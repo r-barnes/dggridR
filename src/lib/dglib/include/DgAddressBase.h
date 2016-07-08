@@ -1,0 +1,41 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+// DgAddressBase.h: DgAddressBase class definitions
+//
+// Version 6.1 - Kevin Sahr, 5/23/13
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#ifndef DGADDRESSBASE_H
+#define DGADDRESSBASE_H
+
+#include <iostream>
+
+using namespace std;
+
+class DgDistanceBase;
+
+////////////////////////////////////////////////////////////////////////////////
+class DgAddressBase {
+
+   public:
+
+      virtual ~DgAddressBase (void);
+
+   protected:
+
+      DgAddressBase (void) {}
+
+      virtual ostream& writeTo (ostream& stream) const = 0;
+
+   friend ostream& operator<< (ostream& stream, const DgAddressBase& add);
+
+};
+
+inline ostream& operator<< (ostream& stream, const DgAddressBase& add)
+{ return add.writeTo(stream); }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+#endif

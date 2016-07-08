@@ -1,0 +1,15 @@
+dbfadd
+dbfcreate
+dbfdump
+shpadd
+shpcreate
+shpdump
+shprewind
+shptreedump
+shptest
+*.dll
+*.lib
+*.exp
+*.la
+*.lo
+.libs

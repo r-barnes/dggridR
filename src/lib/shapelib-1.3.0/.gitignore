@@ -1,0 +1,14 @@
+dbfadd
+dbfcreate
+dbfdump
+dbfopen.o
+libshp.a
+safileio.o
+shpadd
+shpcreate
+shpdump
+shpopen.o
+shprewind
+shptest
+shptree.o
+shptreedump

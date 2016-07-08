@@ -1,0 +1,20 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+// DgUtil.cpp: DgUtil class implementation
+//
+// Version 6.1 - Kevin Sahr, 5/23/13
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include <cmath>
+
+#include "DgUtil.h"
+
+namespace dgg { namespace util {
+
+long rint(const float& x)
+{
+ return static_cast<long>(std::ceil(x));
+}
+
+}} // namespace dgg::util
