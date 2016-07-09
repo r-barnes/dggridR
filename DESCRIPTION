@@ -3,7 +3,7 @@ Type: Package
 Title: Discrete Global Grids for R
 Version: 0.0.1
 Date: 2016-07-08
-Author: Richard Barnes [aut, cre], Kevin Sahr [aut],
+Author: Richard Barnes [aut, cre], Kevin Sahr [ctb],
 Maintainer: Richard Barnes <rbarnes@umn.edu>
 NeedsCompilation: yes
 Depends: rgdal (>= 1.1), ggplot2 (>= 2.1)
@@ -12,14 +12,10 @@ Suggests: dplyr,
     rmarkdown
 License: MIT + file LICENSE
 Authors@R: c(person("Richard", "Barnes", role = c("aut", "cre"), email = "rbarnes@umn.edu"),
-              person("Kevin", "Sahr", role = "aut", email = "sahrk@sou.edu"))
-Description: TODO Contains C++ compiled objects that use time delay embedding to
-    perform state-space reconstruction and nonlinear forecasting and an R interface
-    to those objects using 'Rcpp'. It supports both the simplex projection method
-    from Sugihara & May (1990) <DOI:10.1038/344734a0> and the S-map algorithm
-    in Sugihara (1994) <DOI:10.1098/rsta.1994.0106>. In addition, this package
-    implements convergent cross mapping as described by Sugihara et al. (2012) <DOI:
-    10.1126/science.1227079>.
+             person("Kevin", "Sahr", role = "ctb", email = "sahrk@sou.edu"))
+Description: Provides utilities for binning lat-long data into equally-sized
+             bins using discrete global grids, along with utilities to aid in 
+             plotting such data. This is spatial analysis done right :-)
 URL: https://www.r-project.org, http://www.discreteglobalgrids.org, http://
     webpages.sou.edu/~sahrk/dgg/dggrid.v62/dggridManualV62.pdf
 BugReports: https://pkgname.bugtracker.url
