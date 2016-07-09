@@ -6,7 +6,7 @@ Date: 2016-07-08
 Author: Richard Barnes [aut, cre], Kevin Sahr [aut],
 Maintainer: Richard Barnes <rbarnes@umn.edu>
 NeedsCompilation: yes
-Depends:
+#Depends: (rgdal>= 1.0) #TODO
 License: GPL-3 | file LICENSE
 Authors@R: c(person("Richard", "Barnes", role = c("aut", "cre"), email = "rbarnes@umn.edu"),
               person("Kevin", "Sahr", role = "aut", email = "sahrk@sou.edu"))
