@@ -22,7 +22,7 @@ States (it's not) and Antarctica is the largest continent (it's really not):
 
 ![Mercator Projection](readme_files/mercator.png)
 
-Or you could do things right:
+**Or you could do things right:**
 
 ![Mercator Projection](readme_files/dggrid.png)
 
