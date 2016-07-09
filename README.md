@@ -95,3 +95,14 @@ Richard Barnes built this R package, but the heavy lifting was done by Kevin
 Sahr, who wrote the library the package uses. Credit is also due to John P.
 Snyder who worked out the advanced mathematics (which, to quote, XKCD, may be
 unsuitable for liberal-arts majors) behind some of the projections.
+
+
+
+Disclaimer
+----------
+
+This package *should* operate in the manner described here, in the package's
+main documentation, and in Kevin Sahr's dggrid documentation. Unfortunately,
+none of us are paid enough to make absolutely, doggone certain that that's the
+case. That said, if you find bugs or are seeking enhancements, we want to hear
+about them.

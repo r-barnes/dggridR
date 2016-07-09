@@ -221,3 +221,13 @@ This R package was developed by Richard Barnes (http://rbarnes.org).
 The dggrid conversion software was developed by Kevin Sahr
 (http://www.discreteglobalgrids.org), who credits a number of people in that
 effort.
+
+
+
+##Disclaimer
+
+This package *should* operate in the manner described here, in the package's
+main documentation, and in Kevin Sahr's dggrid documentation. Unfortunately,
+none of us are paid enough to make absolutely, doggone certain that that's the
+case. Use at your own discretion. That said, if you find bugs or are seeking
+enhancements, we want to hear about them.
