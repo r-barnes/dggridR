@@ -109,7 +109,6 @@ on these numbers, and plotting the result.
 #Include libraries
 library(dggridR)
 library(dplyr)
-library(rgdal)
 
 #Construct a global grid with cells approximately 1000 miles across
 dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
@@ -188,6 +187,8 @@ You can also write out a KML file with your data included for displaying in,
 say, Google Earth:
 
 ```{r, eval=FALSE}
+library(rgdal)
+
 #Get the grid cell boundaries for the whole Earth using this dggs in a form
 #suitable for printing to a KML file
 grid          <- dgearthgrid(dggs,frame=FALSE)
