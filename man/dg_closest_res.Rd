@@ -31,10 +31,4 @@ This is a generic function that is used to determine an appropriate
          It does so by extracting the appropriate length/area column and
          searching it for a value close to the input.
 }
-\examples{
-library(dggridR)
-dggs <- dgconstruct(res=20)
-res  <- dg_closest_res(dggs,'AreaKm',1)
-dggs <- dgsetres(dggs,res)
-}
 
