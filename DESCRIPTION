@@ -6,8 +6,11 @@ Date: 2016-07-08
 Author: Richard Barnes [aut, cre], Kevin Sahr [aut],
 Maintainer: Richard Barnes <rbarnes@umn.edu>
 NeedsCompilation: yes
-#Depends: (rgdal>= 1.0) #TODO
-License: GPL-3 | file LICENSE
+Depends: rgdal (>= 1.1), ggplot2 (>= 2.1)
+Suggests: dplyr, 
+    knitr,
+    rmarkdown
+License: MIT + file LICENSE
 Authors@R: c(person("Richard", "Barnes", role = c("aut", "cre"), email = "rbarnes@umn.edu"),
               person("Kevin", "Sahr", role = "aut", email = "sahrk@sou.edu"))
 Description: TODO Contains C++ compiled objects that use time delay embedding to
@@ -21,3 +24,4 @@ URL: https://www.r-project.org, http://www.discreteglobalgrids.org, http://
     webpages.sou.edu/~sahrk/dgg/dggrid.v62/dggridManualV62.pdf
 BugReports: https://pkgname.bugtracker.url
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr
