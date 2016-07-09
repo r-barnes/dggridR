@@ -13,4 +13,4 @@
 \usage{data(dgquakes)} 
 \format{data frame} 
 \source{The USGS Earthquake Hazards Program (\url{http://earthquake.usgs.gov/earthquakes/}). Retrieved with the query \url{http://earthquake.usgs.gov/fdsnws/event/1/query.csv?starttime=2015-01-01%2000:00:00&endtime=2015-12-31%2023:59:59&minmagnitude=3.0&orderby=time}} 
-\keyword{datasets} 
+\keyword{datasets}
