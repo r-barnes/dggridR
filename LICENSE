@@ -10,6 +10,8 @@ This package uses the following libraries:
              version of this library is available under an MIT-style license.
 
  * shapelib: Frank Warmerdam has released shapelib under an MIT-style license.
+             There is also an LGPL licensing option which I have chosen not to
+             use.
 
 All code and documentation not otherwise mentioned above (essentially anything
 outside the `src/` directory of this package) is released under an MIT license,
