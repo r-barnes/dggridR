@@ -3,3 +3,5 @@
 *.a
 src/apps/appex/appex
 src/apps/dggrid/dggrid
+inst/doc
+..Rcheck
