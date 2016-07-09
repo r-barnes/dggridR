@@ -6,8 +6,6 @@
 #'
 #' @return A string representing the path to the dggrid executable.
 #'
-#' @examples 
-#' dg_exe_path()
 dg_exe_path <- function(){
   file.path(system.file(package="dggridR"), "bin", "dggrid")
 }
@@ -134,9 +132,11 @@ dgsetres <- function(dggs,res){
 #' @return     The function has no return value. A stop signal is raised if the
 #'             object is misspecified
 #' @examples
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' dgverify(dggs)
+#' }
 dgverify <- function(dggs){
   #See page 21 of documentation for further bounds
   if(!(dggs[['dggs_type']] %in% c('ISEA3H','ISEA4H','ISEA43H','ISEA4T','ISEA4D','FULLER3H','FULLER4H','FULLER43H','FULLER4T','FULLER4D')))
@@ -385,10 +385,12 @@ dggetres <- function(dggs){
 #' @return A number representing the grid resolution
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' res  <- dg_closest_res(dggs,'AreaKm',1)
 #' dggs <- dgsetres(dggs,res)
+#' }
 dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TRUE){
   KM_TO_M <- 0.621371
 
@@ -594,7 +596,7 @@ dg_process_kml <- function(kmlfile,frame){
 #'
 #' @examples 
 #' library(dggridR)
-#' dggs <- dgconstruct(spacing=1000,metric=FALSE,round='down')
+#' dggs <- dgconstruct(spacing=1000,metric=FALSE,resround='down')
 #'
 #' #Get grid cells for the conterminous United States
 #' grid <- dgrectgrid(dggs,minlat=24.7433195, minlon=-124.7844079, maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
