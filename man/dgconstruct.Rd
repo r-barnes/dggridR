@@ -32,19 +32,19 @@ Only one of res, area, length, or cls should be used.}
 \item{cls}{The desired CLS of the cells.
 Only one of res, area, length, or cls should be used.}
 
+\item{resround}{What direction to search in. Must be nearest, up, or down.}
+
 \item{metric}{Whether input and output should be in metric (TRUE) or
 imperial (FALSE)}
 
 \item{show_info}{Print the area, spacing, and CLS of the chosen resolution.}
-
-\item{round}{What direction to search in. Must be nearest, up, or down.}
 }
 \value{
 Returns a dggs object which can be passed to other dggridR
                  functions
 }
 \details{
-
+Construct a discrete global grid system (dggs) object
 }
 \examples{
 library(dggridR)

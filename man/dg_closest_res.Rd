@@ -36,6 +36,5 @@ library(dggridR)
 dggs <- dgconstruct(res=20)
 res  <- dg_closest_res(dggs,'AreaKm',1)
 dggs <- dgsetres(dggs,res)
-
 }
 

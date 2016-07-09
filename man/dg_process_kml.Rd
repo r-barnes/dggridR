@@ -2,7 +2,7 @@
 % Please edit documentation in R/dggridR.R
 \name{dg_process_kml}
 \alias{dg_process_kml}
-\title{Clean up and/or convert a KML grid cell boundary file}
+\title{Load a KML file}
 \usage{
 dg_process_kml(kmlfile, frame)
 }
@@ -16,6 +16,6 @@ If FALSE, return an OGR poly object}
 Returns a data frame or OGR poly object, as specified by \code{frame}
 }
 \details{
-
+Clean up and/or convert a KML grid cell boundary file
 }
 

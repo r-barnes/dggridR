@@ -2,7 +2,7 @@
 % Please edit documentation in R/dggridR.R
 \name{dg_closest_res_to_area}
 \alias{dg_closest_res_to_area}
-\title{Determine an appropriate grid resolution based on a desired cell area.}
+\title{Determine resolution based on desired area}
 \usage{
 dg_closest_res_to_area(dggs, area, round = "nearest", show_info = TRUE,
   metric = TRUE)
@@ -23,7 +23,8 @@ imperial (FALSE)}
 A number representing the grid resolution
 }
 \details{
-
+Determine an appropriate grid resolution based on a desired 
+                 cell area.
 }
 \examples{
 library(dggridR)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dggridR.R
 \name{dgverify}
 \alias{dgverify}
-\title{Verifies that a dggs object has appropriate values}
+\title{Verify that a dggs object has appropriate values}
 \usage{
 dgverify(dggs)
 }
@@ -14,7 +14,7 @@ The function has no return value. A stop signal is raised if the
             object is misspecified
 }
 \details{
-
+Verify that a dggs object has appropriate values
 }
 \examples{
 library(dggridR)

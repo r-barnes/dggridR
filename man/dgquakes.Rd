@@ -1,3 +1,5 @@
+\name{dgquakes}
+\alias{dgquakes}
 \title{All earthquakes with magnitude >=3.0 earthquakes for 2015}
 \description{ 
   A data frame with 19914 observations on the following 4 variables.

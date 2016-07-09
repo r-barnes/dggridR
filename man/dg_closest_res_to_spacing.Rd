@@ -2,8 +2,7 @@
 % Please edit documentation in R/dggridR.R
 \name{dg_closest_res_to_spacing}
 \alias{dg_closest_res_to_spacing}
-\title{Determine an appropriate grid resolution based on a desired spacing
-       between the center of adjacent cells.}
+\title{Determine grid resolution from desired spacing.}
 \usage{
 dg_closest_res_to_spacing(dggs, spacing, round = "nearest",
   show_info = TRUE, metric = TRUE)
@@ -24,7 +23,8 @@ imperial (FALSE)}
 A number representing the grid resolution
 }
 \details{
-
+Determine an appropriate grid resolution based on a desired 
+                 spacing between the center of adjacent cells.
 }
 \examples{
 library(dggridR)

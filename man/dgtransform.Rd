@@ -11,7 +11,7 @@ dgtransform(dggs, lat, lon)
 
 \item{lat}{A vector of latitudes. Same length at the longtiudes}
 
-\item{long}{A vector of longitudes. Same length as the latitudes.}
+\item{lon}{A vector of longitudes. Same length as the latitudes.}
 }
 \value{
 A vector of the same length as latitudes and longitudes 

@@ -2,12 +2,15 @@
 % Please edit documentation in R/dggridR.R
 \name{dg_exe_path}
 \alias{dg_exe_path}
-\title{Returns a path to the dggrid executable. Used for running stuff.}
+\title{Get path to dggrid executable}
 \usage{
 dg_exe_path()
 }
 \value{
 A string representing the path to the dggrid executable.
+}
+\details{
+Returns a path to the dggrid executable. Used for running stuff.
 }
 \examples{
 dg_exe_path()

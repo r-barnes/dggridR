@@ -2,7 +2,7 @@
 % Please edit documentation in R/dggridR.R
 \name{dggetres}
 \alias{dggetres}
-\title{Gets a grid's resolution and cell property info as a data frame.}
+\title{Get table of grid resolution information}
 \usage{
 dggetres(dggs)
 }
@@ -15,7 +15,7 @@ A data frame containing the resolution levels, number of cells,
         scale of the cells. All values are in kilometres.
 }
 \details{
-
+Gets a grid's resolution and cell property info as a data frame.
 }
 \examples{
 library(dggridR)
