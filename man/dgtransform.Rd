@@ -26,9 +26,11 @@ A discrete global grid maps lat-long points to particular cells.
 }
 \examples{
 library(dggridR)
-attach(quakes)
-dggs        <- dgconstruct(res=20)
-quakes$cell <- dgtransform(dggs,quakes$lat,quakes$long)
+data(dgquakes)
+
+#Construct a grid with cells about ~1000 miles wide
+dggs          <- dgconstruct(spacing=1000,metric=FALSE) 
+dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 
 }
 
