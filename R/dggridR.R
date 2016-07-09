@@ -2,7 +2,8 @@
 #' 
 #' @title Get path to dggrid executable
 #'
-#' @details Returns a path to the dggrid executable. Used for running stuff.
+#' @description
+#'        Returns a path to the dggrid executable. Used for running stuff.
 #'
 #' @return A string representing the path to the dggrid executable.
 #'
@@ -20,7 +21,8 @@ dg_exe_path <- function(){
 #' 
 #' @title      Construct a discrete global grid system (dggs) object
 #'
-#' @details    Construct a discrete global grid system (dggs) object
+#' @description
+#'             Construct a discrete global grid system (dggs) object
 #' 
 #' @param type Type of grid to use. Options are: ISEA3H, ISEA4H, ISEA43H, 
 #'             ISEA4T, ISEA4D, FULLER3H, FULLER4H, FULLER43H, FULLER4T,
@@ -91,7 +93,8 @@ dgconstruct <- function(type='ISEA3H', res=NA, precision=7, area=NA, spacing=NA,
 #' 
 #' @title Set the resolution of a dggs object
 #'
-#' @details Set the resolution of a dggs object
+#' @description
+#'             Set the resolution of a dggs object
 #'
 #' @param dggs A dggs object from dgconstruct().
 #'
@@ -125,7 +128,8 @@ dgsetres <- function(dggs,res){
 #' 
 #' @title Verify that a dggs object has appropriate values
 #'
-#' @details Verify that a dggs object has appropriate values
+#' @description
+#'             Verify that a dggs object has appropriate values
 #' 
 #' @param dggs The dggs object to be verified
 #'
@@ -165,7 +169,8 @@ dgverify <- function(dggs){
 #' 
 #' @title Converts lat-long pairs into discrete global grid cell numbers
 #'
-#' @details A discrete global grid maps lat-long points to particular cells.
+#' @description
+#'          A discrete global grid maps lat-long points to particular cells.
 #'          These cells are uniquely numbered, for a given resolution, from
 #'          1 to some maximum number. Cell numbers may be reused from one
 #'          resolution to the next.
@@ -241,7 +246,8 @@ dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying th
 #' 
 #' @title A generic function for running dggrid and returning values from it
 #'
-#' @details A discrete global grid maps lat-long points to particular cells.
+#' @description
+#'          A discrete global grid maps lat-long points to particular cells.
 #'          These cells are uniquely numbered, for a given resolution, from
 #'          1 to some maximum number. Cell numbers may be reused from one
 #'          resolution to the next.
@@ -286,7 +292,8 @@ dgrun <- function(dggs, clean=TRUE, check=TRUE, has_output_file=TRUE){
 #' 
 #' @title Print a buncha info about a dggs object to the screen
 #'
-#' @details dggs objects have many settings. This returns all of them, along
+#' @description
+#'          dggs objects have many settings. This returns all of them, along
 #'          with info about the grid being specified.
 #' 
 #' @param dggs A dggs object from dgconstruct()
@@ -324,15 +331,16 @@ dginfo <- function(dggs){
 
 #' @name dggetres
 #' 
-#' @title   Get table of grid resolution information
+#' @title      Get table of grid resolution information
 #'
-#' @details Gets a grid's resolution and cell property info as a data frame.
+#' @description
+#'             Gets a grid's resolution and cell property info as a data frame.
 #' 
 #' @param dggs A dggs object from dgconstruct()
 #'
-#' @return A data frame containing the resolution levels, number of cells,
-#'         area of those cells, intercell spacing, and characteristic length
-#'         scale of the cells. All values are in kilometres.
+#' @return     A data frame containing the resolution levels, number of cells,
+#'             area of those cells, intercell spacing, and characteristic length
+#'             scale of the cells. All values are in kilometres.
 #'
 #' @examples 
 #' library(dggridR)
@@ -363,7 +371,8 @@ dggetres <- function(dggs){
 #' 
 #' @title Determine an appropriate grid resolution based on input data.
 #'
-#' @details This is a generic function that is used to determine an appropriate
+#' @description
+#'          This is a generic function that is used to determine an appropriate
 #'          resolution given an area, cell spacing, or correlated length scale.
 #'          It does so by extracting the appropriate length/area column and
 #'          searching it for a value close to the input.
@@ -427,7 +436,8 @@ dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TR
 #' 
 #' @title           Determine resolution based on desired area
 #'
-#' @details         Determine an appropriate grid resolution based on a desired 
+#' @description
+#'                  Determine an appropriate grid resolution based on a desired 
 #'                  cell area.
 #'
 #' @param dggs      A dggs object from dgconstruct()
@@ -459,7 +469,7 @@ dg_closest_res_to_area <- function(dggs,area,round='nearest',show_info=TRUE,metr
 #' 
 #' @title           Determine grid resolution from desired spacing.
 #'
-#' @details         Determine an appropriate grid resolution based on a desired 
+#' @description     Determine an appropriate grid resolution based on a desired 
 #'                  spacing between the center of adjacent cells.
 #'
 #' @param dggs      A dggs object from dgconstruct()
@@ -493,7 +503,8 @@ dg_closest_res_to_spacing <- function(dggs,spacing,round='nearest',show_info=TRU
 #' @title Determine an appropriate grid resolution based on a desired 
 #'        characteristic length scale of the cells.
 #'
-#' @details The characteristic length scale (CLS) is the diameter of a spherical
+#' @description
+#'          The characteristic length scale (CLS) is the diameter of a spherical
 #'          cap of the same area as a cell of the specified resolution.
 #'
 #' @param dggs      A dggs object from dgconstruct()
@@ -533,7 +544,7 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #' 
 #' @title   Load a KML file
 #'
-#' @details Clean up and/or convert a KML grid cell boundary file
+#' @description     Clean up and/or convert a KML grid cell boundary file
 #'
 #' @param kmlfile   A KML file generated by dgrectgrid() or dgearthgrid()
 #'
@@ -575,7 +586,7 @@ dg_process_kml <- function(kmlfile,frame){
 #' @title   Return the coordinates constituting the boundary of cells within a
 #'          specified region
 #'
-#' @details         Note: This may generate odd results for very large
+#' @description     Note: This may generate odd results for very large
 #'                  rectangles, because putting rectangles on spheres is
 #'                  weird... as you should know, if you're using this package.
 #'
@@ -658,7 +669,7 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE){
 #' @title   Return the coordinates constituting the boundary of cells for the
 #'          entire Earth
 #'
-#' @details         Note: If you have a high-resolution grid this may take a
+#' @description     Note: If you have a high-resolution grid this may take a
 #'                  loooooong time to execute.
 #'
 #' @param dggs      A dggs object from dgconstruct()
