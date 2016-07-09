@@ -23,7 +23,7 @@ imperial (FALSE)}
 \value{
 A number representing the grid resolution
 }
-\details{
+\description{
 The characteristic length scale (CLS) is the diameter of a spherical
          cap of the same area as a cell of the specified resolution.
 }

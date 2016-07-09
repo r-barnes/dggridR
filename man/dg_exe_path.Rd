@@ -9,6 +9,7 @@ dg_exe_path()
 \value{
 A string representing the path to the dggrid executable.
 }
-\details{
+\description{
 Returns a path to the dggrid executable. Used for running stuff.
 }
+

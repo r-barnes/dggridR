@@ -22,7 +22,7 @@ imperial (FALSE)}
 \value{
 A number representing the grid resolution
 }
-\details{
+\description{
 Determine an appropriate grid resolution based on a desired 
                  spacing between the center of adjacent cells.
 }

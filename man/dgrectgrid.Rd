@@ -25,7 +25,7 @@ If FALSE, return an OGR poly object}
 \value{
 Returns a data frame or OGR poly object, as specified by \code{frame}
 }
-\details{
+\description{
 Note: This may generate odd results for very large
                  rectangles, because putting rectangles on spheres is
                  weird... as you should know, if you're using this package.

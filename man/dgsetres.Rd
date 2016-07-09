@@ -20,7 +20,7 @@ Default: 9.}
 Returns a dggs object which can be passed to other dggridR
             functions
 }
-\details{
+\description{
 Set the resolution of a dggs object
 }
 \examples{

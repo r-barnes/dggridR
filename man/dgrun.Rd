@@ -22,7 +22,7 @@ If \code{has_output_file} is TRUE, a data frame is returned.
          If \code{has_output_file} is FALSE, the stdout and stderr of dggrid
          are captured and returned as a character vector.
 }
-\details{
+\description{
 A discrete global grid maps lat-long points to particular cells.
          These cells are uniquely numbered, for a given resolution, from
          1 to some maximum number. Cell numbers may be reused from one

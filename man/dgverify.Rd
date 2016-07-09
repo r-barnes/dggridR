@@ -13,7 +13,7 @@ dgverify(dggs)
 The function has no return value. A stop signal is raised if the
             object is misspecified
 }
-\details{
+\description{
 Verify that a dggs object has appropriate values
 }
 \examples{

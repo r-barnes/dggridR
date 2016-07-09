@@ -25,10 +25,18 @@ imperial (FALSE)}
 \value{
 A number representing the grid resolution
 }
-\details{
+\description{
 This is a generic function that is used to determine an appropriate
          resolution given an area, cell spacing, or correlated length scale.
          It does so by extracting the appropriate length/area column and
          searching it for a value close to the input.
+}
+\examples{
+\dontrun{
+library(dggridR)
+dggs <- dgconstruct(res=20)
+res  <- dg_closest_res(dggs,'AreaKm',1)
+dggs <- dgsetres(dggs,res)
+}
 }
 

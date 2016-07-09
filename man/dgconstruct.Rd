@@ -43,7 +43,7 @@ imperial (FALSE)}
 Returns a dggs object which can be passed to other dggridR
                  functions
 }
-\details{
+\description{
 Construct a discrete global grid system (dggs) object
 }
 \examples{

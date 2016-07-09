@@ -18,7 +18,7 @@ A vector of the same length as latitudes and longitudes
             containing the cell id numbers of the points' cells
             in the discrete grid.
 }
-\details{
+\description{
 A discrete global grid maps lat-long points to particular cells.
          These cells are uniquely numbered, for a given resolution, from
          1 to some maximum number. Cell numbers may be reused from one

@@ -12,7 +12,7 @@ dginfo(dggs)
 \value{
 No return. All info is printed to the screen.
 }
-\details{
+\description{
 dggs objects have many settings. This returns all of them, along
          with info about the grid being specified.
 }

@@ -15,7 +15,7 @@ If FALSE, return an OGR poly object}
 \value{
 Returns a data frame or OGR poly object, as specified by \code{frame}
 }
-\details{
+\description{
 Clean up and/or convert a KML grid cell boundary file
 }
 

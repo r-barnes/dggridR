@@ -16,7 +16,7 @@ If FALSE, return an OGR poly object}
 \value{
 Returns a data frame or OGR poly object, as specified by \code{frame}
 }
-\details{
+\description{
 Note: If you have a high-resolution grid this may take a
                  loooooong time to execute.
 }

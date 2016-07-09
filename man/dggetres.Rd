@@ -11,10 +11,10 @@ dggetres(dggs)
 }
 \value{
 A data frame containing the resolution levels, number of cells,
-        area of those cells, intercell spacing, and characteristic length
-        scale of the cells. All values are in kilometres.
+            area of those cells, intercell spacing, and characteristic length
+            scale of the cells. All values are in kilometres.
 }
-\details{
+\description{
 Gets a grid's resolution and cell property info as a data frame.
 }
 \examples{
