@@ -25,7 +25,7 @@ What you want are bins of equal size, regardless of where they are on the globe.
 
 dggridR solves that problem.
 
-dggridR builds discrete global grids which parition the surface of the Earth
+dggridR builds discrete global grids which partition the surface of the Earth
 into hexagonal, triangular, pentagonal, or square cells, all of which have the
 same size.
 
