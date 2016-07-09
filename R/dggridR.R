@@ -1,67 +1,361 @@
-dggrid_exe_path <- function(){
-    file.path(system.file(package="dggridR"), "bin", "dggrid")
+#' @name dg_exe_path
+#' 
+#' @title Returns a path to the dggrid executable. Used for running stuff.
+#'
+#' @return A string representing the path to the dggrid executable.
+#'
+#' @examples 
+#' dg_exe_path()
+dg_exe_path <- function(){
+  file.path(system.file(package="dggridR"), "bin", "dggrid")
 }
 
-dgtransform <- function(lat, long, dggs){ #TODO: Make sure we're not modifying the original dggs
-    verify_dggs(dggs)
 
-    inputfile  <- tempfile(pattern = "dggridR-", fileext=".indat" )
-    outputfile <- tempfile(pattern = "dggridR-", fileext=".outdat")
 
-    message(inputfile)
-    message(outputfile)
 
-    df <- data.frame(long=long,lat=lat)
-    write.table(df, inputfile, sep=",", col.names=FALSE, row.names=FALSE) #TODO: Verify output precision
 
-    dggs[['dggrid_operation']]   = 'TRANSFORM_POINTS'
 
-    dggs[['input_file_name']]    = inputfile
-    dggs[['input_address_type']] = 'GEO'
-    dggs[['input_delimiter']]    = '","'
-    
-    dggs[['output_file_name']]    = outputfile
-    dggs[['output_address_type']] = 'SEQNUM'
-    dggs[['output_delimiter']]    = '","'
 
-    run_dggs(dggs)$V1
+#' @name dgconstruct
+#' 
+#' @title Construct a discrete global grid system (dggs) object
+#'
+#' @details 
+#' 
+#' @param type Type of grid to use. Options are: ISEA3H, ISEA4H, ISEA43H, 
+#'             ISEA4T, ISEA4D, FULLER3H, FULLER4H, FULLER43H, FULLER4T,
+#'             and FULLER4D. Default: ISEA3H
+#'
+#' @param res  Resolution. Must be in the range [0,35]. Larger values represent
+#'             finer resolutions. Appropriate resolutions can be found with
+#'             dg_closest_res_to_area(), dg_closest_res_to_spacing(), and
+#'             dg_closest_res_to_cls(). Default is 9, which corresponds to a
+#'             cell area of ~2600 sq km and a cell spacing of ~50 km.
+#'             Default: 9.
+#'
+#' @param precision Round output to this number of decimal places. Must be in
+#'                  the range [0,30]. Default: 7.
+#'
+#' @return     Returns a dggs object which can be passed to other dggridR
+#'             functions
+#'
+#' @examples 
+#' library(dggridR)
+#' dggs <- dgconstruct(res=20)
+#'
+#' @export 
+dgconstruct <- function(type='ISEA3H', res=9, precision=7){
+  list(dggs_type=type, dggs_res_spec=res, precision=7)
 }
 
-dgstats <- function(dggs){
-  verify_dggs(dggs)
+
+
+#' @name dgsetres
+#' 
+#' @title Set the resolution of a dggs object
+#'
+#' @details 
+#'
+#' @param dggs A dggs object from dgconstruct().
+#'
+#' @param res  Resolution. Must be in the range [0,35]. Larger values represent
+#'             finer resolutions. Appropriate resolutions can be found with
+#'             dg_closest_res_to_area(), dg_closest_res_to_spacing(), and
+#'             dg_closest_res_to_cls(). Default is 9, which corresponds to a
+#'             cell area of ~2600 sq km and a cell spacing of ~50 km.
+#'             Default: 9.
+#'
+#' @return     Returns a dggs object which can be passed to other dggridR
+#'             functions
+#'
+#' @examples 
+#' library(dggridR)
+#' dggs <- dgconstruct(res=20)
+#' dggs <- dgsetres(dggs,10)
+#'
+#' @export 
+dgsetres <- function(dggs,res){
+  dggs[['dggs_res_spec']] = res
+  dgverify(dggs)
+  dggs
+}
+
+
+
+
+
+#' @name dgverify
+#' 
+#' @title Verifies that a dggs object has appropriate values
+#'
+#' @details 
+#' 
+#' @param dggs The dggs object to be verified
+#'
+#' @return     The function has no return value. A stop signal is raised if the
+#'             object is misspecified
+#' @examples
+#' library(dggridR)
+#' dggs <- dgconstruct(res=20)
+#' dgverify(dggs)
+dgverify <- function(dggs){
+  #See page 21 of documentation for further bounds
+  if(!(dggs[['dggs_type']] %in% c('ISEA3H','ISEA4H','ISEA43H','ISEA4T','ISEA4D','FULLER3H','FULLER4H','FULLER43H','FULLER4T','FULLER4D')))
+    stop('Unrecognised dggs type', call.=FALSE) #TODO: Where can they get valid types?
+  if(dggs[['dggs_res_spec']]<0)
+    stop('dggs resolution must be >=0', call.=FALSE)
+  if(dggs[['dggs_res_spec']]>35)
+    stop('dggs resolution must be <=35', call.=FALSE)
+  if(dggs[['precision']]<0)
+    stop('dggs precision must be >=0', call.=FALSE)
+  if(dggs[['precision']]>35)
+    stop('dggs precision must be <=30', call.=FALSE)
+  if(!all.equal(dggs[['dggs_res_spec']], as.integer(dggs[['dggs_res_spec']])))
+    stop('dggs resolution must be an integer', call.=FALSE)
+}
+
+
+
+
+
+
+
+
+
+#' @name dgtransform
+#' 
+#' @title Converts lat-long pairs into discrete global grid cell numbers
+#'
+#' @details A discrete global grid maps lat-long points to particular cells.
+#'          These cells are uniquely numbered, for a given resolution, from
+#'          1 to some maximum number. Cell numbers may be reused from one
+#'          resolution to the next.
+#' 
+#' @param dggs A dggs object from dgconstruct().
+#'
+#' @param lat  A vector of latitudes. Same length at the longtiudes
+#'
+#' @param long A vector of longitudes. Same length as the latitudes.
+#'
+#' @return     A vector of the same length as latitudes and longitudes 
+#'             containing the cell id numbers of the points' cells
+#'             in the discrete grid.
+#'
+#' @examples 
+#' library(dggridR)
+#' attach(quakes)
+#' dggs        <- dgconstruct(res=20)
+#' quakes$cell <- dgtransform(dggs,quakes$lat,quakes$long)
+#'
+#' @export 
+dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying the original dggs
+  dgverify(dggs)
+
+  glon      <- lon>180
+  lon[glon] <- lon[glon]-360
+  llon      <- lon< (-180)
+  lon[llon] <- lon[llon]+360
+
+  inputfile  <- tempfile(pattern = "dggridR-", fileext=".indat" )
+  outputfile <- tempfile(pattern = "dggridR-", fileext=".outdat")
+
+  message(inputfile)
+  message(outputfile)
+
+  df <- data.frame(long=lon,lat=lat)
+  write.table(df, inputfile, sep=",", col.names=FALSE, row.names=FALSE) #TODO: Verify output precision
+
+  dggs[['dggrid_operation']]   = 'TRANSFORM_POINTS'
+
+  dggs[['input_file_name']]    = inputfile
+  dggs[['input_address_type']] = 'GEO'
+  dggs[['input_delimiter']]    = '","'
+  
+  dggs[['output_file_name']]    = outputfile
+  dggs[['output_address_type']] = 'SEQNUM'
+  dggs[['output_delimiter']]    = '","'
+
+  dgrun(dggs)
+
+  #TODO: Consider reading cell ids as strings instead :-(
+  ret <- read.csv(dggs[['output_file_name']], header=FALSE)$V1
+
+  if(any(ret>=2^53)) #R stores large numbers as an IEEE754 double, so we get 53 bits of exact integer goodness.
+    message('dgtransform(): Length of cell ids overflowed R\'s numeric storage capacity. Use a lower resolution')
+
+  ret
+}
+
+
+
+
+
+
+
+
+
+
+
+#' @name dgrun
+#' 
+#' @title A generic function for running dggrid and returning values from it
+#'
+#' @details A discrete global grid maps lat-long points to particular cells.
+#'          These cells are uniquely numbered, for a given resolution, from
+#'          1 to some maximum number. Cell numbers may be reused from one
+#'          resolution to the next.
+#'
+#' @param dggs  A dggs object from dgconstruct()
+#'
+#' @param clean If TRUE, delete the temporary files used/produced by dggrid. TODO
+#'
+#' @param check If TRUE, raise a stop signal if dggrid doesn't run successfully.
+#'
+#' @param has_output_file If TRUE, look for output file. If FALSE, capture and
+#'                        return stdout and stderr.
+#'
+#' @return  If \code{has_output_file} is TRUE, a data frame is returned.
+#'          The calling function is responsible for understanding this frame.
+#'          If \code{has_output_file} is FALSE, the stdout and stderr of dggrid
+#'          are captured and returned as a character vector.
+dgrun <- function(dggs, clean=TRUE, check=TRUE, has_output_file=TRUE){
+  metafile <- tempfile(pattern = "dggridR-", fileext=".meta")
+  write.table(as.data.frame(do.call(rbind, dggs)), metafile, col.names=FALSE, quote=FALSE)
+  com <- paste(dg_exe_path(),metafile)
+  ret <- system(com, intern = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+  if(check && length(grep("complete \\*\\*",ret))!=1){
+      cat(ret)
+      stop('dggridR: Error in processing!', call.=FALSE)
+  }
+  ret
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#' @name dginfo
+#' 
+#' @title Print a buncha info about a dggs object to the screen
+#'
+#' @details dggs objects have many settings. This returns all of them, along
+#'          with info about the grid being specified.
+#' 
+#' @param dggs A dggs object from dgconstruct()
+#'
+#' @return No return. All info is printed to the screen.
+#'
+#' @examples 
+#' library(dggridR)
+#' dggs <- dgconstruct(res=20)
+#' dginfo(dggs)
+#'
+#' @export 
+dginfo <- function(dggs){
+  dgverify(dggs)
 
   dggs[['dggrid_operation']] = 'OUTPUT_STATS'
   dggs[['dggs_res_spec']]    = 35
 
-  cat(run_dggs(dggs, check=FALSE, has_output_file=FALSE), sep="\r\n")
+  cat(dgrun(dggs, check=FALSE, has_output_file=FALSE), sep="\r\n")
+
+  NULL
 }
 
-getres <- function(dggs){
-  verify_dggs(dggs)
+
+
+
+
+
+
+
+
+
+
+
+
+#' @name dggetres
+#' 
+#' @title Gets a grid's resolution and cell property info as a data frame.
+#'
+#' @details 
+#' 
+#' @param dggs A dggs object from dgconstruct()
+#'
+#' @return A data frame containing the resolution levels, number of cells,
+#'         area of those cells, intercell spacing, and characteristic length
+#'         scale of the cells. All values are in kilometres.
+#'
+#' @examples 
+#' library(dggridR)
+#' dggs <- dgconstruct(res=20)
+#' dggetres(dggs)
+#'
+#' @export 
+dggetres <- function(dggs){
+  dgverify(dggs)
 
   dggs[['dggrid_operation']] = 'OUTPUT_STATS'
-  dggs[['dggs_res_spec']]    = 35
+  dggs[['dggs_res_spec']]    = 35 #Used so that we get all resolution levels
+  dggs[['precision']]        = 30 #Used so that very fine meshes still give us numbers >0
 
-  ret <- run_dggs(dggs, check=FALSE, has_output_file=FALSE)
-  ret <- run_dggs(dggs, check=FALSE, has_output_file=FALSE)
+  ret <- dgrun(dggs, check=FALSE, has_output_file=FALSE)
+  ret <- dgrun(dggs, check=FALSE, has_output_file=FALSE)
   ret <- tail(ret,-26)
   ret <- gsub(',','',ret)
 
+  #Redefine table header so that it converts to a nice data frame
   ret[[1]]<-"Res Cells AreaKm SpacingKm CLSKm"
 
   read.table(textConnection(ret), header=TRUE)
 }
 
-get_closest <- function(vec,val,round){
 
-}
-
+#' @name dg_closest_res
+#' 
+#' @title Determine an appropriate grid resolution based on input data.
+#'
+#' @details This is a generic function that is used to determine an appropriate
+#'          resolution given an area, cell spacing, or correlated length scale.
+#'          It does so by extracting the appropriate length/area column and
+#'          searching it for a value close to the input.
+#'
+#' @param dggs      A dggs object from dgconstruct()
+#'
+#' @param col       Column in which to search for a close value. Should be: 
+#'                  AreaKm, SpacingKm, or CLSKm.
+#'
+#' @param val       The value to search for
+#'
+#' @param round     What direction to search in. Must be nearest, up, or down.
+#'
+#' @param show_info Print the area, spacing, and CLS of the chosen resolution.
+#'
+#' @param metric    Whether input and output should be in metric (TRUE) or
+#'                  imperial (FALSE)
+#'
+#' @return A number representing the grid resolution
+#'
+#' @examples 
+#' library(dggridR)
+#' dggs <- dgconstruct(res=20)
+#' res  <- dg_closest_res(dggs,'AreaKm',1)
+#' dggs <- dgsetres(dggs,res)
+#'
+#' @export 
 dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TRUE){
   KM_TO_M <- 0.621371
 
-  verify_dggs(dggs)
+  dgverify(dggs)
 
-  ret <- getres(dggs)
+  ret <- dggetres(dggs)
 
   searchvec = ret[col]
 
@@ -77,65 +371,191 @@ dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TR
   else if(round=='nearest')
     idx <- which.min(abs(searchvec-val))
   else
-    stop('Unrecognised rounding direction. Must be up, down, or nearest.')
+    stop('Unrecognised rounding direction. Must be up, down, or nearest.', call.=FALSE)
 
   if(show_info && metric)
     cat(paste("Resolution: ",ret$Res[idx],", Area (km^2): ",ret$AreaKm[idx],", Spacing (km): ", ret$SpacingKm[idx],", CLS (km): ", ret$CLSKm[idx], "\n", sep=""))
   else if(show_info && !metric)
     cat(paste("Resolution: ",ret$Res[idx],", Area (mi^2): ",ret$AreaKm[idx]*KM_TO_M,", Spacing (mi): ", ret$SpacingKm[idx]*KM_TO_M,", CLS (mi): ", ret$CLSKm[idx]*KM_TO_M, "\n", sep=""))
 
-  idx
+  ret$Res[idx]
 }
 
+
+#' @name dg_closest_res_to_area
+#' 
+#' @title Determine an appropriate grid resolution based on a desired cell area.
+#'
+#' @details 
+#'
+#' @param dggs      A dggs object from dgconstruct()
+#'
+#' @param area      The desired area of the grid's cells
+#'
+#' @param round     What direction to search in. Must be nearest, up, or down.
+#'
+#' @param show_info Print the area, spacing, and CLS of the chosen resolution.
+#'
+#' @param metric    Whether input and output should be in metric (TRUE) or
+#'                  imperial (FALSE)
+#'
+#' @return A number representing the grid resolution
+#'
+#' @examples 
+#' library(dggridR)
+#' dggs <- dgconstruct(res=20)
+#' res  <- dg_closest_res_to_area(dggs,1)
+#' dggs <- dgsetres(dggs,res)
+#'
+#' @export 
 dg_closest_res_to_area <- function(dggs,area,round='nearest',show_info=TRUE,metric=TRUE){
   dg_closest_res(dggs,'AreaKm',area,round,show_info,metric)
 }
 
+
+#' @name dg_closest_res_to_spacing
+#' 
+#' @title Determine an appropriate grid resolution based on a desired spacing
+#'        between the center of adjacent cells.
+#'
+#' @details 
+#'
+#' @param dggs      A dggs object from dgconstruct()
+#'
+#' @param spacing   The desired spacing between the center of adjacent cells
+#'
+#' @param round     What direction to search in. Must be nearest, up, or down.
+#'
+#' @param show_info Print the area, spacing, and CLS of the chosen resolution.
+#'
+#' @param metric    Whether input and output should be in metric (TRUE) or
+#'                  imperial (FALSE)
+#'
+#' @return A number representing the grid resolution
+#'
+#' @examples 
+#' library(dggridR)
+#' dggs <- dgconstruct(res=20)
+#' res  <- dg_closest_res_to_spacing(dggs,1)
+#' dggs <- dgsetres(dggs,res)
+#'
+#' @export 
 dg_closest_res_to_spacing <- function(dggs,spacing,round='nearest',show_info=TRUE,metric=TRUE){
   dg_closest_res(dggs,'SpacingKm',spacing,round,show_info,metric)
 }
 
-#Characteristic Length Scale (CLS): the diameter of a spherical cap of the same area as a cell of the specified resolution. This metric was suggested by Ralph Kahn. 
+#Characteristic Length Scale (CLS): 
+
+#' @name dg_closest_res_to_cls
+#' 
+#' @title Determine an appropriate grid resolution based on a desired 
+#'        characteristic length scale of the cells.
+#'
+#' @details The characteristic length scale (CLS) is the diameter of a spherical
+#'          cap of the same area as a cell of the specified resolution.
+#'
+#' @param dggs      A dggs object from dgconstruct()
+#'
+#' @param cls       The desired CLS of the cells.
+#'
+#' @param round     What direction to search in. Must be nearest, up, or down.
+#'
+#' @param show_info Print the area, spacing, and CLS of the chosen resolution.
+#'
+#' @param metric    Whether input and output should be in metric (TRUE) or
+#'                  imperial (FALSE)
+#'
+#' @return A number representing the grid resolution
+#'
+#' @examples 
+#' library(dggridR)
+#' dggs <- dgconstruct(res=20)
+#' res  <- dg_closest_res_to_cls(dggs,1)
+#' dggs <- dgsetres(dggs,res)
+#'
+#' @export
 dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric=TRUE){
   dg_closest_res(dggs,'CLSKm',cls,round,show_info,metric)
 }
 
 
-construct_dggs <- function(type='ISEA3H', res=9, precision=7){
-    list(dggs_type=type, dggs_res_spec=res, precision=7)
-}
 
-#See page 21 of documentation
-verify_dggs <- function(dggs){
-    if(!(dggs[['dggs_type']] %in% c('ISEA3H','ISEA4H','ISEA43H','ISEA4T','ISEA4D','FULLER3H','FULLER4H','FULLER43H','FULLER4T','FULLER4D')))
-        stop('Unrecognised dggs type') #TODO: Where can they get valid types?
-    if(dggs[['dggs_res_spec']]<0)
-        stop('dggs resolution must be >=0')
-    if(dggs[['dggs_res_spec']]>35)
-        stop('dggs resolution must be <=35')
-    if(dggs[['precision']]<0)
-        stop('dggs precision must be >=0')
-    if(dggs[['precision']]>35)
-        stop('dggs precision must be <=30')
-    if(!all.equal(dggs[['dggs_res_spec']], as.integer(dggs[['dggs_res_spec']])))
-        stop('dggs resolution must be an integer')
-}
 
-run_dggs <- function(dggs, clean=TRUE, check=TRUE, has_output_file=TRUE){
-    metafile <- tempfile(pattern = "dggridR-", fileext=".meta")
-    write.table(as.data.frame(do.call(rbind, dggs)), metafile, col.names=FALSE, quote=FALSE)
-    com <- paste(dggrid_exe_path(),metafile)
-    ret <- system(com, intern = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-    if(check && grep("complete",tail(ret, n=1))!=1){
-        cat(ret)
-        stop('dggridR: Error in processing!')
-    }
-    if(has_output_file)
-      read.csv(dggs[['output_file_name']], header=FALSE)
-    else
-      ret
-}
 
-dggs_types <- function(){
-    message('todo')
+
+
+
+
+
+
+dggengrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1){ #TODO: Densify?
+  dgverify(dggs) 
+
+  library(rgdal)   #For reading KML output of dggrid
+  require(ggplot2) #For fortify
+
+  inputfile <- tempfile(pattern = "dggridR-", fileext=".indat"   )
+  cellfile  <- tempfile(pattern = "dggridR-", fileext=".cell_dat")
+  pointfile <- tempfile(pattern = "dggridR-", fileext=".pt_dat"  )
+
+  whole_earth <- TRUE
+  if(any(c(minlat,minlon,maxlat,maxlon)!=-1))
+    whole_earth<-FALSE
+
+  message(inputfile)
+  message(cellfile)
+  message(pointfile)
+  
+  dggs[['dggrid_operation']] = 'GENERATE_GRID'
+  dggs[['update_frequency']] = 10000000
+
+  #Write output in ARC/INFO Generate polygon format
+  #minlon,maxlat maxlon,maxlat
+  #minlon,minlat maxlon,minlat
+  if(!whole_earth){
+    fout <- file(inputfile, "w")  # open an output file connection
+    cat("1", sep="\n", file=fout)
+    cat(paste(minlon,maxlat), sep="\n", file=fout)
+    cat(paste(maxlon,maxlat), sep="\n", file=fout)
+    cat(paste(maxlon,minlat), sep="\n", file=fout)
+    cat(paste(minlon,minlat), sep="\n", file=fout)
+    cat(paste(minlon,maxlat), sep="\n", file=fout)
+    cat("END", sep="\n", file=fout) #End list of polygon points
+    cat("END", sep="\n", file=fout) #End file
+    close(fout)
+    dggs[['clip_region_files']] = inputfile
+    dggs[['clip_subset_type']]  = 'AIGEN'
+  } else {
+    dggs[['clip_subset_type']]  = 'WHOLE_EARTH'
+  }
+
+  dggs[['cell_output_file_name']] = cellfile
+  dggs[['cell_output_type']]      = 'KML' #SHAPEFILE or KML or GEOJSON or AIGEN
+
+  #TODO - cut
+  #dggs[['output_file_name']]       = pointfile
+  #dggs[['point_output_file_name']] = 'KML' #SHAPEFILE or KML or GEOJSON or AIGEN
+
+  ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
+
+  cellfile <- paste(cellfile,".kml",sep="")
+  map      <- readOGR(cellfile,cellfile)
+
+  map@data$timestamp    <- NULL
+  map@data$begin        <- NULL
+  map@data$end          <- NULL
+  map@data$altitudeMode <- NULL
+  map@data$extrude      <- NULL
+  map@data$visibility   <- NULL
+  map@data$drawOrder    <- NULL
+  map@data$icon         <- NULL
+  map@data$description  <- NULL
+  map@data$tessellate   <- NULL
+  map@data$id           <- rownames(map@data)
+  #map@data$count        <- runif(length(map@data$Name))
+  #map@data$count        <- merge(map@data, quakecounts, by.x="Name", by.y="cell", all.x=TRUE)$count
+  map.points            <- fortify(map, region="id")
+  map.df                <- join(map.points, map@data, by="id")
+
+  map.df
 }
