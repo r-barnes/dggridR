@@ -6,7 +6,7 @@ Date: 2016-07-08
 Author: Richard Barnes [aut, cre], Kevin Sahr [ctb],
 Maintainer: Richard Barnes <rbarnes@umn.edu>
 NeedsCompilation: yes
-Depends: R (>=3), rgdal (>= 1.1), ggplot2 (>= 2.1)
+Depends: R (>= 3.0.0), rgdal (>= 1.1), ggplot2 (>= 2.1)
 Suggests: dplyr, 
     knitr,
     rmarkdown
