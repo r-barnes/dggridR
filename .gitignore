@@ -1,3 +1,5 @@
 *.o
 *.depends
 *.a
+src/apps/appex/appex
+src/apps/dggrid/dggrid
