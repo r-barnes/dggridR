@@ -14,8 +14,8 @@ What you want are bins of equal size, regardless of where they are on the globe.
 dggridR solves that problem.
 
 dggridR builds discrete global grids which partition the surface of the Earth
-into hexagonal, triangular, pentagonal, or square cells, all of which have the
-same size.
+into hexagonal, triangular, pentagonal, or square cells, **all of which are of
+equal size!**
 
 You could do your analyses on a planet where Greenland is bigger than the United
 States (it's not) and Antarctica is the largest continent (it's really not):
