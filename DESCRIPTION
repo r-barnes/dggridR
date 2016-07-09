@@ -15,7 +15,7 @@ Authors@R: c(person("Richard", "Barnes", role = c("aut", "cre"), email = "rbarne
              person("Kevin", "Sahr", role = "ctb", email = "sahrk@sou.edu"))
 Description: Provides utilities for binning lat-long data into equally-sized
              bins using discrete global grids, along with utilities to aid in 
-             plotting such data. This is spatial analysis done right :-)
+             plotting such data.
 URL: https://github.com/r-barnes/dggridR/, http://www.discreteglobalgrids.org, http://webpages.sou.edu/~sahrk/dgg/dggrid.v62/dggridManualV62.pdf
 BugReports: https://github.com/r-barnes/dggridR/
 RoxygenNote: 5.0.1
