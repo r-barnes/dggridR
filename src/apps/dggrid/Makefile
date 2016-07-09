@@ -1,7 +1,7 @@
 TARGET = dggrid
-SRCS = $(wildcard *.cpp)
-OBJS = $(SRCS:.cpp=.o)
-DEPS = $(SRCS:.cpp=.depends)
+SRCS = binpres.cpp  binvals.cpp  dggrid.cpp  DgHexSF.cpp  gridgen.cpp  param.cpp  quadclip.cpp  table.cpp  transform.cpp  util.cpp
+OBJS = binpres.o  binvals.o  dggrid.o  DgHexSF.o  gridgen.o  param.o  quadclip.o  table.o  transform.o  util.o
+DEPS = binpres.depends  dggrid.depends   gridgen.depends  quadclip.depends  transform.depends binvals.depends  DgHexSF.depends  param.depends    table.depends     util.depends
 include ../../MakeIncludes
 DGLIBDIR = ../../lib/dglib
 GPCLIBDIR = ../../lib/gpclib

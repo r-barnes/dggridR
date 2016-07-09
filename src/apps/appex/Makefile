@@ -1,7 +1,7 @@
 TARGET = appex
-SRCS = $(wildcard *.cpp)
-OBJS = $(SRCS:.cpp=.o)
-DEPS = $(SRCS:.cpp=.depends)
+SRCS = appex.cpp
+OBJS = appex.o
+DEPS = appex.depends
 include ../../MakeIncludes
 DGLIBDIR = ../../lib/dglib
 GPCLIBDIR = ../../lib/gpclib

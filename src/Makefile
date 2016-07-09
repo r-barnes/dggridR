@@ -1,11 +1,11 @@
 include ./MakeIncludes
-DGGRID_DIR := ./apps/dggrid
-APPEX_DIR := ./apps/appex
-DG_DIR := ./lib/dglib
-GPC_DIR := ./lib/gpclib
-PROJ4_DIR := ./lib/proj4lib
-SHPLIB_HDR_DIR := ./lib/shapelib-1.3.0
-LIBRARIES := $(DG_DIR)/lib $(GPC_DIR)/lib $(PROJ4_DIR)/lib
+DGGRID_DIR = ./apps/dggrid
+APPEX_DIR = ./apps/appex
+DG_DIR = ./lib/dglib
+GPC_DIR = ./lib/gpclib
+PROJ4_DIR = ./lib/proj4lib
+SHPLIB_HDR_DIR = ./lib/shapelib-1.3.0
+LIBRARIES = $(DG_DIR)/lib $(GPC_DIR)/lib $(PROJ4_DIR)/lib
 
 #ADD_LD_LIBS = ./lib/shapelib-1.3.0/libshp.a
 
