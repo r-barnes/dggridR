@@ -37,21 +37,22 @@ Okay.
 
 Your analysis could be as easy as this:
 
-    :::R
-    library(dggridR)
-    library(dplyr)
+```R
+library(dggridR)
+library(dplyr)
 
-    #Construct a global grid with cells approximately 1000 miles across
-    dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
+#Construct a global grid with cells approximately 1000 miles across
+dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
 
-    #Load included test data set
-    data(dgquakes)
+#Load included test data set
+data(dgquakes)
 
-    #Get the corresponding grid cells for each earthquake epicenter (lat-long pair)
-    dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
+#Get the corresponding grid cells for each earthquake epicenter (lat-long pair)
+dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 
-    #Get the number of earthquakes in each, equally-sized cell
-    quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
+#Get the number of earthquakes in each, equally-sized cell
+quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
+```
 
 
 
