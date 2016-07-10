@@ -1,4 +1,6 @@
-include ./MakeIncludes
+export CCOMP = cc
+export CPPCOMP = c++
+export ADD_CC_FLAGS = -O3
 DGGRID_DIR = ./apps/dggrid
 APPEX_DIR = ./apps/appex
 DG_DIR = ./lib/dglib

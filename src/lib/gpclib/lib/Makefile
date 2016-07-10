@@ -1,5 +1,4 @@
 LIB = gpclib.a 
-include ../../../MakeIncludes
 INCDIRS = -I../include -I../../dglib/include
 CCFLAGS = ${INCDIRS} ${ADD_CC_FLAGS} 
 

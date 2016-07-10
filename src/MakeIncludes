@@ -1,8 +1,0 @@
-DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types 
-SHIP_CC_FLAGS = -O3
-
-ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
-#ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
-
-CCOMP = gcc 
-CPPCOMP = g++ 

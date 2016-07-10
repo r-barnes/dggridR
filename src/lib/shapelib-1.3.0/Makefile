@@ -1,4 +1,3 @@
-
 PREFIX	=	/usr/local
 CFLAGS	=	-g -Wall -fPIC
 #CFLAGS  =       -g -DUSE_CPL
@@ -13,46 +12,46 @@ default:	all
 all:	$(SHPBIN) shptest lib
 
 shpopen.o:	shpopen.c shapefil.h
-	$(CC) $(CFLAGS) -c shpopen.c
+	$(CCOMP) $(CFLAGS) -c shpopen.c
 
 shptree.o:	shptree.c shapefil.h
-	$(CC) $(CFLAGS) -c shptree.c
+	$(CCOMP) $(CFLAGS) -c shptree.c
 
 dbfopen.o:	dbfopen.c shapefil.h
-	$(CC) $(CFLAGS) -c dbfopen.c
+	$(CCOMP) $(CFLAGS) -c dbfopen.c
 
 safileio.o:	safileio.c shapefil.h
-	$(CC) $(CFLAGS) -c safileio.c
+	$(CCOMP) $(CFLAGS) -c safileio.c
 
 shpcreate:	shpcreate.c shpopen.o safileio.o 
-	$(CC) $(CFLAGS) shpcreate.c shpopen.o safileio.o $(LINKOPT) -o shpcreate
+	$(CCOMP) $(CFLAGS) shpcreate.c shpopen.o safileio.o $(LINKOPT) -o shpcreate
 
 shpadd:		shpadd.c shpopen.o safileio.o
-	$(CC) $(CFLAGS) shpadd.c shpopen.o safileio.o $(LINKOPT) -o shpadd
+	$(CCOMP) $(CFLAGS) shpadd.c shpopen.o safileio.o $(LINKOPT) -o shpadd
 
 shpdump:	shpdump.c shpopen.o safileio.o
-	$(CC) $(CFLAGS) shpdump.c shpopen.o safileio.o $(LINKOPT) -o shpdump
+	$(CCOMP) $(CFLAGS) shpdump.c shpopen.o safileio.o $(LINKOPT) -o shpdump
 
 shprewind:	shprewind.c shpopen.o safileio.o
-	$(CC) $(CFLAGS) shprewind.c shpopen.o safileio.o $(LINKOPT) -o shprewind
+	$(CCOMP) $(CFLAGS) shprewind.c shpopen.o safileio.o $(LINKOPT) -o shprewind
 
 dbfcreate:	dbfcreate.c dbfopen.o safileio.o
-	$(CC) $(CFLAGS) dbfcreate.c dbfopen.o safileio.o $(LINKOPT) -o dbfcreate
+	$(CCOMP) $(CFLAGS) dbfcreate.c dbfopen.o safileio.o $(LINKOPT) -o dbfcreate
 
 dbfadd:		dbfadd.c dbfopen.o safileio.o
-	$(CC) $(CFLAGS) dbfadd.c dbfopen.o safileio.o $(LINKOPT) -o dbfadd
+	$(CCOMP) $(CFLAGS) dbfadd.c dbfopen.o safileio.o $(LINKOPT) -o dbfadd
 
 dbfdump:	dbfdump.c dbfopen.o safileio.o
-	$(CC) $(CFLAGS) dbfdump.c dbfopen.o safileio.o $(LINKOPT) -o dbfdump
+	$(CCOMP) $(CFLAGS) dbfdump.c dbfopen.o safileio.o $(LINKOPT) -o dbfdump
 
 shptest:	shptest.c shpopen.o safileio.o
-	$(CC) $(CFLAGS) shptest.c shpopen.o safileio.o $(LINKOPT) -o shptest
+	$(CCOMP) $(CFLAGS) shptest.c shpopen.o safileio.o $(LINKOPT) -o shptest
 
 shputils:	shputils.c shpopen.o safileio.o dbfopen.o 
-	$(CC) $(CFLAGS) shputils.c shpopen.o safileio.o dbfopen.o  $(LINKOPT) -o shputils
+	$(CCOMP) $(CFLAGS) shputils.c shpopen.o safileio.o dbfopen.o  $(LINKOPT) -o shputils
 
 shptreedump:	shptreedump.c shptree.o shpopen.o safileio.o
-	$(CC) $(CFLAGS) shptreedump.c shptree.o shpopen.o safileio.o $(LINKOPT) \
+	$(CCOMP) $(CFLAGS) shptreedump.c shptree.o shpopen.o safileio.o $(LINKOPT) \
 		-o shptreedump
 
 clean:
