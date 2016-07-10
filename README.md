@@ -106,3 +106,12 @@ main documentation, and in Kevin Sahr's dggrid documentation. Unfortunately,
 none of us are paid enough to make absolutely, doggone certain that that's the
 case. That said, if you find bugs or are seeking enhancements, we want to hear
 about them.
+
+
+
+Citing this Package
+-------------------
+
+Please cite this package as:
+
+ > Richard Barnes (2016). dggridR: Discrete Global Grids for R. https://github.com/r-barnes/dggridR.
