@@ -218,9 +218,9 @@ time, Sahr's dggrid is the best option I've found.
 
 This R package was developed by Richard Barnes (http://rbarnes.org).
 
-The dggrid conversion software was developed by Kevin Sahr
-(http://www.discreteglobalgrids.org), who credits a number of people in that
-effort.
+The dggrid conversion software was developed predominantly by Kevin Sahr
+[http://www.discreteglobalgrids.org](http://www.discreteglobalgrids.org), with
+contributions from a few others.
 
 
 
