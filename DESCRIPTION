@@ -16,7 +16,7 @@ Authors@R: c(person("Richard", "Barnes", role = c("aut", "cre"), email = "rbarne
 Description: Provides utilities for binning lat-long data into equally-sized
              bins using discrete global grids, along with utilities to aid in 
              plotting such data.
-URL: https://github.com/r-barnes/dggridR/, http://www.discreteglobalgrids.org, http://webpages.sou.edu/~sahrk/dgg/dggrid.v62/dggridManualV62.pdf
+URL: https://github.com/r-barnes/dggridR/
 BugReports: https://github.com/r-barnes/dggridR/
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
