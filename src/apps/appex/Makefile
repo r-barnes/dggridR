@@ -2,7 +2,6 @@ TARGET = appex
 SRCS = appex.cpp
 OBJS = appex.o
 DEPS = appex.depends
-include ../../MakeIncludes
 DGLIBDIR = ../../lib/dglib
 GPCLIBDIR = ../../lib/gpclib
 PROJ4LIBDIR = ../../lib/proj4lib
