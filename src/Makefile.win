@@ -1,4 +1,4 @@
-export CCOMP = gcc.exe
+export CCOMP = gcc
 export CPPCOMP = c++
 export ADD_CC_FLAGS = -O3
 DGGRID_DIR = ./apps/dggrid
