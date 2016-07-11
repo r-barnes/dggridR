@@ -30,16 +30,24 @@ into hexagonal, triangular, pentagonal, or square cells, all of which have the
 same size.
 
 (Technically, since the aforementioned result is well-neigh impossible to solve,
-many of these grids will also incorporate a small number of pentagons. However,
-the default orientation of the grids is such that these are located over the
-most inaccessible backwaters of the Earth's oceans. Future versions of this
-package will better explain this limitation. (TODO))
+many of these grids will also incorporate a small number of pentagons, as
+detailed below. However, the default orientation of the grids is such that these
+are located over the most inaccessible backwaters of the Earth's oceans. Future
+versions of this package will better explain this limitation. (TODO))
 
 ##Notes
 
-Many different grid resolutions are available for many different grids. The
-following chart shows the number of cells, their area, and statistics regarding
-the spacing of their center nodes for the ISEA3H grid type.
+Many different grid resolutions are available for many different grids. Grid
+types, and some details about them follow.
+
+For each of the following three grids, at every resolution there are 12 pentagonal
+cells. Every other cell is a hexagon. The pentagons have an area exactly 5/6 the
+area of a hexagon.
+
+###ISEA3H
+
+The following chart shows the number of cells, their area, and statistics
+regarding the spacing of their center nodes for the ISEA3H grid type.
 
 |Res |Number of Cells  | Cell Area (km^2) |    Min      |     Max     |    Mean     |    Std    |
 |---:|----------------:|-----------------:|------------:|------------:|------------:|----------:|
@@ -64,8 +72,18 @@ the spacing of their center nodes for the ISEA3H grid type.
 | 19 |  11,622,614,672 |          0.04389 |     0.20743 |     0.26137 |     0.22643 |   0.01371 |
 | 20 |  34,867,844,012 |          0.01463 |     0.11208 |     0.14489 |     0.13071 |   0.00827 |
 
-Cells from one resolution level are partially contained by the cells of other
-levels:
+
+###ISEA4H
+
+TODO
+
+###ISEA43H
+
+TODO
+
+
+In the above grids cells from one resolution level are partially contained by
+the cells of other levels:
 
 ![Nested hexagonal grid](hex_grid_nested.png)
 
@@ -221,6 +239,9 @@ This R package was developed by Richard Barnes (http://rbarnes.org).
 The dggrid conversion software was developed predominantly by Kevin Sahr
 [http://www.discreteglobalgrids.org](http://www.discreteglobalgrids.org), with
 contributions from a few others.
+
+Large portions of the above documentation are drawn from the DGGRID version 6.2b
+User Documentation, which is available in its entirety [here](#TODO).
 
 
 
