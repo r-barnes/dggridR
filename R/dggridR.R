@@ -8,7 +8,8 @@
 #' @return A string representing the path to the dggrid executable.
 #'
 dg_exe_path <- function(){
-  file.path(system.file(package="dggridR"), "bin", "dggrid")
+  exe_name <- switch(Sys.info()[['sysname']], Windows='dggrid.exe', 'dggrid')
+  file.path(system.file(package="dggridR"), "bin", exe_name)
 }
 
 
@@ -194,7 +195,7 @@ dgverify <- function(dggs){
 #' dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 #'
 #' @export 
-dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying the original dggs
+dgtransform <- function(dggs, lat, lon, clean=TRUE){ #TODO: Make sure we're not modifying the original dggs
   dgverify(dggs)
 
   glon      <- lon>180
@@ -204,9 +205,6 @@ dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying th
 
   inputfile  <- tempfile(pattern = "dggridR-", fileext=".indat" )
   outputfile <- tempfile(pattern = "dggridR-", fileext=".outdat")
-
-  message(inputfile)
-  message(outputfile)
 
   df <- data.frame(long=lon,lat=lat)
   write.table(df, inputfile, sep=",", col.names=FALSE, row.names=FALSE) #TODO: Verify output precision
@@ -224,7 +222,11 @@ dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying th
   dgrun(dggs)
 
   #TODO: Consider reading cell ids as strings instead :-(
-  ret <- read.csv(dggs[['output_file_name']], header=FALSE)$V1
+  ret <- read.csv(outputfile, header=FALSE)$V1
+
+  #Clean up
+  file.remove(inputfile)
+  file.remove(outputfile)
 
   if(any(ret>=2^53)) #R stores large numbers as an IEEE754 double, so we get 53 bits of exact integer goodness.
     message('dgtransform(): Length of cell ids overflowed R\'s numeric storage capacity. Use a lower resolution')
@@ -619,9 +621,6 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE){
   inputfile <- tempfile(pattern = "dggridR-", fileext=".indat"   )
   cellfile  <- tempfile(pattern = "dggridR-", fileext=".cell_dat")
 
-  message(inputfile)
-  message(cellfile)
-  
   dggs[['dggrid_operation']] = 'GENERATE_GRID'
   dggs[['update_frequency']] = 10000000
 
@@ -647,7 +646,13 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE){
   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
 
   cellfile <- paste(cellfile,".kml",sep="")
-  dg_process_kml(cellfile,frame)
+  ret      <- dg_process_kml(cellfile,frame)
+
+  #Clean up
+  file.remove(inputfile)
+  file.remove(cellfile)
+
+  ret
 }
 
 
@@ -690,12 +695,8 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE){
 dgearthgrid <- function(dggs,frame=TRUE){ #TODO: Densify?
   dgverify(dggs) 
 
-  inputfile <- tempfile(pattern = "dggridR-", fileext=".indat"   )
   cellfile  <- tempfile(pattern = "dggridR-", fileext=".cell_dat")
 
-  message(inputfile)
-  message(cellfile)
-  
   dggs[['dggrid_operation']] = 'GENERATE_GRID'
   dggs[['update_frequency']] = 10000000
 
@@ -707,6 +708,10 @@ dgearthgrid <- function(dggs,frame=TRUE){ #TODO: Densify?
   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
 
   cellfile <- paste(cellfile,".kml",sep="")
+  ret      <- dg_process_kml(cellfile,frame)
 
-  dg_process_kml(cellfile,frame)
+  #Clean up
+  file.remove(cellfile)
+
+  ret
 }
