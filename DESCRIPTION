@@ -9,7 +9,9 @@ NeedsCompilation: yes
 Depends: R (>= 3.0.0), rgdal (>= 1.1), ggplot2 (>= 2.1)
 Suggests: dplyr, 
     knitr,
-    rmarkdown
+    rmarkdown,
+    maps,
+    mapproj
 License: MIT + file LICENSE
 Authors@R: c(person("Richard", "Barnes", role = c("aut", "cre"), email = "rbarnes@umn.edu"),
              person("Kevin", "Sahr", role = "ctb", email = "sahrk@sou.edu"))
