@@ -105,7 +105,7 @@ The following example demonstrates converting lat-long locations (the epicenters
 of earthquakes) to discrete global grid locations (cell numbers), binning based
 on these numbers, and plotting the result.
 
-```{r, fig.width=5, fig.height=5}
+```{r, fig.width=5, fig.height=5, results='hide', warning=FALSE, error=FALSE}
 #Include libraries
 library(dggridR)
 library(dplyr)
