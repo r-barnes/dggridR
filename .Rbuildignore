@@ -1,3 +1,5 @@
 .git
 .gitignore
 ..Rcheck
+src/bob
+.*.tar.gz
