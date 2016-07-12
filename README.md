@@ -3,25 +3,24 @@ dggridR: Discrete Global Grids for R
 
 _Spatial Analysis Done Right_
 
-You want to do some spatial statistics, and it's going to involve binning.
+You want to do spatial statistics, and it's going to involve binning.
 
-You *know* that using rectangular bins is wrong, wrong, wrong because they will
-require introducing space-distorting projections.
-
-What you want are bins of equal size, regardless of where they are on the globe.
-
-dggridR solves that problem.
-
-dggridR builds discrete global grids which partition the surface of the Earth
-into hexagonal, triangular, or diamond cells, **all of which have the same
-size.** (There are some caveats: see the vignettes.)
-
-You could do your analyses on a planet where Greenland is bigger than the United
-States (it's not) and Antarctica is the largest continent (it's really not):
+Binning with a rectangular grid introduces messy distortions. At the macro-scale
+using a rectangular grid does things like making Greenland bigger than the
+United States and Antarctica the largest continent.
 
 ![Mercator Projection](readme_files/mercator.png)
 
-**Or you could do things right:**
+But this kind of distortion is present no matter what the resolution is.
+
+What you want are bins of equal size, regardless of where they are on the globe,
+regardless of their resolution.
+
+dggridR solves this problem.
+
+dggridR builds discrete global grids which partition the surface of the Earth
+into hexagonal, triangular, or diamond cells, **all of which have the same
+size.** (There are some minor caveats which are detailed in the vignettes.)
 
 ![Mercator Projection](readme_files/dggrid.png)
 
