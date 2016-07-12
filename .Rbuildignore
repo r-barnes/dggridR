@@ -6,3 +6,9 @@ NOTES
 dggridR.Rcheck
 readme_files
 zmisc
+src/.*\.o
+src/.*\.depends
+src/.*\.a
+src/apps/appex/appex
+src/apps/dggrid/dggrid
+src/clean
