@@ -9,7 +9,7 @@ Binning with a rectangular grid introduces messy distortions. At the macro-scale
 using a rectangular grid does things like making Greenland bigger than the
 United States and Antarctica the largest continent.
 
-![Mercator Projection](readme_files/mercator.png)
+![Mercator Projection](vignettes/mercator.png)
 
 But this kind of distortion is present no matter what the resolution is.
 
@@ -22,7 +22,7 @@ dggridR builds discrete global grids which partition the surface of the Earth
 into hexagonal, triangular, or diamond cells, **all of which have the same
 size.** (There are some minor caveats which are detailed in the vignettes.)
 
-![Mercator Projection](readme_files/dggrid.png)
+![Discrete Global Grid in use](readme_files/dggrid.png)
 
 This package includes everything you need to make spatial binning great again.
 
