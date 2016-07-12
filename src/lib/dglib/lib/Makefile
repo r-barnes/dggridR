@@ -19,7 +19,7 @@ $(LIB): $(SRC) $(OBJS) $(DEPS)
 	$(CXX) -c $< $(CCFLAGS)
 
 %.depends: %.cpp
-	$(CXX) -M $(CCFLAGS) $< > $@
+	$(CXX) -MM $(CCFLAGS) $< > $@
 
 clean:
 	rm -rf $(OBJS) $(LIB) $(DEPS) ii_files ti_files make.out

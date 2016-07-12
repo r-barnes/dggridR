@@ -2,8 +2,7 @@ PREFIX	=	/usr/local
 CFLAGS	=	-g -Wall -fPIC
 
 LIBOBJ	=	shpopen.o dbfopen.o safileio.o shptree.o 
-SHPBIN	=	shpcreate shpadd shpdump shprewind dbfcreate dbfadd dbfdump \
-		shptreedump 
+SHPBIN	=	shpcreate shpadd shpdump shprewind dbfcreate dbfadd dbfdump shptreedump 
 
 default:	all
 
