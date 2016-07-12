@@ -1,7 +1,5 @@
 PREFIX	=	/usr/local
 CFLAGS	=	-g -Wall -fPIC
-#CFLAGS  =       -g -DUSE_CPL
-#CC = g++
 
 LIBOBJ	=	shpopen.o dbfopen.o safileio.o shptree.o 
 SHPBIN	=	shpcreate shpadd shpdump shprewind dbfcreate dbfadd dbfdump \
