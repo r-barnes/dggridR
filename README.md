@@ -22,7 +22,7 @@ dggridR builds discrete global grids which partition the surface of the Earth
 into hexagonal, triangular, or diamond cells, **all of which have the same
 size.** (There are some minor caveats which are detailed in the vignettes.)
 
-![Discrete Global Grid in use](readme_files/dggrid.png)
+![Discrete Global Grid in use](vignettes/dggrid.png)
 
 This package includes everything you need to make spatial binning great again.
 
