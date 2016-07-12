@@ -1,12 +1,12 @@
 ---
-title:  "dggridR: Spatial Statistics Done Right"
+title:  "dggridR: Discrete Global Grids for R"
 author:
 - Richard Barnes
 - Kevin Sahr
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{dggridR: Spatial Statistics Done Right}
+  %\VignetteIndexEntry{dggridR: Discrete Global Grids for R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

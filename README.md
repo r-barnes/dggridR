@@ -1,5 +1,7 @@
-dggridR: Spatial Analysis Done Right
+dggridR: Discrete Global Grids for R
 ====================================
+
+_Spatial Analysis Done Right_
 
 You want to do some spatial statistics, and it's going to involve binning.
 
@@ -27,6 +29,8 @@ States (it's not) and Antarctica is the largest continent (it's really not):
 ![Mercator Projection](readme_files/dggrid.png)
 
 This package includes everything you need to make spatial binning great again.
+
+Many details are included in the vignette.
 
 
 
@@ -102,7 +106,7 @@ Disclaimer
 ----------
 
 This package *should* operate in the manner described here, in the package's
-main documentation, and in Kevin Sahr's dggrid documentation. Unfortunately,
+main documentation, and in Kevin Sahr's `dggrid` documentation. Unfortunately,
 none of us are paid enough to make absolutely, doggone certain that that's the
 case. That said, if you find bugs or are seeking enhancements, we want to hear
 about them.
