@@ -11,7 +11,8 @@ Suggests: dplyr,
     knitr,
     rmarkdown,
     maps,
-    mapproj
+    mapproj,
+    R.rsp
 License: MIT + file LICENSE
 Authors@R: c(person("Richard", "Barnes", role = c("aut", "cre"), email = "rbarnes@umn.edu"),
              person("Kevin", "Sahr", role = "ctb", email = "sahrk@sou.edu"))
@@ -21,4 +22,4 @@ Description: Provides utilities for binning lat-long data into equally-sized
 URL: https://github.com/r-barnes/dggridR/
 BugReports: https://github.com/r-barnes/dggridR/
 RoxygenNote: 5.0.1
-VignetteBuilder: knitr
+VignetteBuilder: knitr, R.rsp
