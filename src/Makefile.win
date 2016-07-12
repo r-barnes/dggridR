@@ -14,6 +14,6 @@ export
 all: $(DGGRID_DIR) $(APPEX_DIR)
 
 $(DGGRID_DIR) $(APPEX_DIR) $(LIBRARIES):
-  $(MAKE) --directory=$@
+	$(MAKE) --directory=$@
 
 $(DGGRID_DIR) $(APPEX_DIR): $(LIBRARIES)
