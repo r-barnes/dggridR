@@ -35,7 +35,9 @@ library(dggridR)
 dggs <- dgconstruct(spacing=1000,metric=FALSE,resround='down')
 
 #Get grid cells for the conterminous United States
-grid <- dgrectgrid(dggs,minlat=24.7433195, minlon=-124.7844079, maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
+grid <- dgrectgrid(dggs,
+               minlat=24.7433195, minlon=-124.7844079, 
+               maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
 
 }
 

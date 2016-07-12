@@ -195,7 +195,7 @@ dgverify <- function(dggs){
 #' dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 #'
 #' @export 
-dgtransform <- function(dggs, lat, lon, clean=TRUE){ #TODO: Make sure we're not modifying the original dggs
+dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying the original dggs
   dgverify(dggs)
 
   glon      <- lon>180
