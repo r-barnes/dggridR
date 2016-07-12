@@ -6,18 +6,15 @@ _Spatial Analysis Done Right_
 You want to do some spatial statistics, and it's going to involve binning.
 
 You *know* that using rectangular bins is wrong, wrong, wrong because they will
-require either:
-
-- Introducing projections, which distort space
-- Using a lat-long grid, which gets narrower towards the poles
+require introducing space-distorting projections.
 
 What you want are bins of equal size, regardless of where they are on the globe.
 
 dggridR solves that problem.
 
 dggridR builds discrete global grids which partition the surface of the Earth
-into hexagonal, triangular, pentagonal, or square cells, **all of which are of
-equal size!**
+into hexagonal, triangular, or diamond cells, **all of which have the same
+size.** (There are some caveats: see the vignettes.)
 
 You could do your analyses on a planet where Greenland is bigger than the United
 States (it's not) and Antarctica is the largest continent (it's really not):
@@ -54,7 +51,7 @@ data(dgquakes)
 #Get the corresponding grid cells for each earthquake epicenter (lat-long pair)
 dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 
-#Get the number of earthquakes in each, equally-sized cell
+#Get the number of earthquakes in each equally-sized cell
 quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
 ```
 
