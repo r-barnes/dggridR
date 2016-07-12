@@ -1,5 +1,8 @@
 .git
 .gitignore
-..Rcheck
-src/bob
-.*.tar.gz
+dggridR.*.tar.gz
+wintest
+NOTES
+dggridR.Rcheck
+readme_files
+zmisc

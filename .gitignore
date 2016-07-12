@@ -16,3 +16,6 @@ src/lib/shapelib-1.3.0/shptest
 src/lib/shapelib-1.3.0/shptreedump
 *.tar.gz
 vignettes/*.html
+zmisc/
+wintest
+dggridR.Rcheck/
