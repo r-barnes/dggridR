@@ -3,7 +3,7 @@ Type: Package
 Title: Discrete Global Grids for R
 Version: 0.0.1
 Date: 2016-07-08
-Author: Richard Barnes [aut, cre], Kevin Sahr [ctb],
+Author: Richard Barnes [aut, cre], Kevin Sahr [ctb]
 Maintainer: Richard Barnes <rbarnes@umn.edu>
 NeedsCompilation: yes
 Depends: R (>= 3.0.0), rgdal (>= 1.1), ggplot2 (>= 2.1)
