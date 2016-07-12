@@ -4,7 +4,6 @@ dggridR.*.tar.gz
 wintest
 NOTES
 dggridR.Rcheck
-zmisc
 src/.*\.o$
 src/.*\.depends$
 src/.*\.a$
