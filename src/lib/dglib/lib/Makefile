@@ -12,14 +12,14 @@ CCFLAGS = ${INCDIRS} ${ADD_CC_FLAGS}
 all: $(LIB)
 
 $(LIB): $(SRC) $(OBJS) $(DEPS)
-	ar ruv $(LIB) $(OBJS)
-	ranlib $(LIB)
+	$(AR) ruv $(LIB) $(OBJS)
+	$(RANLIB) $(LIB)
 
 %.o: %.cpp 
-	$(CPPCOMP) -c $< $(CCFLAGS)
+	$(CXX) -c $< $(CCFLAGS)
 
 %.depends: %.cpp
-	$(CPPCOMP) -M $(CCFLAGS) $< > $@
+	$(CXX) -M $(CCFLAGS) $< > $@
 
 clean:
 	rm -rf $(OBJS) $(LIB) $(DEPS) ii_files ti_files make.out

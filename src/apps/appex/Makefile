@@ -18,16 +18,16 @@ LDLIBS= $(DGLIBDIR)/lib/dglib.a \
 all: $(TARGET)
 
 ${TARGET}: $(SRC) $(OBJS) $(DEPS) $(LDLIBS)
-	${CPPCOMP} $(CCFLAGS) $(EXPORT) -o ${TARGET} ${OBJS} $(LDLIBS)
+	$(CXX) $(CCFLAGS) $(EXPORT) -o ${TARGET} ${OBJS} $(LDLIBS)
 
 %.o: %.cpp
-	$(CPPCOMP) -c $< $(CCFLAGS) -o $@
+	$(CXX) -c $< $(CCFLAGS) -o $@
 
 link:
-	${CPPCOMP} $(CCFLAGS) $(EXPORT) -o ${TARGET} ${OBJS} $(LDLIBS)
+	$(CXX) $(CCFLAGS) $(EXPORT) -o ${TARGET} ${OBJS} $(LDLIBS)
 
 %.depends: %.cpp
-	$(CPPCOMP) -M $(CCFLAGS) $< > $@
+	$(CXX) -M $(CCFLAGS) $< > $@
 
 $(LDLIBS):
 	cd $(GPCLIBDIR)/lib; ${MAKE}

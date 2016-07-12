@@ -1,5 +1,3 @@
-export CCOMP = cc
-export CPPCOMP = c++
 export ADD_CC_FLAGS = -O3
 DGGRID_DIR = ./apps/dggrid
 APPEX_DIR = ./apps/appex
@@ -7,21 +5,18 @@ DG_DIR = ./lib/dglib
 GPC_DIR = ./lib/gpclib
 PROJ4_DIR = ./lib/proj4lib
 SHPLIB_HDR_DIR = ./lib/shapelib-1.3.0
-LIBRARIES = $(DG_DIR)/lib $(GPC_DIR)/lib $(PROJ4_DIR)/lib
+LIBRARIES = $(DG_DIR)/lib $(GPC_DIR)/lib $(PROJ4_DIR)/lib $(SHPLIB_HDR_DIR)
 
-#ADD_LD_LIBS = ./lib/shapelib-1.3.0/libshp.a
+export
 
 .PHONY: all $(DGGRID_DIR) $(LIBRARIES)
 
-all: $(DGGRID_DIR) $(APPEX_DIR) shapelib
+all: $(DGGRID_DIR) $(APPEX_DIR)
 
-$(DGGRID_DIR) $(APPEX_DIR) $(LIBRARIES): shapelib
+$(DGGRID_DIR) $(APPEX_DIR) $(LIBRARIES):
 	$(MAKE) --directory=$@
 
-$(DGGRID_DIR) $(APPEX_DIR): $(LIBRARIES) shapelib
-
-shapelib:
-	$(MAKE) --directory=lib/shapelib-1.3.0/
+$(DGGRID_DIR) $(APPEX_DIR): $(LIBRARIES)
 
 clean:
 	cd $(DGGRID_DIR); $(MAKE) clean

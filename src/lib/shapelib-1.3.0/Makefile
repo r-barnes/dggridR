@@ -12,46 +12,46 @@ default:	all
 all:	$(SHPBIN) shptest lib
 
 shpopen.o:	shpopen.c shapefil.h
-	$(CCOMP) $(CFLAGS) -c shpopen.c
+	$(CC) $(CFLAGS) -c shpopen.c
 
 shptree.o:	shptree.c shapefil.h
-	$(CCOMP) $(CFLAGS) -c shptree.c
+	$(CC) $(CFLAGS) -c shptree.c
 
 dbfopen.o:	dbfopen.c shapefil.h
-	$(CCOMP) $(CFLAGS) -c dbfopen.c
+	$(CC) $(CFLAGS) -c dbfopen.c
 
 safileio.o:	safileio.c shapefil.h
-	$(CCOMP) $(CFLAGS) -c safileio.c
+	$(CC) $(CFLAGS) -c safileio.c
 
 shpcreate:	shpcreate.c shpopen.o safileio.o 
-	$(CCOMP) $(CFLAGS) shpcreate.c shpopen.o safileio.o $(LINKOPT) -o shpcreate
+	$(CC) $(CFLAGS) shpcreate.c shpopen.o safileio.o $(LINKOPT) -o shpcreate
 
 shpadd:		shpadd.c shpopen.o safileio.o
-	$(CCOMP) $(CFLAGS) shpadd.c shpopen.o safileio.o $(LINKOPT) -o shpadd
+	$(CC) $(CFLAGS) shpadd.c shpopen.o safileio.o $(LINKOPT) -o shpadd
 
 shpdump:	shpdump.c shpopen.o safileio.o
-	$(CCOMP) $(CFLAGS) shpdump.c shpopen.o safileio.o $(LINKOPT) -o shpdump
+	$(CC) $(CFLAGS) shpdump.c shpopen.o safileio.o $(LINKOPT) -o shpdump
 
 shprewind:	shprewind.c shpopen.o safileio.o
-	$(CCOMP) $(CFLAGS) shprewind.c shpopen.o safileio.o $(LINKOPT) -o shprewind
+	$(CC) $(CFLAGS) shprewind.c shpopen.o safileio.o $(LINKOPT) -o shprewind
 
 dbfcreate:	dbfcreate.c dbfopen.o safileio.o
-	$(CCOMP) $(CFLAGS) dbfcreate.c dbfopen.o safileio.o $(LINKOPT) -o dbfcreate
+	$(CC) $(CFLAGS) dbfcreate.c dbfopen.o safileio.o $(LINKOPT) -o dbfcreate
 
 dbfadd:		dbfadd.c dbfopen.o safileio.o
-	$(CCOMP) $(CFLAGS) dbfadd.c dbfopen.o safileio.o $(LINKOPT) -o dbfadd
+	$(CC) $(CFLAGS) dbfadd.c dbfopen.o safileio.o $(LINKOPT) -o dbfadd
 
 dbfdump:	dbfdump.c dbfopen.o safileio.o
-	$(CCOMP) $(CFLAGS) dbfdump.c dbfopen.o safileio.o $(LINKOPT) -o dbfdump
+	$(CC) $(CFLAGS) dbfdump.c dbfopen.o safileio.o $(LINKOPT) -o dbfdump
 
 shptest:	shptest.c shpopen.o safileio.o
-	$(CCOMP) $(CFLAGS) shptest.c shpopen.o safileio.o $(LINKOPT) -o shptest
+	$(CC) $(CFLAGS) shptest.c shpopen.o safileio.o $(LINKOPT) -o shptest
 
 shputils:	shputils.c shpopen.o safileio.o dbfopen.o 
-	$(CCOMP) $(CFLAGS) shputils.c shpopen.o safileio.o dbfopen.o  $(LINKOPT) -o shputils
+	$(CC) $(CFLAGS) shputils.c shpopen.o safileio.o dbfopen.o  $(LINKOPT) -o shputils
 
 shptreedump:	shptreedump.c shptree.o shpopen.o safileio.o
-	$(CCOMP) $(CFLAGS) shptreedump.c shptree.o shpopen.o safileio.o $(LINKOPT) \
+	$(CC) $(CFLAGS) shptreedump.c shptree.o shpopen.o safileio.o $(LINKOPT) \
 		-o shptreedump
 
 clean:
@@ -99,7 +99,7 @@ test3:
 lib:	libshp.a
 
 libshp.a:	$(LIBOBJ)
-	ar r libshp.a $(LIBOBJ)
+	$(AR) r libshp.a $(LIBOBJ)
 
 lib_install:	libshp.a
 	cp libshp.a $(PREFIX)/lib
