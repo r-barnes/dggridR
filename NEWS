@@ -5,9 +5,9 @@ Changes:
 
 * Added getmaxcell(): Useful for obtaining random grid cells
 * Made dgverify() public: Aids in debugging, possibly useful for users
-* Add `wrapcells` argmuent to grid generation functions: makes plotting easier
+* Added `wrapcells` argmuent to grid generation functions: makes plotting easier
 * Added more examples
-
+* Added `savegrid` argument to make it easier to output grids for other purposes
 
 
 dggridR v0.0.1 (Release date: 2016-07-09)
