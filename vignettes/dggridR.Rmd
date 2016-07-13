@@ -11,7 +11,30 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-![Discrete Global Grid Image](earth_grid.jpg)
+
+```{r, fig.width=5, fig.height=5, results='hide', warning=FALSE, error=FALSE, message=FALSE, echo=FALSE, fig.align='center'}
+#Generate cover picture
+library(dggridR)
+#Generate a global grid whose cells are ~100,000 km^2
+dggs <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
+#Save the cells to a KML file for use in other software
+grid      <- dgearthgrid(dggs,frame=TRUE,wrapcells=TRUE,savegrid=FALSE)
+countries <- map_data("world")
+
+ggplot() + 
+    geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
+    geom_polygon(data=grid,      aes(x=long, y=lat, group=group), fill="blue", alpha=0.4)    +
+    geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white") +
+    scale_fill_gradient(low="blue", high="red")+
+    coord_map("ortho", orientation = c(-38.49831, -179.9223, 0))+
+    xlab('')+ylab('')+
+    theme(axis.ticks.x=element_blank())+
+    theme(axis.ticks.y=element_blank())+
+    theme(axis.text.x=element_blank())+
+    theme(axis.text.y=element_blank())
+```
+
+
 
 _Spatial Analysis Done Right_
 
