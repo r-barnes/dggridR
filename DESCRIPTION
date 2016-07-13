@@ -16,9 +16,7 @@ Suggests: dplyr,
 License: MIT + file LICENSE
 Authors@R: c(person("Richard", "Barnes", role = c("aut", "cre"), email = "rbarnes@umn.edu"),
              person("Kevin", "Sahr", role = "ctb", email = "sahrk@sou.edu"))
-Description: Provides utilities for binning lat-long data into equally-sized
-             bins using discrete global grids, along with utilities to aid in 
-             plotting such data.
+Description: Spatial analyses involving binning require that every bin have the same area, but this is impossible using a rectangular grid laid over the Earth or over any projection of the Earth. Discrete global grids use hexagons, triangles, and diamonds to overcome this issue, overlaying the Earth with equally-sized bins. This package provides utilities for working with discrete global grids, along with utilities to aid in plotting such data.
 URL: https://github.com/r-barnes/dggridR/
 BugReports: https://github.com/r-barnes/dggridR/
 RoxygenNote: 5.0.1
