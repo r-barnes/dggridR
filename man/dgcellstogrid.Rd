@@ -4,13 +4,20 @@
 \alias{dgcellstogrid}
 \title{Return boundary coordinates for specified cells}
 \usage{
-dgcellstogrid(dggs, cells, frame = TRUE)
+dgcellstogrid(dggs, cells, frame = TRUE, wrapcells = TRUE)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
 
 \item{frame}{If TRUE, return a data frame suitable for ggplot plotting.
 If FALSE, return an OGR poly object}
+
+\item{wrapcells}{Cells which cross -180/180 degrees can present 
+difficulties for plotting. Setting this TRUE will result in
+cells with components in both hemispheres to be mapped
+entirely to positive degrees (the Eastern hemisphere). As a
+result, such cells will have components in the range
+[180,360). Only used when \code{frame=TRUE}.}
 }
 \value{
 Returns a data frame or OGR poly object, as specified by \code{frame}
