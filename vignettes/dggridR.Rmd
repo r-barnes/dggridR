@@ -93,6 +93,7 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 
 |Res |Number of Cells  | Cell Area (km^2) |    Min      |     Max     |    Mean     |    Std    |
 |---:|----------------:|-----------------:|------------:|------------:|------------:|----------:|
+|  0 |              12 | 51,006,562.17241 |             |             |             |           |
 |  1 |              32 | 17,002,187.39080 | 4,156.18000 | 4,649.10000 | 4,320.49000 | 233.01400 |
 |  2 |              92 |  5,667,395.79693 | 2,324.81000 | 2,692.72000 | 2,539.69000 | 139.33400 |
 |  3 |             272 |  1,889,131.93231 | 1,363.56000 | 1,652.27000 | 1,480.02000 |  89.39030 |
@@ -144,11 +145,13 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 
 ##Examples
 
+###Binning Lat-Long Points
+
 The following example demonstrates converting lat-long locations (the epicenters
 of earthquakes) to discrete global grid locations (cell numbers), binning based
 on these numbers, and plotting the result.
 
-```{r, fig.width=5, fig.height=5, results='hide', warning=FALSE, error=FALSE}
+```{r, results='hide', warning=FALSE, error=FALSE}
 #Include libraries
 library(dggridR)
 library(dplyr)
@@ -167,7 +170,7 @@ quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
 
 #Get the grid cell boundaries for the whole Earth using this dggs in a form
 #suitable for plotting with ggplot2
-grid          <- dgcellstogrid(dggs,quakecounts$cell,frame=TRUE)
+grid          <- dgcellstogrid(dggs,quakecounts$cell,frame=TRUE,wrapcells=TRUE)
 
 #Update the grid cells' properties to include the number of earthquakes
 #in each cell
@@ -177,19 +180,6 @@ grid          <- merge(grid,quakecounts,by.x="Name",by.y="cell")
 grid$count    <- log(grid$count)
 cutoff        <- quantile(grid$count,0.9)
 grid          <- grid %>% mutate(count=ifelse(count>cutoff,cutoff,count))
-
-#Polygons crossing the -180/180 degree line cause polygons will end up getting
-#stretched all over the map. Let's fix that.
-
-#Find dangerous polygons based on how many degrees of longitude they span
-groups_to_wrap <- grid %>% group_by(group) %>% summarise(diff=max(long)-min(long)) %>% filter(diff>180) %>% select(group)
-
-#Adjust them so they appear on the eastern side of the map
-grid           <- grid %>% mutate(long=ifelse(group %in% groups_to_wrap$group, ifelse(long<0,long+360,long), long))
-
-#Arrange polygon points so they are ordered appropriately, otherwise the results
-#will not be nice, closed cells, but weird triangular thingies
-grid           <- grid %>% arrange(group,order)
 
 #Get polygons for each country of the world
 countries <- map_data("world")
@@ -243,6 +233,139 @@ grid@data$count <- merge(grid@data, quakecounts, by.x="Name", by.y="cell", all.x
 #Write out the grid
 writeOGR(grid, "quakes_per_cell.kml", "quakes", "KML")
 ```
+
+
+###Randomly Sampling the Earth: Method 1
+
+Say you want to sample `N` areas of equal size uniformly distributed on the
+Earth. dggridR provides two possible ways to accomplish this. The conceptually
+simplest is to choose `N` uniformly distributed lat-long pairs and retrieve
+their associated grid cells:
+
+```{r, results='hide', warning=FALSE, error=FALSE}
+#Include libraries
+library(dggridR)
+library(rgdal)
+library(dplyr)
+
+N <- 100    #How many cells to sample
+
+#Distribute the points uniformly on a sphere using equations from
+#http://mathworld.wolfram.com/SpherePointPicking.html
+u     <- runif(N)
+v     <- runif(N)
+theta <- 2*pi*u      * 180/pi
+phi   <- acos(2*v-1) * 180/pi
+lon   <- theta-180
+lat   <- phi-90
+
+df    <- data.frame(lat=lat,lon=lon)
+
+#Construct a global grid in which every hexagonal cell has an area of
+#100,000 km^2. You could, of course, choose a much smaller value, but these
+#will show up when I map them later.
+
+#Note: Cells can only have certain areas, the `dgconstruct()` function below
+#will tell you which area is closest to the one you want. You can also round
+#up or down.
+
+#Note: 12 cells are actually pentagons with an area 5/6 that of the hexagons
+#But, with millions and millions of hexes, you are unlikely to choose one
+#Future versions of the package will make it easier to reject the pentagons
+dggs    <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
+
+#Get the corresponding grid cells for each randomly chosen lat-long
+df$cell <- dgtransform(dggs,df$lat,df$lon)
+
+#Get the hexes for each of these cells
+grid    <- dgcellstogrid(dggs,df$cell,frame=FALSE)
+
+#Save the hex boundaries to a handy KML file for use in your project
+writeOGR(grid, "dgg_sample_cells.kml", "cells", "KML")
+```
+
+The resulting distribution of cells appears as follows:
+
+```{r, fig.width=6, fig.height=4}
+#Get the grid in a more convenient format
+grid           <- dgcellstogrid(dggs,df$cell,frame=TRUE,wrapcells=TRUE)
+
+#Get polygons for each country of the world
+countries      <- map_data("world")
+
+#Plot everything on a flat map
+p<- ggplot() + 
+    geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
+    geom_polygon(data=grid,      aes(x=long, y=lat, group=group), fill="green", alpha=0.4)    +
+    geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white")
+p
+```
+
+
+
+
+
+
+
+
+###Randomly Sampling the Earth: Method 2
+
+Say you want to sample `N` areas of equal size uniformly distributed on the
+Earth. dggridR provides two possible ways to accomplish this. The easiest way to
+do this is to note that grid cells are labeled from 1 to `M`, where `M` is the
+largest cell id at the resolution in question. Therefore, we can sample cell ids
+and generate a grid accordingly.
+
+```{r, results='hide', warning=FALSE, error=FALSE}
+#Include libraries
+library(dggridR)
+library(dplyr)
+
+N <- 100    #How many cells to sample
+
+#Construct a global grid in which every hexagonal cell has an area of
+#100,000 km^2. You could, of course, choose a much smaller value, but these
+#will show up when I map them later.
+
+#Note: Cells can only have certain areas, the `dgconstruct()` function below
+#will tell you which area is closest to the one you want. You can also round
+#up or down.
+
+#Note: 12 cells are actually pentagons with an area 5/6 that of the hexagons
+#But, with millions and millions of hexes, you are unlikely to choose one
+#Future versions of the package will make it easier to reject the pentagons
+dggs    <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
+
+maxcell <- dgmaxcell(dggs)                     #Get maximum cell id
+cells   <- sample(1:maxcell, N, replace=FALSE) #Choose random cells
+grid    <- dgcellstogrid(dggs,cells,frame=TRUE,wrapcells=TRUE) #Get grid
+```
+
+The resulting distribution of cells appears as follows:
+
+```{r, fig.width=6, fig.height=4}
+#Get the grid in a more convenient format
+grid           <- dgcellstogrid(dggs,df$cell,frame=TRUE,wrapcells=TRUE)
+
+#Get polygons for each country of the world
+countries      <- map_data("world")
+
+#Plot everything on a flat map
+p<- ggplot() + 
+    geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
+    geom_polygon(data=grid,      aes(x=long, y=lat, group=group), fill="green", alpha=0.4)    +
+    geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white")
+p
+```
+
+
+
+
+
+
+
+
+
 
 
 ##Roadmap
