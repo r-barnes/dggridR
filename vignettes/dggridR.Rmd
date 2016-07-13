@@ -156,7 +156,7 @@ The following example demonstrates converting lat-long locations (the epicenters
 of earthquakes) to discrete global grid locations (cell numbers), binning based
 on these numbers, and plotting the result.
 
-```{r, results='hide', warning=FALSE, error=FALSE}
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
 library(dplyr)
@@ -247,7 +247,7 @@ Earth. dggridR provides two possible ways to accomplish this. The conceptually
 simplest is to choose `N` uniformly distributed lat-long pairs and retrieve
 their associated grid cells:
 
-```{r, results='hide', warning=FALSE, error=FALSE}
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
 library(rgdal)
@@ -318,7 +318,7 @@ do this is to note that grid cells are labeled from 1 to `M`, where `M` is the
 largest cell id at the resolution in question. Therefore, we can sample cell ids
 and generate a grid accordingly.
 
-```{r, results='hide', warning=FALSE, error=FALSE}
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
 library(dplyr)
@@ -363,8 +363,18 @@ p
 
 
 
+###Save a grid for use in other software
 
+Reading the grid into R, as is done in the examples above, can be expensive. You
+can instead generate the grid directly to a temporary file, as follows:
 
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
+library(dggridR)
+#Generate a global grid whose cells are ~100,000 km^2
+dggs         <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
+#Save the cells to a KML file for use in other software
+gridfilename <- dgearthgrid(dggs,savegrid=TRUE)
+```
 
 
 
