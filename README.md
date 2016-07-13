@@ -25,9 +25,11 @@ size.** (There are some minor caveats which are detailed in the vignettes.)
 
 ![Discrete Global Grid in use](vignettes/dggrid.png)
 
+(Naturally, you can use _much_ smaller cells than those shown in the image above.)
+
 This package includes everything you need to make spatial binning great again.
 
-Many details are included in the vignette.
+Many details and examples are included in the vignette.
 
 
 
@@ -105,10 +107,10 @@ the spacing of their center nodes for the ISEA3H grid type.
 Credits
 -------
 
-Richard Barnes built this R package, but the heavy lifting was done by Kevin
-Sahr, who wrote the library the package uses. Credit is also due to John P.
-Snyder who worked out the advanced mathematics (which, to quote, XKCD, may be
-unsuitable for liberal-arts majors) behind some of the projections.
+Richard Barnes built this R package and parts of the underlying C/C++ library it
+uses, though the vast majority of that is due to Kevin Sahr. Credit is also due
+to John P. Snyder who worked out the advanced mathematics (which, to quote,
+XKCD, may be unsuitable for liberal-arts majors) behind some of the projections.
 
 
 
