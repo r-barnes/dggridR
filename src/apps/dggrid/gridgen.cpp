@@ -7,7 +7,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <fstream>
 #include <set>
+#include <cstdlib>
 
 using namespace std;
 
@@ -39,7 +41,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 GridGenParam::GridGenParam (DgParamList& plist)
-      : MainParam(plist), wholeEarth (true), clipAIGen (true),
+      : MainParam(plist), wholeEarth (false), seqToPoly(false), clipAIGen (true),
         nRandPts (0), clipRandPts (false), nDensify (1),
         nudge (0.001), ptsRand (0), doPointInPoly (true), 
         doPolyIntersect (false), sampleCount(0), nSamplePts(0), 
@@ -55,14 +57,15 @@ GridGenParam::GridGenParam (DgParamList& plist)
       getParamValue(plist, "clip_subset_type", dummy, false);
       if (dummy == "WHOLE_EARTH") 
          wholeEarth = true;
-      else 
-      {
-         wholeEarth = false;
-         if (dummy == "AIGEN") 
-            clipAIGen = true;
-         else // shapefiles
-            clipAIGen = false;
-      }
+      else if (dummy == "AIGEN")
+         clipAIGen  = true;
+      else if (dummy == "SHAPEFILE")
+         clipAIGen  = false; 
+      else if (dummy == "SEQTOPOLY")
+         seqToPoly = true;
+      else
+        ::report("Unrecognised value for 'clip_subset_type'", DgBase::Fatal);
+        //throw "Unrecognised value for 'clip_subset_type'";
 
       //// region file names
 
@@ -886,7 +889,50 @@ void genGrid (GridGenParam& dp)
 
    ////// do whole earth grid if applicable /////
 
-   if (dp.wholeEarth)
+   if (dp.seqToPoly)
+   {
+      dp.nCellsAccepted = 0;
+      dp.nCellsTested = 0;
+
+      const int maxLine = 1000;
+      char buff[maxLine];
+
+      std::ifstream fin(dp.regionFiles[0].c_str());
+      unsigned long int seqnum;
+      set<unsigned long int> seqnums; //To ensure each cell is printed once
+      while(1){
+        dp.nCellsTested++;
+
+        fin.getline(buff, maxLine);
+        if (fin.eof()) break;
+
+        unsigned long int sNum;
+        if (sscanf(buff, "%ld", &sNum) != 1)
+          ::report("doTransform(): invalid SEQNUM " + string(buff), DgBase::Fatal);
+
+        seqnums.insert(sNum);
+      }
+
+      for(set<unsigned long int>::iterator i=seqnums.begin();i!=seqnums.end();i++){
+        dp.nCellsAccepted++;
+
+        DgLocation* loc = static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(*i);
+        if (!dgg.bndRF().validLocation(*loc)){
+          std::cerr<<"doTransform(): SEQNUM " << (*i)<< " not a valid location"<<std::endl;
+          ::report("doTransform(): Invalid SEQNUM found.", DgBase::Warning);
+        }
+
+        outputStatus(dp);
+
+        DgPolygon verts(dgg);
+        dgg.setVertices(*loc, verts, dp.nDensify);
+
+        outputCellAdd2D(dp, dgg, *loc, verts, deg);
+
+        delete loc;
+      }
+   }
+   else if (dp.wholeEarth)
    {
       dp.nCellsAccepted = 0;
       dp.nCellsTested = 0;
@@ -1095,7 +1141,7 @@ void genGrid (GridGenParam& dp)
 
    cout << "\n** grid generation complete **" << endl;
    outputStatus(dp, true);
-   if (!dp.wholeEarth)
+   if (!dp.wholeEarth && !dp.seqToPoly)
       cout << "acceptance rate is " << 
           100.0 * (long double) dp.nCellsAccepted / (long double) dp.nCellsTested <<
           "%" << endl;

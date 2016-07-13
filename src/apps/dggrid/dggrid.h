@@ -134,6 +134,7 @@ class GridGenParam : public MainParam {
       // the parameters
 
       bool wholeEarth;       // generate entire grid?
+      bool seqToPoly;        // whether user wants polys from seqnum
       bool clipAIGen;        // clip using AIGen files (or Shapefiles)
       vector<string> regionFiles;
       int nRandPts;          // # of random pts generated for each hex

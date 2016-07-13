@@ -466,6 +466,7 @@ DgGridPList::DgGridPList (void)
    choices.push_back(new string("WHOLE_EARTH"));
    choices.push_back(new string("AIGEN"));
    choices.push_back(new string("SHAPEFILE"));
+   choices.push_back(new string("SEQTOPOLY"));
    insertParam(new DgStringChoiceParam("clip_subset_type", "WHOLE_EARTH", 
                &choices));
    dgg::util::release(choices);
