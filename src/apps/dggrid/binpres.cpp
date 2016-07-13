@@ -111,7 +111,7 @@ void BinPresenceParam::dump (void)
 
    cout << " *outFile: ";
    if (outFile)
-      cout << *outFile << endl;
+      cout << outFileName << endl;
    else
       cout << "null" << endl;
 
