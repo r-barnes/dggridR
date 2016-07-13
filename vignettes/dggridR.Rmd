@@ -139,6 +139,7 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 
     * `dgearthgrid()`
     * `dgrectgrid()`
+    * `dgcellstogrid()`
 
 
 ##Examples
@@ -166,7 +167,7 @@ quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
 
 #Get the grid cell boundaries for the whole Earth using this dggs in a form
 #suitable for plotting with ggplot2
-grid          <- dgearthgrid(dggs,frame=TRUE)
+grid          <- dgcellstogrid(dggs,quakecounts$cell,frame=TRUE)
 
 #Update the grid cells' properties to include the number of earthquakes
 #in each cell

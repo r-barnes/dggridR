@@ -717,3 +717,82 @@ dgearthgrid <- function(dggs,frame=TRUE){ #TODO: Densify?
 
   ret
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' @name dgcellstogrid
+#' 
+#' @title           Return boundary coordinates for specified cells
+#'
+#' @description     Returns the coordinates constituting the boundary of a 
+#'                  specified set of cells. Duplicates are eliminated to reduce
+#'                  processing and storage requirements.
+#'
+#' @param dggs      A dggs object from dgconstruct()
+#'
+#' @param frame     If TRUE, return a data frame suitable for ggplot plotting.
+#'                  If FALSE, return an OGR poly object
+#'
+#' @return Returns a data frame or OGR poly object, as specified by \code{frame}
+#'
+#' @examples 
+#' library(dggridR)
+#' data(dgquakes)
+#'
+#' #Construct a grid with cells about ~1000 miles wide
+#' dggs          <- dgconstruct(spacing=1000,metric=FALSE) 
+#' dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
+#'
+#' #Get grid cells for the conterminous United States
+#' grid          <- dgcellstogrid(dggs, dgquakes$cell, frame=TRUE)
+#'
+#' @export
+dgcellstogrid <- function(dggs,cells,frame=TRUE){ #TODO: Densify?
+  dgverify(dggs) 
+
+  inputfile <- tempfile(pattern = "dggridR-", fileext=".indat"   )
+  cellfile  <- tempfile(pattern = "dggridR-", fileext=".cell_dat")
+
+  #dggrid also eliminates duplicate cells, but doing so here saves disk space
+  #and likely wall time, given the costs of IO, not that it matters unless the
+  #data set is huge
+  cells <- unique(cells)
+
+  dggs[['dggrid_operation']] = 'GENERATE_GRID'
+  dggs[['update_frequency']] = 10000000
+
+  write.table(cells, file=inputfile, row.names=FALSE, col.names=FALSE)
+  dggs[['clip_region_files']] = inputfile
+  dggs[['clip_subset_type']]  = 'SEQTOPOLY'
+
+  dggs[['cell_output_file_name']] = cellfile
+  dggs[['cell_output_type']]      = 'KML' #SHAPEFILE or KML or GEOJSON or AIGEN
+
+  ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
+
+  cellfile <- paste(cellfile,".kml",sep="")
+  ret      <- dg_process_kml(cellfile,frame)
+
+  #Clean up
+  file.remove(inputfile)
+  file.remove(cellfile)
+
+  ret
+}
