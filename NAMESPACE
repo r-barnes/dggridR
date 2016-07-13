@@ -3,6 +3,7 @@
 importFrom("utils", "read.csv", "read.table", "tail", "write.table")
 importFrom("rgdal", "readOGR")
 importFrom("ggplot2", "fortify")
+import("dplyr")
 
 export(dg_closest_res_to_area)
 export(dg_closest_res_to_cls)
