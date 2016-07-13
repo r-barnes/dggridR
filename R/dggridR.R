@@ -621,6 +621,11 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 dg_process_kml <- function(kmlfile,frame,wrapcells){
   map <- readOGR(kmlfile,kmlfile)
 
+  #These two lines suppress a WARNING message that would otherwise be raised by
+  #`R CMD check` due to the use of dplyr
+  long  <- NULL
+  group <-NULL
+
   map@data$timestamp    <- NULL
   map@data$begin        <- NULL
   map@data$end          <- NULL
