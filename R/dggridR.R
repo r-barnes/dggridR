@@ -611,7 +611,7 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}
 #'
-dg_process_kml <- function(kmlfile,frame){
+dg_process_kml <- function(kmlfile,frame,wrapcells){
   map <- readOGR(kmlfile,kmlfile)
 
   map@data$timestamp    <- NULL
@@ -628,6 +628,19 @@ dg_process_kml <- function(kmlfile,frame){
   if(frame){
     map.points <- fortify(map, region="id")
     map.df     <- merge(map.points, map@data, by="id")
+
+    if(wrapcells){
+      #Find dangerous polygons based on how many degrees of longitude they span
+      groups_to_wrap <- map.df %>% group_by(group) %>% summarise(diff=max(long)-min(long)) %>% filter(diff>180) %>% select(group)
+
+      #Adjust them so they appear on the eastern side of the map
+      map.df <- map.df %>% mutate(long=ifelse(group %in% groups_to_wrap$group, ifelse(long<0,long+360,long), long))
+    }
+
+    #Arrange polygon points so they are ordered appropriately, otherwise the results
+    #will not be nice, closed cells, but weird triangular thingies
+    map.df %>% arrange(group,order)
+
   } else {
     map
   }
@@ -661,6 +674,13 @@ dg_process_kml <- function(kmlfile,frame){
 #' @param frame     If TRUE, return a data frame suitable for ggplot plotting.
 #'                  If FALSE, return an OGR poly object
 #'
+#' @param wrapcells Cells which cross -180/180 degrees can present 
+#'                  difficulties for plotting. Setting this TRUE will result in
+#'                  cells with components in both hemispheres to be mapped
+#'                  entirely to positive degrees (the Eastern hemisphere). As a
+#'                  result, such cells will have components in the range
+#'                  [180,360). Only used when \code{frame=TRUE}.
+#'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}
 #'
 #' @examples 
@@ -673,7 +693,7 @@ dg_process_kml <- function(kmlfile,frame){
 #'                maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
 #'
 #' @export
-dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE){ #TODO: Densify?
+dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
   dgverify(dggs) 
 
   inputfile <- tempfile(pattern = "dggridR-", fileext=".indat"   )
@@ -704,7 +724,7 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE){
   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
 
   cellfile <- paste(cellfile,".kml",sep="")
-  ret      <- dg_process_kml(cellfile,frame)
+  ret      <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up
   file.remove(inputfile)
@@ -740,6 +760,13 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE){
 #' @param frame     If TRUE, return a data frame suitable for ggplot plotting.
 #'                  If FALSE, return an OGR poly object
 #'
+#' @param wrapcells Cells which cross -180/180 degrees can present 
+#'                  difficulties for plotting. Setting this TRUE will result in
+#'                  cells with components in both hemispheres to be mapped
+#'                  entirely to positive degrees (the Eastern hemisphere). As a
+#'                  result, such cells will have components in the range
+#'                  [180,360). Only used when \code{frame=TRUE}.
+#'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}
 #'
 #' @examples 
@@ -750,7 +777,7 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE){
 #' grid <- dgearthgrid(dggs,frame=TRUE)
 #'
 #' @export
-dgearthgrid <- function(dggs,frame=TRUE){ #TODO: Densify?
+dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
   dgverify(dggs) 
 
   cellfile  <- tempfile(pattern = "dggridR-", fileext=".cell_dat")
@@ -766,7 +793,7 @@ dgearthgrid <- function(dggs,frame=TRUE){ #TODO: Densify?
   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
 
   cellfile <- paste(cellfile,".kml",sep="")
-  ret      <- dg_process_kml(cellfile,frame)
+  ret      <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up
   file.remove(cellfile)
@@ -806,6 +833,13 @@ dgearthgrid <- function(dggs,frame=TRUE){ #TODO: Densify?
 #' @param frame     If TRUE, return a data frame suitable for ggplot plotting.
 #'                  If FALSE, return an OGR poly object
 #'
+#' @param wrapcells Cells which cross -180/180 degrees can present 
+#'                  difficulties for plotting. Setting this TRUE will result in
+#'                  cells with components in both hemispheres to be mapped
+#'                  entirely to positive degrees (the Eastern hemisphere). As a
+#'                  result, such cells will have components in the range
+#'                  [180,360). Only used when \code{frame=TRUE}.
+#'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}
 #'
 #' @examples 
@@ -820,7 +854,7 @@ dgearthgrid <- function(dggs,frame=TRUE){ #TODO: Densify?
 #' grid          <- dgcellstogrid(dggs, dgquakes$cell, frame=TRUE)
 #'
 #' @export
-dgcellstogrid <- function(dggs,cells,frame=TRUE){ #TODO: Densify?
+dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
   dgverify(dggs) 
 
   inputfile <- tempfile(pattern = "dggridR-", fileext=".indat"   )
@@ -844,7 +878,7 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE){ #TODO: Densify?
   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
 
   cellfile <- paste(cellfile,".kml",sep="")
-  ret      <- dg_process_kml(cellfile,frame)
+  ret      <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up
   file.remove(inputfile)
