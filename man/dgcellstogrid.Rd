@@ -9,6 +9,8 @@ dgcellstogrid(dggs, cells, frame = TRUE, wrapcells = TRUE)
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
 
+\item{cells}{The cells to get the boundaries of}
+
 \item{frame}{If TRUE, return a data frame suitable for ggplot plotting.
 If FALSE, return an OGR poly object}
 

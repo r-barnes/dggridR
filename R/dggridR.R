@@ -609,6 +609,13 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #' @param frame     If TRUE, return a data frame suitable for ggplot plotting.
 #'                  If FALSE, return an OGR poly object
 #'
+#' @param wrapcells Cells which cross -180/180 degrees can present 
+#'                  difficulties for plotting. Setting this TRUE will result in
+#'                  cells with components in both hemispheres to be mapped
+#'                  entirely to positive degrees (the Eastern hemisphere). As a
+#'                  result, such cells will have components in the range
+#'                  [180,360). Only used when \code{frame=TRUE}.
+#'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}
 #'
 dg_process_kml <- function(kmlfile,frame,wrapcells){
@@ -829,6 +836,8 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
 #'                  processing and storage requirements.
 #'
 #' @param dggs      A dggs object from dgconstruct()
+#'
+#' @param cells     The cells to get the boundaries of
 #'
 #' @param frame     If TRUE, return a data frame suitable for ggplot plotting.
 #'                  If FALSE, return an OGR poly object
