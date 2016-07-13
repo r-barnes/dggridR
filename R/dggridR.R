@@ -693,6 +693,10 @@ dg_process_kml <- function(kmlfile,frame,wrapcells){
 #'                  result, such cells will have components in the range
 #'                  [180,360). Only used when \code{frame=TRUE}.
 #'
+#' @param savegrid  If savegrid is true then a KML representation of the grid is
+#'                  produced and the filename returned. No other manipulations
+#'                  are done. Setting this true overrides all other arguments.
+#'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}
 #'
 #' @examples 
@@ -705,7 +709,7 @@ dg_process_kml <- function(kmlfile,frame,wrapcells){
 #'                maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
 #'
 #' @export
-dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
+dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: Densify?
   dgverify(dggs) 
 
   inputfile <- tempfile(pattern = "dggridR-", fileext=".indat"   )
@@ -736,10 +740,16 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,w
   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
 
   cellfile <- paste(cellfile,".kml",sep="")
-  ret      <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up
   file.remove(inputfile)
+
+  if(savegrid)
+    return(cellfile)
+
+  ret <- dg_process_kml(cellfile,frame,wrapcells)
+
+  #Clean up more
   file.remove(cellfile)
 
   ret
@@ -779,6 +789,10 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,w
 #'                  result, such cells will have components in the range
 #'                  [180,360). Only used when \code{frame=TRUE}.
 #'
+#' @param savegrid  If savegrid is true then a KML representation of the grid is
+#'                  produced and the filename returned. No other manipulations
+#'                  are done. Setting this true overrides all other arguments.
+#'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}
 #'
 #' @examples 
@@ -786,10 +800,10 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,w
 #' dggs <- dgconstruct(res=20)
 #' res  <- dg_closest_res_to_spacing(dggs,spacing=1000,round='down',metric=FALSE)
 #' dggs <- dgsetres(dggs,res)
-#' grid <- dgearthgrid(dggs,frame=TRUE)
+#' gridfilename <- dgearthgrid(dggs,savegrid=TRUE) #Save directly to a file
 #'
 #' @export
-dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
+dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: Densify?
   dgverify(dggs) 
 
   cellfile  <- tempfile(pattern = "dggridR-", fileext=".cell_dat")
@@ -805,7 +819,11 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
 
   cellfile <- paste(cellfile,".kml",sep="")
-  ret      <- dg_process_kml(cellfile,frame,wrapcells)
+
+  if(savegrid)
+    return(cellfile)
+
+  ret <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up
   file.remove(cellfile)
@@ -854,6 +872,10 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
 #'                  result, such cells will have components in the range
 #'                  [180,360). Only used when \code{frame=TRUE}.
 #'
+#' @param savegrid  If savegrid is true then a KML representation of the grid is
+#'                  produced and the filename returned. No other manipulations
+#'                  are done. Setting this true overrides all other commands.
+#'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}
 #'
 #' @examples 
@@ -864,11 +886,11 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
 #' dggs          <- dgconstruct(spacing=1000,metric=FALSE) 
 #' dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 #'
-#' #Get grid cells for the conterminous United States
+#' #Get grid cells for the earthquakes identified
 #' grid          <- dgcellstogrid(dggs, dgquakes$cell, frame=TRUE)
 #'
 #' @export
-dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
+dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: Densify?
   dgverify(dggs) 
 
   inputfile <- tempfile(pattern = "dggridR-", fileext=".indat"   )
@@ -892,10 +914,16 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
 
   cellfile <- paste(cellfile,".kml",sep="")
-  ret      <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up
   file.remove(inputfile)
+
+  if(savegrid)
+    return(cellfile)
+
+  ret <- dg_process_kml(cellfile,frame,wrapcells)
+
+  #Clean up more
   file.remove(cellfile)
 
   ret

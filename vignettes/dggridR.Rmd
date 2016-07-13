@@ -283,10 +283,7 @@ dggs    <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
 df$cell <- dgtransform(dggs,df$lat,df$lon)
 
 #Get the hexes for each of these cells
-grid    <- dgcellstogrid(dggs,df$cell,frame=FALSE)
-
-#Save the hex boundaries to a handy KML file for use in your project
-writeOGR(grid, "dgg_sample_cells.kml", "cells", "KML")
+gridfilename <- dgcellstogrid(dggs,df$cell,savegrid=TRUE)
 ```
 
 The resulting distribution of cells appears as follows:
