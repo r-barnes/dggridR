@@ -30,6 +30,19 @@ Many details are included in the vignette.
 
 
 
+Installation
+------------
+
+dggridR is being reviewed for CRAN.
+
+If you want it now, or prefer your code to be as up-to-date as possible, you can
+install it using:
+
+    library(devtools) #Use `install.packages('devtools')` if need be
+    install_github('r-barnes/dggridR', vignette=TRUE)
+
+
+
 Show me some code
 -----------------
 
