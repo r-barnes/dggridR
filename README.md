@@ -11,7 +11,8 @@ United States and Antarctica the largest continent.
 
 ![Mercator Projection](vignettes/mercator.png)
 
-But this kind of distortion is present no matter what the resolution is.
+But this kind of distortion is present no matter what the resolution is; in
+fact, it shows up whenever you project a sphere onto a plane.
 
 What you want are bins of equal size, regardless of where they are on the globe,
 regardless of their resolution.
