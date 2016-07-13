@@ -1,8 +1,8 @@
 Package: dggridR
 Type: Package
 Title: Discrete Global Grids for R
-Version: 0.0.1
-Date: 2016-07-08
+Version: 0.0.2
+Date: 2016-07-13
 Author: Richard Barnes [aut, cre], Kevin Sahr [ctb]
 Maintainer: Richard Barnes <rbarnes@umn.edu>
 NeedsCompilation: yes

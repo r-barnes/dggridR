@@ -1,3 +1,15 @@
+dggridR v0.0.2 (Release date: 2016-07-13)
+==============
+
+Changes:
+
+* Added getmaxcell(): Useful for obtaining random grid cells
+* Made dgverify() public: Aids in debugging, possibly useful for users
+* Add `wrapcells` argmuent to grid generation functions: makes plotting easier
+* Added more examples
+
+
+
 dggridR v0.0.1 (Release date: 2016-07-09)
 ==============
 
