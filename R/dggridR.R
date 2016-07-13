@@ -369,6 +369,62 @@ dggetres <- function(dggs){
 }
 
 
+
+
+
+
+
+#' @name dgmaxcell
+#' 
+#' @title      Get largest cell id for a dggs
+#'
+#' @description
+#'             Cells are labeled 1-N. This function returns N. This is useful if
+#'             you want to choose cells from the dggs randomly.
+#' 
+#' @param dggs A dggs object from dgconstruct()
+#'
+#' @param res  If NA, use the resolution specified by the dggs. Otherwise,
+#'             override the resolution.
+#'
+#' @return     The maximum cell id.
+#'
+#' @examples 
+#' #Choose a set of cells randomly distributed over the Earth
+#' library(dggridR)
+#' dggs    <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
+#' N       <- 100                                 #Number of cells
+#' maxcell <- dgmaxcell(dggs)                     #Get maximum cell id
+#' cells   <- sample(1:maxcell, N, replace=FALSE) #Choose random cells
+#' grid    <- dgcellstogrid(dggs,cells,frame=TRUE,wrapcells=TRUE) #Get grid
+#'
+#' @export 
+dgmaxcell <- function(dggs,res=NA){
+  dgverify(dggs)
+
+  reses <- dggetres(dggs)
+
+  restoget <- dggs[['dggs_res_spec']]
+  if(!is.na(res))
+    restoget <- res
+
+  #Add one because R uses 1-based indexing and there is a row 0
+  reses$Cells[restoget+1] 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #' @name dg_closest_res
 #' 
 #' @title Determine an appropriate grid resolution based on input data.
