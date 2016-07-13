@@ -137,11 +137,11 @@ dgsetres <- function(dggs,res){
 #' @return     The function has no return value. A stop signal is raised if the
 #'             object is misspecified
 #' @examples
-#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' dgverify(dggs)
-#' }
+#'
+#' @export
 dgverify <- function(dggs){
   #See page 21 of documentation for further bounds
   if(!(dggs[['dggs_type']] %in% c('ISEA3H','ISEA4H','ISEA43H','ISEA4T','ISEA4D','FULLER3H','FULLER4H','FULLER43H','FULLER4T','FULLER4D')))
