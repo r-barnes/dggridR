@@ -131,6 +131,7 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 
     * `dggetres()`
     * `dginfo()`
+    * `dgmaxcell()`
 
 4. Get the grid cells of some lat-long points with:
 
@@ -141,6 +142,10 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
     * `dgearthgrid()`
     * `dgrectgrid()`
     * `dgcellstogrid()`
+
+6. Check that your dggs object is valid (if you've mucked with it) using:
+
+    * `dgverify()`
 
 
 ##Examples
