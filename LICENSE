@@ -2,8 +2,8 @@ Free for non-commercial use; commercial use prohibited.
 
 This package uses the following libraries:
 
- * gpclib:   free for non-commercial use. See `src/lib/gpclib/include/gpc.h`
-             for details.
+ * gpclib:   free for non-commercial use. See http://www.cs.man.ac.uk/~toby/gpc
+             for commercial licensing details
 
  * dggrid:   Kevin Sahr has released dggrid as a 
              "public domain software program"
