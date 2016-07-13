@@ -1,10 +1,12 @@
-This package uses the following libraries:
+Free for non-commercial use; commercial use prohibited.
 
- * dggrid:   Kevin Sahr has released dggrid as a 
-             "public domain software program"
+This package uses the following libraries:
 
  * gpclib:   free for non-commercial use. See `src/lib/gpclib/include/gpc.h`
              for details.
+
+ * dggrid:   Kevin Sahr has released dggrid as a 
+             "public domain software program"
 
  * proj4lib: This is in the public domain from Gerald Evenden. The most recent
              version of this library is available under an MIT-style license.
