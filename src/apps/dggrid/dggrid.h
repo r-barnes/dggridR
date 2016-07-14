@@ -3,8 +3,9 @@
 // dggrid.h: this file defines the classes (effectively structures) which hold
 //           the parameter info
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-// Version 6.2 - Kevin Sahr, 10/25/14
+// Version 6.1  - Kevin Sahr, 5/23/13
+// Version 6.2  - Kevin Sahr, 10/25/14
+// Version 6.2r - Richard Barnes, 2016-07-14
 //
 ////////////////////////////////////////////////////////////////////////////////
 

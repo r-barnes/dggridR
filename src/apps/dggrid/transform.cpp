@@ -7,6 +7,7 @@
 //    version 3.1b: November 11, 2001
 //    version 4.3b: June 21, 2003
 //    version 6.2b: October 25, 2014
+//    version 6.2r: July 14, 2016 - Richard Barnes
 //
 ////////////////////////////////////////////////////////////////////////////////
 

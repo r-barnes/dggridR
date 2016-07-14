@@ -2,7 +2,8 @@
 //
 // gridgen.cpp: gridgen class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
+// Version 6.1  - Kevin Sahr, 5/23/13
+// Version 6.2r - Richard Barnes, 2016-07-14
 //
 ////////////////////////////////////////////////////////////////////////////////
 
