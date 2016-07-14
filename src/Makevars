@@ -3,19 +3,19 @@
 all: lib_shape lib_proj4 lib_gpc lib_dglib appex dggrid
 
 appex: lib_shape lib_proj4 lib_gpc lib_dglib
-	@(cd apps/appex && $(MAKE)             CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+	@(cd apps/appex && $(MAKE)             CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
 dggrid: lib_shape lib_proj4 lib_gpc lib_dglib
-	@(cd apps/dggrid && $(MAKE)            CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+	@(cd apps/dggrid && $(MAKE)            CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
 lib_shape:
-	@(cd lib/shapelib-1.3.0 && $(MAKE) lib CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+	@(cd lib/shapelib-1.3.0 && $(MAKE) lib CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
 lib_proj4:
-	@(cd lib/proj4lib/lib && $(MAKE)       CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+	@(cd lib/proj4lib/lib && $(MAKE)       CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
 lib_gpc:
-	@(cd lib/gpclib/lib && $(MAKE)         CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+	@(cd lib/gpclib/lib && $(MAKE)         CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
 lib_dglib:
-	@(cd lib/dglib/lib && $(MAKE)          CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+	@(cd lib/dglib/lib && $(MAKE)          CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
