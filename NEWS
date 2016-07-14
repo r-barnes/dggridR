@@ -1,3 +1,11 @@
+dggridR v0.1.0 (Release date: 2016-07-14)
+==============
+
+Changes:
+
+* Using clipper instead of gpclib: this means everything is FLOSS now.
+
+
 dggridR v0.0.2 (Release date: 2016-07-13)
 ==============
 
