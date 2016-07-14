@@ -1,9 +1,8 @@
-Free for non-commercial use; commercial use prohibited.
+Free for commerical and non-commercial uses.
 
 This package uses the following libraries:
 
- * gpclib:   free for non-commercial use. See http://www.cs.man.ac.uk/~toby/gpc
-             for commercial licensing details
+ * clipper:  The clipper library has been released under the Boostv1 license.
 
  * dggrid:   Kevin Sahr has released dggrid as a 
              "public domain software program"
