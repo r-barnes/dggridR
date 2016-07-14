@@ -15,7 +15,7 @@ using namespace std;
 
 #include "dggrid.h"
 #include "gridgen.h"
-#include "gpc.h"
+#include "clipper.hpp"
 #include "DgIVec2D.h"
 #include "DgInAIGenFile.h"
 #include "DgInShapefile.h"
@@ -366,61 +366,35 @@ bool evalCell (GridGenParam& dp,  const DgIDGG& dgg, const DgContCartRF& cc1,
    {
       bool failure = true;
 
-      gpc_polygon	*cellPoly	= 0;
-      gpc_vertex_list	*gpcVerts	= 0;
-
-      // create a gpc poly to represent the cell
-      cellPoly = (gpc_polygon*) malloc(sizeof(gpc_polygon));
-
-      if(0 == cellPoly)
-       goto EVALCELL_FINISH;
-
-      gpc_init_polygon(cellPoly);
-
-      // create the cell boundary contour 
-      gpcVerts = (gpc_vertex_list*) malloc(sizeof(gpc_vertex_list));
-
-      if(0 == gpcVerts)
-       goto EVALCELL_FINISH;
-
-      gpcVerts->vertex = 0;
-
-      gpcVerts->num_vertices = verts.size();
-
-      gpcVerts->vertex = (gpc_vertex*) calloc(verts.size(), sizeof(gpc_vertex));
-
-      if(0 == gpcVerts->vertex)
-       goto EVALCELL_FINISH;
-
+      ClipperLib::Paths cellPoly(1);
       for (int i = 0; i < verts.size(); i++)
-      {
-         gpcVerts->vertex[i].x = cc1.getAddress((verts)[i])->x();
-         gpcVerts->vertex[i].y = cc1.getAddress((verts)[i])->y();
-      }
+        cellPoly[0] << ClipperLib::IntPoint( DBL_TO_INT*cc1.getAddress((verts)[i])->x() , DBL_TO_INT*cc1.getAddress((verts)[i])->y() );
 
-      gpc_add_contour(cellPoly, gpcVerts, 0);
+      for (unsigned int i = 0; i < clipRegion.clpPolys().size(); i++){
 
-      // now check for intersection
+        ClipperLib::Clipper c;
 
-      for (unsigned int i = 0; i < clipRegion.gpcPolys().size(); i++)
-      {
-         if (gpc_polygon_intersect(clipRegion.gpcPolys()[i], cellPoly))
-	 {
-	  accepted  = true;
-	  failure = false;
+        c.AddPaths(cellPoly,                 ClipperLib::ptSubject, true);
+        c.AddPaths(clipRegion.clpPolys()[i], ClipperLib::ptClip,    true);
 
-          if (dp.buildShapeFileAttributes)
-          {
+        ClipperLib::Paths solution;
+        c.Execute(ClipperLib::ctIntersection, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
+
+        if (solution.size()!=0){
+      	  accepted = true;
+      	  failure  = false;
+
+          if (dp.buildShapeFileAttributes){
              // add the fields for this polygon
              const set<DgDBFfield>& fields = clipRegion.polyFields()[i];
              for (set<DgDBFfield>::iterator it = fields.begin();
                     it != fields.end(); it++)
                 dp.curFields.insert(*it);
+          } else { // only need one intersection
+            goto EVALCELL_FINISH;
           }
-          else // only need one intersection
-	     goto EVALCELL_FINISH;
-	 }
-     }
+        }
+      }
 
      // If we are here, we did not fail:
      failure = false;
@@ -428,24 +402,13 @@ bool evalCell (GridGenParam& dp,  const DgIDGG& dgg, const DgContCartRF& cc1,
      goto EVALCELL_FINISH;
            
 EVALCELL_FINISH:
-     if(0 != gpcVerts)
-      {
-	if(0 != gpcVerts->vertex)
-     	 free(gpcVerts->vertex);	// as per calloc()
+      if(failure)
+        throw "Out of memory in evalCell()";
 
-        free(gpcVerts);
-      }
+      return accepted;
+    }
 
-     if(0 != cellPoly)
-      gpc_free_polygon(cellPoly);
-
-     if(failure)
-      throw "Out of memory in evalCell()";
-
-     return accepted;
-   }
-
-   return accepted;
+  return accepted;
 
 } // bool evalCell
 

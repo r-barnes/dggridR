@@ -13,7 +13,7 @@
 using namespace std;
 
 #include "dggrid.h"
-#include "gpc.h"
+#include "clipper.hpp"
 #include "DgIDGG.h"
 #include "DgBoundedIDGG.h"
 #include "DgInputStream.h"

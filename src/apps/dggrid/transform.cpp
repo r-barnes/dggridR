@@ -15,7 +15,6 @@
 using namespace std;
 
 #include "dggrid.h"
-#include "gpc.h"
 #include "DgIDGG.h"
 #include "DgBoundedIDGG.h"
 #include "DgInputStream.h"

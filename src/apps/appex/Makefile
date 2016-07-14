@@ -3,14 +3,14 @@ SRCS = appex.cpp
 OBJS = appex.o
 DEPS = appex.depends
 DGLIBDIR = ../../lib/dglib
-GPCLIBDIR = ../../lib/gpclib
+CLIPPERDIR = ../../lib/clipper
 PROJ4LIBDIR = ../../lib/proj4lib
 SHAPELIBDIR = ../../lib/shapelib-1.3.0
-INCDIRS = -I$(DGLIBDIR)/include -I$(GPCLIBDIR)/include \
+INCDIRS = -I$(DGLIBDIR)/include -I$(CLIPPERDIR) \
    -I$(PROJ4LIBDIR)/include
 CCFLAGS  = ${INCDIRS} ${ADD_CC_FLAGS} 
 LDLIBS= $(DGLIBDIR)/lib/dglib.a \
-        $(GPCLIBDIR)/lib/gpclib.a \
+        $(CLIPPERDIR)/libclipper.a \
         $(PROJ4LIBDIR)/lib/proj4lib.a $(SHAPELIBDIR)/libshp.a
 
 .PHONY: clean all
@@ -30,9 +30,9 @@ link:
 	$(CXX) -M $(CCFLAGS) $< > $@
 
 $(LDLIBS):
-	cd $(GPCLIBDIR)/lib; ${MAKE}
+	cd $(CLIPPERDIR);      ${MAKE}
 	cd $(PROJ4LIBDIR)/lib; ${MAKE}
-	cd $(DGLIBDIR)/lib; ${MAKE}
+	cd $(DGLIBDIR)/lib;    ${MAKE}
 
 clean:
 	rm -rf $(OBJS) $(DEPS) ${TARGET} core ti_files ii_files

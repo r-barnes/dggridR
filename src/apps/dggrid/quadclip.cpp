@@ -14,7 +14,7 @@ using namespace std;
 
 #include "dggrid.h"
 #include "gridgen.h"
-#include "gpc.h"
+#include "clipper.hpp"
 #include "DgIVec2D.h"
 #include "DgInAIGenFile.h"
 #include "DgInShapefile.h"
@@ -152,54 +152,31 @@ void createClipRegions (GridGenParam& dp, const DgIDGG& dgg,
       }
 
       if (dp.megaVerbose) 
-	  cout << v0 << endl;
+         cout << v0 << endl;
 
       dgg.geoRF().convert(v0);
 
       if (dp.megaVerbose) 
-	  cout << " -> " << v0 << endl;
+         cout << " -> " << v0 << endl;
 
       clipRegions[q].gnomProj().convert(v0);
 
       if (dp.megaVerbose) 
-	  cout << " -> " << v0 << endl;
+         cout << " -> " << v0 << endl;
 
-      // finally store the boundary as a gpc polygon
-	 {
-	 gpc_vertex_list *gpcVerts = 0;	
-      
-      gpcVerts = (gpc_vertex_list*)malloc(sizeof(gpc_vertex_list));
-
-	 if(0 == gpcVerts)
-	  goto RELEASE_CONTOUR;
-
-	 gpcVerts->vertex = 0;
-
-      gpcVerts->num_vertices = v0.size();
-      gpcVerts->vertex = (gpc_vertex*) calloc(v0.size(), sizeof(gpc_vertex));
-
-	 if(0 == gpcVerts->vertex)
-	  goto RELEASE_CONTOUR;
-   
-      for (int i = 0; i < v0.size(); i++)
+      // finally store the boundary as a clipper polygon
       {
-         const DgDVec2D& p0 = *clipRegions[q].gnomProj().getAddress(v0[i]);
-         gpcVerts->vertex[i].x = p0.x();
-         gpcVerts->vertex[i].y = p0.y();
-      }
+         ClipperLib::Path contour;
 
-      gpc_add_contour(&clipRegions[q].gnomBndry(), gpcVerts, 0);
+         for (int i = 0; i < v0.size(); i++)
+         {
+            const DgDVec2D& p0 = *clipRegions[q].gnomProj().getAddress(v0[i]);
+            contour << ClipperLib::IntPoint( DBL_TO_INT*p0.x() , DBL_TO_INT*p0.y() );
+         }
 
-RELEASE_CONTOUR:
-	 if(0 != gpcVerts)
-	  {
-		if(0 != gpcVerts->vertex)
-		 free(gpcVerts->vertex);
-
-		free(gpcVerts);
-	  }
-	 }
-   }
+         clipRegions[q].gnomBndry().push_back(contour);
+	   }
+	}
 
    //// read in the region boundary files
 
@@ -331,50 +308,34 @@ RELEASE_CONTOUR:
 
                if (dp.megaVerbose) cout << " -> " << polyVec << endl;
 
-               //// now create a gpc poly version
+               //// now create a clipper poly version
 
-	       gpc_vertex_list *gpcVerts = 0;
-               gpcVerts = (gpc_vertex_list*) malloc(sizeof(gpc_vertex_list));
-	       gpcVerts->vertex = 0;
-               gpcVerts->num_vertices = polyVec.size();
-               gpcVerts->vertex = 
-                   (gpc_vertex*) calloc(polyVec.size(), sizeof(gpc_vertex));
+               ClipperLib::Paths clpPoly(1);
 
                for (int i = 0; i < polyVec.size(); i++)
                {
                   const DgDVec2D& p0 = 
                           *clipRegions[q].gnomProj().getAddress(polyVec[i]);
-                  gpcVerts->vertex[i].x = p0.x();
-                  gpcVerts->vertex[i].y = p0.y();
+                  clpPoly[0] << ClipperLib::IntPoint( DBL_TO_INT*p0.x() , DBL_TO_INT*p0.y() );
                }
 
-               gpc_polygon gpcPoly;
-               gpc_init_polygon(&gpcPoly);
-
-               int hole = 0;
-
-               gpc_add_contour(&gpcPoly, gpcVerts, hole);
-
-               free(gpcVerts->vertex);	
-               free(gpcVerts);		
-            
                //// find the intersections
 
-               gpc_polygon resPoly;
-               gpc_init_polygon(&resPoly);
-               gpc_polygon_clip(GPC_INT, &gpcPoly, &clipRegions[q].gnomBndry(),
-                             &resPoly);
+               ClipperLib::Clipper c;
+
+               c.AddPaths(clpPoly,                    ClipperLib::ptSubject, true);
+               c.AddPaths(clipRegions[q].gnomBndry(), ClipperLib::ptClip,    true);
+
+               ClipperLib::Paths solution;
+               c.Execute(ClipperLib::ctIntersection, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero);
+
 
                // check for intersection(s)
  
-               if (resPoly.num_contours <= 0)
+               if (solution.size()==0)
                {
                   if (dp.megaVerbose)
                      cout << "no intersection in quad " << q << endl;
-
-                  gpc_free_polygon(&resPoly);
-                  gpc_free_polygon(&gpcPoly);
-
                   continue;
                }
 
@@ -385,14 +346,14 @@ RELEASE_CONTOUR:
 
                ////// now convert back to Snyder and add to the clipRegions
 
-               for (int i = 0; i < resPoly.num_contours; i++)
+               for (int i = 0; i < solution.size(); i++)
                {
                   DgPolygon locv(clipRegions[q].gnomProj());
-                  for (int j = 0; j < resPoly.contour[i].num_vertices; j++)
+                  for (int j = 0; j < solution[i].size(); j++)
                   {
                      DgLocation* tloc = clipRegions[q].gnomProj().makeLocation(
-                                DgDVec2D(resPoly.contour[i].vertex[j].x,
-                                         resPoly.contour[i].vertex[j].y));
+                                DgDVec2D(INT_TO_DBL*solution[i][j].X,
+                                         INT_TO_DBL*solution[i][j].Y));
                      locv.push_back(*tloc);
                      delete tloc;
                   }
@@ -407,13 +368,9 @@ RELEASE_CONTOUR:
 
                   if (dp.megaVerbose) cout << "->" << locv << endl;
 
-                  // add the intersection to our gpc list
+                  // add the intersection to our clipper list
 
-                  gpc_vertex_list* finVerts = 
-                       (gpc_vertex_list*) malloc(sizeof(gpc_vertex_list));
-                  finVerts->num_vertices = locv.size();
-                  finVerts->vertex = 
-                      (gpc_vertex*) calloc(locv.size(), sizeof(gpc_vertex));
+                  ClipperLib::Paths cfinVerts(1);
 
                   for (int j = 0; j < locv.size(); j++)
                   {
@@ -423,16 +380,10 @@ RELEASE_CONTOUR:
                         report("intersect poly crosses quad boundary; adjust "
                             "nudge", DgBase::Fatal);
 
-                     finVerts->vertex[j].x = qc.coord().x();
-                     finVerts->vertex[j].y = qc.coord().y();
+                     cfinVerts[0]<<ClipperLib::IntPoint( DBL_TO_INT*qc.coord().x() , DBL_TO_INT*qc.coord().y() );
                   }
 
-                  gpc_polygon* pPoly = 
-                              (gpc_polygon*) malloc(sizeof(gpc_polygon));
-                  gpc_init_polygon(pPoly);
-                  gpc_add_contour(pPoly, finVerts, resPoly.hole[i]);
-                  gpc_create_sbtree(pPoly);
-                  clipRegions[q].gpcPolys().push_back(pPoly);
+                  clipRegions[q].clpPolys().push_back(cfinVerts); //TODO: Original code made not of resPoly.hole[i] here
 
                   //// add the attributes for this polygon
                   if (dp.buildShapeFileAttributes)
@@ -471,9 +422,6 @@ RELEASE_CONTOUR:
                      delete tloc;
                   }
                }
-
-               gpc_free_polygon(&resPoly);
-               gpc_free_polygon(&gpcPoly);
             }
          }
       }

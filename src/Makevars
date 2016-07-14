@@ -1,29 +1,29 @@
-.PHONY: all lib_shape lib_proj4 lib_gpc lib_dglib clean
+.PHONY: all lib_shape lib_proj4 clipper lib_dglib clean
 
-all: lib_shape lib_proj4 lib_gpc lib_dglib appex dggrid
+all: lib_shape lib_proj4 lib_dglib appex dggrid clipper
 
-appex: lib_shape lib_proj4 lib_gpc lib_dglib
-	@(cd apps/appex && $(MAKE)             CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+appex: lib_shape lib_proj4 clipper lib_dglib
+	@(cd apps/appex         && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
-dggrid: lib_shape lib_proj4 lib_gpc lib_dglib
-	@(cd apps/dggrid && $(MAKE)            CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+dggrid: lib_shape lib_proj4 clipper lib_dglib
+	@(cd apps/dggrid        && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
 lib_shape:
-	@(cd lib/shapelib-1.3.0 && $(MAKE) lib CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+	@(cd lib/shapelib-1.3.0 && $(MAKE) lib CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
 lib_proj4:
-	@(cd lib/proj4lib/lib && $(MAKE)       CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+	@(cd lib/proj4lib/lib   && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
-lib_gpc:
-	@(cd lib/gpclib/lib && $(MAKE)         CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+clipper:
+	@(cd lib/clipper        && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
 lib_dglib:
-	@(cd lib/dglib/lib && $(MAKE)          CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)")
+	@(cd lib/dglib/lib      && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
 
 clean:
 	@(cd apps/appex         && $(MAKE) clean)
 	@(cd apps/dggrid        && $(MAKE) clean)
 	@(cd lib/shapelib-1.3.0 && $(MAKE) clean)
 	@(cd lib/proj4lib/lib   && $(MAKE) clean)
-	@(cd lib/gpclib/lib     && $(MAKE) clean)
+	@(cd lib/clipper        && $(MAKE) clean)
 	@(cd lib/dglib/lib      && $(MAKE) clean)

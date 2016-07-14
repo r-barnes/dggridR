@@ -11,10 +11,13 @@
 
 #include <set>
 #include <map>
-#include "gpc.h"
+#include "clipper.hpp"
 #include "DgIVec2D.h"
 #include "DgProjGnomonicRF.h"
 #include "DgInShapefileAtt.h"
+
+#define DBL_TO_INT 100000000
+#define INT_TO_DBL 1.0/100000000.0
 
 class GridGenParam;
 class DgIDGG;
@@ -28,24 +31,13 @@ class DgQuadClipRegion {
    public:
 
       DgQuadClipRegion (void) 
-           : isQuadUsed_ (false), gnomProj_ (0),
-	     overI_ (false), overJ_ (false)
-           { 
-              gnomBndry_ = (gpc_polygon*) malloc(sizeof(gpc_polygon));
-              gpc_init_polygon(gnomBndry_);
-           }
+        : isQuadUsed_ (false), gnomProj_ (0), overI_ (false), overJ_ (false) {}
 
-     ~DgQuadClipRegion (void)
-           {
-              for (unsigned long i = 0; i < gpcPolys_.size(); i++)
-                 gpc_free_polygon(gpcPolys_[i]);
-              gpc_free_polygon(gnomBndry_);
-              delete gnomProj_;
-           }
+     ~DgQuadClipRegion (void) {}
 
       //LINESET& region (void) { return region_; }
 
-      vector <gpc_polygon*>& gpcPolys (void) { return gpcPolys_; }
+      vector<ClipperLib::Paths>& clpPolys (void) { return clpPolys_; }
       vector < set<DgDBFfield> >& polyFields (void) { return polyFields_; }
 
       set<DgIVec2D>& points (void) { return points_; }
@@ -65,7 +57,7 @@ class DgQuadClipRegion {
       void setGnomProj (DgProjGnomonicRF* gnomProjIn) 
                                   { gnomProj_ = gnomProjIn; }
 
-      gpc_polygon& gnomBndry (void) { return *gnomBndry_; }
+      ClipperLib::Paths& gnomBndry (void) { return gnomBndry_; }
 
       bool overI (void) const { return overI_; }
       bool overJ (void) const { return overJ_; }
@@ -77,8 +69,8 @@ class DgQuadClipRegion {
 
       bool isQuadUsed_; // indicates which quads intersect the region
       
-      vector<gpc_polygon*> gpcPolys_; // gpc region intersection with quads in
-                               // quad Snyder space
+      vector<ClipperLib::Paths> clpPolys_; // clipper region intersection with quads in
+                                   // quad Snyder space
 
       vector < set<DgDBFfield> > polyFields_; // shapefile attribute fields
 
@@ -91,7 +83,7 @@ class DgQuadClipRegion {
 
       DgProjGnomonicRF* gnomProj_; // gnomonic proj centered on this quad
 
-      gpc_polygon* gnomBndry_; // quad boundary in gnomonic
+      ClipperLib::Paths gnomBndry_; // quad boundary in gnomonic
 
       DgIVec2D offset_; // offset of min (i, j)
       DgIVec2D upperRight_; // (maxi, maxj) relative to offset
