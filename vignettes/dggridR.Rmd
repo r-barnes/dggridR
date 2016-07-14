@@ -174,6 +174,7 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
     * `dgearthgrid()`
     * `dgrectgrid()`
     * `dgcellstogrid()`
+    * `dgshptogrid()`
 
 6. Check that your dggs object is valid (if you've mucked with it) using:
 
@@ -408,8 +409,28 @@ dggs         <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
 gridfilename <- dgearthgrid(dggs,savegrid=TRUE)
 ```
 
+##Get a grid that covers South Africa
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
+library(dggridR)
 
+#Generate a dggs specifying an intercell spacing of ~25 miles
+dggs      <- dgconstruct(spacing=25, metric=FALSE, resround='nearest')
 
+#Use the included South Africa borders shapefile to generate a grid covering
+#South Africa (including Lesotho - holes are not excluded)
+sa_grid   <- dgshptogrid(dggs,dg_shpfname_south_africa)
+
+#Read in the South Africa's borders from the shapefile
+sa_border <- readOGR(dsn=dg_shpfname_south_africa, layer="ZAF_adm0")
+
+#Plot South Africa's borders and the associated grid
+p<- ggplot() + 
+    geom_polygon(data=sa_border, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
+    geom_polygon(data=sa_grid,   aes(x=long, y=lat, group=group), fill="blue", alpha=0.4)   +
+    geom_path   (data=sa_grid,   aes(x=long, y=lat, group=group), alpha=0.4, color="white") +
+    coord_equal()
+p
+```
 
 
 #Roadmap

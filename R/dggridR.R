@@ -14,6 +14,19 @@ dg_exe_path <- function(){
 
 
 
+#' @name dg_shpfname_south_africa
+#' 
+#' @title National border of South Africa
+#'
+#' @description
+#'        This variable points to a shapefile containing the national border
+#'        of South Africa
+#'
+#' @return A filename of a shapefile containing the national border of South Africa
+#'
+#' @export
+dg_shpfname_south_africa <- file.path(system.file(package="dggridR"), "data", "ZAF_adm0.shp")
+
 
 
 
@@ -697,7 +710,8 @@ dg_process_kml <- function(kmlfile,frame,wrapcells){
 #'                  produced and the filename returned. No other manipulations
 #'                  are done. Setting this true overrides all other arguments.
 #'
-#' @return Returns a data frame or OGR poly object, as specified by \code{frame}
+#' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
+#'         If \code{savegrid=TRUE}, returns a filename.
 #'
 #' @examples 
 #' library(dggridR)
@@ -793,7 +807,8 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,w
 #'                  produced and the filename returned. No other manipulations
 #'                  are done. Setting this true overrides all other arguments.
 #'
-#' @return Returns a data frame or OGR poly object, as specified by \code{frame}
+#' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
+#'         If \code{savegrid=TRUE}, returns a filename.
 #'
 #' @examples 
 #' library(dggridR)
@@ -876,7 +891,8 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: D
 #'                  produced and the filename returned. No other manipulations
 #'                  are done. Setting this true overrides all other commands.
 #'
-#' @return Returns a data frame or OGR poly object, as specified by \code{frame}
+#' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
+#'         If \code{savegrid=TRUE}, returns a filename.
 #'
 #' @examples 
 #' library(dggridR)
@@ -928,3 +944,91 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ 
 
   ret
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' @name dgshptogrid
+#' 
+#' @title           Return boundary coordinates for cells intersecting a shapefile
+#'
+#' @description     Returns the coordinates constituting the boundary of a 
+#'                  set of cells which intersect or are contained by a polygon
+#'                  (or polygons) specified in a shapefile. Note that grid cells
+#'                  are also generated for holes in the shapefile's polygon(s).
+#'
+#' @param dggs      A dggs object from dgconstruct()
+#'
+#' @param shpfname  File name of the shapefile. Filename should end with '.shp'
+#'
+#' @param frame     If TRUE, return a data frame suitable for ggplot plotting.
+#'                  If FALSE, return an OGR poly object
+#'
+#' @param wrapcells Cells which cross -180/180 degrees can present 
+#'                  difficulties for plotting. Setting this TRUE will result in
+#'                  cells with components in both hemispheres to be mapped
+#'                  entirely to positive degrees (the Eastern hemisphere). As a
+#'                  result, such cells will have components in the range
+#'                  [180,360). Only used when \code{frame=TRUE}.
+#'
+#' @param savegrid  If savegrid is true then a KML representation of the grid is
+#'                  produced and the filename returned. No other manipulations
+#'                  are done. Setting this true overrides all other commands.
+#'
+#' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
+#'         If \code{savegrid=TRUE}, returns a filename.
+#'
+#' @examples 
+#' library(dggridR)
+#'
+#' dggs <- dgconstruct(spacing=25, metric=FALSE, resround='nearest')
+#' south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa)
+#'
+#' @export
+dgshptogrid <- function(dggs,shpfname,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: Densify?
+  dgverify(dggs) 
+
+  shpfname <- trimws(shpfname)
+
+  if(!grepl('\\.shp$',shpfname))
+    stop("Shapefile name does to end with '.shp'!")
+  if(!file.exists(shpfname))
+    stop('Shapefile does not exist!')
+
+  shpfname <- substr(shpfname,1,nchar(shpfname)-4)
+
+  cellfile <- tempfile(pattern = "dggridR-", fileext=".cell_dat")
+
+  dggs[['dggrid_operation']] = 'GENERATE_GRID'
+  dggs[['update_frequency']] = 10000000
+
+  dggs[['clip_region_files']] = shpfname
+  dggs[['clip_subset_type']]  = 'SHAPEFILE'
+
+  dggs[['cell_output_file_name']] = cellfile
+  dggs[['cell_output_type']]      = 'KML' #SHAPEFILE or KML or GEOJSON or AIGEN
+
+  ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
+
+  cellfile <- paste(cellfile,".kml",sep="")
+
+  if(savegrid)
+    return(cellfile)
+
+  ret <- dg_process_kml(cellfile,frame,wrapcells)
+
+  #Clean up more
+  file.remove(cellfile)
+
+  ret
+}
+
