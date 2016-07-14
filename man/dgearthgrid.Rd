@@ -25,7 +25,8 @@ produced and the filename returned. No other manipulations
 are done. Setting this true overrides all other arguments.}
 }
 \value{
-Returns a data frame or OGR poly object, as specified by \code{frame}
+Returns a data frame or OGR poly object, as specified by \code{frame}.
+        If \code{savegrid=TRUE}, returns a filename.
 }
 \description{
 Note: If you have a high-resolution grid this may take a

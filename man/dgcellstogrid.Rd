@@ -27,7 +27,8 @@ produced and the filename returned. No other manipulations
 are done. Setting this true overrides all other commands.}
 }
 \value{
-Returns a data frame or OGR poly object, as specified by \code{frame}
+Returns a data frame or OGR poly object, as specified by \code{frame}.
+        If \code{savegrid=TRUE}, returns a filename.
 }
 \description{
 Returns the coordinates constituting the boundary of a 
