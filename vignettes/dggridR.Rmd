@@ -410,7 +410,7 @@ gridfilename <- dgearthgrid(dggs,savegrid=TRUE)
 ```
 
 ##Get a grid that covers South Africa
-```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE, fig.align='center', fig.width=5, fig.height=5}
 library(dggridR)
 
 #Generate a dggs specifying an intercell spacing of ~25 miles
