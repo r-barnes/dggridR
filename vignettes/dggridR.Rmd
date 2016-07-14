@@ -15,28 +15,37 @@ vignette: >
 ```{r, fig.width=5, fig.height=5, results='hide', warning=FALSE, error=FALSE, message=FALSE, echo=FALSE, fig.align='center'}
 #Generate cover picture
 library(dggridR)
-#Generate a global grid whose cells are ~100,000 km^2
-dggs <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
-#Save the cells to a KML file for use in other software
-grid      <- dgearthgrid(dggs,frame=TRUE,wrapcells=TRUE,savegrid=FALSE)
+#Generate grids of various sizes
+hdggses <- lapply(3:5, function(res) dgconstruct(res=res))
+hgrids  <- lapply(hdggses, function(dggs) dgearthgrid(dggs))
+
 countries <- map_data("world")
 
-ggplot() + 
-    geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
-    geom_polygon(data=grid,      aes(x=long, y=lat, group=group), fill="blue", alpha=0.4)    +
-    geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white") +
+orthobase <-ggplot() + 
+    geom_polygon(data=countries,  aes(x=long, y=lat, group=group), fill=NA, color="black")   +
     scale_fill_gradient(low="blue", high="red")+
-    coord_map("ortho", orientation = c(-38.49831, -179.9223, 0))+
+    coord_map("ortho", orientation = c(0, 90, 0))+
+    #coord_map("ortho", orientation = c(-89.49831, -179.9223, 0))+
     xlab('')+ylab('')+
     theme(axis.ticks.x=element_blank())+
     theme(axis.ticks.y=element_blank())+
     theme(axis.text.x=element_blank())+
     theme(axis.text.y=element_blank())
+
+for(i in 1:3) {
+  cellstosave <- (hgrids[[i]] %>% group_by(group) %>% summarise(long=max(long)) %>% filter((i-1)*70-5<=long & long<=i*70+5))$group
+  hgrids[[i]] <- hgrids[[i]] %>% filter(group %in% cellstosave)
+}
+
+orthobase+
+ geom_path(data=hgrids[[1]], aes(x=long, y=lat, group=group), alpha=1, color="#1B9E77")+
+ geom_path(data=hgrids[[2]], aes(x=long, y=lat, group=group), alpha=1, color="#D95F02")+
+ geom_path(data=hgrids[[3]], aes(x=long, y=lat, group=group), alpha=1, color="#7570B3")
 ```
 
 
 
-_Spatial Analysis Done Right_
+#_Spatial Analysis Done Right_
 
 You want to do spatial statistics, and it's going to involve binning.
 
@@ -66,7 +75,7 @@ Many details are included in the vignette.
 
 
 
-##Grids
+#Grids
 
 The following grids are available: 
 
@@ -109,7 +118,7 @@ package. (TODO)
 
 
 
-###ISEA3H Details
+##ISEA3H Details
 
 The following chart shows the number of cells, their area, and statistics
 regarding the spacing of their center nodes for the ISEA3H grid type.
@@ -140,7 +149,7 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 
 
 
-##How do I use it?
+#How do I use it?
 
 1. Construct a discrete global grid system (dggs) object using `dgconstruct()`
 
@@ -171,15 +180,15 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
     * `dgverify()`
 
 
-##Examples
+#Examples
 
-###Binning Lat-Long Points
+##Binning Lat-Long Points
 
 The following example demonstrates converting lat-long locations (the epicenters
 of earthquakes) to discrete global grid locations (cell numbers), binning based
 on these numbers, and plotting the result.
 
-```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE, cache=TRUE}
 #Include libraries
 library(dggridR)
 library(dplyr)
@@ -218,7 +227,7 @@ sizes. Really, though, they're not: that's just the effect of trying to plot a
 sphere on a flat surface! And that's what would happen to your data if you
 didn't use this package :-)
 
-```{r, fig.width=6, fig.height=4}
+```{r, fig.width=6, fig.height=4, cache=TRUE}
 #Plot everything on a flat map
 p<- ggplot() + 
     geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
@@ -233,7 +242,7 @@ the same size, as they should be. Note how they deal easily with the
 longitudinal convergence towards Antarctica, as well as with crossing -180/180
 degrees.
 
-```{r, fig.width=6, fig.height=6}
+```{r, fig.width=6, fig.height=6, cache=TRUE}
 #Replot on a spherical projection
 p+coord_map("ortho", orientation = c(-38.49831, -179.9223, 0))+
   xlab('')+ylab('')+
@@ -263,7 +272,7 @@ writeOGR(grid, "quakes_per_cell.kml", "quakes", "KML")
 ```
 
 
-###Randomly Sampling the Earth: Method 1
+##Randomly Sampling the Earth: Method 1
 
 Say you want to sample `N` areas of equal size uniformly distributed on the
 Earth. dggridR provides two possible ways to accomplish this. The conceptually
@@ -311,7 +320,7 @@ gridfilename <- dgcellstogrid(dggs,df$cell,savegrid=TRUE)
 
 The resulting distribution of cells appears as follows:
 
-```{r, fig.width=6, fig.height=4}
+```{r, fig.width=6, fig.height=4, cache=TRUE}
 #Get the grid in a more convenient format
 grid           <- dgcellstogrid(dggs,df$cell,frame=TRUE,wrapcells=TRUE)
 
@@ -333,7 +342,7 @@ p
 
 
 
-###Randomly Sampling the Earth: Method 2
+##Randomly Sampling the Earth: Method 2
 
 Say you want to sample `N` areas of equal size uniformly distributed on the
 Earth. dggridR provides two possible ways to accomplish this. The easiest way to
@@ -386,7 +395,7 @@ p
 
 
 
-###Save a grid for use in other software
+##Save a grid for use in other software
 
 Reading the grid into R, as is done in the examples above, can be expensive. You
 can instead generate the grid directly to a temporary file, as follows:
@@ -403,7 +412,7 @@ gridfilename <- dgearthgrid(dggs,savegrid=TRUE)
 
 
 
-##Roadmap
+#Roadmap
 
 * Method to convert between grid cell ids at different resolutions
 
@@ -417,7 +426,7 @@ time, Sahr's dggrid is the best option I've found.
 
 
 
-##Credits
+#Credits
 
 This R package was developed by Richard Barnes (http://rbarnes.org).
 
@@ -430,7 +439,7 @@ User Documentation, which is available in its entirety
 
 
 
-##Disclaimer
+#Disclaimer
 
 This package *should* operate in the manner described here, in the package's
 main documentation, and in Kevin Sahr's dggrid documentation. Unfortunately,
@@ -440,7 +449,7 @@ enhancements, we want to hear about them.
 
 
 
-##Citing this Package
+#Citing this Package
 
 Please cite this package as:
 
@@ -448,4 +457,4 @@ Please cite this package as:
 
 
 
-## References
+#References
