@@ -96,7 +96,7 @@ test3:
 lib:	libshp.a
 
 libshp.a:	$(LIBOBJ)
-	$(AR) r libshp.a $(LIBOBJ)
+	$(AR) rcs libshp.a $(LIBOBJ)
 
 lib_install:	libshp.a
 	cp libshp.a $(PREFIX)/lib

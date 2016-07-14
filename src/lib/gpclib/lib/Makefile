@@ -6,8 +6,7 @@ CCFLAGS = ${INCDIRS} ${ADD_CC_FLAGS}
 
 all:
 	$(CXX) -c gpc.cpp -I../include -I../../dglib/include -O3
-	$(AR) ruv gpclib.a gpc.o
-	$(RANLIB) gpclib.a
+	$(AR) rcs gpclib.a gpc.o
 
 clean:
 	rm -rf gpclib.a gpc.o
