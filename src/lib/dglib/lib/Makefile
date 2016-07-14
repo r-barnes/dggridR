@@ -12,8 +12,7 @@ CCFLAGS = ${INCDIRS} ${ADD_CC_FLAGS}
 all: $(LIB)
 
 $(LIB): $(SRC) $(OBJS) $(DEPS)
-	$(AR) ruv $(LIB) $(OBJS)
-	$(RANLIB) $(LIB)
+	$(AR) rcs $(LIB) $(OBJS)
 
 %.o: %.cpp 
 	$(CXX) -c $< $(CCFLAGS)
