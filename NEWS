@@ -1,3 +1,12 @@
+dggridR v0.1.1 (Release date: 2016-07-14)
+==============
+
+Changes:
+
+* Added dgshptogrid(): Useful for making grids which cover shapefile-specified
+                       polygons
+
+
 dggridR v0.1.0 (Release date: 2016-07-14)
 ==============
 
