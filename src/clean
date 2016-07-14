@@ -1,4 +1,0 @@
-#!/bin/bash
-find . \( -name "*.o" -o -name "*.depends" -o -name "*.a"  \) -delete
-rm -f apps/appex/appex
-rm -f apps/dggrid/dggrid
