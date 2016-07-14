@@ -352,8 +352,8 @@ void createClipRegions (GridGenParam& dp, const DgIDGG& dgg,
                   for (int j = 0; j < solution[i].size(); j++)
                   {
                      DgLocation* tloc = clipRegions[q].gnomProj().makeLocation(
-                                DgDVec2D(solution[i][j].X,
-                                         solution[i][j].Y));
+                                DgDVec2D(INT_TO_DBL*solution[i][j].X,
+                                         INT_TO_DBL*solution[i][j].Y));
                      locv.push_back(*tloc);
                      delete tloc;
                   }

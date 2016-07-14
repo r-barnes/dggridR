@@ -16,7 +16,8 @@
 #include "DgProjGnomonicRF.h"
 #include "DgInShapefileAtt.h"
 
-#define DBL_TO_INT 1000000000000
+#define DBL_TO_INT 100000000
+#define INT_TO_DBL 1.0/100000000.0
 
 class GridGenParam;
 class DgIDGG;
