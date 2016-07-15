@@ -7,8 +7,7 @@ CLIPPERDIR = ../../lib/clipper
 PROJ4LIBDIR = ../../lib/proj4lib
 SHAPELIBDIR = ../../lib/shapelib-1.3.0
 INCDIRS = -I$(DGLIBDIR)/include -I$(CLIPPERDIR) \
-   -I$(PROJ4LIBDIR)/include -I$(SHAPELIBDIR)
-CCFLAGS  += ${INCDIRS}
+   -I$(PROJ4LIBDIR)/include -I$(SHAPELIBDIR) -I.
 LDLIBS= $(DGLIBDIR)/lib/dglib.a \
         $(CLIPPERDIR)/libclipper.a \
         $(PROJ4LIBDIR)/lib/proj4lib.a $(SHAPELIBDIR)/libshp.a
@@ -18,16 +17,16 @@ LDLIBS= $(DGLIBDIR)/lib/dglib.a \
 all: $(TARGET)
 
 ${TARGET}: $(SRC) $(OBJS) $(DEPS) $(LDLIBS)
-	$(CXX) $(CCFLAGS) $(EXPORT) -o ${TARGET} ${OBJS} $(LDLIBS)
+	$(CXX) $(CXXFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
 
 %.o: %.cpp
-	$(CXX) -c $< $(CCFLAGS) -o $@
+	$(CXX) -c $< $(CXXFLAGS) $(INCDIRS) -o $@
 
 link:
-	$(CXX) $(CCFLAGS) $(EXPORT) -o ${TARGET} ${OBJS} $(LDLIBS)
+	$(CXX) $(CXXFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
 
 %.depends: %.cpp
-	$(CXX) -M $(CCFLAGS) $< > $@
+	$(CXX) -M $(CXXFLAGS) $(INCDIRS) $< > $@
 
 $(LDLIBS):
 	cd $(CLIPPERDIR);      ${MAKE}

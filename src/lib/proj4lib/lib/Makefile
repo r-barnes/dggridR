@@ -4,7 +4,6 @@ OBJS = adjlon.o  emess.o  hypot.o  pj_auth.o  pj_mlfn.o  pj_msfn.o  pj_phi2.o  p
 DEPS = adjlon.depends  hypot.depends    pj_mlfn.depends  pj_phi2.depends  pj_tsfn.depends emess.depends   pj_auth.depends  pj_msfn.depends  pj_qsfn.depends
 SHAPELIBDIR = ../../shapelib-1.3.0
 INCDIRS = -I../include -I../../dglib/include -I$(SHAPELIBDIR)
-CCFLAGS += ${INCDIRS}
 
 .PHONY: clean all
 
@@ -14,10 +13,10 @@ $(LIB): $(SRC) $(OBJS) $(DEPS)
 	$(AR) rcs $(LIB) $(OBJS)
 
 %.o: %.cpp 
-	$(CXX) -c $< $(CCFLAGS)
+	$(CXX) -c $< $(CXXFLAGS) $(INCDIRS)
 
 %.depends: %.cpp
-	$(CXX) -MM $(CCFLAGS) $< > $@
+	$(CXX) -MM $(CXXFLAGS) $(INCDIRS) $< > $@
 
 clean:
 	rm -rf $(OBJS) $(LIB) $(DEPS) ii_files ti_files make.out

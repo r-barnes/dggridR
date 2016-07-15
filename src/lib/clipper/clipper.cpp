@@ -374,7 +374,7 @@ Int128 Int128Mul (long64 lhs, long64 rhs)
   if (tmp.lo < b) tmp.hi++;
   if (negate) tmp = -tmp;
   return tmp;
-};
+}
 #endif
 
 //------------------------------------------------------------------------------

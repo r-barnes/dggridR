@@ -3,22 +3,22 @@
 all: lib_shape lib_proj4 lib_dglib appex dggrid clipper
 
 appex: lib_shape lib_proj4 clipper lib_dglib
-	@(cd apps/appex         && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
+	@(cd apps/appex         && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" AR="$(AR)")
 
 dggrid: lib_shape lib_proj4 clipper lib_dglib
-	@(cd apps/dggrid        && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
+	@(cd apps/dggrid        && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" AR="$(AR)")
 
 lib_shape:
-	@(cd lib/shapelib-1.3.0 && $(MAKE) lib CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
+	@(cd lib/shapelib-1.3.0 && $(MAKE) lib CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" AR="$(AR)")
 
 lib_proj4:
-	@(cd lib/proj4lib/lib   && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
+	@(cd lib/proj4lib/lib   && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" AR="$(AR)")
 
 clipper:
-	@(cd lib/clipper        && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
+	@(cd lib/clipper        && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" AR="$(AR)")
 
 lib_dglib:
-	@(cd lib/dglib/lib      && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)")
+	@(cd lib/dglib/lib      && $(MAKE)     CXX="$(CXX)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" AR="$(AR)")
 
 clean:
 	@(cd apps/appex         && $(MAKE) clean)

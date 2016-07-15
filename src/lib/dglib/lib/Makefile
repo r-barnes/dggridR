@@ -5,7 +5,6 @@ DEPS = DgAddressBase.depends DgBase.depends DgBoundedHexC2RF2D.depends DgBounded
 SHAPELIBDIR = ../../shapelib-1.3.0
 PROJ4LIBDIR = ../../proj4lib
 INCDIRS = -I../include -I$(PROJ4LIBDIR)/include -I$(SHAPELIBDIR)
-CCFLAGS += ${INCDIRS}
 
 .PHONY: clean all
 
@@ -15,10 +14,10 @@ $(LIB): $(SRC) $(OBJS) $(DEPS)
 	$(AR) rcs $(LIB) $(OBJS)
 
 %.o: %.cpp 
-	$(CXX) -c $< $(CCFLAGS)
+	$(CXX) -c $< $(CXXFLAGS) $(INCDIRS)
 
 %.depends: %.cpp
-	$(CXX) -MM $(CCFLAGS) $< > $@
+	$(CXX) -MM $(CXXFLAGS) $(INCDIRS) $< > $@
 
 clean:
 	rm -rf $(OBJS) $(LIB) $(DEPS) ii_files ti_files make.out
