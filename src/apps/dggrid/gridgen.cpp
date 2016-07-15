@@ -871,7 +871,7 @@ void genGrid (GridGenParam& dp)
         if (fin.eof()) break;
 
         unsigned long int sNum;
-        if (sscanf(buff, "%lx", &sNum) != 1)
+        if (sscanf(buff, "%ld", &sNum) != 1)
           ::report("doTransform(): invalid SEQNUM " + string(buff), DgBase::Fatal);
 
         seqnums.insert(sNum);
