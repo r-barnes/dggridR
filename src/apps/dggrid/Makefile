@@ -8,7 +8,7 @@ PROJ4LIBDIR = ../../lib/proj4lib
 SHAPELIBDIR = ../../lib/shapelib-1.3.0
 INCDIRS = -I$(DGLIBDIR)/include -I$(CLIPPERDIR) \
    -I$(PROJ4LIBDIR)/include -I$(SHAPELIBDIR)
-CCFLAGS  = ${INCDIRS} ${ADD_CC_FLAGS} 
+CCFLAGS  += ${INCDIRS}
 LDLIBS= $(DGLIBDIR)/lib/dglib.a \
         $(CLIPPERDIR)/libclipper.a \
         $(PROJ4LIBDIR)/lib/proj4lib.a $(SHAPELIBDIR)/libshp.a

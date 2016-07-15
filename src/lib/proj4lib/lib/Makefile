@@ -4,7 +4,7 @@ OBJS = adjlon.o  emess.o  hypot.o  pj_auth.o  pj_mlfn.o  pj_msfn.o  pj_phi2.o  p
 DEPS = adjlon.depends  hypot.depends    pj_mlfn.depends  pj_phi2.depends  pj_tsfn.depends emess.depends   pj_auth.depends  pj_msfn.depends  pj_qsfn.depends
 SHAPELIBDIR = ../../shapelib-1.3.0
 INCDIRS = -I../include -I../../dglib/include -I$(SHAPELIBDIR)
-CCFLAGS = ${INCDIRS} ${ADD_CC_FLAGS} 
+CCFLAGS += ${INCDIRS}
 
 .PHONY: clean all
 

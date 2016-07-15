@@ -5,7 +5,7 @@ DEPS = DgAddressBase.depends DgBase.depends DgBoundedHexC2RF2D.depends DgBounded
 SHAPELIBDIR = ../../shapelib-1.3.0
 PROJ4LIBDIR = ../../proj4lib
 INCDIRS = -I../include -I$(PROJ4LIBDIR)/include -I$(SHAPELIBDIR)
-CCFLAGS = ${INCDIRS} ${ADD_CC_FLAGS} 
+CCFLAGS += ${INCDIRS}
 
 .PHONY: clean all
 
