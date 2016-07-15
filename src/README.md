@@ -12,3 +12,4 @@ alterations. These include:
 * Addition of the SEQTOPOLY option under the GENERATE_GRID faculty
 * Alterations that enable the code to be compiled under GCC6
 * Alterations that make the code ISO C conformant
+* Alterations to resolve -pedantic and -Wall warnings
