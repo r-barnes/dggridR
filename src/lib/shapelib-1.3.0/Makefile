@@ -1,5 +1,4 @@
 PREFIX	=	/usr/local
-CFLAGS	+= -fPIC
 LIBOBJ	=	shpopen.o dbfopen.o safileio.o shptree.o 
 SHPBIN	=	shpcreate shpadd shpdump shprewind dbfcreate dbfadd dbfdump shptreedump 
 
