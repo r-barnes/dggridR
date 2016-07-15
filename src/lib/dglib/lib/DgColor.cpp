@@ -116,11 +116,11 @@ DgColor::set (const std::string& name, int setComponentsFlag)
    name_ = name;
    if (!setComponentsFlag) return;
 
-   int red, green, blue;
+   unsigned int red, green, blue;
    const char* colStr = name.c_str();
    if (name.length() == 7 && colStr[0] == '#')
    {
-      sscanf(colStr, "%*c%2d%2d%2d", &red, &green, &blue);
+      sscanf(colStr, "%*c%2x%2x%2x", &red, &green, &blue);
 
       red_   = red   / 255.0;
       green_ = green / 255.0;
