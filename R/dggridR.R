@@ -917,6 +917,9 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ 
   #data set is huge
   cells <- unique(cells)
 
+  if(max(cells)>dgmaxcell(dggs))
+    stop("'cells' contained cell ids which were larger than the maximum id!")
+
   dggs[['dggrid_operation']] = 'GENERATE_GRID'
   dggs[['update_frequency']] = 10000000
 
