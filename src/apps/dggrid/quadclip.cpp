@@ -347,10 +347,10 @@ void createClipRegions (GridGenParam& dp, const DgIDGG& dgg,
 
                ////// now convert back to Snyder and add to the clipRegions
 
-               for (int i = 0; i < solution.size(); i++)
+               for (size_t i = 0; i < solution.size(); i++)
                {
                   DgPolygon locv(clipRegions[q].gnomProj());
-                  for (int j = 0; j < solution[i].size(); j++)
+                  for (size_t j = 0; j < solution[i].size(); j++)
                   {
                      DgLocation* tloc = clipRegions[q].gnomProj().makeLocation(
                                 DgDVec2D(INT_TO_DBL*solution[i][j].X,

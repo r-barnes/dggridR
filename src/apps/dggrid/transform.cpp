@@ -202,7 +202,7 @@ void doTransform (TransformParam& dp)
          char* snStr;
          snStr = strtok(buff, delimStr);
          unsigned long int sNum;
-         if (sscanf(snStr, "%ld", &sNum) != 1)
+         if (sscanf(snStr, "%lx", &sNum) != 1)
          {
             ::report("doTransform(): invalid SEQNUM " + string(snStr), 
                      DgBase::Fatal);
