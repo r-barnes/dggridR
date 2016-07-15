@@ -25,7 +25,7 @@ dg_exe_path <- function(){
 #' @return A filename of a shapefile containing the national border of South Africa
 #'
 #' @export
-dg_shpfname_south_africa <- file.path(system.file(package="dggridR"), "data", "ZAF_adm0.shp")
+dg_shpfname_south_africa <- file.path(system.file(package="dggridR"), "extdata", "ZAF_adm0.shp")
 
 
 
