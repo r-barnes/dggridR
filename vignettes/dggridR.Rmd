@@ -206,8 +206,7 @@ dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 #Get the number of earthquakes in each cell
 quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
 
-#Get the grid cell boundaries for the whole Earth using this dggs in a form
-#suitable for plotting with ggplot2
+#Get the grid cell boundaries for cells which had quakes
 grid          <- dgcellstogrid(dggs,quakecounts$cell,frame=TRUE,wrapcells=TRUE)
 
 #Update the grid cells' properties to include the number of earthquakes
