@@ -31,6 +31,14 @@ This package includes everything you need to make spatial binning great again.
 
 Many details and examples are included in the vignette.
 
+Show me more examples!
+----------------------
+
+In R, if you type
+
+    browseVignettes()
+    
+a browser window will open with many examples for many packages. Find `dggridR` in the list and you will find many more examples.
 
 
 Installation
@@ -43,8 +51,6 @@ install it using:
 
     library(devtools) #Use `install.packages('devtools')` if need be
     install_github('r-barnes/dggridR', vignette=TRUE)
-
-
 
 Show me some code
 -----------------
