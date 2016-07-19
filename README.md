@@ -31,15 +31,6 @@ This package includes everything you need to make spatial binning great again.
 
 Many details and examples are included in the vignette.
 
-Show me more examples!
-----------------------
-
-In R, if you type
-
-    browseVignettes()
-    
-a browser window will open with many examples for many packages. Find `dggridR` in the list and you will find many more examples.
-
 
 Installation
 ------------
@@ -76,6 +67,14 @@ dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
 ```
 
+Show me more examples!
+----------------------
+
+In R, if you type
+
+    browseVignettes()
+    
+a browser window will open with many examples for many packages. Find `dggridR` in the list and you will find many more examples.
 
 
 But I want higher resolution grids than that
