@@ -12,7 +12,7 @@ Suggests: knitr,
     maps,
     mapproj,
     R.rsp
-License: MIT + file LICENSE
+License: MIT + file LICENCE
 Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rbarnes@umn.edu"),
              person("Kevin",   "Sahr",      role = "ctb", email = "sahrk@sou.edu"),
              person("Gerald",  "Evenden",   role = "ctb"),
