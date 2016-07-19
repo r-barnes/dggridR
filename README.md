@@ -150,9 +150,10 @@ This package uses the following libraries:
              There is also an LGPL licensing option which I have chosen not to
              use.
 
-All code and documentation not otherwise mentioned above (essentially anything
-outside the `src/` directory of this package) is released under an MIT (Expat)
-license, available in the LICENSE file.
+This package, and all code and documentation not otherwise mentioned above
+(essentially anything outside the `src/` directory of this package) are released
+under the MIT (Expat) license, as stated in the `LICENSE` file. The `LICENCE`
+file exists for use with CRAN.
 
 
 
