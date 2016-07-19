@@ -112,10 +112,47 @@ the spacing of their center nodes for the ISEA3H grid type.
 Credits
 -------
 
-Richard Barnes built this R package and parts of the underlying C/C++ library it
-uses, though the vast majority of that is due to Kevin Sahr. Credit is also due
-to John P. Snyder who worked out the advanced mathematics (which, to quote,
-XKCD, may be unsuitable for liberal-arts majors) behind some of the projections.
+The code in the 'src' directory is based off of
+[DGGRIDv6.2b](http://www.discreteglobalgrids.org) by Kevin Sahr.
+
+However, Richard Barnes has made some significant alterations. These include:
+
+* Replacement of gpclib with clipper, thus making DGGRID into FLOSS software
+  available for both commerical and non-commerical use without restriction
+* Restructuring and simplifying all of the makefiles to enable compilation in R
+* Direct inclusion of the shapelib library
+* Addition of the SEQTOPOLY option under the GENERATE_GRID faculty
+* Alterations that enable the code to be compiled under GCC6
+* Alterations that make the code ISO C conformant
+* Alterations to resolve -pedantic and -Wall warnings
+
+The package relies on several libraries, as noted in the **Licensing** section
+below.
+
+
+
+Licensing
+---------
+
+This package uses the following libraries:
+
+ * clipper:  The clipper library has been released under the Boostv1 license by 
+             Angus Johnson
+
+ * dggrid:   Kevin Sahr has released dggrid as a 
+             "public domain software program"
+
+ * proj4lib: Gerald Evenden has released this code into the public domain. More
+             recent versions of the library, not used here, are under an
+             MIT-style license.
+
+ * shapelib: Frank Warmerdam has released shapelib under an MIT-style license.
+             There is also an LGPL licensing option which I have chosen not to
+             use.
+
+All code and documentation not otherwise mentioned above (essentially anything
+outside the `src/` directory of this package) is released under an MIT (Expat)
+license, available in the LICENSE file.
 
 
 

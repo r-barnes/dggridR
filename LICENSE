@@ -1,22 +1,3 @@
-This package uses the following libraries:
-
- * clipper:  The clipper library has been released under the Boostv1 license.
-
- * dggrid:   Kevin Sahr has released dggrid as a 
-             "public domain software program"
-
- * proj4lib: Gerald Evenden has released this code into the public domain. More
-             recent versions of the library, not used here, are under an
-             MIT-style license.
-
- * shapelib: Frank Warmerdam has released shapelib under an MIT-style license.
-             There is also an LGPL licensing option which I have chosen not to
-             use.
-
-All code and documentation not otherwise mentioned above (essentially anything
-outside the `src/` directory of this package) is released under an MIT (Expat)
-license, as follows.
-
 Copyright (c) 2016, Richard Barnes
 
 Permission is hereby granted, free of charge, to any person obtaining
