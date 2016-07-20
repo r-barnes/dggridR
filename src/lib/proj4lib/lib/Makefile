@@ -11,8 +11,8 @@ all: $(LIB)
 $(LIB): $(SRC) $(OBJS) #$(DEPS)
 	$(AR) rcs $(LIB) $(OBJS)
 
-%.o: %.cpp 
-	$(CC) -c $< $(CXXFLAGS) $(INCDIRS)
+%.o: %.cpp
+	$(CXX) -c $< $(CXXFLAGS) $(INCDIRS)
 
 #%.depends: %.cpp
 #	$(CXX) -MM $(CXXFLAGS) $(INCDIRS) $< > $@
