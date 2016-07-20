@@ -9,6 +9,8 @@
 #ifndef DGCONTCARTRF_H
 #define DGCONTCARTRF_H
 
+#include <stdint.h>
+
 #include "DgRF.h"
 #include "DgConverter.h"
 #include "Dg2WayConverter.h"

@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <cstring>
 #include <cstdlib>
+#include <stdint.h>
 
 #include "DgUtil.h"
 

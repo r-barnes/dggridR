@@ -9,6 +9,8 @@
 #ifndef DGDISCRF_H
 #define DGDISCRF_H
 
+#include <stdint.h>
+
 #include "DgRF.h"
 #include "DgPolygon.h"
 

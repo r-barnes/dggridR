@@ -11,6 +11,7 @@
 
 #include <climits>
 #include <iostream>
+#include <stdint.h>
 
 #include "DgIVec2D.h"
 #include "DgDVec2D.h"

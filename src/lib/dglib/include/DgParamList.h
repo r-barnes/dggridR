@@ -13,6 +13,7 @@
 #include <vector>
 #include <cfloat>
 #include <climits>
+#include <stdint.h>
 
 #include "DgBase.h"
 #include "DgUtil.h"

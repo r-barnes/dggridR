@@ -9,6 +9,8 @@
 #ifndef DGBOUNDEDIDGG_H 
 #define DGBOUNDEDIDGG_H
 
+#include <stdint.h>
+
 #include "DgIDGG.h"
 #include "DgGeoSphRF.h"
 #include "DgBoundedRF.h"

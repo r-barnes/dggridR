@@ -10,6 +10,7 @@
 #define DGDISCRFS_H
 
 #include <vector>
+#include <stdint.h>
 
 #include "DgRF.h"
 #include "DgPolygon.h"

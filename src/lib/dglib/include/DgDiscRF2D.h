@@ -10,6 +10,7 @@
 #define DGDISCRF2D_H
 
 #include <cmath>
+#include <stdint.h>
 
 #include "DgDiscRF.h"
 #include "DgDVec2D.h"

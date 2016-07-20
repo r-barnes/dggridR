@@ -9,6 +9,8 @@
 #ifndef DGBOUNDEDRFS2D_H
 #define DGBOUNDEDRFS2D_H
 
+#include <stdint.h>
+
 #include "DgDiscRFS2D.h"
 #include "DgBoundedRF2D.h"
 #include "DgIVec2D.h"

@@ -9,6 +9,8 @@
 #ifndef DGBOUNDEDIDGGS_H
 #define DGBOUNDEDIDGGS_H
 
+#include <stdint.h>
+
 #include "DgIDGGS.h"
 #include "DgBoundedIDGG.h"
 #include "DgIDGG.h"

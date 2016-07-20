@@ -9,6 +9,8 @@
 #ifndef DGDMDGRIDD82D_H 
 #define DGDMDGRIDD82D_H
 
+#include <stdint.h>
+
 #include "DgDmdD4Grid2D.h"
 
 ////////////////////////////////////////////////////////////////////////////////

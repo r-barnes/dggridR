@@ -9,6 +9,8 @@
 #ifndef DGBOUNDEDRFBASE_H
 #define DGBOUNDEDRFBASE_H
 
+#include <stdint.h>
+
 #include "DgDiscRF.h"
 
 class DgLocation;

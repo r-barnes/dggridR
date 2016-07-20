@@ -9,6 +9,8 @@
 #ifndef DGBOUNDEDRF_H
 #define DGBOUNDEDRF_H
 
+#include <stdint.h>
+
 #include "DgBoundedRFBase.h"
 #include "DgDiscRF.h"
 #include "DgPolygon.h"

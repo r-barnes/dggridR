@@ -10,6 +10,7 @@
 #define DGDMDD4GRID2D_H
 
 #include <cmath>
+#include <stdint.h>
 
 #include "DgDiscRF2D.h"
 #include "DgDVec2D.h"

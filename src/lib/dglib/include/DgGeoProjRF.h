@@ -10,6 +10,7 @@
 #define DGGEOPROJRF_H
 
 #include <iostream>
+#include <stdint.h>
 
 #include "DgConstants.h"
 #include "DgGeoDatumRF.h"

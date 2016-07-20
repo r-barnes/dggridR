@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <stdint.h>
 
 #include "DgRFBase.h"
 #include "DgAddress.h"

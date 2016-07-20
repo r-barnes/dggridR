@@ -11,6 +11,7 @@
 
 #include <cmath>
 #include <string>
+#include <stdint.h>
 
 #include "DgUtil.h"
 #include "DgConstants.h"
