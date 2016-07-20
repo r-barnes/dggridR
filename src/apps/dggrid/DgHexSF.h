@@ -11,6 +11,7 @@
 
 #include <string>
 #include <iostream>
+#include <stdint.h>
 #include "DgIVec3D.h"
 
 using namespace std;

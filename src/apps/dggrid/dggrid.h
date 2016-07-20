@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <set>
+#include <stdint.h>
 #include "DgParamList.h"
 #include "DgEllipsoidRF.h"
 #include "DgRandom.h"

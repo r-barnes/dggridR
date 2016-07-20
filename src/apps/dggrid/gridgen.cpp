@@ -11,6 +11,7 @@
 #include <fstream>
 #include <set>
 #include <cstdlib>
+#include <stdint.h>
 
 using namespace std;
 

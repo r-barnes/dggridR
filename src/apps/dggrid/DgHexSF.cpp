@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <ctype.h>
+#include <stdint.h>
 #include "DgBase.h"
 #include "DgHexSF.h"
 #include "dggrid.h"
