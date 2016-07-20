@@ -11,6 +11,7 @@
 
 #include <string>
 #include <iostream>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgRFBase.h"

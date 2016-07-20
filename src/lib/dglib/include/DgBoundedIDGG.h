@@ -9,6 +9,7 @@
 #ifndef DGBOUNDEDIDGG_H 
 #define DGBOUNDEDIDGG_H
 
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgIDGG.h"

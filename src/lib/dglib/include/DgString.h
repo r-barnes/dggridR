@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <cstring>
 #include <cstdlib>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgUtil.h"

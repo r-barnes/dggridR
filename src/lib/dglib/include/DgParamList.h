@@ -13,6 +13,7 @@
 #include <vector>
 #include <cfloat>
 #include <climits>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgBase.h"

@@ -11,6 +11,7 @@
 
 using namespace std;
 
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgRF.h"

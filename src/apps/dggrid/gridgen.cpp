@@ -11,6 +11,7 @@
 #include <fstream>
 #include <set>
 #include <cstdlib>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 using namespace std;

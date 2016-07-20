@@ -10,6 +10,7 @@
 #define DGDISCRFS_H
 
 #include <vector>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgRF.h"

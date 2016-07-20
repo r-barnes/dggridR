@@ -9,6 +9,7 @@
 #ifndef DGBOUNDEDRF_H
 #define DGBOUNDEDRF_H
 
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgBoundedRFBase.h"

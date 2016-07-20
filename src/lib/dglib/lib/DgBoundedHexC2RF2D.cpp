@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <climits>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgBoundedHexC2RF2D.h"

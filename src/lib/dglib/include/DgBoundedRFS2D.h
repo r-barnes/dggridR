@@ -9,6 +9,7 @@
 #ifndef DGBOUNDEDRFS2D_H
 #define DGBOUNDEDRFS2D_H
 
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgDiscRFS2D.h"

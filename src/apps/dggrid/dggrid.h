@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <set>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 #include "DgParamList.h"
 #include "DgEllipsoidRF.h"

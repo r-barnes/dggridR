@@ -9,6 +9,7 @@
 #ifndef DGBOUNDEDRFBASE_H
 #define DGBOUNDEDRFBASE_H
 
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgDiscRF.h"

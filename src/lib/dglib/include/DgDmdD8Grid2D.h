@@ -9,6 +9,7 @@
 #ifndef DGDMDGRIDD82D_H 
 #define DGDMDGRIDD82D_H
 
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgDmdD4Grid2D.h"

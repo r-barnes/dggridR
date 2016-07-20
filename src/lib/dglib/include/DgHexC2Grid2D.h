@@ -10,6 +10,7 @@
 #define DGHEXC2GRID2D_H
 
 #include <cmath>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgDiscRF2D.h"

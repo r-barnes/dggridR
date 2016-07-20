@@ -57,6 +57,7 @@
 #include <ostream>
 #include <functional>
 #include <queue>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 namespace ClipperLib {

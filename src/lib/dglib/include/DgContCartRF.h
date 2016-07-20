@@ -9,6 +9,7 @@
 #ifndef DGCONTCARTRF_H
 #define DGCONTCARTRF_H
 
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgRF.h"

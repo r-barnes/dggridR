@@ -11,6 +11,7 @@
 
 #include <climits>
 #include <iostream>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgConstants.h"

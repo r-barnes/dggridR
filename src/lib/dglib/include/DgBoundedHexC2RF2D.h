@@ -9,6 +9,7 @@
 #ifndef DGBOUNDEDHEXC2RF2D_H
 #define DGBOUNDEDHEXC2RF2D_H
 
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 
 #include "DgBoundedRF2D.h"

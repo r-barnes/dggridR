@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <ctype.h>
+#define __STDC_LIMIT_MACROS
 #include <stdint.h>
 #include "DgBase.h"
 #include "DgHexSF.h"
