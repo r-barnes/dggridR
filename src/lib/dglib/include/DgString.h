@@ -203,7 +203,7 @@ static
 int64_t from_string(const std::string& source)
 {
  int64_t n;
- sscanf(source.c_str(), "%lld", &n);
+ sscanf(source.c_str(), "%ld", &n);
  return n;
 }
 
@@ -216,7 +216,7 @@ static
 uint64_t from_string(const std::string& source)
 { 
  uint64_t n;
- sscanf(source.c_str(), "%llu", &n);
+ sscanf(source.c_str(), "%lu", &n);
  return n;
 }
 
