@@ -1,6 +1,6 @@
 export AR=ar
-export CC=gcc
-export CXX=g++
+export CC=clang
+export CXX=clang++
 
 export CFLAGS = -g -O2 -Wall -Wno-unused -pedantic
 export CXXFLAGS = -g -O2 -Wall -Wno-unused -pedantic
