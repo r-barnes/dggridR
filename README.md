@@ -70,11 +70,11 @@ quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
 Show me more examples!
 ----------------------
 
-In R, if you type
+In R, typing
 
-    browseVignettes()
-    
-a browser window will open with many examples for many packages. Find `dggridR` in the list and you will find many more examples.
+    vignette('dggridR')
+
+will bring up many examples.
 
 
 But I want higher resolution grids than that
