@@ -393,13 +393,13 @@ class DgLIntParam : public DgBoundedParam<int64_t> {
    public:
 
      DgLIntParam (const string& nameIn, 
-                  int64_t minIn = LLONG_MIN,
-                  int64_t maxIn = LLONG_MAX)
+                  int64_t minIn = INT64_MIN,
+                  int64_t maxIn = INT64_MAX)
           : DgBoundedParam<int64_t> (nameIn, minIn, maxIn) { }
 
       DgLIntParam (const string& nameIn, const int64_t& valIn, 
-                  const int64_t& minIn = LLONG_MIN,
-		  const int64_t& maxIn = LLONG_MAX,
+                  const int64_t& minIn = INT64_MIN,
+		  const int64_t& maxIn = INT64_MAX,
                   bool validIn = true)
         : DgBoundedParam<int64_t> (nameIn, valIn, minIn, maxIn, validIn) 
                 { 
@@ -476,13 +476,13 @@ class DgUint64Param : public DgBoundedParam<uint64_t> {
 
    public:
 
-      DgUint64Param (const string& nameIn, uint64_t minIn = 0ULL, 
-                   uint64_t maxIn = ULLONG_MAX) 
+      DgUint64Param (const string& nameIn, uint64_t minIn = 0, 
+                   uint64_t maxIn = UINT64_MAX) 
           : DgBoundedParam<uint64_t> (nameIn, minIn, maxIn) { }
 
       DgUint64Param (const string& nameIn, const uint64_t& valIn, 
-                    const uint64_t& minIn = 0ULL, 
-                    const uint64_t& maxIn = ULLONG_MAX,
+                    const uint64_t& minIn = 0, 
+                    const uint64_t& maxIn = UINT64_MAX,
                     bool validIn = true)
         : DgBoundedParam<uint64_t> (nameIn, valIn, minIn, maxIn, validIn) 
                 { 
