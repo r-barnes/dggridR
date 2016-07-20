@@ -13,10 +13,10 @@ $(LIB): $(SRC) $(OBJS) $(DEPS)
 	$(AR) rcs $(LIB) $(OBJS)
 
 %.o: %.cpp 
-	$(CXX) -c $< $(CXXFLAGS) $(INCDIRS)
+	$(CXX1X) -c $< $(CXX1XFLAGS) $(INCDIRS)
 
 %.depends: %.cpp
-	$(CXX) -MM $(CXXFLAGS) $(INCDIRS) $< > $@
+	$(CXX1X) -MM $(CXX1XFLAGS) $(INCDIRS) $< > $@
 
 clean:
 	rm -rf $(OBJS) $(LIB) $(DEPS) ii_files ti_files make.out
