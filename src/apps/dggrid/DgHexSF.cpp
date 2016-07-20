@@ -29,7 +29,7 @@ const string DgHexSF::cs3rD = "BA2A4567";
 const string DgHexSF::cs3rE = "B1BA4567";
 const string DgHexSF::cs3rF = "A1A345B7";
 
-unsigned long long int 
+uint64_t 
 DgHexSF::visitMe (GridGenParam& dp, const DgIDGG& dgg, const DgContCartRF& deg,
                   DgEvalData* ed)
 {
@@ -90,7 +90,7 @@ cout << "accepted: " << quadNum_ << " " << coord2d
    return 1;
 }
 
-unsigned long long int 
+uint64_t 
 DgHexSF::depthFirstTraversal (GridGenParam& dp, const DgIDGG& dgg, 
                               const DgContCartRF& deg, int numAp4Res,
                               DgEvalData* ed)
@@ -117,7 +117,7 @@ cout << "depthFirstTrav res: " << res_
    }
    DgHexSF center;
 
-   unsigned long long int numAccepted = 0;
+   uint64_t numAccepted = 0;
    if (quadNum_ == 0 || quadNum_ == 11) // only one child
    {
       center = DgHexSF(0, 0, 0, childRes);
@@ -142,8 +142,8 @@ cout << "depthFirstTrav res: " << res_
       {
          bool useTile = false;
 
-         unsigned long long int i = ijkCoord().i();
-         unsigned long long int j = ijkCoord().j();
+         uint64_t i = ijkCoord().i();
+         uint64_t j = ijkCoord().j();
 
          // all base tiles (except for the upper right)
          // contain some portion of the quad edge
@@ -155,9 +155,9 @@ cout << "depthFirstTrav res: " << res_
          {
             // find bounds of children at target res
            
-            long long int midI = (dgg.maxI() + 1) / 2;
-            long long int midJ = (dgg.maxJ() + 1) / 2;
-            long long int left = 0, right = 0, top = 0, bottom = 0;
+            int64_t midI = (dgg.maxI() + 1) / 2;
+            int64_t midJ = (dgg.maxJ() + 1) / 2;
+            int64_t left = 0, right = 0, top = 0, bottom = 0;
          
             if (i == 0) // base tile child 1 or 2
             {
@@ -246,7 +246,7 @@ cout << "depthFirstTrav res: " << res_
          center.addSf3Digit(startSFDigit);
       }
    
-      unsigned long long int numAccepted = 
+      uint64_t numAccepted = 
             center.depthFirstTraversal(dp, dgg, deg, numAp4Res, ed);
 
       int sfDigit = startSFDigit + 1;

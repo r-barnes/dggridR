@@ -767,7 +767,7 @@ void outputCellAdd2D (GridGenParam& dp, const DgIDGG& dgg, const DgLocation& add
 {
    // create the various output forms
 
-   unsigned long long int sn = dgg.bndRF().seqNum(add2D);
+   uint64_t sn = dgg.bndRF().seqNum(add2D);
    string *label;
    if (dp.useEnumLbl)
       label = new string(dgg::util::to_string(dp.nCellsAccepted));

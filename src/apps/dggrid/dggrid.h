@@ -164,8 +164,8 @@ class GridGenParam : public MainParam {
 
       bool doPointInPoly;             // perform pt-in-poly intersection
       bool doPolyIntersect;           // perform poly intersection
-      long long int sampleCount; // last sample point sequence number
-      unsigned long long int nSamplePts;
+      int64_t sampleCount; // last sample point sequence number
+      uint64_t nSamplePts;
       bool doRandPts;                 // generate random points for the cells
 
       DgOutLocFile *cellOut, *ptOut, *randPtsOut;
@@ -174,9 +174,9 @@ class GridGenParam : public MainParam {
       bool concatPtOut;         
       char formatStr[50];         
       bool useEnumLbl;         
-      unsigned long long int nCellsTested; 
-      unsigned long long int nCellsAccepted;         
-      unsigned long long int nCellsOutputToFile; // cells output to current file 
+      uint64_t nCellsTested; 
+      uint64_t nCellsAccepted;         
+      uint64_t nCellsOutputToFile; // cells output to current file 
       unsigned long int nOutputFile; // # of current output file
 
       unsigned long int updateFreq; // how often to output updates         
