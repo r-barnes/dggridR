@@ -2,6 +2,7 @@
 //static const char SCCSID[]="@(#)pj_mlfn.c	4.3	93/06/12	GIE	REL";
 #endif
 #include "proj4.h"
+#include <math.h>
 /* meridinal distance for ellipsoid and inverse
 **	8th degree - accurate to < 1e-5 meters when used in conjuction
 **		with typical major axis values.

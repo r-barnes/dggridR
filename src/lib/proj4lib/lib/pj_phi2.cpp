@@ -3,6 +3,7 @@
 //static const char SCCSID[]="@(#)pj_phi2.c	4.3	93/06/12	GIE	REL";
 #endif
 #include "proj4.h"
+#include <math.h>
 
 #define TOL 1.0e-10
 #define N_ITER 15
