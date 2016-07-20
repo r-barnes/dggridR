@@ -57,6 +57,7 @@
 #include <ostream>
 #include <functional>
 #include <queue>
+#include <stdint.h>
 
 namespace ClipperLib {
 
@@ -73,12 +74,11 @@ enum PolyFillType { pftEvenOdd, pftNonZero, pftPositive, pftNegative };
   static cInt const loRange = 0x7FFF;
   static cInt const hiRange = 0x7FFF;
 #else
-  typedef signed long long cInt;
+  typedef int64_t cInt;
   static cInt const loRange = 0x3FFFFFFF;
   static cInt const hiRange = 0x3FFFFFFFFFFFFFFFLL;
-  typedef signed long long long64;     //used by Int128 class
-  typedef unsigned long long ulong64;
-
+  typedef int64_t long64;     //used by Int128 class
+  typedef uint64_t ulong64;
 #endif
 
 struct IntPoint {
