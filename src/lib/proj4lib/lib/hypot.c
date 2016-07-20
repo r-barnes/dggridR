@@ -1,4 +1,4 @@
-#include <cmath>
+#include <math.h>
 
 #ifndef lint
 //static const char SCCSID[]="@(#)hypot.c	4.4	93/06/12	GIE	REL";
@@ -23,7 +23,7 @@
 
 
 long double
-hypot(long double x, long double y) {
+usgs_hypot(long double x, long double y) {
 	if ( x < 0.)
 		x = -x;
 	else if (x == 0.)
@@ -34,9 +34,9 @@ hypot(long double x, long double y) {
 		return (x);
 	if ( x < y ) {
 		x /= y;
-		return ( y * sqrt( 1. + x * x ) );
+		return ( y * sqrtl( 1. + x * x ) );
 	} else {
 		y /= x;
-		return ( x * sqrt( 1. + y * y ) );
+		return ( x * sqrtl( 1. + y * y ) );
 	}
 }
