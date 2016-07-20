@@ -1,7 +1,7 @@
 TARGET = appex
 SRCS = appex.cpp
 OBJS = appex.o
-DEPS = appex.depends
+#DEPS = appex.depends
 DGLIBDIR = ../../lib/dglib
 CLIPPERDIR = ../../lib/clipper
 PROJ4LIBDIR = ../../lib/proj4lib
@@ -16,7 +16,7 @@ LDLIBS= $(DGLIBDIR)/lib/dglib.a \
 
 all: $(TARGET)
 
-${TARGET}: $(SRC) $(OBJS) $(DEPS) $(LDLIBS)
+${TARGET}: $(SRC) $(OBJS) $(LDLIBS) #$(DEPS)
 	$(CXX) $(CXXFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
 
 %.o: %.cpp
@@ -25,8 +25,8 @@ ${TARGET}: $(SRC) $(OBJS) $(DEPS) $(LDLIBS)
 link:
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -o ${TARGET} ${OBJS} $(LDLIBS)
 
-%.depends: %.cpp
-	$(CXX) -M $(CXXFLAGS) $(INCDIRS) $< > $@
+#%.depends: %.cpp
+#	$(CXX) -M $(CXXFLAGS) $(INCDIRS) $< > $@
 
 $(LDLIBS):
 	cd $(CLIPPERDIR);      ${MAKE}
@@ -34,7 +34,7 @@ $(LDLIBS):
 	cd $(DGLIBDIR)/lib;    ${MAKE}
 
 clean:
-	rm -rf $(OBJS) $(DEPS) ${TARGET} core ti_files ii_files
+	rm -rf $(OBJS) ${TARGET} core ti_files ii_files #$(DEPS)
 
--include $(DEPS)
+#-include $(DEPS)
 
