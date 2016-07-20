@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
+#include <stdint.h>
 
 #include "DgHexC1Grid2D.h"
 #include "DgPolygon.h"
@@ -63,7 +64,7 @@ DgHexC1Grid2D::quantify (const DgDVec2D& point) const
 {
    long double a1, a2;
    long double x1, x2;
-   long long int m1, m2;
+   int64_t m1, m2;
    long double r1, r2;
    DgIVec2D add;
 
@@ -77,8 +78,8 @@ DgHexC1Grid2D::quantify (const DgDVec2D& point) const
 
    /* check if we have the center of a hex */
 
-   m1 = static_cast<long long int>(x1);
-   m2 = static_cast<long long int>(x2);
+   m1 = static_cast<int64_t>(x1);
+   m2 = static_cast<int64_t>(x2);
 
    /* otherwise round correctly */
 
@@ -164,14 +165,14 @@ DgHexC1Grid2D::quantify (const DgDVec2D& point) const
    {
       if ((add.j() % 2) == 0) // even
       {
-         long long int axisi = add.j() / 2;
-         long long int diff = add.i() - axisi;
+         int64_t axisi = add.j() / 2;
+         int64_t diff = add.i() - axisi;
          add.setI(add.i() - 2 * diff);
       }
       else
       {
-         long long int axisi = (add.j() + 1) / 2;
-         long long int diff = add.i() - axisi;
+         int64_t axisi = (add.j() + 1) / 2;
+         int64_t diff = add.i() - axisi;
          add.setI(add.i() - (2 * diff + 1));
       }
    }

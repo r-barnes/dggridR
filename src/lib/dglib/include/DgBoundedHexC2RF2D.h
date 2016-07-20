@@ -32,9 +32,9 @@ class DgBoundedHexC2RF2D : public DgBoundedRF2D {
                    add.j() >= lowerLeft().j() && add.j() <= upperRight().j() &&
                    !((add.i() + add.j()) % 3); }
 
-      virtual unsigned long long int seqNumAddress (const DgIVec2D& add) const;
+      virtual uint64_t seqNumAddress (const DgIVec2D& add) const;
 
-      virtual DgIVec2D addFromSeqNum (unsigned long long int sNum) const;
+      virtual DgIVec2D addFromSeqNum (uint64_t sNum) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -141,7 +141,7 @@ class DgRFBase {
       virtual string toString (const DgDistanceBase& dist) const = 0;
       virtual long double toDouble (const DgDistanceBase& dist) const = 0;
 
-      virtual unsigned long long int toInt (const DgDistanceBase& dist) const = 0;
+      virtual uint64_t toInt (const DgDistanceBase& dist) const = 0;
 
       virtual string toAddressString (const DgLocation& loc)     const = 0;
       virtual string toAddressString (const DgLocVector& locVec) const = 0;

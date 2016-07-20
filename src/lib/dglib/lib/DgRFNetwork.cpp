@@ -6,6 +6,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <stdint.h>
+
 #include "DgBase.h"
 #include "DgRFBase.h"
 #include "DgLocation.h"
@@ -14,9 +16,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgRFNetwork::~DgRFNetwork (void)
 {
-   for (unsigned long long int i = 0; i < size(); i++)
+   for (uint64_t i = 0; i < size(); i++)
    {
-      for (unsigned long long int j = 0; j < size(); j++) 
+      for (uint64_t j = 0; j < size(); j++) 
       {
          if (matrix_[i][j] && !(matrix_[i][j]->userGenerated()))
          {
@@ -96,9 +98,9 @@ DgRFNetwork::getConverter (const DgRFBase& fromFrame,
 void
 DgRFNetwork::update (void)
 {
-   for (unsigned long long int i = 0; i < size(); i++)
+   for (uint64_t i = 0; i < size(); i++)
    {
-      for (unsigned long long int j = 0; j < size(); j++)
+      for (uint64_t j = 0; j < size(); j++)
       {
          if (i != j && matrix_[i][j] && !matrix_[i][j]->userGenerated())
          {
@@ -129,12 +131,12 @@ DgRFNetwork::reserve (const size_t& capacity)
 int
 DgRFNetwork::generateId (DgRFBase* frame)
 {
-   unsigned long long int newSize = size() + 1;
+   uint64_t newSize = size() + 1;
 
    frames_.resize(newSize, 0);
    matrix_.resize(newSize);
 
-   for (unsigned long long int i = 0; i < newSize; i++) 
+   for (uint64_t i = 0; i < newSize; i++) 
     matrix_[i].resize(newSize, 0);
    
    frames_[nextId_] = frame;

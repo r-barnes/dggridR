@@ -40,7 +40,7 @@ template <class A, class D> class DgGeoDatumRF : public DgRF<A, D> {
       virtual const char* str2add (A* add, const char* str, char delimiter) 
                                                                      const = 0;
 
-      virtual unsigned long long int dist2int (const D& dist) const = 0;
+      virtual uint64_t dist2int (const D& dist) const = 0;
 
       virtual const A& undefAddress (void) const = 0;
 

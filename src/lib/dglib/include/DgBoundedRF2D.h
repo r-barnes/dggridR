@@ -34,8 +34,8 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
       const DgIVec2D& lowerLeft  (void) const { return lowerLeft_; }
       const DgIVec2D& upperRight (void) const { return upperRight_; }
 
-      long long int numI (void) const { return numI_; }
-      long long int numJ (void) const { return numJ_; }
+      int64_t numI (void) const { return numI_; }
+      int64_t numJ (void) const { return numJ_; }
       
       const DgIVec2D& invalidAdd (void) const 
                          { return discRF().undefAddress(); }
@@ -43,9 +43,9 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
       const DgDiscRF<DgIVec2D, DgDVec2D, long double>& discRF (void) const 
                { return discRF_; }
 
-      virtual unsigned long long int seqNumAddress (const DgIVec2D& add) const;
+      virtual uint64_t seqNumAddress (const DgIVec2D& add) const;
 
-      virtual DgIVec2D addFromSeqNum (unsigned long long int sNum) const;
+      virtual DgIVec2D addFromSeqNum (uint64_t sNum) const;
 
    private:
 
@@ -53,7 +53,7 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
       
       DgIVec2D lowerLeft_;
       DgIVec2D upperRight_;
-      long long int numI_, numJ_;
+      int64_t numI_, numJ_;
 
 };
 

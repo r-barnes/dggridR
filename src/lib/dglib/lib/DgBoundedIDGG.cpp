@@ -6,6 +6,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <stdint.h>
+
 #include "DgBoundedIDGG.h"
 #include "DgBoundedRF2D.h"
 #include "DgBoundedHexC2RF2D.h"
@@ -56,7 +58,7 @@ DgBoundedIDGG::DgBoundedIDGG (const DgIDGG& IDGGin)
 
    // validate the size
 
-   unsigned long long int tmpSize = size();
+   uint64_t tmpSize = size();
    if (firstAdd().quadNum() == 0) tmpSize -= 2;
 /*
 cout << "mag: " << idgg().mag() << ", /3: " << idgg().mag() / 3 << ", size: " << size() << ", tmpSize: " << tmpSize << ", tmpSize / 10: " << tmpSize/10 << endl;
@@ -143,10 +145,10 @@ DgBoundedIDGG::decrementAddress (DgQ2DICoord& add) const
 } // DgQ2DICoord& DgBoundedIDGG::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-unsigned long long int 
+uint64_t 
 DgBoundedIDGG::seqNumAddress (const DgQ2DICoord& add) const
 {
-   unsigned long long int offset = 0;
+   uint64_t offset = 0;
    int q = add.quadNum();
 
    // get the quad offset
@@ -159,7 +161,7 @@ DgBoundedIDGG::seqNumAddress (const DgQ2DICoord& add) const
 
    // now account for seqNum within the quad
 
-   unsigned long long int sNum = offset + bnd2D().seqNumAddress(add.coord());
+   uint64_t sNum = offset + bnd2D().seqNumAddress(add.coord());
 
    if (!zeroBased()) 
     sNum++;
@@ -170,7 +172,7 @@ DgBoundedIDGG::seqNumAddress (const DgQ2DICoord& add) const
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DICoord 
-DgBoundedIDGG::addFromSeqNum (unsigned long long int sNum) const
+DgBoundedIDGG::addFromSeqNum (uint64_t sNum) const
 {
    if (!zeroBased()) 
     sNum--;
@@ -188,7 +190,7 @@ DgBoundedIDGG::addFromSeqNum (unsigned long long int sNum) const
 
    // determine quad and adjust accordingly
 
-   unsigned long long int q = sNum / offsetPerQuad() + 1; // note int division
+   uint64_t q = sNum / offsetPerQuad() + 1; // note int division
    sNum -= (q - 1) * offsetPerQuad();
    
    return DgQ2DICoord((int) q, bnd2D().addFromSeqNum(sNum));

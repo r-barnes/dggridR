@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <climits>
+#include <stdint.h>
 
 #include "DgBoundedRF2D.h"
 #include "DgDiscRF.h"
@@ -78,22 +79,22 @@ DgBoundedRF2D::decrementAddress (DgIVec2D& add) const
 } // DgIVec2D& DgBoundedRF2D::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-unsigned long long int
+uint64_t
 DgBoundedRF2D::seqNumAddress (const DgIVec2D& add) const
 {
    DgIVec2D tVec = add - lowerLeft();
 
-   long long int sNum = tVec.i() * numJ() + tVec.j();
+   int64_t sNum = tVec.i() * numJ() + tVec.j();
 
    if (!zeroBased()) 
     sNum++;
 
    return sNum;
-} // unsigned long long int DgBoundedRF2D::seqNumAddress
+} // uint64_t DgBoundedRF2D::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIVec2D 
-DgBoundedRF2D::addFromSeqNum (unsigned long long int sNum) const
+DgBoundedRF2D::addFromSeqNum (uint64_t sNum) const
 {
    DgIVec2D res;
 

@@ -35,7 +35,7 @@ class DgSqrD4Grid2D : public DgDiscRF2D {
       DgSqrD4Grid2D& operator= (const DgSqrD4Grid2D& grd)
            { DgDiscRF2D::operator=(grd); return *this; }
 
-      virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
+      virtual int64_t dist (const DgIVec2D& add1, const DgIVec2D& add2) const
            { return abs(add2.i() - add1.i()) + abs(add2.j() - add1.j()); }
 
    protected:
@@ -45,8 +45,8 @@ class DgSqrD4Grid2D : public DgDiscRF2D {
                                                                           const;
 
       virtual DgIVec2D quantify (const DgDVec2D& point) const
-           { return DgIVec2D((long long int) floor(point.x() + 0.5), 
-                             (long long int) floor(point.y() + 0.5)); }
+           { return DgIVec2D((int64_t) floor(point.x() + 0.5), 
+                             (int64_t) floor(point.y() + 0.5)); }
 
       virtual DgDVec2D invQuantify (const DgIVec2D& add) const
            { return DgDVec2D(add.i(), add.j()); }

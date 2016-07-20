@@ -6,6 +6,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <stdint.h>
+
 #include "DgEllipsoidRF.h"
 #include "DgGeoSphRF.h"
 #include "DgPolygon.h"
@@ -229,7 +231,7 @@ void planeTriInit (PlaneTri* tri)
 } /* void planeTriInit */
 
 /******************************************************************************/
-void printInt (long long int val)
+void printInt (int64_t val)
 /*
    Print val or 'UNDEFVAL' to stdout as appropriate.
 */

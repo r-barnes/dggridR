@@ -90,7 +90,7 @@ inline string toLower (const string& strIn)
 namespace dgg { namespace util {
 
 ////////////////////////////////////////////////////////////////////////////////
-inline string addCommas (unsigned long long int num)
+inline string addCommas (uint64_t num)
 {
     std::stringstream ss;
     ss << num;
@@ -117,7 +117,7 @@ inline string addCommas (unsigned long long int num)
 ////////////////////////////////////////////////////////////////////////////////
 inline string addCommas (long double num, unsigned int precision)
 {
-   unsigned long long int intPart = num;
+   uint64_t intPart = num;
 
    string newS = addCommas(intPart);
 
@@ -200,9 +200,9 @@ inline
    linker errors. */
 static 		
 #endif
-long long int from_string(const std::string& source)
+int64_t from_string(const std::string& source)
 {
- long long int n;
+ int64_t n;
  sscanf(source.c_str(), "%lld", &n);
  return n;
 }
@@ -213,9 +213,9 @@ inline
 #if !defined  __APPLE__ && !defined __clang__ && GCC_VERSION < 40300
 static 
 #endif
-unsigned long long int from_string(const std::string& source)
+uint64_t from_string(const std::string& source)
 { 
- unsigned long long int n;
+ uint64_t n;
  sscanf(source.c_str(), "%llu", &n);
  return n;
 }

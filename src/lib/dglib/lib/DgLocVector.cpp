@@ -6,6 +6,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <stdint.h>
+
 #include "DgLocVector.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -14,7 +16,7 @@ DgLocVector::DgLocVector (const DgRFBase& rfIn, int sizeIn)
 {
    vec_.resize(sizeIn);
 
-   for (long long int i = 0; i < size(); i++) 
+   for (int64_t i = 0; i < size(); i++) 
      vec_[i] = rf().createAddress();
 
 } // DgLocVector::DgLocVector
@@ -25,7 +27,7 @@ DgLocVector::clearAddress (void)
 {
    tmpLoc_.address_ = 0;
 
-   for (long long int i = 0; i < size(); i++)
+   for (int64_t i = 0; i < size(); i++)
    {
       delete vec_[i];
       vec_[i] = 0;

@@ -26,9 +26,9 @@ class DgSqrD8Grid2D : public DgSqrD4Grid2D {
       DgSqrD8Grid2D (const DgSqrD8Grid2D& grd) 
          : DgSqrD4Grid2D (grd) {}
 
-      virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
-           { long long int diffi = abs(add2.i() - add1.i());
-             long long int diffj = abs(add2.j() - add1.j());
+      virtual int64_t dist (const DgIVec2D& add1, const DgIVec2D& add2) const
+           { int64_t diffi = abs(add2.i() - add1.i());
+             int64_t diffj = abs(add2.j() - add1.j());
              return (diffi >= diffj) ? diffi : diffj; }
 
    protected:

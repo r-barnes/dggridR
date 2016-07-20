@@ -35,7 +35,7 @@ class DgHexC1Grid2D : public DgDiscRF2D {
       DgHexC1Grid2D& operator= (const DgHexC1Grid2D& grd)
            { DgDiscRF2D::operator=(grd); return *this; }
 
-      virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
+      virtual int64_t dist (const DgIVec2D& add1, const DgIVec2D& add2) const
            { DgIVec2D diff = add2 - add1;
              if ((diff.i() >= 0 && diff.j() <= 0) ||
                  (diff.i() <= 0 && diff.j() >= 0))   /* different signs */

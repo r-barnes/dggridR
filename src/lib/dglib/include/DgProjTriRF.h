@@ -125,8 +125,8 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual unsigned long long int dist2int (const long double& dist) const
-                       { return (unsigned long long int) dist; }
+      virtual uint64_t dist2int (const long double& dist) const
+                       { return (uint64_t) dist; }
 
       DgSphIcosa& sphIcosa (void) const { return *sphIcosa_; }
 

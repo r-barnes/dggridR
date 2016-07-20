@@ -6,6 +6,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <stdint.h>
+
 template<class A, class B, class DB>
 DgBoundedRF<A, B, DB>::DgBoundedRF (const DgDiscRF<A, B, DB>& rfIn, 
       const A& firstAddIn, const A& lastAddIn, const A& endAddIn, bool zBasedIn)
@@ -50,18 +52,18 @@ DgBoundedRF<A, B, DB>::decrementLocation (DgLocation& loc, bool convert) const
 } // DgLocation& DgBoundedRF<A, B, DB>::decrementLocation
                                                   
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> unsigned long long int
+template<class A, class B, class DB> uint64_t
 DgBoundedRF<A, B, DB>::seqNum (const DgLocation& loc, bool convert) const
 {
    const A* add = discRF().getAddress(loc);
    
    return seqNumAddress(*add);
 
-} // unsigned long long int DgBoundedRF<A, B, DB>::seqNum
+} // uint64_t DgBoundedRF<A, B, DB>::seqNum
                                                   
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> DgLocation*
-DgBoundedRF<A, B, DB>::locFromSeqNum (unsigned long long int sNum) const
+DgBoundedRF<A, B, DB>::locFromSeqNum (uint64_t sNum) const
 {
    A add = addFromSeqNum(sNum);
 

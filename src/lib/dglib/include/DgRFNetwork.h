@@ -32,7 +32,7 @@ class DgRFNetwork {
 
      ~DgRFNetwork (void);
 
-      unsigned long long int size (void) const { return frames_.size(); }
+      uint64_t size (void) const { return frames_.size(); }
 
       bool existsConverter (const DgRFBase& fromFrame,
                             const DgRFBase& toFrame) const;

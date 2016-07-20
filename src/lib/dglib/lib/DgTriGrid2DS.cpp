@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
+#include <stdint.h>
 
 #include "DgContCartRF.h"
 #include "DgIVec2D.h"
@@ -132,10 +133,10 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
          const DgIVec2D lowerLeft((add.address().i() * radix()),
                                   (add.address().j() * radix()));
 
-         long long int maxJ = 0;
+         int64_t maxJ = 0;
          for (int i = 0; i < radix(); i++)
          {
-            for (long long int j = 0; j <= maxJ; j++)
+            for (int64_t j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgIVec2D> >(
                            DgResAdd<DgIVec2D>(DgIVec2D(lowerLeft.i() + i, 
@@ -149,10 +150,10 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
          const DgIVec2D upperRight((add.address().i() * radix() + radix() - 1),
                                    (add.address().j() * radix() + radix() - 1));
 
-         long long int maxJ = 0;
+         int64_t maxJ = 0;
          for (int i = 0; i < radix(); i++)
          {
-            for (long long int j = 0; j <= maxJ; j++)
+            for (int64_t j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgIVec2D> >(
                            DgResAdd<DgIVec2D>(DgIVec2D(upperRight.i() - i, 

@@ -44,11 +44,11 @@ class DgBoundedIDGGS
 
       const vector<DgBoundedIDGG*>& grids (void) const { return *grids_; }
 
-      virtual unsigned long long int seqNumAddress 
+      virtual uint64_t seqNumAddress 
                                   (const DgResAdd<DgQ2DICoord>& add) const;
 
       virtual DgResAdd<DgQ2DICoord> addFromSeqNum 
-                                  (unsigned long long int sNum) const;
+                                  (uint64_t sNum) const;
 
    private:
 

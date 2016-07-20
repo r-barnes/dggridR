@@ -6,6 +6,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <stdint.h>
+
 #include "DgBase.h"
 #include "DgLocation.h"
 #include "DgLocVector.h"
@@ -444,7 +446,7 @@ DgRF<A, D>::toDouble (const DgDistanceBase& dist) const
 
 ////////////////////////////////////////////////////////////////////////////////
 template <class A, class D> 
-unsigned long long int
+uint64_t
 DgRF<A, D>::toInt (const DgDistanceBase& dist) const
 {
    if (dist.rf() != *this)
@@ -456,7 +458,7 @@ DgRF<A, D>::toInt (const DgDistanceBase& dist) const
 
    return dist2int((static_cast<const DgDistance<D>&>(dist)).distance());
 
-} // unsigned long long int DgRF<A, D>::toInt
+} // uint64_t DgRF<A, D>::toInt
 
 ////////////////////////////////////////////////////////////////////////////////
 template <class A, class D> void

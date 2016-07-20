@@ -271,8 +271,8 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual unsigned long long int dist2int (const long double& dist) const
-                       { return static_cast<unsigned long long int>(dist); }
+      virtual uint64_t dist2int (const long double& dist) const
+                       { return static_cast<uint64_t>(dist); }
 
    private:
 
@@ -355,7 +355,7 @@ typedef struct Vec3D {
 
 typedef struct SphTri {
 
-   long long int code; 
+   int64_t code; 
    GeoCoord verts[3];  /* vertices in degrees */
    long double   edges[3];  /* edges opposite to verts in central angle degrees */
    long double   angles[3]; /* interior angles in degrees corresponding to verts */
@@ -367,8 +367,8 @@ typedef struct SphTri {
 
 typedef struct PlaneTri {
 
-   long long int code;
-   long long int direction; /* 0: up, 1: down */
+   int64_t code;
+   int64_t direction; /* 0: up, 1: down */
    Vec2D    points[3]; /* points in plane triangle in km */ 
    Vec2D    cenpoint;  /* central point of plane triangle in km */ 
  
@@ -376,7 +376,7 @@ typedef struct PlaneTri {
 
 typedef struct SCtri {
 
-  long long int code;
+  int64_t code;
   GeoCoord verts[3]; /* vertices in radius*/
   GeoCoord poles[3];  
   long double edges[3];

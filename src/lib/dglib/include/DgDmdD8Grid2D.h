@@ -26,10 +26,10 @@ class DgDmdD8Grid2D : public DgDmdD4Grid2D {
       DgDmdD8Grid2D (const DgDmdD8Grid2D& grd) 
          : DgDmdD4Grid2D (grd) {}
 
-      virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
+      virtual int64_t dist (const DgIVec2D& add1, const DgIVec2D& add2) const
       { 
-	unsigned long long int diffi = abs(add2.i() - add1.i());
-	unsigned long long int diffj = abs(add2.j() - add1.j());
+	uint64_t diffi = abs(add2.i() - add1.i());
+	uint64_t diffj = abs(add2.j() - add1.j());
         return (diffi >= diffj) ? diffi : diffj; 
       }
 

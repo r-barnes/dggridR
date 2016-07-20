@@ -45,10 +45,10 @@ class DgBoundedRFS2D
 
       const vector<DgBoundedRF2D*>& grids (void) const { return *grids_; }
 
-      virtual unsigned long long int seqNumAddress (const DgResAdd<DgIVec2D>& add) 
+      virtual uint64_t seqNumAddress (const DgResAdd<DgIVec2D>& add) 
                                                                         const;
 
-      virtual DgResAdd<DgIVec2D> addFromSeqNum (unsigned long long int sNum) const;
+      virtual DgResAdd<DgIVec2D> addFromSeqNum (uint64_t sNum) const;
 
    private:
 

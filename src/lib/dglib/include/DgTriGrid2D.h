@@ -36,7 +36,7 @@ class DgTriGrid2D : public DgDiscRF2D {
       DgTriGrid2D& operator= (const DgTriGrid2D& grd)
            { DgDiscRF2D::operator=(grd); return *this; }
 
-      virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const;
+      virtual int64_t dist (const DgIVec2D& add1, const DgIVec2D& add2) const;
 
       static bool isUp (const DgIVec2D& add) { return !(add.j() % 2); }
 
