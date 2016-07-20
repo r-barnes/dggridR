@@ -239,7 +239,7 @@ void printInt (int64_t val)
    if (val == UNDEFVAL)
       printf("UNDEFVAL");
    else
-      printf("%lld", val);
+      printf("%ld", val);
  
 } /* void printInt */
 

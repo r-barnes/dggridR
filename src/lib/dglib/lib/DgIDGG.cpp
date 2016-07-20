@@ -23,7 +23,7 @@
 #include "DgProjFuller.h"
 
 const DgQ2DICoord DgQ2DICoord::undefDgQ2DICoord(-1, 
-                                     DgIVec2D(LLONG_MAX, LLONG_MAX));
+                                     DgIVec2D(INT64_MAX, INT64_MAX));
 const DgQ2DDCoord DgQ2DDCoord::undefDgQ2DDCoord(-1, 
                                      DgDVec2D(LDBL_MAX, LDBL_MAX));
 
