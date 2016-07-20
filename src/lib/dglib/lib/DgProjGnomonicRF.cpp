@@ -110,7 +110,7 @@ DgProjGnomonicRF::projInverse (const DgDVec2D& addIn,
 
    long double  rh, cosz, sinz;
 
-   rh = hypot(xy.x(), xy.y());
+   rh = usgs_hypot(xy.x(), xy.y());
    lp.setLat(atan(rh));
    sinz = sin(lp.lat());
    cosz = sqrt(1. - sinz * sinz);
