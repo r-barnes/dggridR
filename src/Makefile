@@ -1,7 +1,7 @@
 export AR=ar
 export CC=clang
 export CXX=clang++
-export CXX1X=clang++ --std=c++11
+export CXX1X=clang++
 
 export CFLAGS = -g -O2 -Wall -Wno-unused -pedantic
 export CXXFLAGS = -g -O2 -Wall -Wno-unused -pedantic

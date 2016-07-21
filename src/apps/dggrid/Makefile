@@ -17,7 +17,7 @@ LDLIBS= $(DGLIBDIR)/lib/dglib.a \
 all: $(TARGET)
 
 ${TARGET}: $(SRC) $(OBJS) $(LDLIBS) #$(DEPS)
-	$(CXX) $(CXXFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
+	$(CXX1X) $(CXX1XFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
 
 %.o: %.cpp
 	$(CXX1X) -c $< $(CXX1XFLAGS) $(INCDIRS) -o $@
