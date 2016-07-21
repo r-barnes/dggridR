@@ -3,6 +3,7 @@
 //static const char SCCSID[]="@(#)pj_qsfn.c	4.3	93/06/12	GIE	REL";
 #endif
 #include <cmath>
+#include "proj4_constants.h"
 
 # define EPSILON 1.0e-7
 	long double

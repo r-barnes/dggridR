@@ -4,6 +4,7 @@
 #endif
 #include "proj4.h"
 #include <cmath>
+#include "proj4_constants.h"
 
 #define TOL 1.0e-10
 #define N_ITER 15
@@ -14,11 +15,11 @@ pj_phi2(long double ts, long double e) {
 	int i;
 
 	eccnth = .5 * e;
-	Phi = M_PI_2 - 2. * std::atan (ts);
+	Phi = projM_PI_2 - 2. * std::atan (ts);
 	i = N_ITER;
 	do {
 		con = e * std::sin (Phi);
-		dphi = M_PI_2 - 2. * std::atan (ts * std::pow((1. - con) /
+		dphi = projM_PI_2 - 2. * std::atan (ts * std::pow((1. - con) /
 		   (1. + con), eccnth)) - Phi;
 		Phi += dphi;
 	} while ( std::fabs(dphi) > TOL && --i);

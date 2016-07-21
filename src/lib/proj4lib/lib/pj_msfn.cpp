@@ -3,6 +3,7 @@
 //static const char SCCSID[]="@(#)pj_msfn.c	4.3	93/06/12	GIE	REL";
 #endif
 #include <cmath>
+#include "proj4_constants.h"
 	long double
 pj_msfn(long double sinphi, long double cosphi, long double es) {
 	return (cosphi / std::sqrt (1. - es * sinphi * sinphi));
