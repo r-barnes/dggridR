@@ -68,8 +68,8 @@ DgIcosaTri::translate (DgDVec2D* pt) const
    long double y0 = pt->y();
    if (rot60_)
    {
-      long double cosAng = cos((rot60_ * 60.0L) * M_PI_180);
-      long double sinAng = sin((rot60_ * 60.0L) * M_PI_180);
+      long double cosAng = cos((rot60_ * 60.0L) * dgM_PI_180);
+      long double sinAng = sin((rot60_ * 60.0L) * dgM_PI_180);
       pt->setX(x0 * cosAng - y0 * sinAng);
       pt->setY(x0 * sinAng + y0 * cosAng);
    }
@@ -93,8 +93,8 @@ DgIcosaTri::untranslate (DgDVec2D* pt, bool shiftOrigin) const
    long double y0 = pt->y();
    if (rot60_)
    {
-      long double cosAng = cos(-1.0L * (rot60_ * 60.0L) * M_PI_180);
-      long double sinAng = sin(-1.0L * (rot60_ * 60.0L) * M_PI_180);
+      long double cosAng = cos(-1.0L * (rot60_ * 60.0L) * dgM_PI_180);
+      long double sinAng = sin(-1.0L * (rot60_ * 60.0L) * dgM_PI_180);
       pt->setX(x0 * cosAng - y0 * sinAng);
       pt->setY(x0 * sinAng + y0 * cosAng);
    }

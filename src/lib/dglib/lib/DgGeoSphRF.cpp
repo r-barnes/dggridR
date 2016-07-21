@@ -17,7 +17,7 @@ long double DgGeoSphRF::icosaEdgeRads_ = M_ATAN2;
 long double DgGeoSphRF::icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
 long double DgGeoSphRF::icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
 long double DgGeoSphRF::totalAreaKM_ = 
-                      4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
+                      4.0L * dgM_PI * earthRadiusKM_ * earthRadiusKM_;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ DgGeoSphRF::densify (DgPolygon& p, long double maxDist, bool rads)
    const DgGeoSphRF* gs = dynamic_cast<const DgGeoSphRF*>(&p.rf());
    if (gs == 0) report("DgGeoSphRF::densify() with non-CCRF", DgBase::Fatal);
 
-   if (!rads) maxDist *= M_PI_180;
+   if (!rads) maxDist *= dgM_PI_180;
 
    DgPolygon densVerts(*gs);
 
@@ -127,8 +127,8 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
 
    if (!inputRads)
    {
-      distance *= M_PI_180;
-      azimuth *= M_PI_180;
+      distance *= dgM_PI_180;
+      azimuth *= dgM_PI_180;
    }
 
    GeoCoord ans = GCdaz(pp0, distance, azimuth);

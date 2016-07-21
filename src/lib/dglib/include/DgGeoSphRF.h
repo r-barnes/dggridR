@@ -26,7 +26,7 @@ class DgGeoSphRF : public DgEllipsoidRF {
               icosaEdgeRads_ = M_ATAN2;
               icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
               icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
-              totalAreaKM_ = 4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
+              totalAreaKM_ = 4.0L * dgM_PI * earthRadiusKM_ * earthRadiusKM_;
            }
 
       DgGeoSphRF (const DgGeoSphRF& rf) 

@@ -77,7 +77,7 @@ GridGenParam::GridGenParam (DgParamList& plist)
       util::ssplit(regFileStr, regionFiles);
 
       getParamValue(plist, "geodetic_densify", geoDens, false);
-      geoDens *= M_PI / 180.0;
+      geoDens *= dgM_PI / 180.0;
 
       getParamValue(plist, "densification", nDensify, false);
       //nudge = 0.00000001;

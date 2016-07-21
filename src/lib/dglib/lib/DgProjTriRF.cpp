@@ -14,7 +14,7 @@ DgSphIcosa::DgSphIcosa (const DgGeoCoord& vert0, long double azimuthDegs)
 {
    sphIcosa_.pt.lon = vert0.lon();
    sphIcosa_.pt.lat = vert0.lat();
-   sphIcosa_.azimuth = azimuthDegs * M_PI/180;
+   sphIcosa_.azimuth = azimuthDegs * dgM_PI/180;
 
    ico12verts();
 
@@ -27,7 +27,7 @@ ostream& operator<< (ostream& str, const DgSphIcosa& dgsi)
 
    DgGeoCoord tmp(si.pt);
    str << "vert0: " << tmp << endl;
-   str << "az0: " << si.azimuth * 180.0 / M_PI << endl;
+   str << "az0: " << si.azimuth * 180.0 / dgM_PI << endl;
 
    str << "vertices:\n";
    str << "{\n";
@@ -77,7 +77,7 @@ GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,
   ptnew.lat = acos(cosptnewlat);
   if (fabs(ptnew.lat-0.) < PRECISION*100000)
       ptnew.lon=0.; 
-  else if (fabs(ptnew.lat-M_PI) < PRECISION*100000)
+  else if (fabs(ptnew.lat-dgM_PI) < PRECISION*100000)
       ptnew.lon=0.; 
   else
    {
@@ -86,13 +86,13 @@ GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,
     if (cosptnewlon>1.) cosptnewlon=1.0;
     if (cosptnewlon<-1.) cosptnewlon=-1.0;
     ptnew.lon = acos(cosptnewlon);
-    if ((ptold.lon-newNPold.lon)>=0 && (ptold.lon-newNPold.lon) < M_PI)
+    if ((ptold.lon-newNPold.lon)>=0 && (ptold.lon-newNPold.lon) < dgM_PI)
       ptnew.lon=-ptnew.lon+lon0;
     else ptnew.lon=ptnew.lon+lon0;
-    if (ptnew.lon>M_PI) ptnew.lon -= 2*M_PI;
-    if (ptnew.lon<-M_PI) ptnew.lon += 2*M_PI;
+    if (ptnew.lon>dgM_PI) ptnew.lon -= 2*dgM_PI;
+    if (ptnew.lon<-dgM_PI) ptnew.lon += 2*dgM_PI;
    }
-  ptnew.lat = M_PI/2-ptnew.lat;
+  ptnew.lat = dgM_PI/2-ptnew.lat;
   return ptnew;
  }
 
@@ -177,28 +177,28 @@ DgSphIcosa::ico12verts (void)
    newnpold.lon = 0.0;
    for (i = 1; i <= 5; i++) 
    {
-     vertsnew[i].lat = 26.565051177 * M_PI / 180.0;
-     vertsnew[i].lon = -sphIcosa().azimuth + 72 * (i - 1) * M_PI / 180.0;
-     if (vertsnew[i].lon > M_PI-PRECISION) vertsnew[i].lon -= 2 * M_PI;
-     if (vertsnew[i].lon < -(M_PI+PRECISION)) vertsnew[i].lon += 2 * M_PI;
-     vertsnew[i+5].lat = -26.565051177 * M_PI / 180;
+     vertsnew[i].lat = 26.565051177 * dgM_PI / 180.0;
+     vertsnew[i].lon = -sphIcosa().azimuth + 72 * (i - 1) * dgM_PI / 180.0;
+     if (vertsnew[i].lon > dgM_PI-PRECISION) vertsnew[i].lon -= 2 * dgM_PI;
+     if (vertsnew[i].lon < -(dgM_PI+PRECISION)) vertsnew[i].lon += 2 * dgM_PI;
+     vertsnew[i+5].lat = -26.565051177 * dgM_PI / 180;
      vertsnew[i+5].lon = 
-              -sphIcosa().azimuth + (36.0 + 72.0 * (i - 1)) * M_PI / 180.0;
-     if (vertsnew[i + 5].lon > M_PI - PRECISION) 
+              -sphIcosa().azimuth + (36.0 + 72.0 * (i - 1)) * dgM_PI / 180.0;
+     if (vertsnew[i + 5].lon > dgM_PI - PRECISION) 
      {
-        vertsnew[i + 5].lon -= 2 * M_PI;
+        vertsnew[i + 5].lon -= 2 * dgM_PI;
      }
-     if (vertsnew[i+5].lon < -(M_PI+PRECISION)) vertsnew[i+5].lon += 2 * M_PI;
+     if (vertsnew[i+5].lon < -(dgM_PI+PRECISION)) vertsnew[i+5].lon += 2 * dgM_PI;
    }
-   vertsnew[11].lat = -90.0 * M_PI / 180.0;
-   vertsnew[11].lon = 0.0 * M_PI / 180.0;
+   vertsnew[11].lat = -90.0 * dgM_PI / 180.0;
+   vertsnew[11].lon = 0.0 * dgM_PI / 180.0;
    sphIcosa().icoverts[0].lat = sphIcosa().pt.lat;
    sphIcosa().icoverts[0].lon = sphIcosa().pt.lon;
 /***** hardwire for bug test ******/
 
 /*
-vertsnew[0].lat = 90.0 * M_PI / 180.0;
-vertsnew[0].lon = 0.0 * M_PI / 180.0;
+vertsnew[0].lat = 90.0 * dgM_PI / 180.0;
+vertsnew[0].lon = 0.0 * dgM_PI / 180.0;
 for (i = 0; i < 12; i++) 
 {
    sphIcosa().icoverts[i].lat = vertsnew[i].lat; 

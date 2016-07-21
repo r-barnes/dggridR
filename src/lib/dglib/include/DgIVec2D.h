@@ -127,7 +127,7 @@ DgIVec2D::rotate (long double degrees)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   long double rotAng = degrees * M_PI_180;
+   long double rotAng = degrees * dgM_PI_180;
    long double cosAng = cos(rotAng);
    long double sinAng = sin(rotAng);
    std::int64_t i = i_;

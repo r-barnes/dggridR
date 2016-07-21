@@ -55,11 +55,11 @@ class DgGeoCoord : public DgDVec2D {
       DgGeoCoord (const DgGeoCoord& coord) { *this = coord; }
 
       DgGeoCoord (const DgDVec2D& coord, bool rads = true)
-        { if (rads) *this = coord; else *this = coord * M_PI_180; } 
+        { if (rads) *this = coord; else *this = coord * dgM_PI_180; } 
 
       DgGeoCoord (long double lon, long double lat, bool rads = true) 
         { if (rads) *this = DgDVec2D(lon, lat); 
-          else *this = DgDVec2D(lon * M_PI_180, lat * M_PI_180); }
+          else *this = DgDVec2D(lon * dgM_PI_180, lat * dgM_PI_180); }
 
       DgGeoCoord (const GeoCoord& coord)
            { *this = DgDVec2D(coord.lon, coord.lat); }
@@ -83,8 +83,8 @@ class DgGeoCoord : public DgDVec2D {
       void setLat (long double rads) { setY(rads); }
       void setLon (long double rads) { setX(rads); }
 
-      void setLatDeg (long double degs) { setY(degs * M_PI_180); }
-      void setLonDeg (long double degs) { setX(degs * M_PI_180); }
+      void setLatDeg (long double degs) { setY(degs * dgM_PI_180); }
+      void setLonDeg (long double degs) { setX(degs * dgM_PI_180); }
 
       void normalize (void)
            {

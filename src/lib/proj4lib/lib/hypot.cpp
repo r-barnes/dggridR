@@ -1,4 +1,3 @@
-#include "proj4_constants.h"
 #include <cmath>
 
 #ifndef lint

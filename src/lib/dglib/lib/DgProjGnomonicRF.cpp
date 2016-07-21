@@ -25,7 +25,7 @@ DgProjGnomonicRF::DgProjGnomonicRF(DgRFNetwork& networkIn, const string& nameIn,
    : DgGeoProjRF (networkIn, nameIn, proj0In, x0In, y0In, k0In, 
                   to_meterIn, fr_meterIn)
 { 
-   if (fabs(fabs(phi0()) - M_PI_2) < EPS10)
+   if (fabs(fabs(phi0()) - dgM_PI_2) < EPS10)
       mode_ = phi0() < 0.0L ? S_POLE : N_POLE;
    else if (fabs(phi0()) < EPS10)
       mode_ = EQUIT;
@@ -122,7 +122,7 @@ DgProjGnomonicRF::projInverse (const DgDVec2D& addIn,
       case OBLIQ:
          lp.setLat(cosz * sinph0_ + xy.y() * sinz * cosph0_ / rh);
          if (fabs(lp.lat()) >= 1.0L)
-            lp.setLat(lp.lat() > 0.0L ? M_PI_2 : - M_PI_2);
+            lp.setLat(lp.lat() > 0.0L ? dgM_PI_2 : - dgM_PI_2);
          else
             lp.setLat(asin(lp.lat()));
          xy.setY((cosz - sinph0_ * sin(lp.lat())) * rh);
@@ -131,17 +131,17 @@ DgProjGnomonicRF::projInverse (const DgDVec2D& addIn,
       case EQUIT:
          lp.setLat(xy.y() * sinz / rh);
          if (fabs(lp.lat()) >= 1.0L)
-            lp.setLat(lp.lat() > 0.0L ? M_PI_2 : - M_PI_2);
+            lp.setLat(lp.lat() > 0.0L ? dgM_PI_2 : - dgM_PI_2);
          else
             lp.setLat(asin(lp.lat()));
          xy.setY(cosz * rh);
          xy.setX(xy.x() * sinz);
          break;
       case S_POLE:
-         lp.setLat(lp.lat() - M_PI_2);
+         lp.setLat(lp.lat() - dgM_PI_2);
          break;
       case N_POLE:
-         lp.setLat(M_PI_2 - lp.lat());
+         lp.setLat(dgM_PI_2 - lp.lat());
          xy.setY(-xy.y());
          break;
       }

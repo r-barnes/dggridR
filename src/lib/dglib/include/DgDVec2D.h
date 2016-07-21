@@ -127,7 +127,7 @@ DgDVec2D::rotate (long double degrees)
    while (degrees >= 360.0L) degrees -= 360.0L;
    if (fabs(degrees - M_ZERO) < M_EPSILON) return *this;
 
-   long double rotAng = degrees * M_PI_180;
+   long double rotAng = degrees * dgM_PI_180;
    long double cosAng = cos(rotAng);
    long double sinAng = sin(rotAng);
    long double x = x_;

@@ -181,23 +181,23 @@ GeoCoord fullerInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
     long double azh, theta;
     Geovect = fullerInvOneTri(iPt, M_ONE, &azh, &theta);
 
-    azh = M_PI - azh; // 180' - azh
+    azh = dgM_PI - azh; // 180' - azh
 
     // now reposition to the actual triangle
 
     azh += ddazh;
 
-    while (azh <= -M_PI) azh += M_2PI;
-    while (azh > M_PI) azh -= M_2PI;
+    while (azh <= -dgM_PI) azh += M_2PI;
+    while (azh > dgM_PI) azh -= M_2PI;
 
     sinlat=cent.sinLat * cos(theta) + cent.cosLat * sin(theta) * cos(azh);
     if (sinlat > M_ONE) sinlat = M_ONE;
     if (sinlat < -M_ONE) sinlat = -M_ONE;
     Geovect.lat = asin(sinlat);
 
-    if (fabs(fabs(Geovect.lat) - M_PI_2) < M_EPSILON)
+    if (fabs(fabs(Geovect.lat) - dgM_PI_2) < M_EPSILON)
     {
-       Geovect.lat = (Geovect.lat > M_ZERO) ? M_PI_2 : -M_PI_2;
+       Geovect.lat = (Geovect.lat > M_ZERO) ? dgM_PI_2 : -dgM_PI_2;
        Geovect.lon = M_ZERO;
     }
     else
@@ -211,8 +211,8 @@ GeoCoord fullerInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
       if (coslon < -M_ONE) coslon =-M_ONE;
       Geovect.lon = cent.pt.lon+asin(sinlon);
       Geovect.lon = cent.pt.lon+atan2(sinlon, coslon);
-      if (Geovect.lon <= -M_PI) Geovect.lon += M_2PI;
-      if (Geovect.lon >= M_PI) Geovect.lon -= M_2PI;
+      if (Geovect.lon <= -dgM_PI) Geovect.lon += M_2PI;
+      if (Geovect.lon >= dgM_PI) Geovect.lon -= M_2PI;
     }
   }
   return Geovect;
@@ -221,8 +221,8 @@ GeoCoord fullerInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
 
 static void geogtocartesian (long double lon, long double lat, long double R, long double ret[])
 {
-   long double inc = M_PI_2 - lat;
-   long double azi = lon + M_PI;
+   long double inc = dgM_PI_2 - lat;
+   long double azi = lon + dgM_PI;
 
    ret[0] = R * cos(azi) * sin(inc);
    ret[1] = R * sin(azi) * sin(inc);
@@ -350,7 +350,7 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
 
    /* Find x1, y1 and z1 on template planar triangle*/
 
-   //y1 = a1p * sin (60.0L * M_PI_180) - (el / (2.0L * M_SQRT3));
+   //y1 = a1p * sin (60.0L * dgM_PI_180) - (el / (2.0L * M_SQRT3));
    y1 = a1p * M_SIN60 - 0.30353099910334311154769579070999L;
    //x1 = a2p + (y1 / M_SQRT3) - (el / 3.0L);
    x1 = a2p + (y1 / M_SQRT3) - 0.3504874080794224040171127232319L;
@@ -370,21 +370,21 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
 
    theta = acos (z);
    azimuth = atan2 (y, x);
-   long double j = M_PI / 2.0L;
+   long double j = dgM_PI / 2.0L;
    if (azimuth <= j )
-      azimuth = azimuth + M_PI_2;
+      azimuth = azimuth + dgM_PI_2;
    else
    {
-      //azimuth = azimuth - 3.0L * M_PI / 2.0L;
+      //azimuth = azimuth - 3.0L * dgM_PI / 2.0L;
       azimuth -= 4.712388980384689857693965074919L;
    }
 
    *pTheta = theta;
    *pAzimuth = azimuth;
    
-   long double lat = (M_PI_2 - theta) * M_180_PI;
+   long double lat = (dgM_PI_2 - theta) * M_180_PI;
    long double lon = azimuth;
-   if (fabs (M_PI_2 - lat) < PRECISION)
+   if (fabs (dgM_PI_2 - lat) < PRECISION)
       lon = M_ZERO;
 
    lon = lon * M_180_PI;

@@ -1142,7 +1142,7 @@ DgIDGG::initialize (void)
       gridStats_.setCellAreaKM(DgGeoSphRF::totalAreaKM() / gridStats_.nCells());
 
    gridStats_.setCLS(2.0L * 2.0L * DgGeoSphRF::earthRadiusKM() * 
-                     asin(sqrt(gridStats_.cellAreaKM() / M_PI) / 
+                     asin(sqrt(gridStats_.cellAreaKM() / dgM_PI) / 
                      (2.0L * DgGeoSphRF::earthRadiusKM())));
 
 } // DgIDGG::initialize

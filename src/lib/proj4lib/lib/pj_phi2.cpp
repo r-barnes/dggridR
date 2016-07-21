@@ -4,7 +4,6 @@
 #endif
 #include "proj4.h"
 #include <cmath>
-#include "proj4_constants.h"
 
 #define TOL 1.0e-10
 #define N_ITER 15

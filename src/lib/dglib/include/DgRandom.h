@@ -72,7 +72,7 @@ class DgRandom {
 
       DgGeoCoord nextGeo (void) 
          { 
-            return DgGeoCoord(randInRange(-M_PI, M_PI),
+            return DgGeoCoord(randInRange(-dgM_PI, dgM_PI),
                               asin(randInRange(-1.0, 1.0)));
          }
 

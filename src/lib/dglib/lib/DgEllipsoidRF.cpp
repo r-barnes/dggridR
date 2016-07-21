@@ -33,20 +33,20 @@ DgGeoCoord::gcDist (const DgGeoCoord& g1, const DgGeoCoord& g2,
 
    long double bigC = fabs(g2.lon() - g1.lon());
    
-   if (bigC > M_PI) // assume we want the complement
+   if (bigC > dgM_PI) // assume we want the complement
    {
       // note that in this case they can't both be negative
 
       long double lon1 = g1.lon();
-      if (lon1 < 0.0L) lon1 += 2.0L * M_PI; 
+      if (lon1 < 0.0L) lon1 += 2.0L * dgM_PI; 
       long double lon2 = g2.lon();
-      if (lon2 < 0.0L) lon2 += 2.0L * M_PI; 
+      if (lon2 < 0.0L) lon2 += 2.0L * dgM_PI; 
 
       bigC = fabs(lon2 - lon1);
    }
 
-   long double b = M_PI_2 - g1.lat();
-   long double a = M_PI_2 - g2.lat();
+   long double b = dgM_PI_2 - g1.lat();
+   long double a = dgM_PI_2 - g2.lat();
 
    // use law of cosines to find c
 
@@ -117,7 +117,7 @@ DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
    long double bigB = 2.0L * atan(k / sinsb);
    long double bigC = 2.0L * atan(k / sinsc);
 
-   long double E = bigA + bigB + bigC - M_PI;
+   long double E = bigA + bigB + bigC - dgM_PI;
 
 /*
    cout << "geoTriArea: " << g1 << " " << g2 << " " << g3 << endl
@@ -128,7 +128,7 @@ DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
         << " B: " << bigB
         << " C: " << bigC << endl
         << " E: " << E << " "
-        << E / (4.0L * M_PI) << endl;
+        << E / (4.0L * dgM_PI) << endl;
 */
 
    return E;
@@ -449,7 +449,7 @@ long double vecDot (const Vec3D& A, const Vec3D& B)
 /******************************************************************************/
 long double sqrMetersToExcessD (long double area)
 {
-   return area * 360.0L / (4.0L * M_PI * DgGeoSphRF::earthRadiusKM() * 
+   return area * 360.0L / (4.0L * dgM_PI * DgGeoSphRF::earthRadiusKM() * 
           DgGeoSphRF::earthRadiusKM());
 
 } /* long double metersToExcessD */
@@ -457,7 +457,7 @@ long double sqrMetersToExcessD (long double area)
 /******************************************************************************/
 long double metersToGCDegrees (long double meters)
 {
-   long double earthCircum = (2.0L * M_PI * DgGeoSphRF::earthRadiusKM());
+   long double earthCircum = (2.0L * dgM_PI * DgGeoSphRF::earthRadiusKM());
    return meters * 360.0L / earthCircum;
 
 } /* long double metersToGCDegrees */
@@ -523,7 +523,7 @@ GeoCoord xyzll(const Vec3D& v0)
      if (v.z>1.0L) v.z = 1.0L;
      if (v.z<-1.0L) v.z = -1.0L;
      sv.lat=asin(v.z);
-     if ((sv.lat== M_PI_2) || (sv.lat==-M_PI_2)) sv.lon=0.0L;
+     if ((sv.lat== dgM_PI_2) || (sv.lat==-dgM_PI_2)) sv.lon=0.0L;
      else sv.lon=atan2(v.y,v.x);
      return sv;
   }
@@ -583,8 +583,8 @@ long double spheredist(const GeoCoord& ll1, const GeoCoord& ll2)
 */
  {
   long double sd;
-  sd=cos(M_PI_2-ll1.lat)*cos(M_PI_2-ll2.lat)+
-     sin(M_PI_2-ll1.lat)*sin(M_PI_2-ll2.lat)*cos(ll1.lon-ll2.lon);
+  sd=cos(dgM_PI_2-ll1.lat)*cos(dgM_PI_2-ll2.lat)+
+     sin(dgM_PI_2-ll1.lat)*sin(dgM_PI_2-ll2.lat)*cos(ll1.lon-ll2.lon);
   if (sd>1) sd=1;
   if (sd<-1) sd=-1;
   return acos(sd);
@@ -605,12 +605,12 @@ void sphTriSolve(SphTri* tri)
   l1[0]=tri->verts[0].lat; l1[1]=tri->verts[0].lon;
   l2[0]=tri->verts[1].lat; l2[1]=tri->verts[1].lon;
   l3[0]=tri->verts[2].lat; l3[1]=tri->verts[2].lon;
-  tri->edges[0]=acos(cos(M_PI_2-l2[0])*cos(M_PI_2-l3[0])+
-               sin(M_PI_2-l2[0])*sin(M_PI_2-l3[0])*cos(l2[1]-l3[1]));
-  tri->edges[1]=acos(cos(M_PI_2-l1[0])*cos(M_PI_2-l3[0])+
-               sin(M_PI_2-l1[0])*sin(M_PI_2-l3[0])*cos(l1[1]-l3[1]));
-  tri->edges[2]=acos(cos(M_PI_2-l2[0])*cos(M_PI_2-l1[0])+
-               sin(M_PI_2-l2[0])*sin(M_PI_2-l1[0])*cos(l2[1]-l1[1]));
+  tri->edges[0]=acos(cos(dgM_PI_2-l2[0])*cos(dgM_PI_2-l3[0])+
+               sin(dgM_PI_2-l2[0])*sin(dgM_PI_2-l3[0])*cos(l2[1]-l3[1]));
+  tri->edges[1]=acos(cos(dgM_PI_2-l1[0])*cos(dgM_PI_2-l3[0])+
+               sin(dgM_PI_2-l1[0])*sin(dgM_PI_2-l3[0])*cos(l1[1]-l3[1]));
+  tri->edges[2]=acos(cos(dgM_PI_2-l2[0])*cos(dgM_PI_2-l1[0])+
+               sin(dgM_PI_2-l2[0])*sin(dgM_PI_2-l1[0])*cos(l2[1]-l1[1]));
   tri->angles[0]=acos((cos(tri->edges[0])-cos(tri->edges[1])*
                cos(tri->edges[2]))/(sin(tri->edges[1])*sin(tri->edges[2])));
   tri->angles[1]=acos((cos(tri->edges[1])-cos(tri->edges[0])*
@@ -623,7 +623,7 @@ void sphTriSolve(SphTri* tri)
     p=(tri->edges[0]+tri->edges[1]+tri->edges[2])/2;
     tri->area=sqrt(p*(p-tri->edges[0])*(p-tri->edges[1])*(p-tri->edges[2]));
    }
-  else tri->area=(tri->angles[0]+tri->angles[1]+tri->angles[2]-M_PI)*
+  else tri->area=(tri->angles[0]+tri->angles[1]+tri->angles[2]-dgM_PI)*
               DgGeoSphRF::earthRadiusKM()*DgGeoSphRF::earthRadiusKM();
  
  } /* void sphTriSolve(SphTri* tri) */
@@ -854,19 +854,19 @@ GeoCoord GCdaz(const GeoCoord& pt, long double distance, long double az)
   GeoCoord pt2;
   long double sinlat, sinlon, coslon;
  
-  if ((fabs(az)<PRECISION) || (fabs(fabs(az)-M_PI)<PRECISION))
+  if ((fabs(az)<PRECISION) || (fabs(fabs(az)-dgM_PI)<PRECISION))
   {
      if (fabs(az)<PRECISION) pt2.lat = pt.lat + distance;
      else pt2.lat = pt.lat - distance;
      pt2.lon = pt.lon;
-     if (fabs(pt2.lat-M_PI_2)<PRECISION)
+     if (fabs(pt2.lat-dgM_PI_2)<PRECISION)
      { 
-        pt2.lat = M_PI_2;
+        pt2.lat = dgM_PI_2;
         pt2.lon = 0.0L;
      } 
-     if (fabs(pt2.lat+M_PI_2)<PRECISION)
+     if (fabs(pt2.lat+dgM_PI_2)<PRECISION)
      { 
-        pt2.lat = -M_PI;
+        pt2.lat = -dgM_PI;
         pt2.lon = 0.0L;
      } 
   }   
@@ -876,7 +876,7 @@ GeoCoord GCdaz(const GeoCoord& pt, long double distance, long double az)
      if (sinlat>1.0L) sinlat=1.0L;
      if (sinlat<-1.0L) sinlat=-1.0L;
      pt2.lat=asin(sinlat);   
-     if ((pt2.lat==M_PI_2) || (pt2.lat==-M_PI_2)) pt2.lon=0.0L;
+     if ((pt2.lat==dgM_PI_2) || (pt2.lat==-dgM_PI_2)) pt2.lon=0.0L;
      else   
       {  
        sinlon=sin(az)*sin(distance)/cos(pt2.lat);
@@ -888,8 +888,8 @@ GeoCoord GCdaz(const GeoCoord& pt, long double distance, long double az)
        if (coslon<-1.0L) sinlon=-1.0L;
        pt2.lon=pt.lon+atan2(sinlon,coslon); 
       }   
-     if (pt2.lon>M_PI+PRECISION) pt2.lon -=2.0L*M_PI;
-     if (pt2.lon<-M_PI-PRECISION) pt2.lon +=2.0L*M_PI;
+     if (pt2.lon>dgM_PI+PRECISION) pt2.lon -=2.0L*dgM_PI;
+     if (pt2.lon<-dgM_PI-PRECISION) pt2.lon +=2.0L*dgM_PI;
   }
  
   return pt2;

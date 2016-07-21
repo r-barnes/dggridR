@@ -121,7 +121,7 @@ DgDVec3D::rotate (long double degrees)
 {
    if (fabs(degrees - 0.0L) < M_EPSILON) return *this;
 
-   long double rotAng = degrees * M_PI_180;
+   long double rotAng = degrees * dgM_PI_180;
    long double cosAng = cos(rotAng);
    long double sinAng = sin(rotAng);
    long double x = x_;

@@ -61,13 +61,13 @@ class DgGeoProjConverter :
      
            // check for forward and latitude or longitude overange 
 
-           if ((t = fabs(lp.lat())-M_PI_2) > EPS || fabs(lp.lon()) > 10.0L) {
+           if ((t = fabs(lp.lat())-dgM_PI_2) > EPS || fabs(lp.lon()) > 10.0L) {
                 xy = DgDVec2D::undefDgDVec2D;
                 report("DgGeoProjConverter::convertTypedAddress(): "
                    " lat or lon out of range", DgBase::Fatal);
            } else { /* proceed with projection */
               if (fabs(t) <= EPS)
-                 lp.setLat(lp.lat() < 0.0L ? -M_PI_2 : M_PI_2);
+                 lp.setLat(lp.lat() < 0.0L ? -dgM_PI_2 : dgM_PI_2);
               else if (p.geoc())
                  lp.setLat(atan(e.rone_es() * tan(lp.lat())));
 //cout << "cta: lp: " << lp << endl;
@@ -159,7 +159,7 @@ class DgGeoInvProjConverter :
            lp.setLon(lp.lon() + p.lam0()); // reduce from del lp.lam 
            if (!p.over())
               lp.setLon(adjlon(lp.lon())); // adjust longitude to CM 
-           if (p.geoc() && fabs(fabs(lp.lat())-M_PI_2) > EPS)
+           if (p.geoc() && fabs(fabs(lp.lat())-dgM_PI_2) > EPS)
               lp.setLat(atan(e.one_es() * tan(lp.lat())));
 
            lp.normalize();

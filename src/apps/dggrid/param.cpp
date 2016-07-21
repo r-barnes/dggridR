@@ -444,11 +444,11 @@ DgGridPList::DgGridPList (void)
 
    // dggs_res_specify_area <long double: km^2> (v > 0.0)
    insertParam(new DgDoubleParam("dggs_res_specify_area", 100.0, 
-                                 0.0, 4.0 * M_PI * 6500.0 * 6500.0));
+                                 0.0, 4.0 * dgM_PI * 6500.0 * 6500.0));
 
    // dggs_res_specify_intercell_distance <long double: km> (v > 0.0)
    insertParam(new DgDoubleParam("dggs_res_specify_intercell_distance", 100.0, 
-                                 0.0, 2.0 * M_PI * 6500.0));
+                                 0.0, 2.0 * dgM_PI * 6500.0));
 
    // dggs_res_specify_rnd_down <TRUE ! FALSE> (true indicates round down, false up)
    insertParam(new DgBoolParam("dggs_res_specify_rnd_down", true));
