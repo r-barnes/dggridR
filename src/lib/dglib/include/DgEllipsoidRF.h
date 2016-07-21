@@ -11,8 +11,7 @@
 
 #include <climits>
 #include <iostream>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgConstants.h"
 #include "DgGeoDatumRF.h"
@@ -272,8 +271,8 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual uint64_t dist2int (const long double& dist) const
-                       { return static_cast<uint64_t>(dist); }
+      virtual std::uint64_t dist2int (const long double& dist) const
+                       { return static_cast<std::uint64_t>(dist); }
 
    private:
 
@@ -356,7 +355,7 @@ typedef struct Vec3D {
 
 typedef struct SphTri {
 
-   int64_t code; 
+   std::int64_t code; 
    GeoCoord verts[3];  /* vertices in degrees */
    long double   edges[3];  /* edges opposite to verts in central angle degrees */
    long double   angles[3]; /* interior angles in degrees corresponding to verts */
@@ -368,8 +367,8 @@ typedef struct SphTri {
 
 typedef struct PlaneTri {
 
-   int64_t code;
-   int64_t direction; /* 0: up, 1: down */
+   std::int64_t code;
+   std::int64_t direction; /* 0: up, 1: down */
    Vec2D    points[3]; /* points in plane triangle in km */ 
    Vec2D    cenpoint;  /* central point of plane triangle in km */ 
  
@@ -377,7 +376,7 @@ typedef struct PlaneTri {
 
 typedef struct SCtri {
 
-  int64_t code;
+  std::int64_t code;
   GeoCoord verts[3]; /* vertices in radius*/
   GeoCoord poles[3];  
   long double edges[3];

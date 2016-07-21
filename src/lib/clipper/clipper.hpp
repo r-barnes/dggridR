@@ -57,8 +57,7 @@
 #include <ostream>
 #include <functional>
 #include <queue>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 namespace ClipperLib {
 
@@ -75,11 +74,11 @@ enum PolyFillType { pftEvenOdd, pftNonZero, pftPositive, pftNegative };
   static cInt const loRange = 0x7FFF;
   static cInt const hiRange = 0x7FFF;
 #else
-  typedef int64_t cInt;
+  typedef std::int64_t cInt;
   static cInt const loRange = 0x3FFFFFFF;
   static cInt const hiRange = 0x3FFFFFFFFFFFFFFF;
-  typedef int64_t long64;     //used by Int128 class
-  typedef uint64_t ulong64;
+  typedef std::int64_t long64;     //used by Int128 class
+  typedef std::uint64_t ulong64;
 #endif
 
 struct IntPoint {

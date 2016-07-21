@@ -6,8 +6,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 template<class A, class B, class DB>
 DgBoundedRF<A, B, DB>::DgBoundedRF (const DgDiscRF<A, B, DB>& rfIn, 
@@ -53,18 +52,18 @@ DgBoundedRF<A, B, DB>::decrementLocation (DgLocation& loc, bool convert) const
 } // DgLocation& DgBoundedRF<A, B, DB>::decrementLocation
                                                   
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> uint64_t
+template<class A, class B, class DB> std::uint64_t
 DgBoundedRF<A, B, DB>::seqNum (const DgLocation& loc, bool convert) const
 {
    const A* add = discRF().getAddress(loc);
    
    return seqNumAddress(*add);
 
-} // uint64_t DgBoundedRF<A, B, DB>::seqNum
+} // std::uint64_t DgBoundedRF<A, B, DB>::seqNum
                                                   
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> DgLocation*
-DgBoundedRF<A, B, DB>::locFromSeqNum (uint64_t sNum) const
+DgBoundedRF<A, B, DB>::locFromSeqNum (std::uint64_t sNum) const
 {
    A add = addFromSeqNum(sNum);
 

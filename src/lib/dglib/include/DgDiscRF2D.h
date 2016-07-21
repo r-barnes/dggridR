@@ -10,8 +10,7 @@
 #define DGDISCRF2D_H
 
 #include <cmath>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgDiscRF.h"
 #include "DgDVec2D.h"
@@ -55,7 +54,7 @@ class DgDiscRF2D : public DgDiscRF<DgIVec2D, DgDVec2D, long double> {
 
       // remind users of the pure virtual functions remaining from above
 
-      virtual int64_t dist (const DgIVec2D& add1, const DgIVec2D& add2) const = 0;
+      virtual std::int64_t dist (const DgIVec2D& add1, const DgIVec2D& add2) const = 0;
 
       virtual DgIVec2D quantify    (const DgDVec2D& point) const = 0;
       virtual DgDVec2D invQuantify (const DgIVec2D& add)   const = 0;

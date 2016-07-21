@@ -15,8 +15,7 @@
 #include <iomanip>
 #include <cstring>
 #include <cstdlib>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 #include <sstream>
 #include <stdexcept>
 
@@ -93,7 +92,7 @@ inline string toLower (const string& strIn)
 namespace dgg { namespace util {
 
 ////////////////////////////////////////////////////////////////////////////////
-inline string addCommas (uint64_t num)
+inline string addCommas (std::uint64_t num)
 {
     std::stringstream ss;
     ss << num;
@@ -120,7 +119,7 @@ inline string addCommas (uint64_t num)
 ////////////////////////////////////////////////////////////////////////////////
 inline string addCommas (long double num, unsigned int precision)
 {
-   uint64_t intPart = num;
+   std::uint64_t intPart = num;
 
    string newS = addCommas(intPart);
 
@@ -203,9 +202,9 @@ inline
    linker errors. */
 static 		
 #endif
-int64_t from_string(const std::string& source)
+std::int64_t from_string(const std::string& source)
 {
- int64_t n;
+ std::int64_t n;
   std::istringstream convert(source);
   convert>>n;
   if(convert.fail())
@@ -219,9 +218,9 @@ inline
 #if !defined  __APPLE__ && !defined __clang__ && GCC_VERSION < 40300
 static 
 #endif
-uint64_t from_string(const std::string& source)
+std::uint64_t from_string(const std::string& source)
 { 
- uint64_t n;
+ std::uint64_t n;
   std::istringstream convert(source);
   convert>>n;
   if(convert.fail())

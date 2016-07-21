@@ -10,8 +10,7 @@
 #define DGHEXC1GRID2D_H
 
 #include <cmath>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgDiscRF2D.h"
 #include "DgDVec2D.h"
@@ -36,7 +35,7 @@ class DgHexC1Grid2D : public DgDiscRF2D {
       DgHexC1Grid2D& operator= (const DgHexC1Grid2D& grd)
            { DgDiscRF2D::operator=(grd); return *this; }
 
-      virtual int64_t dist (const DgIVec2D& add1, const DgIVec2D& add2) const
+      virtual std::int64_t dist (const DgIVec2D& add1, const DgIVec2D& add2) const
            { DgIVec2D diff = add2 - add1;
              if ((diff.i() >= 0 && diff.j() <= 0) ||
                  (diff.i() <= 0 && diff.j() >= 0))   /* different signs */

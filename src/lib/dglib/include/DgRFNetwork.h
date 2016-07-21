@@ -10,8 +10,7 @@
 #define DGRFNETWORK_H
 
 #include <vector>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgUtil.h"
 
@@ -33,7 +32,7 @@ class DgRFNetwork {
 
      ~DgRFNetwork (void);
 
-      uint64_t size (void) const { return frames_.size(); }
+      std::uint64_t size (void) const { return frames_.size(); }
 
       bool existsConverter (const DgRFBase& fromFrame,
                             const DgRFBase& toFrame) const;

@@ -7,8 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgContCartRF.h"
 #include "DgDiscRF.h"
@@ -84,10 +83,10 @@ DgIDGGS4T::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
          const DgIVec2D lowerLeft((add.address().coord().i() * radix()),
                                   (add.address().coord().j() * radix()));
 
-         int64_t maxJ = 0;
+         std::int64_t maxJ = 0;
          for (int i = 0; i < radix(); i++)
          {
-            for (int64_t j = 0; j <= maxJ; j++)
+            for (std::int64_t j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgQ2DICoord> >(
                   DgResAdd<DgQ2DICoord>(DgQ2DICoord(add.address().quadNum(),
@@ -103,10 +102,10 @@ DgIDGGS4T::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                          (add.address().coord().i() * radix() + radix() - 1),
                          (add.address().coord().j() * radix() + radix() - 1));
 
-         int64_t maxJ = 0;
+         std::int64_t maxJ = 0;
          for (int i = 0; i < radix(); i++)
          {
-            for (int64_t j = 0; j <= maxJ; j++)
+            for (std::int64_t j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgQ2DICoord> >(
                   DgResAdd<DgQ2DICoord>(DgQ2DICoord(add.address().quadNum(),

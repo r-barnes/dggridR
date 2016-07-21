@@ -7,8 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgContCartRF.h"
 #include "DgHexC2Grid2D.h"
@@ -43,7 +42,7 @@ DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
 } // DgHexC2Grid2D::DgHexC2Grid2D
 
 ////////////////////////////////////////////////////////////////////////////////
-int64_t
+std::int64_t
 DgHexC2Grid2D::dist (const DgIVec2D& add1, const DgIVec2D& add2) const
 {
    DgLocation* loc1 = substrate().makeLocation(add1);
@@ -52,7 +51,7 @@ DgHexC2Grid2D::dist (const DgIVec2D& add1, const DgIVec2D& add2) const
    surrogate().convert(loc1);
    surrogate().convert(loc2);
 
-   int64_t d = surrogate().dist(*(surrogate().getAddress(*loc1)),
+   std::int64_t d = surrogate().dist(*(surrogate().getAddress(*loc1)),
                             *(surrogate().getAddress(*loc2)));
 
    delete loc1;
@@ -88,7 +87,7 @@ DgHexC2Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
    delete tmpLoc;
 
    vector<DgAddressBase*>& v = vec.addressVec();
-   for (int64_t i = 0; i < tmpVec.size(); i++)
+   for (std::int64_t i = 0; i < tmpVec.size(); i++)
    {
       v.push_back(new DgAddress<DgIVec2D>(
                      *(substrate().getAddress(tmpVec[i]))));

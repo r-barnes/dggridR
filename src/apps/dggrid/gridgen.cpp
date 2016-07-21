@@ -11,8 +11,7 @@
 #include <fstream>
 #include <set>
 #include <cstdlib>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 using namespace std;
 
@@ -768,7 +767,7 @@ void outputCellAdd2D (GridGenParam& dp, const DgIDGG& dgg, const DgLocation& add
 {
    // create the various output forms
 
-   uint64_t sn = dgg.bndRF().seqNum(add2D);
+   std::uint64_t sn = dgg.bndRF().seqNum(add2D);
    string *label;
    if (dp.useEnumLbl)
       label = new string(dgg::util::to_string(dp.nCellsAccepted));

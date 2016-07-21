@@ -7,8 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgTriGrid2D.h"
 #include "DgPolygon.h"
@@ -75,13 +74,13 @@ DgTriGrid2D::quantify (const DgDVec2D& point) const
 
    DgDVec2D pp(p.x() + p.y() / sqrt(3.0), p.y()); // p long double prime
 
-   int64_t i    = static_cast<int64_t>(floor(pp.x() / e()));
-   int64_t jTmp = static_cast<int64_t>(floor(2.0/3.0 * pp.y()));
+   std::int64_t i    = static_cast<std::int64_t>(floor(pp.x() / e()));
+   std::int64_t jTmp = static_cast<std::int64_t>(floor(2.0/3.0 * pp.y()));
 
    DgDVec2D ppp(p.x() - p.y() / sqrt(3.0), p.y()); // p triple prime
-   int64_t k    = static_cast<int64_t>(floor(ppp.x() / e()));
+   std::int64_t k    = static_cast<std::int64_t>(floor(ppp.x() / e()));
 
-   int64_t j = jTmp * 2;
+   std::int64_t j = jTmp * 2;
    if (jTmp % 2) // i + j + k should be odd
    {
       if (!((i + j + k) % 2)) j++;
@@ -108,7 +107,7 @@ DgTriGrid2D::invQuantify (const DgIVec2D& add) const
 } // DgDVec2D DgTriGrid2D::invQuantify
 
 ////////////////////////////////////////////////////////////////////////////////
-int64_t
+std::int64_t
 DgTriGrid2D::dist (const DgIVec2D& add1, const DgIVec2D& add2) const
 {
    return 0;

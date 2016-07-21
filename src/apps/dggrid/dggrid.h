@@ -14,8 +14,7 @@
 
 #include <iostream>
 #include <set>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 #include "DgParamList.h"
 #include "DgEllipsoidRF.h"
 #include "DgRandom.h"
@@ -165,8 +164,8 @@ class GridGenParam : public MainParam {
 
       bool doPointInPoly;             // perform pt-in-poly intersection
       bool doPolyIntersect;           // perform poly intersection
-      int64_t sampleCount; // last sample point sequence number
-      uint64_t nSamplePts;
+      std::int64_t sampleCount; // last sample point sequence number
+      std::uint64_t nSamplePts;
       bool doRandPts;                 // generate random points for the cells
 
       DgOutLocFile *cellOut, *ptOut, *randPtsOut;
@@ -175,9 +174,9 @@ class GridGenParam : public MainParam {
       bool concatPtOut;         
       char formatStr[50];         
       bool useEnumLbl;         
-      uint64_t nCellsTested; 
-      uint64_t nCellsAccepted;         
-      uint64_t nCellsOutputToFile; // cells output to current file 
+      std::uint64_t nCellsTested; 
+      std::uint64_t nCellsAccepted;         
+      std::uint64_t nCellsOutputToFile; // cells output to current file 
       unsigned long int nOutputFile; // # of current output file
 
       unsigned long int updateFreq; // how often to output updates         

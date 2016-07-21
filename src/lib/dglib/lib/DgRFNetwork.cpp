@@ -6,8 +6,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgBase.h"
 #include "DgRFBase.h"
@@ -17,9 +16,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgRFNetwork::~DgRFNetwork (void)
 {
-   for (uint64_t i = 0; i < size(); i++)
+   for (std::uint64_t i = 0; i < size(); i++)
    {
-      for (uint64_t j = 0; j < size(); j++) 
+      for (std::uint64_t j = 0; j < size(); j++) 
       {
          if (matrix_[i][j] && !(matrix_[i][j]->userGenerated()))
          {
@@ -99,9 +98,9 @@ DgRFNetwork::getConverter (const DgRFBase& fromFrame,
 void
 DgRFNetwork::update (void)
 {
-   for (uint64_t i = 0; i < size(); i++)
+   for (std::uint64_t i = 0; i < size(); i++)
    {
-      for (uint64_t j = 0; j < size(); j++)
+      for (std::uint64_t j = 0; j < size(); j++)
       {
          if (i != j && matrix_[i][j] && !matrix_[i][j]->userGenerated())
          {
@@ -132,12 +131,12 @@ DgRFNetwork::reserve (const size_t& capacity)
 int
 DgRFNetwork::generateId (DgRFBase* frame)
 {
-   uint64_t newSize = size() + 1;
+   std::uint64_t newSize = size() + 1;
 
    frames_.resize(newSize, 0);
    matrix_.resize(newSize);
 
-   for (uint64_t i = 0; i < newSize; i++) 
+   for (std::uint64_t i = 0; i < newSize; i++) 
     matrix_[i].resize(newSize, 0);
    
    frames_[nextId_] = frame;

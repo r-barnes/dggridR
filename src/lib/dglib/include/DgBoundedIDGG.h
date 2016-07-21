@@ -9,8 +9,7 @@
 #ifndef DGBOUNDEDIDGG_H 
 #define DGBOUNDEDIDGG_H
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgIDGG.h"
 #include "DgGeoSphRF.h"
@@ -37,11 +36,11 @@ class DgBoundedIDGG : public DgBoundedRF<DgQ2DICoord, DgGeoCoord, long double> {
 
       const DgIDGG& idgg (void) const { return IDGG_; }
 
-      uint64_t offsetPerQuad (void) const { return offsetPerQuad_; }
+      std::uint64_t offsetPerQuad (void) const { return offsetPerQuad_; }
 
-      virtual uint64_t seqNumAddress (const DgQ2DICoord& add) const;
+      virtual std::uint64_t seqNumAddress (const DgQ2DICoord& add) const;
 
-      virtual DgQ2DICoord addFromSeqNum (uint64_t sNum) const;
+      virtual DgQ2DICoord addFromSeqNum (std::uint64_t sNum) const;
 
    protected:
 
@@ -51,7 +50,7 @@ class DgBoundedIDGG : public DgBoundedRF<DgQ2DICoord, DgGeoCoord, long double> {
 
       const DgIDGG& IDGG_;
       DgBoundedRF2D* bnd2D_;
-      uint64_t offsetPerQuad_;
+      std::uint64_t offsetPerQuad_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

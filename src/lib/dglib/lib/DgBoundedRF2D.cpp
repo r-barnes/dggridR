@@ -7,8 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <climits>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgBoundedRF2D.h"
 #include "DgDiscRF.h"
@@ -80,22 +79,22 @@ DgBoundedRF2D::decrementAddress (DgIVec2D& add) const
 } // DgIVec2D& DgBoundedRF2D::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-uint64_t
+std::uint64_t
 DgBoundedRF2D::seqNumAddress (const DgIVec2D& add) const
 {
    DgIVec2D tVec = add - lowerLeft();
 
-   int64_t sNum = tVec.i() * numJ() + tVec.j();
+   std::int64_t sNum = tVec.i() * numJ() + tVec.j();
 
    if (!zeroBased()) 
     sNum++;
 
    return sNum;
-} // uint64_t DgBoundedRF2D::seqNumAddress
+} // std::uint64_t DgBoundedRF2D::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIVec2D 
-DgBoundedRF2D::addFromSeqNum (uint64_t sNum) const
+DgBoundedRF2D::addFromSeqNum (std::uint64_t sNum) const
 {
    DgIVec2D res;
 

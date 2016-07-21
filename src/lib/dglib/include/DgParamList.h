@@ -13,8 +13,7 @@
 #include <vector>
 #include <cfloat>
 #include <climits>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgBase.h"
 #include "DgUtil.h"
@@ -389,20 +388,20 @@ class DgIntParam : public DgBoundedParam<int> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgLIntParam : public DgBoundedParam<int64_t> {
+class DgLIntParam : public DgBoundedParam<std::int64_t> {
 
    public:
 
      DgLIntParam (const string& nameIn, 
-                  int64_t minIn = INT64_MIN,
-                  int64_t maxIn = INT64_MAX)
-          : DgBoundedParam<int64_t> (nameIn, minIn, maxIn) { }
+                  std::int64_t minIn = INT64_MIN,
+                  std::int64_t maxIn = INT64_MAX)
+          : DgBoundedParam<std::int64_t> (nameIn, minIn, maxIn) { }
 
-      DgLIntParam (const string& nameIn, const int64_t& valIn, 
-                  const int64_t& minIn = INT64_MIN,
-		  const int64_t& maxIn = INT64_MAX,
+      DgLIntParam (const string& nameIn, const std::int64_t& valIn, 
+                  const std::int64_t& minIn = INT64_MIN,
+		  const std::int64_t& maxIn = INT64_MAX,
                   bool validIn = true)
-        : DgBoundedParam<int64_t> (nameIn, valIn, minIn, maxIn, validIn) 
+        : DgBoundedParam<std::int64_t> (nameIn, valIn, minIn, maxIn, validIn) 
                 { 
                   if (!validate())
                   {
@@ -414,14 +413,14 @@ class DgLIntParam : public DgBoundedParam<int64_t> {
                 }
 
       virtual string valToStr (void) const { return dgg::util::to_string(value_); }
-      virtual int64_t strToVal (const string& strVal) const
+      virtual std::int64_t strToVal (const string& strVal) const
                 { 
-			return dgg::util::from_string<int64_t>(strVal); 
+			return dgg::util::from_string<std::int64_t>(strVal); 
                 }
 
       virtual bool validate (void) 
                 { 
-                   DgBoundedParam<int64_t>::validate();
+                   DgBoundedParam<std::int64_t>::validate();
                    if (!isValid())
                    {
                       setValidationErrMsg(string("value out of range ") +
@@ -473,19 +472,19 @@ class DgULIntParam : public DgBoundedParam<unsigned long int> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgUint64Param : public DgBoundedParam<uint64_t> {
+class DgUint64Param : public DgBoundedParam<std::uint64_t> {
 
    public:
 
-      DgUint64Param (const string& nameIn, uint64_t minIn = 0, 
-                   uint64_t maxIn = UINT64_MAX) 
-          : DgBoundedParam<uint64_t> (nameIn, minIn, maxIn) { }
+      DgUint64Param (const string& nameIn, std::uint64_t minIn = 0, 
+                   std::uint64_t maxIn = UINT64_MAX) 
+          : DgBoundedParam<std::uint64_t> (nameIn, minIn, maxIn) { }
 
-      DgUint64Param (const string& nameIn, const uint64_t& valIn, 
-                    const uint64_t& minIn = 0, 
-                    const uint64_t& maxIn = UINT64_MAX,
+      DgUint64Param (const string& nameIn, const std::uint64_t& valIn, 
+                    const std::uint64_t& minIn = 0, 
+                    const std::uint64_t& maxIn = UINT64_MAX,
                     bool validIn = true)
-        : DgBoundedParam<uint64_t> (nameIn, valIn, minIn, maxIn, validIn) 
+        : DgBoundedParam<std::uint64_t> (nameIn, valIn, minIn, maxIn, validIn) 
                 { 
                   if (!validate())
                   {
@@ -497,12 +496,12 @@ class DgUint64Param : public DgBoundedParam<uint64_t> {
                 }
 
       virtual string valToStr (void) const { return dgg::util::to_string(value_); }
-      virtual uint64_t strToVal (const string& strVal) const
-                      { return dgg::util::from_string<uint64_t>(strVal); }
+      virtual std::uint64_t strToVal (const string& strVal) const
+                      { return dgg::util::from_string<std::uint64_t>(strVal); }
 
       virtual bool validate (void) 
                 { 
-                   DgBoundedParam<uint64_t>::validate();
+                   DgBoundedParam<std::uint64_t>::validate();
                    if (!isValid())
                    {
                       setValidationErrMsg(string("value out of range ") +

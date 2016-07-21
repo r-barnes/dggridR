@@ -9,8 +9,7 @@
 #ifndef DGCONTCARTRF_H
 #define DGCONTCARTRF_H
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgRF.h"
 #include "DgConverter.h"
@@ -54,8 +53,8 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual uint64_t dist2int (const long double& dist) const
-                       { return static_cast<uint64_t>(dist); }
+      virtual std::uint64_t dist2int (const long double& dist) const
+                       { return static_cast<std::uint64_t>(dist); }
 
       virtual const DgDVec2D& undefAddress (void) const
                             { return DgDVec2D::undefDgDVec2D; }

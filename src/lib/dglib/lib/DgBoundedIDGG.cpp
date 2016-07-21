@@ -6,8 +6,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgBoundedIDGG.h"
 #include "DgBoundedRF2D.h"
@@ -59,7 +58,7 @@ DgBoundedIDGG::DgBoundedIDGG (const DgIDGG& IDGGin)
 
    // validate the size
 
-   uint64_t tmpSize = size();
+   std::uint64_t tmpSize = size();
    if (firstAdd().quadNum() == 0) tmpSize -= 2;
 /*
 cout << "mag: " << idgg().mag() << ", /3: " << idgg().mag() / 3 << ", size: " << size() << ", tmpSize: " << tmpSize << ", tmpSize / 10: " << tmpSize/10 << endl;
@@ -146,10 +145,10 @@ DgBoundedIDGG::decrementAddress (DgQ2DICoord& add) const
 } // DgQ2DICoord& DgBoundedIDGG::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-uint64_t 
+std::uint64_t 
 DgBoundedIDGG::seqNumAddress (const DgQ2DICoord& add) const
 {
-   uint64_t offset = 0;
+   std::uint64_t offset = 0;
    int q = add.quadNum();
 
    // get the quad offset
@@ -162,7 +161,7 @@ DgBoundedIDGG::seqNumAddress (const DgQ2DICoord& add) const
 
    // now account for seqNum within the quad
 
-   uint64_t sNum = offset + bnd2D().seqNumAddress(add.coord());
+   std::uint64_t sNum = offset + bnd2D().seqNumAddress(add.coord());
 
    if (!zeroBased()) 
     sNum++;
@@ -173,7 +172,7 @@ DgBoundedIDGG::seqNumAddress (const DgQ2DICoord& add) const
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DICoord 
-DgBoundedIDGG::addFromSeqNum (uint64_t sNum) const
+DgBoundedIDGG::addFromSeqNum (std::uint64_t sNum) const
 {
    if (!zeroBased()) 
     sNum--;
@@ -191,7 +190,7 @@ DgBoundedIDGG::addFromSeqNum (uint64_t sNum) const
 
    // determine quad and adjust accordingly
 
-   uint64_t q = sNum / offsetPerQuad() + 1; // note int division
+   std::uint64_t q = sNum / offsetPerQuad() + 1; // note int division
    sNum -= (q - 1) * offsetPerQuad();
    
    return DgQ2DICoord((int) q, bnd2D().addFromSeqNum(sNum));

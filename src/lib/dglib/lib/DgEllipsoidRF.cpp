@@ -6,8 +6,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 #include <iostream>
 
 #include "DgEllipsoidRF.h"
@@ -233,7 +232,7 @@ void planeTriInit (PlaneTri* tri)
 } /* void planeTriInit */
 
 /******************************************************************************/
-void printInt (int64_t val)
+void printInt (std::int64_t val)
 /*
    Print val or 'UNDEFVAL' to stdout as appropriate.
 */

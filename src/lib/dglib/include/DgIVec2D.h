@@ -11,8 +11,7 @@
 
 #include <cmath>
 #include <string>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgUtil.h"
 #include "DgConstants.h"
@@ -32,7 +31,7 @@ class DgIVec2D {
 
       static const DgIVec2D& undefDgIVec2D;
 
-      DgIVec2D (int64_t i = 0, int64_t j = 0) 
+      DgIVec2D (std::int64_t i = 0, std::int64_t j = 0) 
        : i_(i), j_(j)
       {}
 
@@ -45,14 +44,14 @@ class DgIVec2D {
          j_ (dgg::util::lrint(pt.y())) 
       {}
 
-      void setI (int64_t i) { i_ = i; }
-      void setJ (int64_t j) { j_ = j; }
+      void setI (std::int64_t i) { i_ = i; }
+      void setJ (std::int64_t j) { j_ = j; }
 
       long double distance (const DgIVec2D& pt) const
               { return (pt - *this).magnitude(); }
 
-      int64_t i (void) const { return i_; }
-      int64_t j (void) const { return j_; }
+      std::int64_t i (void) const { return i_; }
+      std::int64_t j (void) const { return j_; }
       
       long double magnitude (void) const 
               { return sqrt((long double) (i_ * i_ + j_ * j_)); }
@@ -96,8 +95,8 @@ class DgIVec2D {
 
    private:
 
-      int64_t i_;
-      int64_t j_;
+      std::int64_t i_;
+      std::int64_t j_;
 
 };
 
@@ -111,8 +110,8 @@ DgIVec2D::scale (long double xScaleFactor, long double yScaleFactor)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   i_ = (int64_t) dgg::util::lrint(i_ * xScaleFactor);
-   j_ = (int64_t) dgg::util::lrint(j_ * yScaleFactor);
+   i_ = (std::int64_t) dgg::util::lrint(i_ * xScaleFactor);
+   j_ = (std::int64_t) dgg::util::lrint(j_ * yScaleFactor);
 
    return *this;
 
@@ -131,11 +130,11 @@ DgIVec2D::rotate (long double degrees)
    long double rotAng = degrees * M_PI_180;
    long double cosAng = cos(rotAng);
    long double sinAng = sin(rotAng);
-   int64_t i = i_;
-   int64_t j = j_;
+   std::int64_t i = i_;
+   std::int64_t j = j_;
 
-   i_ = (int64_t) dgg::util::lrint(i * cosAng - j * sinAng);
-   j_ = (int64_t) dgg::util::lrint(i * sinAng + j * cosAng);
+   i_ = (std::int64_t) dgg::util::lrint(i * cosAng - j * sinAng);
+   j_ = (std::int64_t) dgg::util::lrint(i * sinAng + j * cosAng);
 
    return *this;
 

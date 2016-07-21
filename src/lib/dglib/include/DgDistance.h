@@ -11,8 +11,7 @@
 
 #include <string>
 #include <iostream>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgRFBase.h"
 
@@ -31,7 +30,7 @@ class DgDistanceBase {
 
       long double asDouble (void) const { return rf().toDouble(*this); }
 
-      uint64_t asInt (void) const { return rf().toInt(*this); }
+      std::uint64_t asInt (void) const { return rf().toInt(*this); }
 
    protected:
 

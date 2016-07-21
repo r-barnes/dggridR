@@ -6,8 +6,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgLocVector.h"
 
@@ -17,7 +16,7 @@ DgLocVector::DgLocVector (const DgRFBase& rfIn, int sizeIn)
 {
    vec_.resize(sizeIn);
 
-   for (int64_t i = 0; i < size(); i++) 
+   for (std::int64_t i = 0; i < size(); i++) 
      vec_[i] = rf().createAddress();
 
 } // DgLocVector::DgLocVector
@@ -28,7 +27,7 @@ DgLocVector::clearAddress (void)
 {
    tmpLoc_.address_ = 0;
 
-   for (int64_t i = 0; i < size(); i++)
+   for (std::int64_t i = 0; i < size(); i++)
    {
       delete vec_[i];
       vec_[i] = 0;

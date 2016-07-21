@@ -11,8 +11,7 @@
 
 #include <climits>
 #include <iostream>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgIVec2D.h"
 #include "DgDVec2D.h"
@@ -174,8 +173,8 @@ class DgQ2DDRF : public DgRF<DgQ2DDCoord, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual uint64_t dist2int (const long double& dist) const
-                       { return (uint64_t) dist; }
+      virtual std::uint64_t dist2int (const long double& dist) const
+                       { return (std::uint64_t) dist; }
 
       virtual const DgQ2DDCoord& undefAddress (void) const
                        { static DgQ2DDCoord undef; return undef; }
@@ -339,8 +338,8 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual uint64_t dist2int (const long double& dist) const
-                       { return (uint64_t) dist; }
+      virtual std::uint64_t dist2int (const long double& dist) const
+                       { return (std::uint64_t) dist; }
 
       static const DgVertTriVals& vertTable (int vertNum, int subTri) 
                        { return vertTable_[vertNum][subTri]; }
@@ -357,11 +356,11 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgQ2DItoDConverter : 
-        public DgConverter<DgQ2DICoord, int64_t, DgQ2DDCoord, long double>
+        public DgConverter<DgQ2DICoord, std::int64_t, DgQ2DDCoord, long double>
 {
    public:
 
-      DgQ2DItoDConverter (const DgRF<DgQ2DICoord, int64_t>& from,
+      DgQ2DItoDConverter (const DgRF<DgQ2DICoord, std::int64_t>& from,
                           const DgRF<DgQ2DDCoord, long double>& to);
 
       const DgIDGG& IDGG (void) const { return *pIDGG_; }
@@ -377,12 +376,12 @@ class DgQ2DItoDConverter :
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgQ2DDtoIConverter : 
-        public DgConverter<DgQ2DDCoord, long double, DgQ2DICoord, int64_t>
+        public DgConverter<DgQ2DDCoord, long double, DgQ2DICoord, std::int64_t>
 {
    public:
 
       DgQ2DDtoIConverter (const DgRF<DgQ2DDCoord, long double>& from,
-                          const DgRF<DgQ2DICoord, int64_t>& to);
+                          const DgRF<DgQ2DICoord, std::int64_t>& to);
 
       const DgIDGG& IDGG (void) const { return *pIDGG_; }
 
@@ -538,14 +537,14 @@ operator<< (ostream& stream, const DgInterleaveCoord& coord)
 { return stream << string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgInterleaveRF : public DgRF<DgInterleaveCoord, int64_t> {
+class DgInterleaveRF : public DgRF<DgInterleaveCoord, std::int64_t> {
 
    public:
 
       DgInterleaveRF (DgRFNetwork& networkIn, const string& nameIn)
-         : DgRF<DgInterleaveCoord, int64_t>(networkIn, nameIn) { }
+         : DgRF<DgInterleaveCoord, std::int64_t>(networkIn, nameIn) { }
 
-      virtual int64_t dist (const DgInterleaveCoord& add1, 
+      virtual std::int64_t dist (const DgInterleaveCoord& add1, 
                         const DgInterleaveCoord& add2) const 
                        { return 0; }
 
@@ -559,13 +558,13 @@ class DgInterleaveRF : public DgRF<DgInterleaveCoord, int64_t> {
       virtual const char* str2add (DgInterleaveCoord* add, const char* str, 
                                    char delimiter) const;
 
-      virtual string dist2str (const int64_t& dist) const
+      virtual string dist2str (const std::int64_t& dist) const
                        { return dgg::util::to_string(dist); }
 
-      virtual long double dist2dbl (const int64_t& dist) const
+      virtual long double dist2dbl (const std::int64_t& dist) const
                        { return dist; }
 
-      virtual uint64_t dist2int (const int64_t& dist) const
+      virtual std::uint64_t dist2int (const std::int64_t& dist) const
                        { return dist; }
 
       virtual const DgInterleaveCoord& undefAddress (void) const
@@ -575,12 +574,12 @@ class DgInterleaveRF : public DgRF<DgInterleaveCoord, int64_t> {
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgQ2DItoInterleaveConverter : 
-        public DgConverter<DgQ2DICoord, int64_t, DgInterleaveCoord, int64_t>
+        public DgConverter<DgQ2DICoord, std::int64_t, DgInterleaveCoord, std::int64_t>
 {
    public:
 
-      DgQ2DItoInterleaveConverter (const DgRF<DgQ2DICoord, int64_t>& from,
-                                   const DgRF<DgInterleaveCoord, int64_t>& to);
+      DgQ2DItoInterleaveConverter (const DgRF<DgQ2DICoord, std::int64_t>& from,
+                                   const DgRF<DgInterleaveCoord, std::int64_t>& to);
 
       const DgIDGG& IDGG (void) const { return *pIDGG_; }
 
@@ -638,13 +637,13 @@ class DgGridStats {
          : nCells_ (0), cls_ (M_ZERO), cellDistKM_ (M_ZERO), 
            cellAreaKM_ (M_ZERO), precision_ (DEFAULT_PRECISION) { }
 
-      uint64_t nCells     (void) const { return nCells_; }
+      std::uint64_t nCells     (void) const { return nCells_; }
       long double            cls        (void) const { return cls_; }
       long double            cellDistKM (void) const { return cellDistKM_; }
       long double            cellAreaKM (void) const { return cellAreaKM_; }
       unsigned int           precision  (void) const { return precision_; }
    
-      void setNCells (int64_t nCellsIn) { nCells_ = nCellsIn; }
+      void setNCells (std::int64_t nCellsIn) { nCells_ = nCellsIn; }
       void setCLS    (long double clsIn)             { cls_ = clsIn; }
       void setCellDistKM (long double cellDistKMin)  { cellDistKM_ = cellDistKMin; }
       void setCellAreaKM (long double cellAreaIn)    { cellAreaKM_ = cellAreaIn; }
@@ -652,7 +651,7 @@ class DgGridStats {
       
    private:
 
-      uint64_t nCells_;
+      std::uint64_t nCells_;
       long double cls_;
       long double cellDistKM_;
       long double cellAreaKM_;
@@ -712,10 +711,10 @@ class DgIDGG : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       int                numAp4      (void) const { return numAp4_; }
       int                res         (void) const { return res_; }
       int                adjRes      (void) const { return adjRes_; }
-      int64_t maxI        (void) const { return maxI_; }
-      int64_t maxJ        (void) const { return maxJ_; }
-      int64_t mag         (void) const { return mag_; }
-      int64_t maxD        (void) const { return maxD_; }
+      std::int64_t maxI        (void) const { return maxI_; }
+      std::int64_t maxJ        (void) const { return maxJ_; }
+      std::int64_t mag         (void) const { return mag_; }
+      std::int64_t maxD        (void) const { return maxD_; }
       int                radix       (void) const { return radix_; }
       const string&      gridTopo    (void) const { return gridTopo_; }
       const string&      projType    (void) const { return projType_; }
@@ -773,7 +772,7 @@ class DgIDGG : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       // we'll give dummy definitions for these since some of our IDGG's may
       // not have defined these yet
 
-      virtual int64_t dist (const DgQ2DICoord& add1, 
+      virtual std::int64_t dist (const DgQ2DICoord& add1, 
                                        const DgQ2DICoord& add2) const
            {
               report(string("DgIDGG::dist() this method has not been defined "
@@ -831,11 +830,11 @@ class DgIDGG : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       bool isSuperfund_;
       int  sfRes_;
 
-      int64_t mag_;
-      int64_t maxD_;
+      std::int64_t mag_;
+      std::int64_t maxD_;
       int radix_;
-      int64_t maxI_;
-      int64_t maxJ_;
+      std::int64_t maxI_;
+      std::int64_t maxJ_;
 
       DgQ2DICoord firstAdd_;
       DgQ2DICoord lastAdd_;

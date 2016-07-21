@@ -11,8 +11,7 @@
 
 #include <cmath>
 #include <string>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgUtil.h"
 #include "DgIVec2D.h"
@@ -25,8 +24,8 @@ class DgIVec3D {
 
       static const DgIVec3D& undefDgIVec3D;
 
-      DgIVec3D (int64_t i = 0, int64_t j = 0,
-                int64_t k = 0) 
+      DgIVec3D (std::int64_t i = 0, std::int64_t j = 0,
+                std::int64_t k = 0) 
        : i_(i), j_(j), k_(k)
       {}
 
@@ -40,16 +39,16 @@ class DgIVec3D {
          k_ (0) 
       {}
 
-      void setI (int64_t i) { i_ = i; }
-      void setJ (int64_t j) { j_ = j; }
-      void setK (int64_t k) { k_ = k; }
+      void setI (std::int64_t i) { i_ = i; }
+      void setJ (std::int64_t j) { j_ = j; }
+      void setK (std::int64_t k) { k_ = k; }
 
       long double distance (const DgIVec3D& pt) const
               { return (pt - *this).magnitude(); }
 
-      int64_t i (void) const { return i_; }
-      int64_t j (void) const { return j_; }
-      int64_t k (void) const { return k_; }
+      std::int64_t i (void) const { return i_; }
+      std::int64_t j (void) const { return j_; }
+      std::int64_t k (void) const { return k_; }
       
       long double magnitude (void) const 
               { return sqrt((long double) (i_ * i_ + j_ * j_) + k_ * k_); }
@@ -92,9 +91,9 @@ class DgIVec3D {
 
    private:
 
-      int64_t i_;
-      int64_t j_;
-      int64_t k_;
+      std::int64_t i_;
+      std::int64_t j_;
+      std::int64_t k_;
 
 };
 
@@ -108,9 +107,9 @@ DgIVec3D::scale (long double iScaleFactor, long double jScaleFactor,
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   i_ = (int64_t) dgg::util::lrint(i_ * iScaleFactor);
-   j_ = (int64_t) dgg::util::lrint(j_ * jScaleFactor);
-   k_ = (int64_t) dgg::util::lrint(k_ * kScaleFactor);
+   i_ = (std::int64_t) dgg::util::lrint(i_ * iScaleFactor);
+   j_ = (std::int64_t) dgg::util::lrint(j_ * jScaleFactor);
+   k_ = (std::int64_t) dgg::util::lrint(k_ * kScaleFactor);
 
    return *this;
 

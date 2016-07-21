@@ -11,8 +11,7 @@
 
 #include <climits>
 #include <iostream>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgIVec2D.h"
 #include "DgDVec2D.h"
@@ -126,8 +125,8 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual uint64_t dist2int (const long double& dist) const
-                       { return (uint64_t) dist; }
+      virtual std::uint64_t dist2int (const long double& dist) const
+                       { return (std::uint64_t) dist; }
 
       DgSphIcosa& sphIcosa (void) const { return *sphIcosa_; }
 

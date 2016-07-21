@@ -2,7 +2,7 @@
 #ifndef lint
 //static const char SCCSID[]="@(#)pj_qsfn.c	4.3	93/06/12	GIE	REL";
 #endif
-#include <math.h>
+#include <cmath>
 
 # define EPSILON 1.0e-7
 	long double

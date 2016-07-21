@@ -2,7 +2,7 @@
 #ifndef lint
 //static const char SCCSID[]="@(#)adjlon.c	4.3	93/06/12	GIE	REL";
 #endif
-#include <math.h>
+#include <cmath>
 /* note: PI adjusted high
 ** approx. true val:	3.14159265358979323844
 */

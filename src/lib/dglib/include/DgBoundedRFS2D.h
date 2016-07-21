@@ -9,8 +9,7 @@
 #ifndef DGBOUNDEDRFS2D_H
 #define DGBOUNDEDRFS2D_H
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgDiscRFS2D.h"
 #include "DgBoundedRF2D.h"
@@ -46,10 +45,10 @@ class DgBoundedRFS2D
 
       const vector<DgBoundedRF2D*>& grids (void) const { return *grids_; }
 
-      virtual uint64_t seqNumAddress (const DgResAdd<DgIVec2D>& add) 
+      virtual std::uint64_t seqNumAddress (const DgResAdd<DgIVec2D>& add) 
                                                                         const;
 
-      virtual DgResAdd<DgIVec2D> addFromSeqNum (uint64_t sNum) const;
+      virtual DgResAdd<DgIVec2D> addFromSeqNum (std::uint64_t sNum) const;
 
    private:
 

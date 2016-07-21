@@ -7,8 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <climits>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgBase.h"
 #include "DgIVec2D.h"
@@ -31,16 +30,16 @@ DgIVec2D::fromString (const char* str, char delimiter)
    // Get i and j:
    char* tok;
 
-   int64_t	iIn(0),
+   std::int64_t	iIn(0),
 	   		jIn(0);
 
    try
     {
    	tok = strtok(tmpStr, delimStr);
-   	iIn = dgg::util::from_string<int64_t>(tok);
+   	iIn = dgg::util::from_string<std::int64_t>(tok);
 	
    	tok = strtok(NULL, delimStr);
-   	jIn = dgg::util::from_string<int64_t>(tok);
+   	jIn = dgg::util::from_string<std::int64_t>(tok);
     }  
    catch(...)
     {
@@ -51,7 +50,7 @@ DgIVec2D::fromString (const char* str, char delimiter)
    setI(iIn);
    setJ(jIn);
 
-   uint64_t offset = (tok - tmpStr) + strlen(tok) + 1;
+   std::uint64_t offset = (tok - tmpStr) + strlen(tok) + 1;
    if (offset >= strlen(str)) 
     return 0;
 

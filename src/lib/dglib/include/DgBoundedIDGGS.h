@@ -9,8 +9,7 @@
 #ifndef DGBOUNDEDIDGGS_H
 #define DGBOUNDEDIDGGS_H
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgIDGGS.h"
 #include "DgBoundedIDGG.h"
@@ -45,11 +44,11 @@ class DgBoundedIDGGS
 
       const vector<DgBoundedIDGG*>& grids (void) const { return *grids_; }
 
-      virtual uint64_t seqNumAddress 
+      virtual std::uint64_t seqNumAddress 
                                   (const DgResAdd<DgQ2DICoord>& add) const;
 
       virtual DgResAdd<DgQ2DICoord> addFromSeqNum 
-                                  (uint64_t sNum) const;
+                                  (std::uint64_t sNum) const;
 
    private:
 

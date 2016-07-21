@@ -9,8 +9,7 @@
 #ifndef DGBOUNDEDRF2D_H
 #define DGBOUNDEDRF2D_H
 
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgBoundedRF.h"
 #include "DgIVec2D.h"
@@ -35,8 +34,8 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
       const DgIVec2D& lowerLeft  (void) const { return lowerLeft_; }
       const DgIVec2D& upperRight (void) const { return upperRight_; }
 
-      int64_t numI (void) const { return numI_; }
-      int64_t numJ (void) const { return numJ_; }
+      std::int64_t numI (void) const { return numI_; }
+      std::int64_t numJ (void) const { return numJ_; }
       
       const DgIVec2D& invalidAdd (void) const 
                          { return discRF().undefAddress(); }
@@ -44,9 +43,9 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
       const DgDiscRF<DgIVec2D, DgDVec2D, long double>& discRF (void) const 
                { return discRF_; }
 
-      virtual uint64_t seqNumAddress (const DgIVec2D& add) const;
+      virtual std::uint64_t seqNumAddress (const DgIVec2D& add) const;
 
-      virtual DgIVec2D addFromSeqNum (uint64_t sNum) const;
+      virtual DgIVec2D addFromSeqNum (std::uint64_t sNum) const;
 
    private:
 
@@ -54,7 +53,7 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
       
       DgIVec2D lowerLeft_;
       DgIVec2D upperRight_;
-      int64_t numI_, numJ_;
+      std::int64_t numI_, numJ_;
 
 };
 

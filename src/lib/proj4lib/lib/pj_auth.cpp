@@ -3,7 +3,7 @@
 //static const char SCCSID[]="@(#)pj_auth.c	4.3	93/06/12	GIE	REL";
 #endif
 #include "proj4.h"
-#include <math.h>
+#include <cmath>
 # define P00 .33333333333333333333
 # define P01 .17222222222222222222
 # define P02 .10257936507936507936

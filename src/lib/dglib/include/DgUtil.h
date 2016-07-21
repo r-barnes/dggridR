@@ -20,8 +20,7 @@
 
 #include <cmath>
 #include <cfloat>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 #include <climits>
 
 // hard-code the TR1 limits (these are GPL)

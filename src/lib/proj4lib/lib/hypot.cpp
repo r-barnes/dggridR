@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 
 #ifndef lint
 //static const char SCCSID[]="@(#)hypot.c	4.4	93/06/12	GIE	REL";

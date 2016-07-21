@@ -11,8 +11,7 @@
 
 #include <string>
 #include <iostream>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 #include "DgIVec3D.h"
 
 using namespace std;
@@ -92,11 +91,11 @@ class DgHexSF {
       bool operator!= (const DgHexSF& h) const
             { return !operator==(h); }
 
-      uint64_t depthFirstTraversal (GridGenParam& dp, 
+      std::uint64_t depthFirstTraversal (GridGenParam& dp, 
                   const DgIDGG& dgg, const DgContCartRF& deg, int numAp4Res,
                   DgEvalData* ed = NULL);
 
-      uint64_t visitMe (GridGenParam& dp, const DgIDGG& dgg,
+      std::uint64_t visitMe (GridGenParam& dp, const DgIDGG& dgg,
                           const DgContCartRF& deg, DgEvalData* ed);
 
       DgHexSF downAp4 (void);

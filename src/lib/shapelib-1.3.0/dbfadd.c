@@ -50,7 +50,7 @@
  * updated license terms
  *
  * Revision 1.4  1998/12/03 16:36:06  warmerda
- * Added stdlib.h and math.h to get atof() prototype.
+ * Added stdlib.h and cmath to get atof() prototype.
  *
  * Revision 1.3  1995/10/21 03:13:23  warmerda
  * Use binary mode..
@@ -61,7 +61,7 @@
  */
 
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 
 #include "shapefil.h"

@@ -7,8 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <climits>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgBoundedRFS2D.h"
 #include "DgBoundedHexC2RF2D.h"
@@ -38,8 +37,8 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
    grids_ = new vector<DgBoundedRF2D*>(discRFS().nRes());
 
    int totTicks = 1;
-   int64_t numI = upperRight0.i() + 1;
-   int64_t numJ = upperRight0.j() + 1;
+   std::int64_t numI = upperRight0.i() + 1;
+   std::int64_t numJ = upperRight0.j() + 1;
    if (rf.aperture() == 3) // better be hex!
    {
       for (int i = 0; i < discRFS().nRes(); i++)
@@ -100,7 +99,7 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
    size_ = 0;
    for (int i = 0; i < discRFS().nRes(); i++)
    {
-      uint64_t lastSize = size_;
+      std::uint64_t lastSize = size_;
 
       const DgBoundedRF2D* g = (*grids_)[i];
 
@@ -185,7 +184,7 @@ DgBoundedRFS2D::decrementAddress (DgResAdd<DgIVec2D>& add) const
 } // DgResAdd<DgIVec2D>& DgBoundedRFS2D::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-uint64_t 
+std::uint64_t 
 DgBoundedRFS2D::seqNumAddress (const DgResAdd<DgIVec2D>& add) const
 {
    if (!validSize())
@@ -195,7 +194,7 @@ DgBoundedRFS2D::seqNumAddress (const DgResAdd<DgIVec2D>& add) const
       return 0;
    }
 
-   uint64_t sNum = 0;
+   std::uint64_t sNum = 0;
    if (!zeroBased()) sNum++;
 
    for (int i = 0; i < add.res(); i++) sNum += (*grids_)[i]->size();
@@ -204,11 +203,11 @@ DgBoundedRFS2D::seqNumAddress (const DgResAdd<DgIVec2D>& add) const
 
    return sNum;
 
-} // uint64_t DgBoundedRFS2D::seqNumAddress
+} // std::uint64_t DgBoundedRFS2D::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 DgResAdd<DgIVec2D> 
-DgBoundedRFS2D::addFromSeqNum (uint64_t sNum) const
+DgBoundedRFS2D::addFromSeqNum (std::uint64_t sNum) const
 {
    if (!validSize())
    {
@@ -220,7 +219,7 @@ DgBoundedRFS2D::addFromSeqNum (uint64_t sNum) const
    if (!zeroBased()) sNum--;
 
    DgResAdd<DgIVec2D> tmp;
-   uint64_t n = sNum;
+   std::uint64_t n = sNum;
    tmp.setRes(0);
 
    int r;

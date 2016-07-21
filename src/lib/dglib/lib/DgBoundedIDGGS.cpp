@@ -7,8 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <climits>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgBoundedIDGGS.h"
 #include "DgBoundedHexC2RF2D.h"
@@ -42,7 +41,7 @@ DgBoundedIDGGS::DgBoundedIDGGS (const DgIDGGS& rf)
    size_ = 0;
    for (int i = 0; i < IDGGS().nRes(); i++)
    {
-      uint64_t lastSize = size_;
+      std::uint64_t lastSize = size_;
 
       const DgBoundedIDGG* g = (*grids_)[i];
 
@@ -127,7 +126,7 @@ DgBoundedIDGGS::decrementAddress (DgResAdd<DgQ2DICoord>& add) const
 } // DgResAdd<DgQ2DICoord>& DgBoundedIDGGS::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-uint64_t 
+std::uint64_t 
 DgBoundedIDGGS::seqNumAddress (const DgResAdd<DgQ2DICoord>& add) const
 {
    if (!validSize())
@@ -137,7 +136,7 @@ DgBoundedIDGGS::seqNumAddress (const DgResAdd<DgQ2DICoord>& add) const
       return 0;
    }
 
-   uint64_t sNum = 0;
+   std::uint64_t sNum = 0;
    if (!zeroBased()) sNum++;
 
    for (int i = 0; i < add.res(); i++) sNum += (*grids_)[i]->size();
@@ -146,11 +145,11 @@ DgBoundedIDGGS::seqNumAddress (const DgResAdd<DgQ2DICoord>& add) const
 
    return sNum;
 
-} // uint64_t DgBoundedIDGGS::seqNumAddress
+} // std::uint64_t DgBoundedIDGGS::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 DgResAdd<DgQ2DICoord> 
-DgBoundedIDGGS::addFromSeqNum (uint64_t sNum) const
+DgBoundedIDGGS::addFromSeqNum (std::uint64_t sNum) const
 {
    if (!validSize())
    {
@@ -162,7 +161,7 @@ DgBoundedIDGGS::addFromSeqNum (uint64_t sNum) const
    if (!zeroBased()) sNum--;
 
    DgResAdd<DgQ2DICoord> tmp;
-   uint64_t n = sNum;
+   std::uint64_t n = sNum;
    tmp.setRes(0);
 
    int r;

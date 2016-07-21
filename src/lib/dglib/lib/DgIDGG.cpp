@@ -9,8 +9,7 @@
 #include <cmath>
 #include <climits>
 #include <cfloat>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgUtil.h"
 #include "DgIDGG.h"
@@ -348,8 +347,8 @@ DgIDGG::str2add (DgQ2DICoord* add, const char* str, char delimiter) const
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DDtoIConverter::DgQ2DDtoIConverter (
-   const DgRF<DgQ2DDCoord, long double>& from, const DgRF<DgQ2DICoord, int64_t>& to)
-  : DgConverter<DgQ2DDCoord, long double, DgQ2DICoord, int64_t>(from, to),
+   const DgRF<DgQ2DDCoord, long double>& from, const DgRF<DgQ2DICoord, std::int64_t>& to)
+  : DgConverter<DgQ2DDCoord, long double, DgQ2DICoord, std::int64_t>(from, to),
     pIDGG_ (0) 
 { 
    pIDGG_ = dynamic_cast<const DgIDGG*>(&toFrame());
@@ -397,8 +396,8 @@ cout << " ---> " << *loc << endl;
       delete loc;
    }
 
-   int64_t edgeI = IDGG().maxI() + 1;
-   int64_t edgeJ = IDGG().maxJ() + 1;
+   std::int64_t edgeI = IDGG().maxI() + 1;
+   std::int64_t edgeJ = IDGG().maxJ() + 1;
    if (coord.i() > edgeI || coord.j() > edgeJ) // maybe round-off error?
    {
       DgDVec2D tmp(addIn.coord());
@@ -473,9 +472,9 @@ cout << " ---> " << *loc << endl;
 } // DgQ2DICoord DgQ2DDtoIConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DItoDConverter::DgQ2DItoDConverter (const DgRF<DgQ2DICoord, int64_t>& from,
+DgQ2DItoDConverter::DgQ2DItoDConverter (const DgRF<DgQ2DICoord, std::int64_t>& from,
                                         const DgRF<DgQ2DDCoord, long double>& to)
-        : DgConverter<DgQ2DICoord, int64_t, DgQ2DDCoord, long double> (from, to),
+        : DgConverter<DgQ2DICoord, std::int64_t, DgQ2DDCoord, long double> (from, to),
           pIDGG_ (NULL)
 { 
    pIDGG_ = dynamic_cast<const DgIDGG*>(&fromFrame());
@@ -505,9 +504,9 @@ DgQ2DItoDConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter 
-                (const DgRF<DgQ2DICoord, int64_t>& from,
-                 const DgRF<DgInterleaveCoord, int64_t>& to)
-        : DgConverter<DgQ2DICoord, int64_t, DgInterleaveCoord, int64_t> (from, to),
+                (const DgRF<DgQ2DICoord, std::int64_t>& from,
+                 const DgRF<DgInterleaveCoord, std::int64_t>& to)
+        : DgConverter<DgQ2DICoord, std::int64_t, DgInterleaveCoord, std::int64_t> (from, to),
           pIDGG_ (NULL)
 { 
    pIDGG_ = dynamic_cast<const DgIDGG*>(&fromFrame());
@@ -836,13 +835,13 @@ DgIDGG::initialize (void)
          if (aperture() == 4)
          {
             isClassI_ = true;
-            maxD_ = (int64_t) pow(2.0L, res()) - 1;
+            maxD_ = (std::int64_t) pow(2.0L, res()) - 1;
          }
          else // aperture 3
          {
             isClassI_ = !(res() % 2);
             if (!isClassI()) adjRes_ = res() + 1;
-            maxD_ = (int64_t) pow(3.0L, (adjRes() / 2)) - 1;
+            maxD_ = (std::int64_t) pow(3.0L, (adjRes() / 2)) - 1;
          }
       }
       else // mixed43
@@ -850,14 +849,14 @@ DgIDGG::initialize (void)
          if (res() <= numAp4())
          {
             isClassI_ = true;
-            maxD_ = (int64_t) pow(2.0L, res()) - 1;
+            maxD_ = (std::int64_t) pow(2.0L, res()) - 1;
          }
          else
          {
             isClassI_ = !((res() - numAp4()) % 2);
             if (!isClassI()) adjRes_ = res() + 1;
 
-            maxD_ = (int64_t) (pow(2.0L, numAp4()) *
+            maxD_ = (std::int64_t) (pow(2.0L, numAp4()) *
                       pow(3.0L, ((adjRes() - numAp4()) / 2))) - 1;
          }
          // cout << "MAXD: " << maxD_ << endl;
@@ -870,7 +869,7 @@ DgIDGG::initialize (void)
    }
    else
    {
-      maxD_ = (int64_t) pow((long double) radix(), res()) - 1;
+      maxD_ = (std::int64_t) pow((long double) radix(), res()) - 1;
       maxI_ = maxD();
       maxJ_ = maxD();
       mag_ = maxD() + 1;

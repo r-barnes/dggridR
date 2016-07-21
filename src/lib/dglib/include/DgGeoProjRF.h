@@ -10,8 +10,7 @@
 #define DGGEOPROJRF_H
 
 #include <iostream>
-#define __STDC_LIMIT_MACROS
-#include <stdint.h>
+#include <cstdint>
 
 #include "DgConstants.h"
 #include "DgGeoDatumRF.h"
@@ -102,8 +101,8 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual uint64_t dist2int (const long double& dist) const
-                       { return static_cast<uint64_t>(dist); }
+      virtual std::uint64_t dist2int (const long double& dist) const
+                       { return static_cast<std::uint64_t>(dist); }
 
       // the following routines are "back-doors" included for speed;
       // use with care!
