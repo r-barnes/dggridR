@@ -34,9 +34,9 @@ usgs_hypot(long double x, long double y) {
 		return (x);
 	if ( x < y ) {
 		x /= y;
-		return ( y * sqrtl( 1. + x * x ) );
+		return ( y * std::sqrt( 1. + x * x ) );
 	} else {
 		y /= x;
-		return ( x * sqrtl( 1. + y * y ) );
+		return ( x * std::sqrt( 1. + y * y ) );
 	}
 }

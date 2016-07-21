@@ -10,7 +10,7 @@
 #define TWOPI	6.2831853071795864769
 	long double
 adjlon (long double lon) {
-	while ( fabsl(lon) > SPI )
+	while ( std::fabs(lon) > SPI )
 		lon += lon < 0. ? TWOPI : -TWOPI;
 	return( lon );
 }

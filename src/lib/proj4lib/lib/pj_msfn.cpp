@@ -5,5 +5,5 @@
 #include <cmath>
 	long double
 pj_msfn(long double sinphi, long double cosphi, long double es) {
-	return (cosphi / sqrt (1. - es * sinphi * sinphi));
+	return (cosphi / std::sqrt (1. - es * sinphi * sinphi));
 }

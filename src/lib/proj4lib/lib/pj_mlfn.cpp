@@ -53,9 +53,9 @@ pj_inv_mlfn(long double arg, long double es, long double *en) {
 	for (i = MAX_ITER; i ; --i) { /* rarely goes over 5 iterations */
 		s = sin(phi);
 		t = 1. - es * s * s;
-		t = (pj_mlfn(phi, s, cos(phi), en) - arg) / ( k * t * sqrt(t));
+		t = (pj_mlfn(phi, s, std::cos(phi), en) - arg) / ( k * t * std::sqrt(t));
 		phi -= t;
-		if (fabsl(t) < EPS)
+		if (std::fabs(t) < EPS)
 			break;
 	}
 /*

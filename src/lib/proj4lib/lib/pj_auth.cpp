@@ -30,5 +30,5 @@ pj_authset(long double es) {
 	long double
 pj_authlat(long double beta, long double *APA) {
 	long double t = beta+beta;
-	return(beta + APA[0] * sin(t) + APA[1] * sin(t+t) + APA[2] * sin(t+t+t));
+	return(beta + APA[0] * std::sin(t) + APA[1] * std::sin(t+t) + APA[2] * std::sin(t+t+t));
 }

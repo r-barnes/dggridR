@@ -12,7 +12,7 @@ pj_qsfn(long double sinphi, long double e, long double one_es) {
 	if (e >= EPSILON) {
 		con = e * sinphi;
 		return (one_es * (sinphi / (1. - con * con) -
-		   (.5 / e) * log ((1. - con) / (1. + con))));
+		   (.5 / e) * std::log ((1. - con) / (1. + con))));
 	} else
 		return (sinphi + sinphi);
 }
