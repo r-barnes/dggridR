@@ -9,7 +9,7 @@ libclipper.a: clipper.o
 	$(AR) rcs libclipper.a clipper.o 
 
 clipper.o: clipper.cpp clipper.hpp
-	$(CXX) $(CXXFLAGS) -c clipper.cpp -o clipper.o
+	$(CXX1X) $(CXX1XFLAGS) -c clipper.cpp -o clipper.o
 
 clean:
 	rm -f *.o libclipper.a

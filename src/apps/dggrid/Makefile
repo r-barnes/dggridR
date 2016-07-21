@@ -20,10 +20,10 @@ ${TARGET}: $(SRC) $(OBJS) $(LDLIBS) #$(DEPS)
 	$(CXX) $(CXXFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
 
 %.o: %.cpp
-	$(CXX) -c $< $(CXXFLAGS) $(INCDIRS) -o $@
+	$(CXX1X) -c $< $(CXX1XFLAGS) $(INCDIRS) -o $@
 
 link:
-	$(CXX) $(CXXFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
+	$(CXX1X) $(CXX1XFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
 
 #%.depends: %.cpp
 #	$(CXX) -MM $(CXXFLAGS) $(INCDIRS) $< > $@
