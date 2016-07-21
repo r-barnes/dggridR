@@ -19,23 +19,8 @@
                               + __GNUC_PATCHLEVEL__)
 
 #include <cmath>
-#include <cfloat>
 #include <cstdint>
-#include <climits>
-
-// hard-code the TR1 limits (these are GPL)
-
-#ifndef LLONG_MIN
-#define LLONG_MIN INT64_MIN
-#endif
-
-#ifndef LLONG_MAX
-#define LLONG_MAX INT64_MAX
-#endif
-
-#ifndef ULLONG_MAX
-#define ULLONG_MAX UINT64_MAX
-#endif
+#include <limits>// hard-code the TR1 limits (these are GPL)
 
 namespace dgg { namespace util {
 

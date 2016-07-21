@@ -9,7 +9,7 @@
 #ifndef DGPROJ_ISEA_H
 #define DGPROJ_ISEA_H
 
-#include <climits>
+#include <limits>
 #include <iostream>
 
 #include "DgIVec2D.h"

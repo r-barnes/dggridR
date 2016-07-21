@@ -9,7 +9,7 @@
 #ifndef DGELLIPSOIDRF_H
 #define DGELLIPSOIDRF_H
 
-#include <climits>
+#include <limits>
 #include <iostream>
 #include <cstdint>
 
@@ -323,8 +323,8 @@ operator<< (ostream& stream, const DgEllipsoidRF& ell)
 
 /**** macros ****/
 
-#define UNDEFVAL  LDBL_MAX
-#define UNDEFINT  INT_MAX
+#define UNDEFVAL  std::numeric_limits<long double>::max()
+#define UNDEFINT  std::numeric_limits<int>::max()
 
 #define PRECISION 0.0000000000005L /* precise 12 digits after dot  */
 

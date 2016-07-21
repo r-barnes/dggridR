@@ -7,8 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#include <climits>
-#include <cfloat>
+#include <limits>
 #include <cstdint>
 
 #include "DgUtil.h"
@@ -23,9 +22,9 @@
 #include "DgProjFuller.h"
 
 const DgQ2DICoord DgQ2DICoord::undefDgQ2DICoord(-1, 
-                                     DgIVec2D(INT64_MAX, INT64_MAX));
+                                     DgIVec2D(std::numeric_limits<std::int64_t>::max(), std::numeric_limits<std::int64_t>::max()));
 const DgQ2DDCoord DgQ2DDCoord::undefDgQ2DDCoord(-1, 
-                                     DgDVec2D(LDBL_MAX, LDBL_MAX));
+                                     DgDVec2D(std::numeric_limits<long double>::max(), std::numeric_limits<long double>::max()));
 
 ////////////////////////////////////////////////////////////////////////////////
 DgVertTriVals DgVertex2DDRF::vertTable_[12][6] = {  

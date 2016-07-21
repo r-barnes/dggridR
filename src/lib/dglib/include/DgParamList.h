@@ -11,8 +11,7 @@
 
 #include <string>
 #include <vector>
-#include <cfloat>
-#include <climits>
+#include <limits>
 #include <cstdint>
 
 #include "DgBase.h"
@@ -350,12 +349,12 @@ class DgIntParam : public DgBoundedParam<int> {
 
    public:
 
-     DgIntParam (const string& nameIn, int minIn = INT_MIN,
-                 int maxIn = INT_MAX)
+     DgIntParam (const string& nameIn, int minIn = std::numeric_limits<int>::min(),
+                 int maxIn = std::numeric_limits<int>::max())
           : DgBoundedParam<int> (nameIn, minIn, maxIn) { }
 
       DgIntParam (const string& nameIn, const int& valIn, 
-                  const int& minIn = INT_MIN, const int& maxIn = INT_MAX,
+                  const int& minIn = std::numeric_limits<int>::min(), const int& maxIn = std::numeric_limits<int>::max(),
                   bool validIn = true)
         : DgBoundedParam<int> (nameIn, valIn, minIn, maxIn, validIn) 
                 { 
@@ -393,13 +392,13 @@ class DgLIntParam : public DgBoundedParam<std::int64_t> {
    public:
 
      DgLIntParam (const string& nameIn, 
-                  std::int64_t minIn = INT64_MIN,
-                  std::int64_t maxIn = INT64_MAX)
+                  std::int64_t minIn = std::numeric_limits<std::int64_t>::min(),
+                  std::int64_t maxIn = std::numeric_limits<std::int64_t>::max())
           : DgBoundedParam<std::int64_t> (nameIn, minIn, maxIn) { }
 
       DgLIntParam (const string& nameIn, const std::int64_t& valIn, 
-                  const std::int64_t& minIn = INT64_MIN,
-		  const std::int64_t& maxIn = INT64_MAX,
+                  const std::int64_t& minIn = std::numeric_limits<std::int64_t>::min(),
+		  const std::int64_t& maxIn = std::numeric_limits<std::int64_t>::max(),
                   bool validIn = true)
         : DgBoundedParam<std::int64_t> (nameIn, valIn, minIn, maxIn, validIn) 
                 { 
@@ -436,12 +435,12 @@ class DgULIntParam : public DgBoundedParam<unsigned long int> {
    public:
 
      DgULIntParam (const string& nameIn, unsigned long int minIn = 0UL, 
-                 unsigned long int maxIn = ULONG_MAX) 
+                 unsigned long int maxIn = std::numeric_limits<unsigned long int>::max()) 
           : DgBoundedParam<unsigned long int> (nameIn, minIn, maxIn) { }
 
       DgULIntParam (const string& nameIn, const unsigned long int& valIn, 
                   const unsigned long int& minIn = 0UL, 
-                  const unsigned long int& maxIn = ULONG_MAX,
+                  const unsigned long int& maxIn = std::numeric_limits<unsigned long int>::max(),
                   bool validIn = true)
         : DgBoundedParam<unsigned long int> 
                           (nameIn, valIn, minIn, maxIn, validIn) 
@@ -477,12 +476,12 @@ class DgUint64Param : public DgBoundedParam<std::uint64_t> {
    public:
 
       DgUint64Param (const string& nameIn, std::uint64_t minIn = 0, 
-                   std::uint64_t maxIn = UINT64_MAX) 
+                   std::uint64_t maxIn = std::numeric_limits<std::uint64_t>::max()) 
           : DgBoundedParam<std::uint64_t> (nameIn, minIn, maxIn) { }
 
       DgUint64Param (const string& nameIn, const std::uint64_t& valIn, 
                     const std::uint64_t& minIn = 0, 
-                    const std::uint64_t& maxIn = UINT64_MAX,
+                    const std::uint64_t& maxIn = std::numeric_limits<std::uint64_t>::max(),
                     bool validIn = true)
         : DgBoundedParam<std::uint64_t> (nameIn, valIn, minIn, maxIn, validIn) 
                 { 
@@ -516,13 +515,13 @@ class DgDoubleParam : public DgBoundedParam<long double> {
 
    public:
 
-      DgDoubleParam (const string& nameIn, long double minIn = LDBL_MIN, 
-                     long double maxIn = LDBL_MAX) 
+      DgDoubleParam (const string& nameIn, long double minIn = std::numeric_limits<long double>::min(), 
+                     long double maxIn = std::numeric_limits<long double>::max()) 
           : DgBoundedParam<long double> (nameIn, minIn, maxIn) { }
 
       DgDoubleParam (const string& nameIn, const long double& valIn, 
-                     const long double& minIn = LDBL_MIN, 
-                     const long double& maxIn = LDBL_MAX, bool validIn = true)
+                     const long double& minIn = std::numeric_limits<long double>::min(), 
+                     const long double& maxIn = std::numeric_limits<long double>::max(), bool validIn = true)
           : DgBoundedParam<long double> (nameIn, valIn, minIn, maxIn, validIn)
                 { 
                   if (!validate())

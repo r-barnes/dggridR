@@ -9,7 +9,7 @@
 #ifndef DGPROJ_FULLER_H
 #define DGPROJ_FULLER_H
 
-#include <climits>
+#include <limits>
 #include <iostream>
 
 #include "DgIVec2D.h"

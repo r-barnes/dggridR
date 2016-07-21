@@ -6,15 +6,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <cfloat>
-
 #include "DgBase.h"
 #include "DgDVec2D.h"
 #include "DgDVec3D.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const DgDVec2D& DgDVec2D::undefDgDVec2D = DgDVec2D(DBL_MAX, DBL_MAX);
+const DgDVec2D& DgDVec2D::undefDgDVec2D = DgDVec2D(std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
 ////////////////////////////////////////////////////////////////////////////////
 DgDVec2D::DgDVec2D (const DgDVec3D& pt) : x_ (pt.x()), y_ (pt.y()) {}

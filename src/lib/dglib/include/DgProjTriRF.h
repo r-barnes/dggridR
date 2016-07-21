@@ -9,7 +9,7 @@
 #ifndef DGPROJ_TRI_RF_H
 #define DGPROJ_TRI_RF_H
 
-#include <climits>
+#include <limits>
 #include <iostream>
 #include <cstdint>
 

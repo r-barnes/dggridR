@@ -6,7 +6,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <climits>
+#include <limits>
 #include <cstdint>
 
 #include "DgBase.h"
@@ -14,7 +14,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const DgIVec3D& DgIVec3D::undefDgIVec3D = DgIVec3D(INT_MAX, INT_MAX, INT_MAX);
+const DgIVec3D& DgIVec3D::undefDgIVec3D = DgIVec3D(std::numeric_limits<int>::max(), std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*

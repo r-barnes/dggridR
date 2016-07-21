@@ -10,7 +10,6 @@
 #define DGDVEC2D_H
 
 #include <cmath>
-#include <cfloat>
 #include <iostream>
 
 #include "DgUtil.h"

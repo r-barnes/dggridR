@@ -9,7 +9,7 @@
 #ifndef DGIDGG_H 
 #define DGIDGG_H
 
-#include <climits>
+#include <limits>
 #include <iostream>
 #include <cstdint>
 

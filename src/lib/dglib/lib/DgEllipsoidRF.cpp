@@ -8,12 +8,13 @@
 
 #include <cstdint>
 #include <iostream>
+#include <limits>
 
 #include "DgEllipsoidRF.h"
 #include "DgGeoSphRF.h"
 #include "DgPolygon.h"
 
-const DgGeoCoord DgGeoCoord::undefGeoCoord(LDBL_MAX, LDBL_MAX);
+const DgGeoCoord DgGeoCoord::undefGeoCoord(std::numeric_limits<long double>::max(), std::numeric_limits<long double>::max());
 const long double DgGeoCoord::tolerance = 0.0000000005L;
 
 ////////////////////////////////////////////////////////////////////////////////

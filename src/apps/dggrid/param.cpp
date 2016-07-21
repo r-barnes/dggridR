@@ -7,6 +7,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <limits>
+
 #include "dggrid.h"
 #include "DgIDGGS.h"
 #include "DgEllipsoidRF.h"
@@ -407,7 +409,7 @@ DgGridPList::DgGridPList (void)
    dgg::util::release(choices);
 
    // dggs_num_placements <int> (v >= 1)
-   insertParam(new DgIntParam("dggs_num_placements", 1, 1, INT_MAX, true));
+   insertParam(new DgIntParam("dggs_num_placements", 1, 1, std::numeric_limits<int>::max(), true));
 
    // dggs_orient_output_file_name <whatever.meta>
    insertParam(new DgStringParam("dggs_orient_output_file_name", 
@@ -415,7 +417,7 @@ DgGridPList::DgGridPList (void)
 
    // dggs_orient_rand_seed <unsigned long int int>
    insertParam(new DgULIntParam("dggs_orient_rand_seed", 77316727, 0,
-                     ULONG_MAX, true));
+                     std::numeric_limits<unsigned long>::max(), true));
 
    // dggs_vert0_lon <long double: decimal degrees> (-180.0 <= v <= 180.0)
    insertParam(new DgDoubleParam("dggs_vert0_lon", 11.25, -180.0, 180.0));
@@ -500,7 +502,7 @@ DgGridPList::init2 (void)
    insertParam(new DgIntParam("densification", 0, 0, 500));
 
    // precision <int> (0 <= v <= 30)
-   insertParam(new DgIntParam("precision", DEFAULT_PRECISION, 0, INT_MAX));
+   insertParam(new DgIntParam("precision", DEFAULT_PRECISION, 0, std::numeric_limits<int>::max()));
 
    // output_cell_label_type <GLOBAL_SEQUENCE | ENUMERATION | SUPERFUND>
    choices.push_back(new string("GLOBAL_SEQUENCE"));
@@ -578,10 +580,10 @@ DgGridPList::init2 (void)
    insertParam(new DgBoolParam("randpts_concatenate_output", true));
 
    // randpts_num_per_cell <int> (v >= 0)
-   insertParam(new DgIntParam("randpts_num_per_cell", 0, 0, INT_MAX));
+   insertParam(new DgIntParam("randpts_num_per_cell", 0, 0, std::numeric_limits<int>::max()));
 
    // randpts_seed <unsigned long int>
-   insertParam(new DgULIntParam("randpts_seed", 77316727, 0, ULONG_MAX, true));
+   insertParam(new DgULIntParam("randpts_seed", 77316727, 0, std::numeric_limits<unsigned long>::max(), true));
 
 /*
    // clip_randpts <TRUE | FALSE>
@@ -600,7 +602,7 @@ DgGridPList::init2 (void)
    insertParam(new DgBoolParam("build_shapefile_attributes", false));
 
    // shapefile_attribute_default_int <int>
-   insertParam(new DgIntParam("shapefile_attribute_default_int", 0, INT_MIN, INT_MAX));
+   insertParam(new DgIntParam("shapefile_attribute_default_int", 0, std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
 
    // shapefile_attribute_default_double <double>
    insertParam(new DgDoubleParam("shapefile_attribute_default_double", 0.0, -DBL_MIN, DBL_MAX));
@@ -621,10 +623,10 @@ DgGridPList::init2 (void)
 ****/
 
    //  update_frequency <int> (v >= 0)
-   insertParam(new DgULIntParam("update_frequency", 100000, 0, ULONG_MAX, true));
+   insertParam(new DgULIntParam("update_frequency", 100000, 0, std::numeric_limits<unsigned long>::max(), true));
 
    //  max_cells_per_output_file <int> (v >= 0)
-   insertParam(new DgULIntParam("max_cells_per_output_file", 0, 0, ULONG_MAX, true));
+   insertParam(new DgULIntParam("max_cells_per_output_file", 0, 0, std::numeric_limits<unsigned long>::max(), true));
 
    //  verbosity <int> (0 <= v <= 3)
    insertParam(new DgIntParam("verbosity", 0, 0, 3));

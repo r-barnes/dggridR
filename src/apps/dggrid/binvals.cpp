@@ -10,6 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -549,7 +550,7 @@ class ValStat {
    public:
 
       ValStat (void)
-       : nVals (0), val(0.0), min(DBL_MAX), max(DBL_MIN), leaf(false),
+       : nVals (0), val(0.0), min(std::numeric_limits<double>::max()), max(std::numeric_limits<double>::min()), leaf(false),
          covered(true) { }
 
       int nVals;
