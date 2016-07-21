@@ -8,6 +8,7 @@
 
 #define __STDC_LIMIT_MACROS
 #include <stdint.h>
+#include <iostream>
 
 #include "DgEllipsoidRF.h"
 #include "DgGeoSphRF.h"
@@ -240,7 +241,7 @@ void printInt (int64_t val)
    if (val == UNDEFVAL)
       printf("UNDEFVAL");
    else
-      printf("%ld", val);
+      std::cout<<val;
  
 } /* void printInt */
 

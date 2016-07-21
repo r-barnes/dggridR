@@ -17,6 +17,8 @@
 #include <cstdlib>
 #define __STDC_LIMIT_MACROS
 #include <stdint.h>
+#include <sstream>
+#include <stdexcept>
 
 #include "DgUtil.h"
 
@@ -204,7 +206,10 @@ static
 int64_t from_string(const std::string& source)
 {
  int64_t n;
- sscanf(source.c_str(), "%ld", &n);
+  std::istringstream convert(source);
+  convert>>n;
+  if(convert.fail())
+    throw std::runtime_error("from_string(): Conversion failed on: " + source);
  return n;
 }
 
@@ -217,7 +222,10 @@ static
 uint64_t from_string(const std::string& source)
 { 
  uint64_t n;
- sscanf(source.c_str(), "%lu", &n);
+  std::istringstream convert(source);
+  convert>>n;
+  if(convert.fail())
+    throw std::runtime_error("from_string(): Conversion failed on: " + source);
  return n;
 }
 

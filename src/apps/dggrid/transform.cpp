@@ -12,6 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -201,12 +202,12 @@ void doTransform (TransformParam& dp)
       {
          char* snStr;
          snStr = strtok(buff, delimStr);
+         std::istringstream convert(snStr);
          unsigned long int sNum;
-         if (sscanf(snStr, "%lu", &sNum) != 1)
-         {
+         convert>>sNum;
+         if(convert.fail())
             ::report("doTransform(): invalid SEQNUM " + string(snStr), 
                      DgBase::Fatal);
-         }
 
          loc = static_cast<const DgIDGG&>(inRF).bndRF().locFromSeqNum(sNum);
          remainder = &(buff[strlen(snStr) + 1]);
