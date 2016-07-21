@@ -76,7 +76,7 @@ enum PolyFillType { pftEvenOdd, pftNonZero, pftPositive, pftNegative };
 #else
   typedef std::int64_t cInt;
   static cInt const loRange = 0x3FFFFFFF;
-  static cInt const hiRange = 0x3FFFFFFFFFFFFFFF;
+  static cInt const hiRange = 0x3FFFFFFFFFFFFFFFLL;
   typedef std::int64_t long64;     //used by Int128 class
   typedef std::uint64_t ulong64;
 #endif
