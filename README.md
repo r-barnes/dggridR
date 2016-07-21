@@ -35,10 +35,11 @@ Many details and examples are included in the vignette.
 Installation
 ------------
 
-dggridR is being reviewed for CRAN.
+dggridR is available from CRAN via:
 
-If you want it now, or prefer your code to be as up-to-date as possible, you can
-install it using:
+    install.packages('dggridR')
+
+If you want your code to be as up-to-date as possible, you can install it using:
 
     library(devtools) #Use `install.packages('devtools')` if need be
     install_github('r-barnes/dggridR', vignette=TRUE)
