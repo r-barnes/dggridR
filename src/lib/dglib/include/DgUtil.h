@@ -57,7 +57,7 @@ void release(std::vector<T>& v)
 // Round a long double into a long:
 inline long lrint(const long double& x)
 {
- return llrintl(x);
+ return std::llrint(x);
 }
 
 }} // namespace dgg::util
