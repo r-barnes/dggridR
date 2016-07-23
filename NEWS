@@ -1,3 +1,11 @@
+dggridR v0.1.7 (Release date: 2016-07-21)
+==============
+
+Changes:
+
+* Numerous changes to C++11 in hopes of extending compatibility
+
+
 dggridR v0.1.6 (Release date: 2016-07-20)
 ==============
 
