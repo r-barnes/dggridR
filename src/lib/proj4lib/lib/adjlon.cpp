@@ -1,7 +1,4 @@
 /* reduce argument to range +/- PI */
-#ifndef lint
-//static const char SCCSID[]="@(#)adjlon.c	4.3	93/06/12	GIE	REL";
-#endif
 #include <cmath>
 #include "proj4.h"
 /* note: PI adjusted high

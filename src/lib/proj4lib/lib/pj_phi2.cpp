@@ -1,7 +1,4 @@
 /* determine latitude angle phi-2 */
-#ifndef lint
-//static const char SCCSID[]="@(#)pj_phi2.c	4.3	93/06/12	GIE	REL";
-#endif
 #include "proj4.h"
 #include <cmath>
 

@@ -19,7 +19,7 @@
 const static int maxLine = 256;
 
 ////////////////////////////////////////////////////////////////////////////////
-static void fixSciNotation (char* string)
+void fixSciNotation (char* string)
 //
 // convert 'D' to 'E' scientific notation
 //

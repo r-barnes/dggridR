@@ -1,6 +1,3 @@
-#ifndef lint
-//static const char SCCSID[]="@(#)pj_mlfn.c	4.3	93/06/12	GIE	REL";
-#endif
 #include "proj4.h"
 #include <cmath>
 #include <cstdlib>

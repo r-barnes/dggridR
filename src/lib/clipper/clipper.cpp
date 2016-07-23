@@ -3462,7 +3462,7 @@ bool Clipper::JoinPoints(Join *j, OutRec* outRec1, OutRec* outRec2)
 }
 //----------------------------------------------------------------------
 
-static OutRec* ParseFirstLeft(OutRec* FirstLeft)
+OutRec* ParseFirstLeft(OutRec* FirstLeft)
 {
   while (FirstLeft && !FirstLeft->Pts)
     FirstLeft = FirstLeft->FirstLeft;

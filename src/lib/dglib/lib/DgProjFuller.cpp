@@ -219,7 +219,7 @@ GeoCoord fullerInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
 
 } /* GeoCoord fullerInv */
 
-static void geogtocartesian (long double lon, long double lat, long double R, long double ret[])
+void geogtocartesian (long double lon, long double lat, long double R, long double ret[])
 {
    long double inc = dgM_PI_2 - lat;
    long double azi = lon + dgM_PI;
@@ -230,7 +230,7 @@ static void geogtocartesian (long double lon, long double lat, long double R, lo
 
 } // static void geogtocartesian
 
-static long double scalar_triple(long double * x, long double * y, long double * z)
+long double scalar_triple(long double * x, long double * y, long double * z)
 {
    long double yzcross[3];
 

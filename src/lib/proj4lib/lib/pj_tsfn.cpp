@@ -1,7 +1,4 @@
 /* determine small t */
-#ifndef lint
-//static const char SCCSID[]="@(#)pj_tsfn.c	4.3	93/06/12	GIE	REL";
-#endif
 #include <cmath>
 #include "proj4.h"
 	long double

@@ -177,7 +177,7 @@ inline void trim(char *line, const std::string& candidates = "\n\r")
 }
 
 template <class TargetT>
-inline static TargetT from_string(const std::string& source)
+inline TargetT from_string(const std::string& source)
 {
  TargetT result;
 
@@ -195,13 +195,6 @@ inline static TargetT from_string(const std::string& source)
 // JFW: clean up (gcc specific)
 template <>
 inline
-/* Test for GCC < 4.3.0 */
-#if !defined  __APPLE__ && !defined __clang__ && GCC_VERSION < 40300
-/* Template specializations are not allowed to have their own storage 
-   classes, but older g++ didn't know that. Without this, you'll get 
-   linker errors. */
-static 		
-#endif
 std::int64_t from_string(const std::string& source)
 {
  std::int64_t n;
@@ -215,9 +208,6 @@ std::int64_t from_string(const std::string& source)
 // JFW: clean up (gcc specific)
 template <>
 inline 
-#if !defined  __APPLE__ && !defined __clang__ && GCC_VERSION < 40300
-static 
-#endif
 std::uint64_t from_string(const std::string& source)
 { 
  std::uint64_t n;
@@ -229,7 +219,7 @@ std::uint64_t from_string(const std::string& source)
 }
 
 template <class SourceT>
-static std::string to_string(const SourceT& source)
+std::string to_string(const SourceT& source)
 {
  std::ostringstream os;
  os << source;

@@ -9,7 +9,7 @@
 
 #include "DgRandom.h"
 
-static double Mother (unsigned long *pSeed);
+double Mother (unsigned long *pSeed);
 
 ////////////////////////////////////////////////////////////////////////////////
 DgRandom::~DgRandom(void)
@@ -73,7 +73,7 @@ switch.
 |	Bob Wheeler 8/8/94
 */
 
-static double Mother(unsigned long *pSeed)
+double Mother(unsigned long *pSeed)
 {
 	unsigned long  number, number1, number2;
 	short n, *p;
