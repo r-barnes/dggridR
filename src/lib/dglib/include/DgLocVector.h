@@ -92,6 +92,7 @@ class DgLocVector : public DgLocBase {
    friend class DgRFBase;
    friend class DgConverterBase;
    friend class DgPoly;
+   template <class A, class D> friend class DgRF;
 
 };
 
