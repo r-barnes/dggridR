@@ -1,3 +1,11 @@
+dggridR v0.1.8 (Release date: 2016-07-25)
+==============
+
+Changes:
+
+* Fix bug preventing compilation in clang++-3.9
+
+
 dggridR v0.1.7 (Release date: 2016-07-21)
 ==============
 
