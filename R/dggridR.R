@@ -371,7 +371,6 @@ dggetres <- function(dggs){
   dggs[['precision']]        = 30 #Used so that very fine meshes still give us numbers >0
 
   ret <- dgrun(dggs, check=FALSE, has_output_file=FALSE)
-  ret <- dgrun(dggs, check=FALSE, has_output_file=FALSE)
   ret <- tail(ret,-26)
   ret <- gsub(',','',ret)
 
