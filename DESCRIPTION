@@ -11,7 +11,8 @@ Suggests: knitr,
     rmarkdown,
     maps,
     mapproj,
-    R.rsp
+    R.rsp,
+    testthat
 License: MIT + file LICENCE
 Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rbarnes@umn.edu"),
              person("Kevin",   "Sahr",      role = "ctb", email = "sahrk@sou.edu"),
