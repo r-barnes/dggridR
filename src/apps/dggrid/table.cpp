@@ -60,14 +60,11 @@ void doTable (MainParam& dp, DgGridPList& plist)
       if (idggs->idgg(r).outputRes() >= 0) // in case invalid sf res
       {
          const DgGridStats& gs = idggs->idgg(r).gridStats();
-         cout << setw(resWidth)  << idggs->idgg(r).outputRes()
-           << setw(nCellsWidth) << dgg::util::addCommas(gs.nCells()) 
-           << setw(areaWidth) << dgg::util::addCommas(gs.cellAreaKM(), 
-                                                dp.precision) 
-           << setw(spcWidth) << dgg::util::addCommas(gs.cellDistKM(), 
-                                                dp.precision) 
-           << setw(clsWidth) << dgg::util::addCommas(gs.cls(), 
-                                                dp.precision) << endl;
+         cout << setw(resWidth)    << idggs->idgg(r).outputRes()
+              << " " << setw(nCellsWidth) << dgg::util::addCommas(gs.nCells()) 
+              << " " << setw(areaWidth)   << dgg::util::addCommas(gs.cellAreaKM(), dp.precision) 
+              << " " << setw(spcWidth)    << dgg::util::addCommas(gs.cellDistKM(), dp.precision) 
+              << " " << setw(clsWidth)    << dgg::util::addCommas(gs.cls(), dp.precision) << endl;
       }
    }
 
