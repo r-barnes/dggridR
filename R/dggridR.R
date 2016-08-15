@@ -29,8 +29,6 @@ dg_shpfname_south_africa <- file.path(system.file(package="dggridR"), "extdata",
 
 
 
-
-
 #' @name dgconstruct
 #' 
 #' @title      Construct a discrete global grid system (dggs) object
@@ -42,7 +40,7 @@ dg_shpfname_south_africa <- file.path(system.file(package="dggridR"), "extdata",
 #'             ISEA4T, ISEA4D, FULLER3H, FULLER4H, FULLER43H, FULLER4T,
 #'             and FULLER4D. Default: ISEA3H
 #'
-#' @param res  Resolution. Must be in the range [0,35]. Larger values represent
+#' @param res  Resolution. Must be in the range [0,30]. Larger values represent
 #'             finer resolutions. Appropriate resolutions can be found with
 #'             dg_closest_res_to_area(), dg_closest_res_to_spacing(), and
 #'             dg_closest_res_to_cls(). Default is 9, which corresponds to a
@@ -112,7 +110,7 @@ dgconstruct <- function(type='ISEA3H', res=NA, precision=7, area=NA, spacing=NA,
 #'
 #' @param dggs A dggs object from dgconstruct().
 #'
-#' @param res  Resolution. Must be in the range [0,35]. Larger values represent
+#' @param res  Resolution. Must be in the range [0,30]. Larger values represent
 #'             finer resolutions. Appropriate resolutions can be found with
 #'             dg_closest_res_to_area(), dg_closest_res_to_spacing(), and
 #'             dg_closest_res_to_cls(). Default is 9, which corresponds to a
@@ -161,11 +159,11 @@ dgverify <- function(dggs){
     stop('Unrecognised dggs type', call.=FALSE) #TODO: Where can they get valid types?
   if(dggs[['dggs_res_spec']]<0)
     stop('dggs resolution must be >=0', call.=FALSE)
-  if(dggs[['dggs_res_spec']]>35)
-    stop('dggs resolution must be <=35', call.=FALSE)
+  if(dggs[['dggs_res_spec']]>30)
+    stop('dggs resolution must be <=30', call.=FALSE)
   if(dggs[['precision']]<0)
     stop('dggs precision must be >=0', call.=FALSE)
-  if(dggs[['precision']]>35)
+  if(dggs[['precision']]>30)
     stop('dggs precision must be <=30', call.=FALSE)
   if(!all.equal(dggs[['dggs_res_spec']], as.integer(dggs[['dggs_res_spec']])))
     stop('dggs resolution must be an integer', call.=FALSE)
@@ -325,7 +323,7 @@ dginfo <- function(dggs){
   dgverify(dggs)
 
   dggs[['dggrid_operation']] = 'OUTPUT_STATS'
-  dggs[['dggs_res_spec']]    = 35
+  dggs[['dggs_res_spec']]    = 30
 
   cat(dgrun(dggs, check=FALSE, has_output_file=FALSE), sep="\r\n")
 
@@ -367,7 +365,7 @@ dggetres <- function(dggs){
   dgverify(dggs)
 
   dggs[['dggrid_operation']] = 'OUTPUT_STATS'
-  dggs[['dggs_res_spec']]    = 35 #Used so that we get all resolution levels
+  dggs[['dggs_res_spec']]    = 30 #Used so that we get all resolution levels
   dggs[['precision']]        = 30 #Used so that very fine meshes still give us numbers >0
 
   ret <- dgrun(dggs, check=FALSE, has_output_file=FALSE)
@@ -1047,4 +1045,3 @@ dgshptogrid <- function(dggs,shpfname,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){
 
   ret
 }
-
