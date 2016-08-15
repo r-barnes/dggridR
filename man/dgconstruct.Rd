@@ -13,7 +13,7 @@ dgconstruct(type = "ISEA3H", res = NA, precision = 7, area = NA,
 ISEA4T, ISEA4D, FULLER3H, FULLER4H, FULLER43H, FULLER4T,
 and FULLER4D. Default: ISEA3H}
 
-\item{res}{Resolution. Must be in the range [0,35]. Larger values represent
+\item{res}{Resolution. Must be in the range [0,30]. Larger values represent
 finer resolutions. Appropriate resolutions can be found with
 dg_closest_res_to_area(), dg_closest_res_to_spacing(), and
 dg_closest_res_to_cls(). Default is 9, which corresponds to a

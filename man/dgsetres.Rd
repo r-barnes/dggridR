@@ -9,7 +9,7 @@ dgsetres(dggs, res)
 \arguments{
 \item{dggs}{A dggs object from dgconstruct().}
 
-\item{res}{Resolution. Must be in the range [0,35]. Larger values represent
+\item{res}{Resolution. Must be in the range [0,30]. Larger values represent
 finer resolutions. Appropriate resolutions can be found with
 dg_closest_res_to_area(), dg_closest_res_to_spacing(), and
 dg_closest_res_to_cls(). Default is 9, which corresponds to a
