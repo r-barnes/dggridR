@@ -369,7 +369,10 @@ dggetres <- function(dggs){
   dggs[['precision']]        = 30 #Used so that very fine meshes still give us numbers >0
 
   ret <- dgrun(dggs, check=FALSE, has_output_file=FALSE)
-  ret <- tail(ret,-26)
+
+  table_start <- grep('^Res',ret)-1
+
+  ret <- tail(ret,-table_start)
   ret <- gsub(',','',ret)
 
   #Redefine table header so that it converts to a nice data frame
