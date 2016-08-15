@@ -1,3 +1,11 @@
+dggridR v0.1.9 (Release date: 2016-08-14)
+==============
+
+Changes:
+
+* Fix bugs preventing the -4- grids from constructing properly (e.g. ISEA4H)
+
+
 dggridR v0.1.8 (Release date: 2016-07-25)
 ==============
 
