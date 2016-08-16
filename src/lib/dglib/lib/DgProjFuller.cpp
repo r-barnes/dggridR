@@ -320,21 +320,21 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
 
    long double hi = answer-test;
    long double lastHi = hi;
-   while (fabs(hi) > PRECISION) 
+   while (std::abs(hi) > PRECISION) 
    { 
-      test = tan (a2 + group1) + tan (a2 - alpha) + tan (a2 - group2);
+      test = std::tan (a2 + group1) + std::tan (a2 - alpha) + std::tan (a2 - group2);
       inc = inc / 2.0L;
    
       hi = answer - test;
       if (hi == lastHi)
       {
-         fprintf(stderr, "ERROR: fullerInvOneTri: iterative step failed.\n");
-         fprintf(stderr, "loss of precision: %.20LF.\n", (fabs(hi) - PRECISION));
+         std::cerr<<"ERROR: fullerInvOneTri: iterative step failed.\n";
+         std::cerr<<"loss of precision: "<<(std::abs(hi) - PRECISION)<<".\n";
          break;
       }
       lastHi = hi;
 
-      if (fabs(hi) < PRECISION) break;
+      if (std::abs(hi) < PRECISION) break;
 
       if (test > answer)
          a2 = a2 - inc;

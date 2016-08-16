@@ -10,6 +10,8 @@
 #include "DgDVec2D.h"
 #include "DgDVec3D.h"
 
+#include <sstream>
+
 ////////////////////////////////////////////////////////////////////////////////
 
 const DgDVec2D& DgDVec2D::undefDgDVec2D = DgDVec2D(std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
@@ -41,24 +43,25 @@ DgDVec2D::fromString (const char* str, char delimiter)
 
    char* tok;
 
-   // get the x
-
-   tok = strtok(tmpStr, delimStr);
    long double xIn;
-   if (sscanf(tok, "%LF", &xIn) != 1)
+   long double yIn;
+
+   // get the x
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + string(tok), 
-               DgBase::Fatal);
+      tok = strtok(tmpStr, delimStr);
+      std::istringstream convert(tok);
+      convert >> xIn;
+      if(convert.fail())
+         ::report("DgDVec2D::fromString() invalid value in string " + string(tok), DgBase::Fatal);
    }
 
    // get the y
-
-   tok = strtok(NULL, delimStr);
-   long double yIn;
-   if (sscanf(tok, "%LF", &yIn) != 1)
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + string(tok), 
-               DgBase::Fatal);
+      tok = strtok(NULL, delimStr);
+      std::istringstream convert(tok);
+      convert >> yIn;
+      if(convert.fail())
+         ::report("DgDVec2D::fromString() invalid value in string " + string(tok), DgBase::Fatal);
    }
 
    setX(xIn);

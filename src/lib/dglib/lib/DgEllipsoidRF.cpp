@@ -239,7 +239,7 @@ void printInt (std::int64_t val)
 */
 {
    if (val == UNDEFVAL)
-      printf("UNDEFVAL");
+      std::cout<<"UNDEFVAL";
    else
       std::cout<<val;
  
@@ -252,9 +252,9 @@ void printVal (long double val)
 */
 {
    if (val == UNDEFVAL) 
-      printf("UNDEFVAL"); 
+      std::cout<<"UNDEFVAL";
    else 
-      printf("%LF", val);
+      std::cout<<val;
 
 } /* void printVal */
 

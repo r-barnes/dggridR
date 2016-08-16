@@ -8,6 +8,7 @@
 
 #include <cmath>
 #include <limits>
+#include <iostream>
 #include "DgProjISEA.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -133,11 +134,14 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
 
    if (z > DH + 0.00000005)
    {
-      printf("nTri: %d  z: %Lf  DH+: %Lf  diff: %Lf\n", nTri, z, 
-             DH + 0.00000005, (DH + 0.00000005) - z);
-      printf("1: The point: ");
+      std::cout<<"nTri: "<<nTri
+               <<"z:    "<<z
+               <<"DH+:  "<<(DH + 0.00000005)
+               <<"diff: "<<((DH + 0.00000005) - z)
+               <<"\n";
+      std::cout<<"1: The point: ";
       printGeoCoord(geoVect);
-      printf(" is located on another polygon.\n");
+      std::cout<<" is located on another polygon.\n";
       exit(1);
    }
 
