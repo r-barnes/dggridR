@@ -1,3 +1,11 @@
+dggridR v0.1.10 (Release date: 2016-08-16)
+==============
+
+Changes:
+
+* Many conversions from printf and sscanf in hopes of improving oldrel-windows functionality
+
+
 dggridR v0.1.9 (Release date: 2016-08-14)
 ==============
 
