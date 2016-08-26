@@ -12,7 +12,8 @@ dg_exe_path <- function(){
   file.path(system.file(package="dggridR"), "bin", exe_name)
 }
 
-
+dg_env <- new.env()
+assign("dg_debug", FALSE, envir=dg_env)
 
 #' @name dg_shpfname_south_africa
 #' 
@@ -236,8 +237,13 @@ dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying th
   ret <- read.csv(outputfile, header=FALSE)$V1
 
   #Clean up
-  file.remove(inputfile)
-  file.remove(outputfile)
+  if(!get("dg_debug", envir=dg_env)){
+    file.remove(inputfile)
+    file.remove(outputfile)
+  } else {
+    print(paste("Inputfile:", inputfile))
+    print(paste("Outputfile:", outputfile))
+  }
 
   if(any(ret>=2^53)) #R stores large numbers as an IEEE754 double, so we get 53 bits of exact integer goodness.
     message('dgtransform(): Length of cell ids overflowed R\'s numeric storage capacity. Use a lower resolution')
@@ -283,9 +289,17 @@ dgrun <- function(dggs, clean=TRUE, check=TRUE, has_output_file=TRUE){
   write.table(as.data.frame(do.call(rbind, dggs)), metafile, col.names=FALSE, quote=FALSE)
   com <- paste(dg_exe_path(),metafile)
   ret <- system(com, intern = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
+  if(get("dg_debug", envir=dg_env)){
+    cat(ret, sep='\n')
+  }
   if(check && length(grep("complete \\*\\*",ret))!=1){
       cat(ret)
       stop('dggridR: Error in processing!', call.=FALSE)
+  }
+  #TODO: Clean up metafile here
+  if(!get("dg_debug", envir=dg_env)){
+    print(paste("Metafile:",metafile))
+    file.remove(metafile)
   }
   ret
 }
@@ -756,7 +770,11 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,w
   cellfile <- paste(cellfile,".kml",sep="")
 
   #Clean up
-  file.remove(inputfile)
+  if(!get("dg_debug", envir=dg_env)){
+    file.remove(inputfile)
+  } else {
+    print(paste("Inputfile:",inputfile))
+  }
 
   if(savegrid)
     return(cellfile)
@@ -764,7 +782,11 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,w
   ret <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up more
-  file.remove(cellfile)
+  if(!get("dg_debug", envir=dg_env)){
+    file.remove(cellfile)
+  } else {
+    print(paste("Cellfile: ",cellfile))
+  }
 
   ret
 }
@@ -841,7 +863,11 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: D
   ret <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up
-  file.remove(cellfile)
+  if(!get("dg_debug", envir=dg_env)){
+    file.remove(cellfile)
+  } else {
+    print(paste("Cellfile:",cellfile))
+  }
 
   ret
 }
@@ -935,7 +961,12 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ 
   cellfile <- paste(cellfile,".kml",sep="")
 
   #Clean up
-  file.remove(inputfile)
+  if(!get("dg_debug", envir=dg_env)){
+    file.remove(inputfile)
+  } else {
+    print(paste("Inputfile:",inputfile))
+    print(paste("Cellfile:",cellfile))
+  }
 
   if(savegrid)
     return(cellfile)
@@ -943,7 +974,9 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ 
   ret <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up more
-  file.remove(cellfile)
+  if(!get("dg_debug", envir=dg_env)){
+    file.remove(cellfile)
+  }
 
   ret
 }
@@ -1044,7 +1077,11 @@ dgshptogrid <- function(dggs,shpfname,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){
   ret <- dg_process_kml(cellfile,frame,wrapcells)
 
   #Clean up more
-  file.remove(cellfile)
+  if(!get("dg_debug", envir=dg_env)){
+    file.remove(cellfile)
+  } else {
+    print(paste("Cellfile:",cellfile))
+  }
 
   ret
 }
