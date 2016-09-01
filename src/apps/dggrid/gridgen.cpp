@@ -857,7 +857,7 @@ void genGrid (GridGenParam& dp)
    if (dp.seqToPoly)
    {
       dp.nCellsAccepted = 0;
-      dp.nCellsTested = 0;
+      dp.nCellsTested   = 0;
 
       std::ifstream fin(dp.regionFiles[0].c_str());
       set<unsigned long int> seqnums; //To ensure each cell is printed once
