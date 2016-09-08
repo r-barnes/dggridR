@@ -297,8 +297,9 @@ dgrun <- function(dggs, clean=TRUE, check=TRUE, has_output_file=TRUE){
       stop('dggridR: Error in processing!', call.=FALSE)
   }
   #TODO: Clean up metafile here
-  if(!get("dg_debug", envir=dg_env)){
+  if(get("dg_debug", envir=dg_env)){
     print(paste("Metafile:",metafile))
+  } else {
     file.remove(metafile)
   }
   ret
