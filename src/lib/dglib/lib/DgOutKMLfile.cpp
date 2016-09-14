@@ -136,9 +136,9 @@ DgOutKMLfile::insert(const DgDVec2D& pt)
    DgOutKMLfile& o(*this);
 
    o << "            "
-     << std::setprecision(getPrecision()) << pt.x()
+     << std::setprecision(getPrecision()) << (double) pt.x()
      << ","
-     << std::setprecision(getPrecision()) << pt.y()
+     << std::setprecision(getPrecision()) << (double) pt.y()
      << ",0.0\n";
 
    return o;
