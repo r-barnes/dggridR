@@ -285,9 +285,9 @@ Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1,
 GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzimuth, 
                          long double* pTheta)
 {
-   long double arc, alpha, el, dve; /* constants used with Fuller projection*/
+   long double alpha, el, dve;      /* constants used with Fuller projection*/
    long double x, y, z;             /* 3-D x, y, z coords of output  */
-   long double x1, y1, z1;        /* 3-D x, y, z coords of template triangle plane*/
+   long double x1, y1, z1;          /* 3-D x, y, z coords of template triangle plane*/
    long double x2, y2;              /* initial planar coords*/
    long double a1, a2, a3;          /* arc lengths on plane and sphere*/
    long double a1p, a2p;            /* arc lengths on template triangle plane*/ 
@@ -301,8 +301,6 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
    el = 1.05146222423826721205133816969575L;
    //dve = sqrt(3.0L + M_SQRT5) / sqrt(5.0L + M_SQRT5);
    dve = 0.85065080835203993218154049706301L;
-   //arc = 2.0L * asin (sqrt (5.0L - M_SQRT5) / M_SQRT10);
-   arc = M_ATAN2;
    //alpha = 0.5L * arc;
    alpha = M_ATAN2_2;
    

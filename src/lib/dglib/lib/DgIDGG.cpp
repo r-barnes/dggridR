@@ -645,8 +645,6 @@ DgQ2DDtoVertex2DDConverter::compute_subtriangle
 DgVertex2DDCoord 
 DgQ2DDtoVertex2DDConverter::convertTypedAddress (const DgQ2DDCoord& addIn) const
 {
-   DgDVec2D coord = addIn.coord();
-
    int subTri = compute_subtriangle(addIn.coord().x(), addIn.coord().y());
 
    const DgVertTriVals& st = DgVertex2DDRF::vertTable(addIn.quadNum(), subTri);
