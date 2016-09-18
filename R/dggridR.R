@@ -12,6 +12,15 @@ dg_exe_path <- function(){
   file.path(system.file(package="dggridR"), "bin", exe_name)
 }
 
+#' @name dg_env
+#' 
+#' @title Control global aspects of the dggridR package
+#'
+#' @description
+#'        This environment is used to control global features of the dggridR
+#'        package. At the moment the only option is 'dg_debug' which, when set
+#'        to TRUE provides extensive outputs useful for tracking down bugs.
+#'
 dg_env <- new.env()
 assign("dg_debug", FALSE, envir=dg_env)
 
