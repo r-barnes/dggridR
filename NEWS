@@ -1,5 +1,16 @@
+dggridR v0.1.11 (Release date: 2016-09-18)
+===============
+
+Changes:
+
+* Fixes a `long double` output formatting issue that gives bad results when  
+  code is compiled using MingW on certain Windows systems.
+  
+* Adds a debugging capability to the R code to make it easier to get 
+  diagnostics from users.
+
 dggridR v0.1.10 (Release date: 2016-08-16)
-==============
+===============
 
 Changes:
 
