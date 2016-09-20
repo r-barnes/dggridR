@@ -656,7 +656,7 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}
 #'
 dg_process_kml <- function(kmlfile,frame,wrapcells){
-  map <- suppressWarnings(readOGR(kmlfile,kmlfile))
+  map <- suppressWarnings(readOGR(dsn=kmlfile,layer='dgout'))
 
   #These two lines suppress a WARNING message that would otherwise be raised by
   #`R CMD check` due to the use of dplyr

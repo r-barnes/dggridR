@@ -101,12 +101,12 @@ void DgOutKMLfile::preamble()
 
    o << "<Folder>\n";
 
-   o << "   <name>";
-   if (name_ == "")
-      o << o.DgOutputStream::fileName();
-   else
-      o << name_;
-   o << "</name>\n";
+   o << "   <name>dgout</name>\n";
+   // if (name_ == "")
+   //    o << o.DgOutputStream::fileName();
+   // else
+   //    o << name_;
+   //o << "dgout</name>\n";
 
    o << "   <description>";
    o << description_;
