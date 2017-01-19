@@ -299,7 +299,7 @@ lat   <- phi-90
 df    <- data.frame(lat=lat,lon=lon)
 
 #Construct a global grid in which every hexagonal cell has an area of
-#100,000 km^2. You could, of course, choose a much smaller value, but these
+#100,000 miles^2. You could, of course, choose a much smaller value, but these
 #will show up when I map them later.
 
 #Note: Cells can only have certain areas, the `dgconstruct()` function below
@@ -358,7 +358,7 @@ library(dplyr)
 N <- 100    #How many cells to sample
 
 #Construct a global grid in which every hexagonal cell has an area of
-#100,000 km^2. You could, of course, choose a much smaller value, but these
+#100,000 miles^2. You could, of course, choose a much smaller value, but these
 #will show up when I map them later.
 
 #Note: Cells can only have certain areas, the `dgconstruct()` function below
@@ -402,7 +402,7 @@ can instead generate the grid directly to a temporary file, as follows:
 
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 library(dggridR)
-#Generate a global grid whose cells are ~100,000 km^2
+#Generate a global grid whose cells are ~100,000 miles^2
 dggs         <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
 #Save the cells to a KML file for use in other software
 gridfilename <- dgearthgrid(dggs,savegrid=TRUE)
