@@ -432,6 +432,35 @@ p
 ```
 
 
+#Caveats
+
+At every resolution, the Icosahedral grids contain 12 pentagonal cells which
+each have an area exactly 5/6 that of the hexagonal cells. In the standard
+orientation, these are located as follows (scaled to a size corresponding to the
+grid resolution):
+
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=4, echo=FALSE}
+
+lat <- c(90,-90,26.57,-26.57,26.57,-26.57,26.57,-26.57,26.57,-26.57,26.57,-26.57)
+lon <- c(0,0,0,36,72,108,144,180,216,252,288,324)
+
+dggs  <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
+cells <- dgtransform(dggs,lat,lon)
+grid  <- dgcellstogrid(dggs,cells,frame=TRUE,wrapcells=TRUE) #Get grid
+
+#Get polygons for each country of the world
+countries      <- map_data("world")
+
+#Plot everything on a flat map
+p<- ggplot() + 
+    geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
+    geom_polygon(data=grid,      aes(x=long, y=lat, group=group), alpha=0.6, fill="purple")    +
+    geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white")
+p
+```
+
+
+
 #Roadmap
 
 * Method to convert between grid cell ids at different resolutions
