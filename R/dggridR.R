@@ -15,7 +15,7 @@
 #'
 dg_exe_path <- function(){
   exe_name <- switch(Sys.info()[['sysname']], Windows='dggrid.exe', 'dggrid')
-  file.path(system.file(package="dggridR"), "bin", exe_name)
+  file.path(find.package('dggridR'), "bin", exe_name)
 }
 
 #' @name dg_env
@@ -41,7 +41,7 @@ assign("dg_debug", FALSE, envir=dg_env)
 #' @return A filename of a shapefile containing the national border of South Africa
 #'
 #' @export
-dg_shpfname_south_africa <- file.path(system.file(package="dggridR"), "extdata", "ZAF_adm0.shp")
+dg_shpfname_south_africa <- file.path(find.package('dggridR'), "extdata", "ZAF_adm0.shp")
 
 
 
