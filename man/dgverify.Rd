@@ -22,4 +22,3 @@ dggs <- dgconstruct(res=20)
 dgverify(dggs)
 
 }
-

@@ -33,4 +33,3 @@ dggs          <- dgconstruct(spacing=1000,metric=FALSE)
 dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 
 }
-

@@ -52,4 +52,3 @@ grid <- dgrectgrid(dggs,
                maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
 
 }
-

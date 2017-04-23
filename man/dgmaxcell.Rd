@@ -29,4 +29,3 @@ cells   <- sample(1:maxcell, N, replace=FALSE) #Choose random cells
 grid    <- dgcellstogrid(dggs,cells,frame=TRUE,wrapcells=TRUE) #Get grid
 
 }
-

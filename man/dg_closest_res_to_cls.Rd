@@ -34,4 +34,3 @@ res  <- dg_closest_res_to_cls(dggs,1)
 dggs <- dgsetres(dggs,res)
 
 }
-

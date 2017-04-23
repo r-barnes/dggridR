@@ -29,4 +29,3 @@ dggs <- dgconstruct(res=20)
 dggs <- dgsetres(dggs,10)
 
 }
-

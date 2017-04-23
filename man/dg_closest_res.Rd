@@ -39,4 +39,3 @@ res  <- dg_closest_res(dggs,'AreaKm',1)
 dggs <- dgsetres(dggs,res)
 }
 }
-

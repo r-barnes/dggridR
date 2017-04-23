@@ -40,4 +40,3 @@ dggs <- dgsetres(dggs,res)
 gridfilename <- dgearthgrid(dggs,savegrid=TRUE) #Save directly to a file
 
 }
-

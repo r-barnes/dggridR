@@ -47,4 +47,3 @@ dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 grid          <- dgcellstogrid(dggs, dgquakes$cell, frame=TRUE)
 
 }
-

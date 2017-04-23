@@ -14,4 +14,3 @@ This environment is used to control global features of the dggridR
        to TRUE provides extensive outputs useful for tracking down bugs.
 }
 \keyword{datasets}
-

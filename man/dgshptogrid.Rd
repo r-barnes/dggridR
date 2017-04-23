@@ -57,4 +57,3 @@ dggs <- dgconstruct(spacing=25, metric=FALSE, resround='nearest')
 south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa)
 
 }
-

@@ -23,4 +23,3 @@ dggs <- dgconstruct(res=20)
 dggetres(dggs)
 
 }
-

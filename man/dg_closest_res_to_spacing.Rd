@@ -33,4 +33,3 @@ res  <- dg_closest_res_to_spacing(dggs,1)
 dggs <- dgsetres(dggs,res)
 
 }
-

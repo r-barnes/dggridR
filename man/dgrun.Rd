@@ -28,4 +28,3 @@ A discrete global grid maps lat-long points to particular cells.
          1 to some maximum number. Cell numbers may be reused from one
          resolution to the next.
 }
-

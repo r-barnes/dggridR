@@ -16,4 +16,3 @@ This variable points to a shapefile containing the national border
        of South Africa
 }
 \keyword{datasets}
-
