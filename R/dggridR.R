@@ -1,3 +1,9 @@
+#' @importFrom utils read.csv read.table tail write.table
+#' @importFrom rgdal readOGR
+#' @importFrom ggplot2 fortify
+#' @importFrom dplyr
+
+
 #' @name dg_exe_path
 #' 
 #' @title Get path to dggrid executable
