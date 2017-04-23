@@ -17,13 +17,13 @@ LDLIBS= $(DGLIBDIR)/lib/dglib.a \
 all: $(TARGET)
 
 ${TARGET}: $(SRC) $(OBJS) $(LDLIBS) #$(DEPS)
-	$(CXX1X) $(CXX1XFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
+	$(CXX) $(CXXFLAGS) -o ${TARGET} ${OBJS} $(LDLIBS) $(INCDIRS)
 
 %.o: %.cpp
-	$(CXX1X) -c $< $(CXX1XFLAGS) $(INCDIRS) -o $@
+	$(CXX) -c $< $(CXXFLAGS) $(INCDIRS) -o $@
 
 link:
-	$(CXX1X) $(CXX1XFLAGS) $(INCDIRS) -o ${TARGET} ${OBJS} $(LDLIBS)
+	$(CXX) $(CXXFLAGS) $(INCDIRS) -o ${TARGET} ${OBJS} $(LDLIBS)
 
 #%.depends: %.cpp
 #	$(CXX) -M $(CXXFLAGS) $(INCDIRS) $< > $@

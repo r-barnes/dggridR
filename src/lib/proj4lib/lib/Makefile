@@ -12,7 +12,7 @@ $(LIB): $(SRC) $(OBJS) #$(DEPS)
 	$(AR) rcs $(LIB) $(OBJS)
 
 %.o: %.cpp
-	$(CXX1X) -c $< $(CXX1XFLAGS) $(INCDIRS)
+	$(CXX) -c $< $(CXXFLAGS) $(INCDIRS)
 
 #%.depends: %.cpp
 #	$(CXX) -MM $(CXXFLAGS) $(INCDIRS) $< > $@

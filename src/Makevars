@@ -3,22 +3,22 @@
 all: lib_shape lib_proj4 lib_dglib appex dggrid clipper
 
 appex: lib_shape lib_proj4 clipper lib_dglib
-	@(cd apps/appex         && $(MAKE)     CXX1X="$(CXX1X) $(CXX1XSTD)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXX1XFLAGS="$(CXX1XFLAGS)" AR="$(AR)")
+	@(cd apps/appex         && $(MAKE)     CXX="$(CXX11) $(CXX11STD)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXX11FLAGS)" AR="$(AR)")
 
 dggrid: lib_shape lib_proj4 clipper lib_dglib
-	@(cd apps/dggrid        && $(MAKE)     CXX1X="$(CXX1X) $(CXX1XSTD)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXX1XFLAGS="$(CXX1XFLAGS)" AR="$(AR)")
+	@(cd apps/dggrid        && $(MAKE)     CXX="$(CXX11) $(CXX11STD)" CC="$(CC)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXX11FLAGS)" AR="$(AR)")
 
 lib_shape:
-	@(cd lib/shapelib-1.3.0 && $(MAKE) lib CXX1X="$(CXX1X) $(CXX1XSTD)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" CXX1XFLAGS="$(CXX1XFLAGS) $(CXX1XPICFLAGS)" AR="$(AR)")
+	@(cd lib/shapelib-1.3.0 && $(MAKE) lib CXX="$(CXX11) $(CXX11STD)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" CXXFLAGS="$(CXX11FLAGS) $(CXX11PICFLAGS)" AR="$(AR)")
 
 lib_proj4:
-	@(cd lib/proj4lib/lib   && $(MAKE)     CXX1X="$(CXX1X) $(CXX1XSTD)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" CXX1XFLAGS="$(CXX1XFLAGS) $(CXX1XPICFLAGS)" AR="$(AR)")
+	@(cd lib/proj4lib/lib   && $(MAKE)     CXX="$(CXX11) $(CXX11STD)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" CXXFLAGS="$(CXX11FLAGS) $(CXX11PICFLAGS)" AR="$(AR)")
 
 clipper:
-	@(cd lib/clipper        && $(MAKE)     CXX1X="$(CXX1X) $(CXX1XSTD)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" CXX1XFLAGS="$(CXX1XFLAGS) $(CXX1XPICFLAGS)" AR="$(AR)")
+	@(cd lib/clipper        && $(MAKE)     CXX="$(CXX11) $(CXX11STD)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" CXXFLAGS="$(CXX11FLAGS) $(CXX11PICFLAGS)" AR="$(AR)")
 
 lib_dglib:
-	@(cd lib/dglib/lib      && $(MAKE)     CXX1X="$(CXX1X) $(CXX1XSTD)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" CXX1XFLAGS="$(CXX1XFLAGS) $(CXX1XPICFLAGS)" AR="$(AR)")
+	@(cd lib/dglib/lib      && $(MAKE)     CXX="$(CXX11) $(CXX11STD)" CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" CXXFLAGS="$(CXX11FLAGS) $(CXX11PICFLAGS)" AR="$(AR)")
 
 clean:
 	@(cd apps/appex         && $(MAKE) clean)
