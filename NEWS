@@ -1,3 +1,13 @@
+dggridR v1.0.1  (Release date: 2017-04-23)
+===============
+
+Changes:
+
+* Fixes a documentation issue
+* Reorders NAMESPACE using new build system
+
+
+
 dggridR v1.0.0  (Release date: 2017-04-23)
 ===============
 
