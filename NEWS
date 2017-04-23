@@ -1,3 +1,17 @@
+dggridR v1.0.0  (Release date: 2017-04-23)
+===============
+
+Changes:
+
+* Append image to vignette showing where pentagons are
+* Add `azimuth`, `pole_lat`, and `pole_lon` to `dgconstruct()
+* Update `CXX1X` compilation stuff to `CXX11` - requires R (>= 3.4.0)
+* Using a different method to identify package location - may fix a Windows bug
+* Muck with licensing so both CRAN and Github accept it
+* Fixed a small documentation issue with units in the comments
+* Switched to semantic versioning (http://semver.org/)
+
+
 dggridR v0.1.11 (Release date: 2016-09-18)
 ===============
 
@@ -8,6 +22,7 @@ Changes:
   
 * Adds a debugging capability to the R code to make it easier to get 
   diagnostics from users.
+
 
 dggridR v0.1.10 (Release date: 2016-08-16)
 ===============
