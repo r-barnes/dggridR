@@ -6,6 +6,9 @@
 \usage{
 dg_transform_for_output(dggs)
 }
+\arguments{
+\item{dggs}{A dggs object from dgconstruct().}
+}
 \description{
 A dggs object may contain variables that are named for user
        friendliness. This function removes the friendliness. It's enemies

@@ -184,6 +184,8 @@ dgsetres <- function(dggs,res){
 #' 
 #' @title Transform a dggs object's fields to a form suitable for output
 #'
+#' @param dggs A dggs object from dgconstruct().
+#'
 #' @description
 #'        A dggs object may contain variables that are named for user
 #'        friendliness. This function removes the friendliness. It's enemies
