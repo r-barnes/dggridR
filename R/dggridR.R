@@ -76,6 +76,15 @@ dg_shpfname_south_africa <- file.path(system.file(package="dggridR"), "extdata",
 #' @param metric    Whether input and output should be in metric (TRUE) or
 #'                  imperial (FALSE)
 #'
+#' @param azimuth   Rotation in degrees of grid about its pole, value in [0,360].
+#'                  Default=0.
+#'
+#' @param pole_lat  Latitude in degrees of the pole, value in [-90,90].
+#'                  Default=58.28252559.
+#'
+#' @param pole_lon  Longitude in degrees of the pole, value in [-180,180].
+#'                  Default=11.25.
+#'
 #' @return          Returns a dggs object which can be passed to other dggridR
 #'                  functions
 #'
@@ -86,12 +95,33 @@ dg_shpfname_south_africa <- file.path(system.file(package="dggridR"), "extdata",
 #' dggs <- dgconstruct(area=5,metric=FALSE)
 #'
 #' @export 
-dgconstruct <- function(type='ISEA3H', res=NA, precision=7, area=NA, spacing=NA, cls=NA, resround='nearest', metric=TRUE, show_info=TRUE){
+dgconstruct <- function(
+  type      = 'ISEA3H',
+  res       = NA,
+  precision = 7,
+  area      = NA,
+  spacing   = NA,
+  cls       = NA,
+  resround  = 'nearest',
+  metric    = TRUE,
+  show_info = TRUE,
+  azimuth   = 0,
+  pole_lat  = 58.28252559,
+  pole_lon  = 11.25
+){
   if(sum(!is.na(c(res,area,spacing,cls)))!=1)
     stop('dgconstruct(): Only one of res, area, length, or cls can have a value!')
 
   #Use a dummy resolution, we'll fix it in a moment
-  dggs <- list(dggs_type=type, dggs_res_spec=1, precision=7)
+  dggs <- list(
+    dggs_type                = type,
+    dggs_res_spec            = 1,
+    precision                = 7,
+    azimuth                  = azimuth,
+    pole_lat                 = pole_lat,
+    pole_lon                 = pole_lon,
+    dggs_orient_specify_type = "SPECIFIED"
+  )
 
   if(!is.na(res))
     dggs[['dggs_res_spec']] = res
@@ -144,6 +174,26 @@ dgsetres <- function(dggs,res){
 
 
 
+#' @name dg_transform_for_output
+#' 
+#' @title Transform a dggs object's fields to a form suitable for output
+#'
+#' @description
+#'        A dggs object may contain variables that are named for user
+#'        friendliness. This function removes the friendliness. It's enemies
+#'        from here on out.
+#'
+dg_transform_for_output <- function(dggs){
+  dggsnew                         <- dggs
+  dggsnew[['dggs_vert0_azimuth']] <- dggs[['azimuth']]
+  dggsnew[['dggs_vert0_lat']]     <- dggs[['pole_lat']]
+  dggsnew[['dggs_vert0_lon']]     <- dggs[['pole_lon']]
+  dggsnew[['azimuth']]            <- NULL
+  dggsnew[['pole_lat']]           <- NULL
+  dggsnew[['pole_lon']]           <- NULL
+  dggsnew
+}
+
 
 
 #' @name dgverify
@@ -175,6 +225,12 @@ dgverify <- function(dggs){
     stop('dggs precision must be >=0', call.=FALSE)
   if(dggs[['precision']]>30)
     stop('dggs precision must be <=30', call.=FALSE)
+  if(dggs[['azimuth']]<0 || dggs[['azimuth']]>360)
+    stop('dggs azimuth must be in the range [0,360]')
+  if(dggs[['pole_lat']]<(-90) || dggs[['pole_lat']]>90)
+    stop('dggs pole_lat must be in the range [-90,90]')
+  if(dggs[['pole_lon']]<(-180) || dggs[['pole_lon']]>180)
+    stop('dggs pole_lon must be in the range [-180,180]')
   if(!all.equal(dggs[['dggs_res_spec']], as.integer(dggs[['dggs_res_spec']])))
     stop('dggs resolution must be an integer', call.=FALSE)
 }
@@ -294,6 +350,7 @@ dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying th
 #'          If \code{has_output_file} is FALSE, the stdout and stderr of dggrid
 #'          are captured and returned as a character vector.
 dgrun <- function(dggs, clean=TRUE, check=TRUE, has_output_file=TRUE){
+  dggs     <- dg_transform_for_output(dggs)
   metafile <- tempfile(pattern = "dggridR-", fileext=".meta")
   write.table(as.data.frame(do.call(rbind, dggs)), metafile, col.names=FALSE, quote=FALSE)
   com <- paste(dg_exe_path(),metafile)

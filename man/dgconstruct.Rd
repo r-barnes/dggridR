@@ -6,7 +6,8 @@
 \usage{
 dgconstruct(type = "ISEA3H", res = NA, precision = 7, area = NA,
   spacing = NA, cls = NA, resround = "nearest", metric = TRUE,
-  show_info = TRUE)
+  show_info = TRUE, azimuth = 0, pole_lat = 58.28252559,
+  pole_lon = 11.25)
 }
 \arguments{
 \item{type}{Type of grid to use. Options are: ISEA3H, ISEA4H, ISEA43H, 
@@ -38,6 +39,15 @@ Only one of res, area, length, or cls should be used.}
 imperial (FALSE)}
 
 \item{show_info}{Print the area, spacing, and CLS of the chosen resolution.}
+
+\item{azimuth}{Rotation in degrees of grid about its pole, value in [0,360].
+Default=0.}
+
+\item{pole_lat}{Latitude in degrees of the pole, value in [-90,90].
+Default=58.28252559.}
+
+\item{pole_lon}{Longitude in degrees of the pole, value in [-180,180].
+Default=11.25.}
 }
 \value{
 Returns a dggs object which can be passed to other dggridR
@@ -53,4 +63,3 @@ dggs <- dgconstruct(res=20)
 dggs <- dgconstruct(area=5,metric=FALSE)
 
 }
-
