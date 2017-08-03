@@ -70,16 +70,15 @@ class DgLocation : public DgLocBase {
       void setNullAddress (void) { address_ = 0; }
 
       virtual void clearAddress (void) { delete address_; address_ = 0; }
+      
+      DgLocation (const DgRFBase& rfIn, DgAddressBase* addIn) : DgLocBase (rfIn), address_ (addIn) {}
 
    protected:
 
       virtual void convertTo (const DgRFBase& rf) { rf.convert(this); }
 
-   private:
 
-      DgLocation (const DgRFBase& rfIn, DgAddressBase* addIn) 
-         : DgLocBase (rfIn),
-           address_ (addIn) {}
+   private:
 
       DgAddressBase* address_;
 
