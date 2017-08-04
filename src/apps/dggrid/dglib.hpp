@@ -29,8 +29,8 @@ namespace dglib {
      long double  azimuth_deg,
      unsigned int aperture,
      int          res,
-     std::string topology, //"HEXAGON", "DIAMOND", "TRIANGLE"
-     std::string projection, //ISEA/FULLER
+     std::string  topology, //"HEXAGON", "DIAMOND", "TRIANGLE"
+     std::string  projection, //ISEA/FULLER
      InType       in_type,
      const double *const in1,
      const double *const in2,
