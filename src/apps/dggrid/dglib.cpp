@@ -86,6 +86,8 @@ namespace dglib {
      long double  azimuth_deg,
      unsigned int aperture,
      int          res,
+     std::string topology, //"HEXAGON", "DIAMOND", "TRIANGLE"
+     std::string projection, //ISEA/FULLER
      InType       in_type,
      const double *const in1,
      const double *const in2,
@@ -111,8 +113,8 @@ namespace dglib {
       aperture,    //aperture:
       res,         //res:
       "DDG",       //const string& name ??
-      "HEXAGON",   //gridTopo (HEXAGON, DIAMOND, TRIANGLE):
-      "ISEA",      //projType (ISEA, FULLER):
+      topology,    //gridTopo (HEXAGON, DIAMOND, TRIANGLE):
+      projection,  //projType (ISEA, FULLER):
       false,       //isMixed43 (true, false):
       0,           //numAp4: number of leading aperture 4 resolutions in a mixed grid
       false,       //isSuperfund (true, false): Is a superfund grid
