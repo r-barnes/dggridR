@@ -914,9 +914,9 @@ DgIDGG::initialize (void)
    projTriRF_ = new DgProjTriRF(network(), name() + string("projTri"), 
                 sphIcosa_);
    vertexRF_ = new DgVertex2DDRF(network(), name() + string("vertex"));
-   q2ddRF_ = new DgQ2DDRF(network(), name() + string("q2dd"));
-   intRF_ = new DgInterleaveRF(network(), name() + string("int"));
-   planeRF_ = new DgPlaneTriRF(network(), name() + string("plane"));
+   q2ddRF_   = new DgQ2DDRF(network(), name() + string("q2dd"));
+   intRF_    = new DgInterleaveRF(network(), name() + string("int"));
+   planeRF_  = new DgPlaneTriRF(network(), name() + string("plane"));
 
    // create the converters; for convenience use where they are in overall
    // sequence for name
