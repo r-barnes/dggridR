@@ -31,13 +31,12 @@ using namespace std;
 #include "DgTriGrid2D.h"
 
 void outputCellAdd2D (
-  GridGenParam& dp,
   const DgIDGG& dgg,
   const DgLocation& add2D,
   const DgPolygon& verts,
   const DgContCartRF& deg,
-  double *out1,
-  double *out2
+  std::vector<double> out1,
+  std::vector<double> out2
 ){
   std::uint64_t sn = dgg.bndRF().seqNum(add2D);
   string label = dgg::util::to_string(sn);
@@ -45,15 +44,14 @@ void outputCellAdd2D (
   DgLocation* tmpLoc = new DgLocation(add2D);
   DgCell cell(dgg.geoRF(), label, *tmpLoc, new DgPolygon(verts));
 
-  const auto georf& = dgg.geoRF();
-
   delete tmpLoc;
 
-  const auto reg& = cell.region();
-  for(unsigned int i=0;i<cell.size();i++){
-    const DgGeoCoord *add = geoRF.getAddress(reg[i]);
-    out1[i] = add->lonDegs();
-    out2[i] = add->latDegs();
+  const DgPolygon& reg = cell.region();
+  const auto &grf = dgg.geoRF();
+  for(unsigned int i=0;i<reg.size();i++){
+    const DgGeoCoord *add = grf.getAddress(reg[i]);
+    out1.push_back(add->lonDegs());
+    out2.push_back(add->latDegs());
   }
 }
 
@@ -66,22 +64,25 @@ void GeneratorGlobalGrid (
   std::string topology, //"HEXAGON", "DIAMOND", "TRIANGLE"
   std::string projection, //ISEA/FULLER
   bool ismixed43,
-  int  numap4
+  int  numap4,
+  std::vector<double> out1,
+  std::vector<double> out2
 ){
   DgRFNetwork net0;
-  geoRF = DgGeoSphRF(net0); //, dp.datum, dp.earthRadius);
-  dgg   = DgIDGG(geoRF, dp.vert0, dp.azimuthDegs, dp.aperture, dp.actualRes,
-            "DDG", dp.gridTopo, dp.projType, dp.isMixed43, dp.numAp4, 
-            dp.isSuperfund, dp.sfRes, dp.precision);
+  DgGeoSphRF geoRF(net0); //, dp.datum, dp.earthRadius);
+  DgGeoCoord pole(pole_lon_deg,pole_lat_deg,false);  
+
+  DgIDGG dgg(geoRF, pole, azimuth_deg, aperture, res, "DDG", topology, 
+    projection, ismixed43, numap4, false, 0, 7);
 
   DgGeoSphDegRF deg(geoRF, geoRF.name() + "Deg");
 
   DgLocation* addLoc = new DgLocation(dgg.bndRF().first());
   while(dgg.bndRF().validLocation(*addLoc)){
     DgPolygon verts(dgg);
-    dgg.setVertices(*addLoc, verts, dp.nDensify);
+    dgg.setVertices(*addLoc, verts, 0); //dp.npDensify
 
-    outputCellAdd2D(dp, dgg, *addLoc, verts, deg);
+    outputCellAdd2D(dgg, *addLoc, verts, deg, out1, out2);
 
     dgg.bndRF().incrementLocation(*addLoc);
   }
@@ -102,26 +103,28 @@ void GeneratorGridFromSeqNums (
   bool ismixed43,
   int  numap4,
   const std::vector<unsigned long int> seqnums_to_print,
+  std::vector<double> out1,
+  std::vector<double> out2
 ){
   DgRFNetwork net0;
-  geoRF = DgGeoSphRF(net0); //, dp.datum, dp.earthRadius);
-  dgg   = DgIDGG(geoRF, dp.vert0, dp.azimuthDegs, dp.aperture, dp.actualRes,
-            "DDG", dp.gridTopo, dp.projType, dp.isMixed43, dp.numAp4, 
-            dp.isSuperfund, dp.sfRes, dp.precision);
+  DgGeoSphRF geoRF (net0); //, dp.datum, dp.earthRadius);
+  DgGeoCoord pole(pole_lon_deg,pole_lat_deg,false);  
+  DgIDGG dgg(geoRF, pole, azimuth_deg, aperture, res, "DDG", topology, 
+    projection, ismixed43, numap4, false, 0, 7);
 
   DgGeoSphDegRF deg(geoRF, geoRF.name() + "Deg");
 
   for(const auto i: seqnums_to_print){
     DgLocation* loc = static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(i);
     if (!dgg.bndRF().validLocation(*loc)){
-      std::cerr<<"doTransform(): SEQNUM " << (*i)<< " not a valid location"<<std::endl;
+      std::cerr<<"doTransform(): SEQNUM " << i << " not a valid location"<<std::endl;
       ::report("doTransform(): Invalid SEQNUM found.", DgBase::Warning);
     }
 
     DgPolygon verts(dgg);
-    dgg.setVertices(*loc, verts, dp.nDensify);
+    dgg.setVertices(*loc, verts, 0); //dp.npDensify
 
-    outputCellAdd2D(dp, dgg, *loc, verts, deg);
+    outputCellAdd2D(dgg, *loc, verts, deg, out1, out2);
 
     delete loc;
   }
