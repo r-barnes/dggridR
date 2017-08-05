@@ -6,20 +6,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DgConstants.h"
-#include "dggrid.h"
-//#include "DgProjGnomonicRF.h"
-//#include "DgGeoProjConverter.h"
-
-#include "DgIDGG.h"
-#include "DgBoundedIDGG.h"
-#include "DgInputStream.h"
-#include "DgOutputStream.h"
-#include "DgCell.h"
-#include "DgOutAIGenFile.h"
-#include "DgProjGnomonicRF.h"
-#include "DgGeoProjConverter.h"
-
 #include "dglib.hpp"
 #include <cassert>
 
@@ -79,180 +65,433 @@ void orientGrid (MainParam& dp, DgGridPList& plist)
 
 namespace dglib {
 
-  ////////////////////////////////////////////////////////////////////////////////
-  void DgTransform (
-     long double  pole_lon_deg,
-     long double  pole_lat_deg,
-     long double  azimuth_deg,
-     unsigned int aperture,
-     int          res,
-     std::string topology, //"HEXAGON", "DIAMOND", "TRIANGLE"
-     std::string projection, //ISEA/FULLER
-     InType       in_type,
-     const double *const in1,
-     const double *const in2,
-     const double *const in3,
-     OutType      out_type,
-     double       *const out1,
-     double       *const out2,
-     double       *const out3,
-     const unsigned int N
-  ){
-    DgRFNetwork net0;
+  const std::string DgTransformer::TOPO_HEXAGON  = "HEXAGON";
+  const std::string DgTransformer::TOPO_DIAMOND  = "DIAMOND";
+  const std::string DgTransformer::TOPO_TRIANGLE = "TRIANGLE";
+  const std::string DgTransformer::PROJ_ISEA     = "ISEA";
+  const std::string DgTransformer::PROJ_FULLER   = "FULLER";
+
+  DgTransformer::DgTransformer (
+    const DgParams &dp
+  ) : geoRF(DgGeoSphRF(net0)),
+      dgg(
+        geoRF,       //geoRF:
+        DgGeoCoord(dp.pole_lon_deg,dp.pole_lat_deg,false),        //vert0:
+        dp.azimuth_deg, //azDegs:
+        dp.aperture,    //aperture:
+        dp.res,         //res:
+        "DDG",       //const string& name ??
+        dp.topology,    //gridTopo (HEXAGON, DIAMOND, TRIANGLE):
+        dp.projection,  //projType (ISEA, FULLER):
+        false,       //isMixed43 (true, false):
+        0,           //numAp4: number of leading aperture 4 resolutions in a mixed grid
+        false,       //isSuperfund (true, false): Is a superfund grid
+        0,           //sfRes: Superfund resolution
+        7            //Precision of printed output. NOTE: Should be unused here.
+      ),
+      deg(geoRF, geoRF.name() + "Deg")
+   {
     //DgGeoSphRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph", long double earthRadiusKMin = DEFAULT_RADIUS_KM)
     //DgGeoSphRF geoRF(net0, dp.datum, dp.earthRadius);
-    DgGeoSphRF geoRF(net0);
-
     //DgGeoCoord (long double lon, long double lat, bool rads = true) 
-    DgGeoCoord pole(pole_lon_deg,pole_lat_deg,false);  
-
-    DgIDGG dgg(
-      geoRF,       //geoRF:
-      pole,        //vert0:
-      azimuth_deg, //azDegs:
-      aperture,    //aperture:
-      res,         //res:
-      "DDG",       //const string& name ??
-      topology,    //gridTopo (HEXAGON, DIAMOND, TRIANGLE):
-      projection,  //projType (ISEA, FULLER):
-      false,       //isMixed43 (true, false):
-      0,           //numAp4: number of leading aperture 4 resolutions in a mixed grid
-      false,       //isSuperfund (true, false): Is a superfund grid
-      0,           //sfRes: Superfund resolution
-      7            //Precision of printed output. NOTE: Should be unused here.
-    );
-
     //DgIDGG(const DgGeoSphRF& geoRF, const DgGeoCoord& vert0, long double azDegs, unsigned int aperture, int res, const string& name, const string& gridTopo, const string& projType, bool isMixed43, int numAp4, bool isSuperfund, int sfRes, unsigned int precision)
-
+    // set-up to convert to degrees
+    //deg = DgGeoSphDegRF(geoRF, geoRF.name() + "Deg");
     //cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+  }
 
-     // set-up to convert to degrees
-    DgGeoSphDegRF deg(geoRF, geoRF.name() + "Deg");
+  DgTransformer::DgTransformer (
+    long double  pole_lon_deg,
+    long double  pole_lat_deg,
+    long double  azimuth_deg,
+    unsigned int aperture,
+    int          res,
+    std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
+    std::string  projection  //ISEA/FULLER
+  ) : geoRF(DgGeoSphRF(net0)),
+      dgg(
+        geoRF,       //geoRF:
+        DgGeoCoord(pole_lon_deg,pole_lat_deg,false),        //vert0:
+        azimuth_deg, //azDegs:
+        aperture,    //aperture:
+        res,         //res:
+        "DDG",       //const string& name ??
+        topology,    //gridTopo (HEXAGON, DIAMOND, TRIANGLE):
+        projection,  //projType (ISEA, FULLER):
+        false,       //isMixed43 (true, false):
+        0,           //numAp4: number of leading aperture 4 resolutions in a mixed grid
+        false,       //isSuperfund (true, false): Is a superfund grid
+        0,           //sfRes: Superfund resolution
+        7            //Precision of printed output. NOTE: Should be unused here.
+      ),
+      deg(geoRF, geoRF.name() + "Deg")
+   {
+    //DgGeoSphRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph", long double earthRadiusKMin = DEFAULT_RADIUS_KM)
+    //DgGeoSphRF geoRF(net0, dp.datum, dp.earthRadius);
+    //DgGeoCoord (long double lon, long double lat, bool rads = true) 
+    //DgIDGG(const DgGeoSphRF& geoRF, const DgGeoCoord& vert0, long double azDegs, unsigned int aperture, int res, const string& name, const string& gridTopo, const string& projType, bool isMixed43, int numAp4, bool isSuperfund, int sfRes, unsigned int precision)
+    // set-up to convert to degrees
+    //deg = DgGeoSphDegRF(geoRF, geoRF.name() + "Deg");
+    //cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+  }
 
-    switch(in_type){
-      case InType::SEQNUM:
-        assert(in1!=nullptr);
-        break;
-      case InType::GEO:
-        assert(in1!=nullptr && in2!=nullptr);
-        break;
-      case InType::PROJTRI:
-      case InType::Q2DD:
-      case InType::Q2DI:
-        assert(in1!=nullptr && in2!=nullptr && in3!=nullptr);
-        break;
-      default:
-        throw std::runtime_error("Unknown input coordinate system!");
-    }
+  std::shared_ptr<DgLocation> DgTransformer::inGEO    (long double lon_deg, long double lat_deg){
+    const DgGeoCoord dgc(lon_deg,lat_deg,false); //DgGeoCoord (long double lon, long double lat, bool rads = true) 
+    DgAddressBase *dab = new DgAddress<DgGeoCoord>(dgc);
+    return std::make_shared<DgLocation>(geoRF,dab);
+    delete dab;
+  }
 
-    switch(out_type){
-      case OutType::SEQNUM:
-        assert(out1!=nullptr);
-        break;
-      case OutType::GEO:
-      case OutType::PLANE:
-        assert(out1!=nullptr && out2!=nullptr);
-        break;
-      case OutType::PROJTRI:
-      case OutType::Q2DD:
-      case OutType::Q2DI:
-        assert(out1!=nullptr && out2!=nullptr && out3!=nullptr);
-        break;
-      default:
-        throw std::runtime_error("Unknown output coordinate system!");
-    }
+  std::shared_ptr<DgLocation> DgTransformer::inPROJTRI(uint64_t tnum, long double x, long double y){
+    const DgProjTriCoord dptc(tnum, DgDVec2D(x,y));
+    DgAddressBase *dab = new DgAddress<DgProjTriCoord>(dptc);
+    return std::make_shared<DgLocation>(dgg.projTriRF(),dab);
+    delete dab;
+  }
 
-    //Setup coordinate converter
-    const DgRFBase* pInRF = NULL;
-    switch(in_type){
-      case InType::GEO:         pInRF = &geoRF;            break;
-      case InType::PROJTRI:     pInRF = &dgg.projTriRF();  break;
-      //case InType::VERTEX2DD:   pInRF = &dgg.vertexRF();   break;
-      case InType::Q2DD:        pInRF = &dgg.q2ddRF();     break;
-      case InType::Q2DI:        pInRF = &dgg;              break;
-      case InType::SEQNUM:      pInRF = &dgg;              break;
-      default:
-        throw std::runtime_error("Unknown input coordinate system!");
-    }
-    const DgRFBase& inRF = *pInRF;
+  std::shared_ptr<DgLocation> DgTransformer::inQ2DD   (uint64_t quad, long double x, long double y){
+    const DgQ2DDCoord dgq(quad, DgDVec2D(x,y));
+    DgAddressBase *dab = new DgAddress<DgQ2DDCoord>(dgq);
+    return std::make_shared<DgLocation>(dgg.q2ddRF(),dab);
+    delete dab;
+  }
 
-    const DgRFBase* pOutRF = NULL;
-    switch(out_type){
-      case OutType::GEO:        pOutRF = &geoRF;           break;
-      case OutType::PROJTRI:    pOutRF = &dgg.projTriRF(); break;
-      //case OutType::VERTEX2DD:  pOutRF = &dgg.vertexRF();  break;
-      case OutType::Q2DD:       pOutRF = &dgg.q2ddRF();    break;
-      //case OutType::INTERLEAVE: pOutRF = &dgg.intRF();     break;
-      case OutType::PLANE:      pOutRF = &dgg.planeRF();   break;
-      case OutType::Q2DI:       pOutRF = &dgg;             break;
-      case OutType::SEQNUM:     pOutRF = &dgg;             break;
-      default:
-        throw std::runtime_error("Unknown input coordinate system!");
-    }
-    const DgRFBase& outRF = *pOutRF;
+  std::shared_ptr<DgLocation> DgTransformer::inQ2DI   (uint64_t quad, long double i, long double j){
+    const DgQ2DICoord dgq(quad, DgDVec2D(i,j));
+    DgAddressBase *dab = new DgAddress<DgQ2DICoord>(dgq);
+    return std::make_shared<DgLocation>(dgg,dab);
+    delete dab;
+  }
+
+  std::shared_ptr<DgLocation> DgTransformer::inSEQNUM (uint64_t seqnum){
+    DgLocation *loc = static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(seqnum);
+    return std::shared_ptr<DgLocation>(loc);
+  }
+
+  void DgTransformer::outGEO    (std::shared_ptr<DgLocation> loc, long double &lon_deg, long double &lat_deg){
+    geoRF.convert(loc.get());
+    const DgGeoCoord *add = geoRF.getAddress(*loc);
+    lon_deg = add->lonDegs();
+    lat_deg = add->latDegs();
+  }
+
+  void DgTransformer::outPROJTRI(std::shared_ptr<DgLocation> loc, uint64_t &tnum, long double &x, long double &y){
+    dgg.projTriRF().convert(loc.get());
+    const DgRFBase* pOutRF = &dgg.projTriRF();
+    const DgProjTriCoord *add = static_cast<const DgRF<DgProjTriCoord, long double>*>(pOutRF)->getAddress(*loc);
+    tnum = add->triNum();
+    x    = add->coord().x();
+    y    = add->coord().y();
+  }
+
+  void DgTransformer::outQ2DD   (std::shared_ptr<DgLocation> loc, uint64_t &quad, long double &x, long double &y){
+    dgg.q2ddRF().convert(loc.get());
+    const DgRFBase* pOutRF = &dgg.q2ddRF();
+    const DgQ2DDCoord *add = static_cast<const DgRF<DgQ2DDCoord, long double>*>(pOutRF)->getAddress(*loc);
+    quad = add->quadNum();
+    x    = add->coord().x();
+    y    = add->coord().y();
+  }
+
+  void DgTransformer::outPLANE  (std::shared_ptr<DgLocation> loc, long double &x, long double &y){
+    dgg.planeRF().convert(loc.get());
+    const DgRFBase* pOutRF = &dgg;
+    const DgDVec2D *add = static_cast<const DgRF<DgDVec2D, long double>*>(pOutRF)->getAddress(*loc);
+    x = add->x();
+    y = add->y();
+  }
+
+  void DgTransformer::outQ2DI   (std::shared_ptr<DgLocation> loc, uint64_t &quad, long double &i, long double &j){
+    dgg.convert(loc.get());
+    const DgRFBase* pOutRF = &dgg;
+    const DgQ2DICoord *add = static_cast<const DgRF<DgQ2DICoord, long double>*>(pOutRF)->getAddress(*loc);
+    quad = add->quadNum();
+    i    = add->coord().i();
+    j    = add->coord().j();
+  }
+
+  void DgTransformer::outSEQNUM (std::shared_ptr<DgLocation> loc, uint64_t &seqnum){
+    dgg.convert(loc.get());
+    seqnum = static_cast<const DgIDGG&>(dgg).bndRF().seqNum(*loc);
+  }
+
+
+
+
+
+
+
+  void GEO_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, long double *const out_lon_deg, long double *const out_lat_deg){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
     for(unsigned int i=0;i<N;i++){
-      DgLocation    *loc = NULL; 
-      DgAddressBase *dab = NULL;
-
-      if(in_type==InType::GEO) {
-        const DgGeoCoord dgc(in1[i],in2[i],false); //DgGeoCoord (long double lon, long double lat, bool rads = true) 
-        DgAddressBase *dab = new DgAddress<DgGeoCoord>(dgc);
-        loc = new DgLocation(inRF,dab);
-      } else if (in_type==InType::PROJTRI) {
-        const DgProjTriCoord dptc(in1[i], DgDVec2D(in2[i],in3[i]));
-        dab = new DgAddress<DgProjTriCoord>(dptc);
-        loc = new DgLocation(inRF,dab);
-      } else if (in_type==InType::Q2DD) {
-        const DgQ2DDCoord dgq(in1[i], DgDVec2D(in2[i],in3[i]));
-        dab = new DgAddress<DgQ2DDCoord>(dgq);
-        loc = new DgLocation(inRF,dab);
-      } else if (in_type==InType::Q2DI) {
-        const DgQ2DICoord dgq(in1[i], DgDVec2D(in2[i],in3[i]));
-        dab = new DgAddress<DgQ2DICoord>(dgq);
-        loc = new DgLocation(inRF,dab);
-      } else if (in_type==InType::SEQNUM){
-        loc = static_cast<const DgIDGG&>(inRF).bndRF().locFromSeqNum(in1[i]);
-      } else {
-        throw std::runtime_error("Unknown input coordinate system!");
-      }
-
-      delete dab;
-
-      outRF.convert(loc);       // convert the address
-
-      if(out_type==OutType::GEO){
-        const DgGeoCoord *add = geoRF.getAddress(*loc);
-        out1[i] = add->lonDegs();
-        out2[i] = add->latDegs();
-      } else if(out_type==OutType::PROJTRI){
-        const DgProjTriCoord *add = static_cast<const DgRF<DgProjTriCoord, long double>&>(outRF).getAddress(*loc);
-        out1[i] = add->triNum();
-        out2[i] = add->coord().x();
-        out3[i] = add->coord().y();
-      } else if(out_type==OutType::Q2DD){
-        const DgQ2DDCoord *add = static_cast<const DgRF<DgQ2DDCoord, long double>&>(outRF).getAddress(*loc);
-        out1[i] = add->quadNum();
-        out2[i] = add->coord().x();
-        out3[i] = add->coord().y();
-      } else if(out_type==OutType::PLANE){
-        const DgDVec2D *add = static_cast<const DgRF<DgDVec2D, long double>&>(outRF).getAddress(*loc);
-        out1[i] = add->x();
-        out2[i] = add->y();
-      } else if(out_type==OutType::Q2DI){
-        const DgQ2DICoord *add = static_cast<const DgRF<DgQ2DICoord, long double>&>(outRF).getAddress(*loc);
-        out1[i] = add->quadNum();
-        out2[i] = add->coord().i();
-        out3[i] = add->coord().j();
-      } else if(out_type==OutType::SEQNUM){
-        out1[i] = static_cast<const DgIDGG&>(outRF).bndRF().seqNum(*loc);
-      } else {
-        throw std::runtime_error("Unknown output coordinate system!");
-      }
-
-      delete loc;
+      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
+      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
     }
   }
+
+  void GEO_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
+      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
+    }
+  }
+
+  void GEO_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
+      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
+    }
+  }
+
+  void GEO_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
+      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
+    }
+  }
+
+  void GEO_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_seqnum){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
+      dgt.outSEQNUM(in, out_seqnum[i]);
+    }
+  }
+
+  void GEO_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, long double *const out_px, long double *const out_py){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
+      dgt.outPLANE(in, out_px[i], out_py[i]);
+    }
+  }
+
+  void PROJTRI_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, long double *const out_lon_deg, long double *const out_lat_deg){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
+      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
+    }
+  }
+
+  void PROJTRI_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
+      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
+    }
+  }
+
+  void PROJTRI_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
+      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
+    }
+  }
+
+  void PROJTRI_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
+      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
+    }
+  }
+
+  void PROJTRI_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_seqnum){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
+      dgt.outSEQNUM(in, out_seqnum[i]);
+    }
+  }
+
+  void PROJTRI_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, long double *const out_px, long double *const out_py){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
+      dgt.outPLANE(in, out_px[i], out_py[i]);
+    }
+  }
+
+  void Q2DD_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, long double *const out_lon_deg, long double *const out_lat_deg){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
+      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
+    }
+  }
+
+  void Q2DD_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
+      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
+    }
+  }
+
+  void Q2DD_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
+      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
+    }
+  }
+
+  void Q2DD_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
+      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
+    }
+  }
+
+  void Q2DD_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_seqnum){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
+      dgt.outSEQNUM(in, out_seqnum[i]);
+    }
+  }
+
+  void Q2DD_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, long double *const out_px, long double *const out_py){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
+      dgt.outPLANE(in, out_px[i], out_py[i]);
+    }
+  }
+
+  void Q2DI_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, long double *const out_lon_deg, long double *const out_lat_deg){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
+      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
+    }
+  }
+
+  void Q2DI_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
+      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
+    }
+  }
+
+  void Q2DI_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
+      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
+    }
+  }
+
+  void Q2DI_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
+      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
+    }
+  }
+
+  void Q2DI_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_seqnum){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
+      dgt.outSEQNUM(in, out_seqnum[i]);
+    }
+  }
+
+  void Q2DI_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, long double *const out_px, long double *const out_py){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
+      dgt.outPLANE(in, out_px[i], out_py[i]);
+    }
+  }
+
+  void SEQNUM_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, long double *const out_lon_deg, long double *const out_lat_deg){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inSEQNUM(in_seqnum[i]);
+      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
+    }
+  }
+
+  void SEQNUM_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inSEQNUM(in_seqnum[i]);
+      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
+    }
+  }
+
+  void SEQNUM_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inSEQNUM(in_seqnum[i]);
+      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
+    }
+  }
+
+  void SEQNUM_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inSEQNUM(in_seqnum[i]);
+      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
+    }
+  }
+
+  void SEQNUM_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_seqnum){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inSEQNUM(in_seqnum[i]);
+      dgt.outSEQNUM(in, out_seqnum[i]);
+    }
+  }
+
+  void SEQNUM_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, long double *const out_px, long double *const out_py){
+    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+
+    for(unsigned int i=0;i<N;i++){
+      auto in = dgt.inSEQNUM(in_seqnum[i]);
+      dgt.outPLANE(in, out_px[i], out_py[i]);
+    }
+  }
+
+
 }
 
 
