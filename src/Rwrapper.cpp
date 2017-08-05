@@ -2,8 +2,10 @@
 #include "dglib.hpp"
 #include <Rcpp.h>
 
+using namespace Rcpp;
+
 RCPP_MODULE(dgparams){
-  Rcpp::class_<dglib::DgParams>("DgParams")
+  Rcpp::class_<dglib::DgParams>("dgparams")
   
   .constructor()
   
