@@ -11,7 +11,7 @@
 
 #include <string>
 #include <set>
-#include <shapefil.h>
+#include "shapefil.h"
 #include "DgInShapefile.h"
 
 using namespace std;
@@ -155,7 +155,7 @@ operator<< (ostream& stream, const DgDBFfield& f)
       default: type = 'X'; break;
    }
    return stream << " type: " << type << " #" << f.fieldNum() 
-                 << " (" << f.width() << "/" << f.precision() << ")";
+                 << " (" << f.width() << "" << f.precision() << ")";
 
 } // ostream& operator<<
 

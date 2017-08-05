@@ -28,7 +28,7 @@ DgSeriesConverter::DgSeriesConverter
       if (series[i]->toFrame() != series[i+1]->fromFrame())
       {
          report(string("DgSeriesConverter::DgSeriesConverter() mismatch in "
-           "toFrame/fromFrame: ") + series[i]->toFrame().name() + string("/")
+           "toFrame/fromFrame: ") + series[i]->toFrame().name() + string("")
            + series[i+1]->fromFrame().name(), DgBase::Fatal);
       }
    }

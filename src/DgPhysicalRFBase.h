@@ -58,6 +58,6 @@ template<class C> class DgPhysicalRFBase {
       const DgBoundedRFBase& boundedRFBase_;
 };
 
-#include "../lib/DgPhysicalRFBase.hpp"
+#include "DgPhysicalRFBase.hpp"
 
 #endif

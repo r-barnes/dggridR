@@ -528,6 +528,6 @@ template <class A, class B, class DB> class Dg2WayResAddConverter
 };
 
 // JFW: is this really what we mean?
-#include "../lib/DgDiscRFS.hpp"
+#include "DgDiscRFS.hpp"
 
 #endif

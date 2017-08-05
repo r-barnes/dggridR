@@ -48,7 +48,7 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
 
    names[0] = fileNameIn;
    names[1] = fileNameIn + "." + suffix_;
-   names[2] = defaultDirectory_ + "/" + names[0];
+   names[2] = defaultDirectory_ + "" + names[0];
    names[3] = names[2] + "." + suffix_;
 
    int i;

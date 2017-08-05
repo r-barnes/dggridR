@@ -11,7 +11,7 @@
 
 #include <cstdio>
 #include <set>
-#include <shapefil.h>
+#include "shapefil.h"
 
 #include "DgInShapefileAtt.h"
 #include "DgOutLocFile.h"

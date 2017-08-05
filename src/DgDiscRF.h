@@ -197,6 +197,6 @@ class DgDiscRF : public DgRF<A, std::int64_t> {
 
 };
 
-#include "../lib/DgDiscRF.hpp"
+#include "DgDiscRF.hpp"
 
 #endif

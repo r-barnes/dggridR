@@ -40,6 +40,6 @@ template<class C> class DgPhysicalRF2D : public DgPhysicalRF<DgIVec2D, C> {
 
 };
 
-#include "../lib/DgPhysicalRF2D.hpp"
+#include "DgPhysicalRF2D.hpp"
 
 #endif

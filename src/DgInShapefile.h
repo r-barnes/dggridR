@@ -11,7 +11,7 @@
 
 #include <string>
 #include <fstream>
-#include <shapefil.h>
+#include "shapefil.h"
 #include "DgInLocFile.h"
 
 using namespace std;
