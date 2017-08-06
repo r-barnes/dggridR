@@ -805,7 +805,7 @@ DgIDGG::initialize (void)
       if (aperture() != 4) report(apErrStr, DgBase::Fatal);
    }
    else
-      report("DgIDGG::initialize(): invalid grid topo " + gridTopo(), 
+      report("DgIDGG::initialize(): invalid grid topo '" + gridTopo() + "'", 
              DgBase::Fatal);
 
    if (isMixed43())

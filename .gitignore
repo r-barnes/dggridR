@@ -20,3 +20,4 @@ wintest
 dggridR.Rcheck/
 mailinglist
 LICENCE
+*.so

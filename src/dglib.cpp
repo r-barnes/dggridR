@@ -8,6 +8,7 @@
 
 #include "dglib.hpp"
 #include <cassert>
+#include <fstream>
 
 void orientGrid (MainParam& dp, DgGridPList& plist)
 //
@@ -64,6 +65,18 @@ void orientGrid (MainParam& dp, DgGridPList& plist)
 } // void orientGrid
 
 namespace dglib {
+
+  void DgParams::print() const {
+    std::ofstream fout("/z/bob");
+    fout<<"pole_lon_deg = " << pole_lon_deg << std::endl;
+    fout<<"pole_lat_deg = " << pole_lat_deg << std::endl;
+    fout<<"azimuth_deg  = " << azimuth_deg  << std::endl;
+    fout<<"aperture     = " << aperture     << std::endl;
+    fout<<"res          = " << res          << std::endl;
+    fout<<"topology     = " << topology     << std::endl; 
+    fout<<"projection   = " << projection   << std::endl; 
+    fout.flush();
+  }
 
   const std::string DgTransformer::TOPO_HEXAGON  = "HEXAGON";
   const std::string DgTransformer::TOPO_DIAMOND  = "DIAMOND";
@@ -214,283 +227,6 @@ namespace dglib {
     dgg.convert(loc.get());
     seqnum = static_cast<const DgIDGG&>(dgg).bndRF().seqNum(*loc);
   }
-
-
-
-
-
-
-
-  void GEO_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, long double *const out_lon_deg, long double *const out_lat_deg){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
-      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
-    }
-  }
-
-  void GEO_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
-      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
-    }
-  }
-
-  void GEO_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
-      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
-    }
-  }
-
-  void GEO_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
-      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
-    }
-  }
-
-  void GEO_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_seqnum){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
-      dgt.outSEQNUM(in, out_seqnum[i]);
-    }
-  }
-
-  void GEO_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, long double *const out_px, long double *const out_py){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inGEO(in_lon_deg[i], in_lat_deg[i]);
-      dgt.outPLANE(in, out_px[i], out_py[i]);
-    }
-  }
-
-  void PROJTRI_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, long double *const out_lon_deg, long double *const out_lat_deg){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
-      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
-    }
-  }
-
-  void PROJTRI_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
-      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
-    }
-  }
-
-  void PROJTRI_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
-      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
-    }
-  }
-
-  void PROJTRI_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
-      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
-    }
-  }
-
-  void PROJTRI_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_seqnum){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
-      dgt.outSEQNUM(in, out_seqnum[i]);
-    }
-  }
-
-  void PROJTRI_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, long double *const out_px, long double *const out_py){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inPROJTRI(in_tnum[i], in_tx[i], in_ty[i]);
-      dgt.outPLANE(in, out_px[i], out_py[i]);
-    }
-  }
-
-  void Q2DD_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, long double *const out_lon_deg, long double *const out_lat_deg){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
-      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
-    }
-  }
-
-  void Q2DD_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
-      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
-    }
-  }
-
-  void Q2DD_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
-      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
-    }
-  }
-
-  void Q2DD_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
-      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
-    }
-  }
-
-  void Q2DD_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_seqnum){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
-      dgt.outSEQNUM(in, out_seqnum[i]);
-    }
-  }
-
-  void Q2DD_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, long double *const out_px, long double *const out_py){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DD(in_quad[i], in_qx[i], in_qy[i]);
-      dgt.outPLANE(in, out_px[i], out_py[i]);
-    }
-  }
-
-  void Q2DI_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, long double *const out_lon_deg, long double *const out_lat_deg){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
-      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
-    }
-  }
-
-  void Q2DI_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
-      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
-    }
-  }
-
-  void Q2DI_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
-      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
-    }
-  }
-
-  void Q2DI_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
-      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
-    }
-  }
-
-  void Q2DI_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_seqnum){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
-      dgt.outSEQNUM(in, out_seqnum[i]);
-    }
-  }
-
-  void Q2DI_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, long double *const out_px, long double *const out_py){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inQ2DI(in_quad[i], in_i[i], in_j[i]);
-      dgt.outPLANE(in, out_px[i], out_py[i]);
-    }
-  }
-
-  void SEQNUM_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, long double *const out_lon_deg, long double *const out_lat_deg){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inSEQNUM(in_seqnum[i]);
-      dgt.outGEO(in, out_lon_deg[i], out_lat_deg[i]);
-    }
-  }
-
-  void SEQNUM_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inSEQNUM(in_seqnum[i]);
-      dgt.outPROJTRI(in, out_tnum[i], out_tx[i], out_ty[i]);
-    }
-  }
-
-  void SEQNUM_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inSEQNUM(in_seqnum[i]);
-      dgt.outQ2DD(in, out_quad[i], out_qx[i], out_qy[i]);
-    }
-  }
-
-  void SEQNUM_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_quad, long double *const out_i, long double *const out_j){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inSEQNUM(in_seqnum[i]);
-      dgt.outQ2DI(in, out_quad[i], out_i[i], out_j[i]);
-    }
-  }
-
-  void SEQNUM_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_seqnum){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inSEQNUM(in_seqnum[i]);
-      dgt.outSEQNUM(in, out_seqnum[i]);
-    }
-  }
-
-  void SEQNUM_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, long double *const out_px, long double *const out_py){
-    dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
-
-    for(unsigned int i=0;i<N;i++){
-      auto in = dgt.inSEQNUM(in_seqnum[i]);
-      dgt.outPLANE(in, out_px[i], out_py[i]);
-    }
-  }
-
 
 }
 

@@ -102,41 +102,44 @@ dg_shpfname_south_africa <- file.path(find.package('dggridR'), "extdata", "ZAF_a
 #'
 #' @export 
 dgconstruct <- function(
-  type      = 'ISEA3H',
-  res       = NA,
-  precision = 7,
-  area      = NA,
-  spacing   = NA,
-  cls       = NA,
-  resround  = 'nearest',
-  metric    = TRUE,
-  show_info = TRUE,
-  azimuth   = 0,
-  pole_lat  = 58.28252559,
-  pole_lon  = 11.25
+  projection   = 'ISEA',
+  aperture     = 3,
+  topology     = 'HEXAGON',
+  res          = NA,
+  precision    = 7,
+  area         = NA,
+  spacing      = NA,
+  cls          = NA,
+  resround     = 'nearest',
+  metric       = TRUE,
+  show_info    = TRUE,
+  azimuth_deg  = 0,
+  pole_lat_deg = 58.28252559,
+  pole_lon_deg = 11.25
 ){
   if(sum(!is.na(c(res,area,spacing,cls)))!=1)
     stop('dgconstruct(): Only one of res, area, length, or cls can have a value!')
 
   #Use a dummy resolution, we'll fix it in a moment
   dggs <- list(
-    dggs_type                = type,
-    dggs_res_spec            = 1,
-    precision                = 7,
-    azimuth                  = azimuth,
-    pole_lat                 = pole_lat,
-    pole_lon                 = pole_lon,
-    dggs_orient_specify_type = "SPECIFIED"
+    pole_lon_deg = pole_lon_deg,
+    pole_lat_deg = pole_lat_deg,
+    azimuth_deg  = azimuth_deg,
+    aperture     = aperture,
+    res          = 1,
+    topology     = topology,
+    projection   = projection,
+    precision    = precision
   )
 
   if(!is.na(res))
-    dggs[['dggs_res_spec']] = res
+    dggs[['res']] = res
   else if(!is.na(area))
-    dggs[['dggs_res_spec']] = dg_closest_res_to_area   (dggs,area=area,      round=resround,metric=metric,show_info=TRUE)
+    dggs[['res']] = dg_closest_res_to_area   (dggs,area=area,      round=resround,metric=metric,show_info=TRUE)
   else if(!is.na(spacing))
-    dggs[['dggs_res_spec']] = dg_closest_res_to_spacing(dggs,spacing=spacing,round=resround,metric=metric,show_info=TRUE)
+    dggs[['res']] = dg_closest_res_to_spacing(dggs,spacing=spacing,round=resround,metric=metric,show_info=TRUE)
   else if(!is.na(cls))
-    dggs[['dggs_res_spec']] = dg_closest_res_to_cls    (dggs,cls=cls,        round=resround,metric=metric,show_info=TRUE)
+    dggs[['res']] = dg_closest_res_to_cls    (dggs,cls=cls,        round=resround,metric=metric,show_info=TRUE)
   else
     stop('dgconstruct(): Logic itself has failed us.')
 
@@ -223,23 +226,23 @@ dg_transform_for_output <- function(dggs){
 #' @export
 dgverify <- function(dggs){
   #See page 21 of documentation for further bounds
-  if(!(dggs[['dggs_type']] %in% c('ISEA3H','ISEA4H','ISEA43H','ISEA4T','ISEA4D','FULLER3H','FULLER4H','FULLER43H','FULLER4T','FULLER4D')))
-    stop('Unrecognised dggs type', call.=FALSE) #TODO: Where can they get valid types?
-  if(dggs[['dggs_res_spec']]<0)
+  if(!(dggs[['projection']] %in% c('ISEA','FULLER')))
+    stop('Unrecognised dggs projection', call.=FALSE) #TODO: Where can they get valid types?
+  if(!(dggs[['topology']] %in% c('HEXAGON','DIAMOND','TRIANGLE')))
+    stop('Unrecognised dggs topology', call.=FALSE) #TODO: Where can they get valid types?
+  if(!(dggs[['aperture']] %in% c(3,4)))
+    stop('Unrecognised dggs aperture', call.=FALSE) #TODO: Where can they get valid types?
+  if(dggs[['res']]<0)
     stop('dggs resolution must be >=0', call.=FALSE)
-  if(dggs[['dggs_res_spec']]>30)
+  if(dggs[['res']]>30)
     stop('dggs resolution must be <=30', call.=FALSE)
-  if(dggs[['precision']]<0)
-    stop('dggs precision must be >=0', call.=FALSE)
-  if(dggs[['precision']]>30)
-    stop('dggs precision must be <=30', call.=FALSE)
-  if(dggs[['azimuth']]<0 || dggs[['azimuth']]>360)
-    stop('dggs azimuth must be in the range [0,360]')
-  if(dggs[['pole_lat']]<(-90) || dggs[['pole_lat']]>90)
-    stop('dggs pole_lat must be in the range [-90,90]')
-  if(dggs[['pole_lon']]<(-180) || dggs[['pole_lon']]>180)
-    stop('dggs pole_lon must be in the range [-180,180]')
-  if(!all.equal(dggs[['dggs_res_spec']], as.integer(dggs[['dggs_res_spec']])))
+  if(dggs[['azimuth_deg']]<0 || dggs[['azimuth_deg']]>360)
+    stop('dggs azimuth_deg must be in the range [0,360]')
+  if(dggs[['pole_lat_deg']]<(-90) || dggs[['pole_lat_deg']]>90)
+    stop('dggs pole_lat_deg must be in the range [-90,90]')
+  if(dggs[['pole_lon_deg']]<(-180) || dggs[['pole_lon_deg']]>180)
+    stop('dggs pole_lon_deg must be in the range [-180,180]')
+  if(!all.equal(dggs[['res']], as.integer(dggs[['res']])))
     stop('dggs resolution must be an integer', call.=FALSE)
 }
 

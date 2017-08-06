@@ -1,4 +1,5 @@
 Rcpp:::loadModule("dgparams", TRUE)
+Rcpp:::loadModule("dgfuncs", TRUE)
 
 #TODO: Used to display start-up messages
 #.onAttach <- function(...) {
@@ -8,3 +9,7 @@ Rcpp:::loadModule("dgparams", TRUE)
     #                       "> vignette(\"rEDM_tutorial\")", sep = "\n")
     #packageStartupMessage(intro_message)
 #}
+
+
+#TODO
+#.Call('rEDM_compute_stats', PACKAGE = 'rEDM', observed, predicted)

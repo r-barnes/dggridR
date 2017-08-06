@@ -18,3 +18,7 @@ RCPP_MODULE(dgparams){
   .field("projection",   &dglib::DgParams::projection)
   ;
 }
+
+
+#include "cgen_body.h"
+#include "cgen_funcs.h"

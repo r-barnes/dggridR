@@ -27,8 +27,9 @@ namespace dglib {
     long double  azimuth_deg;
     unsigned int aperture;
     int          res;
-    std::string  topology;    //"HEXAGON", "DIAMOND", "TRIANGLE"
+    std::string  topology = "cheese";    //"HEXAGON", "DIAMOND", "TRIANGLE"
     std::string  projection;  //ISEA/FULLER
+    void print() const;
   };
 
   class DgTransformer {
@@ -67,72 +68,6 @@ namespace dglib {
     void outSEQNUM (std::shared_ptr<DgLocation> loc, uint64_t &seqnum);
     void outPLANE  (std::shared_ptr<DgLocation> loc, long double &x, long double &y);
   };
-
-
-
-
-  // [[Rcpp::export]]
-  void GEO_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, long double *const out_lon_deg, long double *const out_lat_deg);
-  // [[Rcpp::export]]
-  void GEO_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty);
-  // [[Rcpp::export]]
-  void GEO_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy);
-  // [[Rcpp::export]]
-  void GEO_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_quad, long double *const out_i, long double *const out_j);
-  // [[Rcpp::export]]
-  void GEO_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, uint64_t *const out_seqnum);
-  // [[Rcpp::export]]
-  void GEO_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const long double *const in_lon_deg, const long double *const in_lat_deg, long double *const out_px, long double *const out_py);
-  // [[Rcpp::export]]
-  void PROJTRI_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, long double *const out_lon_deg, long double *const out_lat_deg);
-  // [[Rcpp::export]]
-  void PROJTRI_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty);
-  // [[Rcpp::export]]
-  void PROJTRI_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy);
-  // [[Rcpp::export]]
-  void PROJTRI_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_quad, long double *const out_i, long double *const out_j);
-  // [[Rcpp::export]]
-  void PROJTRI_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, uint64_t *const out_seqnum);
-  // [[Rcpp::export]]
-  void PROJTRI_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_tnum, const long double *const in_tx, const long double *const in_ty, long double *const out_px, long double *const out_py);
-  // [[Rcpp::export]]
-  void Q2DD_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, long double *const out_lon_deg, long double *const out_lat_deg);
-  // [[Rcpp::export]]
-  void Q2DD_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty);
-  // [[Rcpp::export]]
-  void Q2DD_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy);
-  // [[Rcpp::export]]
-  void Q2DD_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_quad, long double *const out_i, long double *const out_j);
-  // [[Rcpp::export]]
-  void Q2DD_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, uint64_t *const out_seqnum);
-  // [[Rcpp::export]]
-  void Q2DD_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_qx, const long double *const in_qy, long double *const out_px, long double *const out_py);
-  // [[Rcpp::export]]
-  void Q2DI_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, long double *const out_lon_deg, long double *const out_lat_deg);
-  // [[Rcpp::export]]
-  void Q2DI_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty);
-  // [[Rcpp::export]]
-  void Q2DI_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy);
-  // [[Rcpp::export]]
-  void Q2DI_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_quad, long double *const out_i, long double *const out_j);
-  // [[Rcpp::export]]
-  void Q2DI_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, uint64_t *const out_seqnum);
-  // [[Rcpp::export]]
-  void Q2DI_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_quad, const long double *const in_i, const long double *const in_j, long double *const out_px, long double *const out_py);
-  // [[Rcpp::export]]
-  void SEQNUM_to_GEO(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, long double *const out_lon_deg, long double *const out_lat_deg);
-  // [[Rcpp::export]]
-  void SEQNUM_to_PROJTRI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_tnum, long double *const out_tx, long double *const out_ty);
-  // [[Rcpp::export]]
-  void SEQNUM_to_Q2DD(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_quad, long double *const out_qx, long double *const out_qy);
-  // [[Rcpp::export]]
-  void SEQNUM_to_Q2DI(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_quad, long double *const out_i, long double *const out_j);
-  // [[Rcpp::export]]
-  void SEQNUM_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, uint64_t *const out_seqnum);
-  // [[Rcpp::export]]
-  void SEQNUM_to_PLANE(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, unsigned int N, const uint64_t *const in_seqnum, long double *const out_px, long double *const out_py);
-
-
 
 }
 
