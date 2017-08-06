@@ -25,59 +25,6 @@
 //#include "DgDmdD4Grid2DS.h"
 #include "DgTriGrid2D.h"
 
-void orientGrid (MainParam& dp, DgGridPList& plist)
-//
-// Set the orientation parameters if not specified
-//
-{
-   if (dp.placeRandom) // randomize grid orientation
-   {
-      dp.vert0 = dp.orientRand->nextGeo();
-
-      dp.azimuthDegs = dp.orientRand->randInRange(0.0, 360.0);
-
-      // set the paramlist to match so we can print it back out
-
-      plist.setParam("dggs_orient_specify_type", "SPECIFIED");
-      plist.setParam("dggs_num_placements", dgg::util::to_string(1));
-      plist.setParam("dggs_vert0_lon", dgg::util::to_string(dp.vert0.lonDegs()));
-      plist.setParam("dggs_vert0_lat", dgg::util::to_string(dp.vert0.latDegs()));
-      plist.setParam("dggs_vert0_azimuth", dgg::util::to_string(dp.azimuthDegs));
-
-      cout << "Grid " << dp.curGrid <<
-           " #####################################################" << endl;
-      cout << "grid #" << dp.curGrid << " orientation randomized to: " << endl;
-      cout << plist << endl;
-   }
-   else if (dp.orientCenter && dp.curGrid == 1)
-   {
-      DgRFNetwork netc;
-      DgGeoSphRF geoRF(netc, "GS0", dp.earthRadius);
-
-      long double lonc = 0.0, latc = 0.0;
-      getParamValue(plist, "region_center_lon", lonc, false);
-      getParamValue(plist, "region_center_lat", latc, false);
-
-      DgProjGnomonicRF gnomc(netc, "cgnom", DgGeoCoord(lonc, latc, false)); 
-      Dg2WayGeoProjConverter(geoRF, gnomc);
-
-      DgLocation* gloc = gnomc.makeLocation(DgDVec2D(-7289214.618283, 
-                                                      7289214.618283));
-      geoRF.convert(gloc);
-   
-      DgGeoCoord p0 = *geoRF.getAddress(*gloc);
-      delete gloc;
-
-      gloc = gnomc.makeLocation(DgDVec2D(2784232.232959, 2784232.232959));
-      geoRF.convert(gloc);
-      DgGeoCoord p1 = *geoRF.getAddress(*gloc);
-      delete gloc;
-
-      dp.vert0 = p0;
-      dp.azimuthDegs = DgGeoSphRF::azimuth(p0, p1, false);
-   }
-
-} // void orientGrid
 
 namespace dglib {
 

@@ -36,7 +36,6 @@ class DgOutShapefile;
 
 class MainParam;
 class DgGridPList;
-void orientGrid (MainParam& dp, DgGridPList& plist);
 
 // gridgen.cpp
 
