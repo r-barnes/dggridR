@@ -33,7 +33,7 @@ sig = """void {intype}_to_{outtype}({typed_proj_args}, {in_args}, {out_args});
 #// [[Rcpp::export]]
 ftemplate = """
 void {intype}_to_{outtype}({typed_proj_args}, unsigned int N, {in_args}, {out_args}){{
-  dglib::DgTransformer dgt({proj_args});
+  dglib::Transformer dgt({proj_args});
 
   for(unsigned int i=0;i<{size};i++){{
 {translatein}
@@ -121,7 +121,7 @@ for i in in_arg:
 fout_funcs.write("}")
 
 # void DgGEO_to_SEQNUM(long double pole_lon_deg, long double pole_lat_deg, long double azimuth_deg, unsigned int aperture, int res, std::string topology, std::string projection, const std::vector<long double> &lon_deg, const std::vector<long double> &lat_deg, std::vector<uint64_t> &seqnum){
-#   dglib::DgTransformer dgt(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection);
+#   dglib::Transformer dgt(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection);
 
 #   for(unsigned int i=0;i<lon_deg.size();i++){
 #     auto in = dgt.inGEO(lon_deg.at(i),lat_deg.at(i));

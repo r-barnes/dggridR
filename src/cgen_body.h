@@ -1,6 +1,6 @@
 
 void GEO_to_GEO(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_lon_deg, Rcpp::NumericVector in_lat_deg, Rcpp::NumericVector out_lon_deg, Rcpp::NumericVector out_lat_deg){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const long double tin_lon_deg = in_lon_deg[i];
@@ -15,7 +15,7 @@ void GEO_to_GEO(const long double pole_lon_deg, const long double pole_lat_deg, 
 }
 
 void GEO_to_PROJTRI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_lon_deg, Rcpp::NumericVector in_lat_deg, Rcpp::NumericVector out_tnum, Rcpp::NumericVector out_tx, Rcpp::NumericVector out_ty){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const long double tin_lon_deg = in_lon_deg[i];
@@ -32,7 +32,7 @@ void GEO_to_PROJTRI(const long double pole_lon_deg, const long double pole_lat_d
 }
 
 void GEO_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_lon_deg, Rcpp::NumericVector in_lat_deg, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_qx, Rcpp::NumericVector out_qy){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const long double tin_lon_deg = in_lon_deg[i];
@@ -49,7 +49,7 @@ void GEO_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_deg,
 }
 
 void GEO_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_lon_deg, Rcpp::NumericVector in_lat_deg, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_i, Rcpp::NumericVector out_j){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const long double tin_lon_deg = in_lon_deg[i];
@@ -66,7 +66,7 @@ void GEO_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_deg,
 }
 
 void GEO_to_SEQNUM(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_lon_deg, Rcpp::NumericVector in_lat_deg, Rcpp::NumericVector out_seqnum){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const long double tin_lon_deg = in_lon_deg[i];
@@ -79,7 +79,7 @@ void GEO_to_SEQNUM(const long double pole_lon_deg, const long double pole_lat_de
 }
 
 void GEO_to_PLANE(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_lon_deg, Rcpp::NumericVector in_lat_deg, Rcpp::NumericVector out_px, Rcpp::NumericVector out_py){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const long double tin_lon_deg = in_lon_deg[i];
@@ -94,7 +94,7 @@ void GEO_to_PLANE(const long double pole_lon_deg, const long double pole_lat_deg
 }
 
 void PROJTRI_to_GEO(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_tnum, Rcpp::NumericVector in_tx, Rcpp::NumericVector in_ty, Rcpp::NumericVector out_lon_deg, Rcpp::NumericVector out_lat_deg){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_tnum = in_tnum[i];
@@ -110,7 +110,7 @@ void PROJTRI_to_GEO(const long double pole_lon_deg, const long double pole_lat_d
 }
 
 void PROJTRI_to_PROJTRI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_tnum, Rcpp::NumericVector in_tx, Rcpp::NumericVector in_ty, Rcpp::NumericVector out_tnum, Rcpp::NumericVector out_tx, Rcpp::NumericVector out_ty){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_tnum = in_tnum[i];
@@ -128,7 +128,7 @@ void PROJTRI_to_PROJTRI(const long double pole_lon_deg, const long double pole_l
 }
 
 void PROJTRI_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_tnum, Rcpp::NumericVector in_tx, Rcpp::NumericVector in_ty, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_qx, Rcpp::NumericVector out_qy){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_tnum = in_tnum[i];
@@ -146,7 +146,7 @@ void PROJTRI_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_
 }
 
 void PROJTRI_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_tnum, Rcpp::NumericVector in_tx, Rcpp::NumericVector in_ty, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_i, Rcpp::NumericVector out_j){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_tnum = in_tnum[i];
@@ -164,7 +164,7 @@ void PROJTRI_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_
 }
 
 void PROJTRI_to_SEQNUM(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_tnum, Rcpp::NumericVector in_tx, Rcpp::NumericVector in_ty, Rcpp::NumericVector out_seqnum){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_tnum = in_tnum[i];
@@ -178,7 +178,7 @@ void PROJTRI_to_SEQNUM(const long double pole_lon_deg, const long double pole_la
 }
 
 void PROJTRI_to_PLANE(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_tnum, Rcpp::NumericVector in_tx, Rcpp::NumericVector in_ty, Rcpp::NumericVector out_px, Rcpp::NumericVector out_py){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_tnum = in_tnum[i];
@@ -194,7 +194,7 @@ void PROJTRI_to_PLANE(const long double pole_lon_deg, const long double pole_lat
 }
 
 void Q2DD_to_GEO(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_qx, Rcpp::NumericVector in_qy, Rcpp::NumericVector out_lon_deg, Rcpp::NumericVector out_lat_deg){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -210,7 +210,7 @@ void Q2DD_to_GEO(const long double pole_lon_deg, const long double pole_lat_deg,
 }
 
 void Q2DD_to_PROJTRI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_qx, Rcpp::NumericVector in_qy, Rcpp::NumericVector out_tnum, Rcpp::NumericVector out_tx, Rcpp::NumericVector out_ty){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -228,7 +228,7 @@ void Q2DD_to_PROJTRI(const long double pole_lon_deg, const long double pole_lat_
 }
 
 void Q2DD_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_qx, Rcpp::NumericVector in_qy, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_qx, Rcpp::NumericVector out_qy){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -246,7 +246,7 @@ void Q2DD_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_deg
 }
 
 void Q2DD_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_qx, Rcpp::NumericVector in_qy, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_i, Rcpp::NumericVector out_j){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -264,7 +264,7 @@ void Q2DD_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_deg
 }
 
 void Q2DD_to_SEQNUM(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_qx, Rcpp::NumericVector in_qy, Rcpp::NumericVector out_seqnum){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -278,7 +278,7 @@ void Q2DD_to_SEQNUM(const long double pole_lon_deg, const long double pole_lat_d
 }
 
 void Q2DD_to_PLANE(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_qx, Rcpp::NumericVector in_qy, Rcpp::NumericVector out_px, Rcpp::NumericVector out_py){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -294,7 +294,7 @@ void Q2DD_to_PLANE(const long double pole_lon_deg, const long double pole_lat_de
 }
 
 void Q2DI_to_GEO(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_i, Rcpp::NumericVector in_j, Rcpp::NumericVector out_lon_deg, Rcpp::NumericVector out_lat_deg){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -310,7 +310,7 @@ void Q2DI_to_GEO(const long double pole_lon_deg, const long double pole_lat_deg,
 }
 
 void Q2DI_to_PROJTRI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_i, Rcpp::NumericVector in_j, Rcpp::NumericVector out_tnum, Rcpp::NumericVector out_tx, Rcpp::NumericVector out_ty){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -328,7 +328,7 @@ void Q2DI_to_PROJTRI(const long double pole_lon_deg, const long double pole_lat_
 }
 
 void Q2DI_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_i, Rcpp::NumericVector in_j, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_qx, Rcpp::NumericVector out_qy){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -346,7 +346,7 @@ void Q2DI_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_deg
 }
 
 void Q2DI_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_i, Rcpp::NumericVector in_j, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_i, Rcpp::NumericVector out_j){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -364,7 +364,7 @@ void Q2DI_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_deg
 }
 
 void Q2DI_to_SEQNUM(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_i, Rcpp::NumericVector in_j, Rcpp::NumericVector out_seqnum){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -378,7 +378,7 @@ void Q2DI_to_SEQNUM(const long double pole_lon_deg, const long double pole_lat_d
 }
 
 void Q2DI_to_PLANE(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_quad, Rcpp::NumericVector in_i, Rcpp::NumericVector in_j, Rcpp::NumericVector out_px, Rcpp::NumericVector out_py){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_quad = in_quad[i];
@@ -394,7 +394,7 @@ void Q2DI_to_PLANE(const long double pole_lon_deg, const long double pole_lat_de
 }
 
 void SEQNUM_to_GEO(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_seqnum, Rcpp::NumericVector out_lon_deg, Rcpp::NumericVector out_lat_deg){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_seqnum = in_seqnum[i];
@@ -408,7 +408,7 @@ void SEQNUM_to_GEO(const long double pole_lon_deg, const long double pole_lat_de
 }
 
 void SEQNUM_to_PROJTRI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_seqnum, Rcpp::NumericVector out_tnum, Rcpp::NumericVector out_tx, Rcpp::NumericVector out_ty){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_seqnum = in_seqnum[i];
@@ -424,7 +424,7 @@ void SEQNUM_to_PROJTRI(const long double pole_lon_deg, const long double pole_la
 }
 
 void SEQNUM_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_seqnum, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_qx, Rcpp::NumericVector out_qy){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_seqnum = in_seqnum[i];
@@ -440,7 +440,7 @@ void SEQNUM_to_Q2DD(const long double pole_lon_deg, const long double pole_lat_d
 }
 
 void SEQNUM_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_seqnum, Rcpp::NumericVector out_quad, Rcpp::NumericVector out_i, Rcpp::NumericVector out_j){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_seqnum = in_seqnum[i];
@@ -456,7 +456,7 @@ void SEQNUM_to_Q2DI(const long double pole_lon_deg, const long double pole_lat_d
 }
 
 void SEQNUM_to_SEQNUM(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_seqnum, Rcpp::NumericVector out_seqnum){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_seqnum = in_seqnum[i];
@@ -468,7 +468,7 @@ void SEQNUM_to_SEQNUM(const long double pole_lon_deg, const long double pole_lat
 }
 
 void SEQNUM_to_PLANE(const long double pole_lon_deg, const long double pole_lat_deg, const long double azimuth_deg, const unsigned int aperture, const int res, const std::string topology, const std::string projection, unsigned int N, Rcpp::NumericVector in_seqnum, Rcpp::NumericVector out_px, Rcpp::NumericVector out_py){
-  dglib::DgTransformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
+  dglib::Transformer dgt(pole_lon_deg, pole_lat_deg, azimuth_deg, aperture, res, topology, projection);
 
   for(unsigned int i=0;i<N;i++){
     const uint64_t tin_seqnum = in_seqnum[i];

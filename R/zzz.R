@@ -1,4 +1,5 @@
 Rcpp:::loadModule("dgfuncs", TRUE)
+Rcpp:::loadModule("gridgens", TRUE)
 
 #TODO: Used to display start-up messages
 #.onAttach <- function(...) {
