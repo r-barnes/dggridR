@@ -52,9 +52,16 @@ dg_shpfname_south_africa <- file.path(find.package('dggridR'), "extdata", "ZAF_a
 #' @description
 #'             Construct a discrete global grid system (dggs) object
 #' 
-#' @param type Type of grid to use. Options are: ISEA3H, ISEA4H, ISEA43H, 
-#'             ISEA4T, ISEA4D, FULLER3H, FULLER4H, FULLER43H, FULLER4T,
-#'             and FULLER4D. Default: ISEA3H
+#' @param projection Type of grid to use. Options are: ISEA and FULLER.
+#'                   Default: ISEA3H
+#'
+#' @param topology   Shape of cell. Options are: HEXAGON, DIAMOND, TRIANGLE.
+#'                   Default: HEXAGON
+#'
+#' @parma aperture   How finely subsequent resolution levels divide the grid.
+#'                   Options are: 3, 4. Not all options work with all 
+#'                   projections and topologies.
+#'                   Default: 3
 #'
 #' @param res  Resolution. Must be in the range [0,30]. Larger values represent
 #'             finer resolutions. Appropriate resolutions can be found with
@@ -82,14 +89,14 @@ dg_shpfname_south_africa <- file.path(find.package('dggridR'), "extdata", "ZAF_a
 #' @param metric    Whether input and output should be in metric (TRUE) or
 #'                  imperial (FALSE)
 #'
-#' @param azimuth   Rotation in degrees of grid about its pole, value in [0,360].
-#'                  Default=0.
+#' @param azimuth_deg   Rotation in degrees of grid about its pole, value in [0,360].
+#'                      Default=0.
 #'
-#' @param pole_lat  Latitude in degrees of the pole, value in [-90,90].
-#'                  Default=58.28252559.
+#' @param pole_lat_deg  Latitude in degrees of the pole, value in [-90,90].
+#'                      Default=58.28252559.
 #'
-#' @param pole_lon  Longitude in degrees of the pole, value in [-180,180].
-#'                  Default=11.25.
+#' @param pole_lon_deg  Longitude in degrees of the pole, value in [-180,180].
+#'                      Default=11.25.
 #'
 #' @return          Returns a dggs object which can be passed to other dggridR
 #'                  functions

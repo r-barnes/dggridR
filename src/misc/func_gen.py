@@ -73,6 +73,10 @@ dg{intype}_to_{outtype} <- function(dggs, {Rin}){{
 {init_out}
 
   dggridR:::{intype}_to_{outtype}({dgproj_args}, N, {Rin}, {Rout})
+
+  list(
+{Routlist}
+  )
 }}
 """
 
@@ -100,11 +104,12 @@ for c in codes:
         in_args         = ', '.join(['Rcpp::NumericVector in_{1}'.format(ia[0],ia[1]) for ia in i[1]]),
         out_args        = ', '.join(['Rcpp::NumericVector out_{1}'.format(oa[0],oa[1]) for oa in o[1]]),
         size            = 'N',
-        Rparams         = '#\'', #\n'.join(["#' @param {0}  {1}".format(ia[1],ia[2]) for ia in i[1]]),
+        Rparams         = '\n'.join(["#' @param {0}  {1}".format(ia[1],ia[2]) for ia in i[1]]),
         Rin             = ', '.join('in_'+ia[1] for ia in i[1]),
         Rout            = ', '.join('out_'+oa[1] for oa in o[1]),
-        init_out        = '\n'.join(['  out_{0} <- rep(0,length(N))'.format(oa[1]) for oa in o[1]]),
-        Rin1            = 'in_'+i[1][0][1]
+        init_out        = '\n'.join(['  out_{0} <- rep(0,N)'.format(oa[1]) for oa in o[1]]),
+        Rin1            = 'in_'+i[1][0][1],
+        Routlist        = ',\n'.join(['    {0} = out_{0}'.format(oa[1]) for oa in o[1]])
       )
       fout.write(outstr)
 

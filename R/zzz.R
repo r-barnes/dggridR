@@ -8,7 +8,3 @@ Rcpp:::loadModule("dgfuncs", TRUE)
     #                       "> vignette(\"rEDM_tutorial\")", sep = "\n")
     #packageStartupMessage(intro_message)
 #}
-
-
-#TODO
-#.Call('rEDM_compute_stats', PACKAGE = 'rEDM', observed, predicted)
