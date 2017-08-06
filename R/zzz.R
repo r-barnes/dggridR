@@ -1,4 +1,3 @@
-Rcpp:::loadModule("dgparams", TRUE)
 Rcpp:::loadModule("dgfuncs", TRUE)
 
 #TODO: Used to display start-up messages
