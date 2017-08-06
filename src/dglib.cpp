@@ -24,6 +24,7 @@
 //#include "DgDmdD4Grid2D.h"
 //#include "DgDmdD4Grid2DS.h"
 #include "DgTriGrid2D.h"
+#include "DgIDGGS.h"
 
 
 namespace dglib {
@@ -55,6 +56,7 @@ namespace dglib {
     // set-up to convert to degrees
     //deg = DgGeoSphDegRF(geoRF, geoRF.name() + "Deg");
     //cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+    init(dp.pole_lon_deg,dp.pole_lat_deg,dp.azimuth_deg,dp.aperture,dp.res,dp.topology,dp.projection);
   }
 
   GridThing::GridThing (
@@ -90,8 +92,48 @@ namespace dglib {
     // set-up to convert to degrees
     //deg = DgGeoSphDegRF(geoRF, geoRF.name() + "Deg");
     //cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
+    init(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection);
   }
 
+  void GridThing::init (
+    long double  pole_lon_deg,
+    long double  pole_lat_deg,
+    long double  azimuth_deg,
+    unsigned int aperture,
+    int          res,
+    std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
+    std::string  projection  //ISEA/FULLER
+  ){
+    DgGeoCoord pole(pole_lon_deg,pole_lat_deg,false);
+    idggs.reset(DgIDGGS::makeRF(net0, geoRF, pole, azimuth_deg, aperture, res+1,
+      topology, "IDGGS", projection, false, 0, false));
+    myres = res;
+  }
+
+  double GridThing::nCells()     const { return nCells(myres);     }
+  double GridThing::cellAreaKM() const { return cellAreaKM(myres); }
+  double GridThing::cellDistKM() const { return cellDistKM(myres); }
+  double GridThing::cls()        const { return cls(myres);        }
+
+  double GridThing::nCells(int res) const {
+    const DgGridStats& gs = idggs->idgg(res).gridStats();
+    return gs.nCells();
+  }
+
+  double GridThing::cellAreaKM(int res) const {
+    const DgGridStats& gs = idggs->idgg(res).gridStats();
+    return gs.cellAreaKM();
+  }
+
+  double GridThing::cellDistKM(int res) const {
+    const DgGridStats& gs = idggs->idgg(res).gridStats();
+    return gs.cellDistKM();
+  }
+
+  double GridThing::cls(int res) const {
+    const DgGridStats& gs = idggs->idgg(res).gridStats();
+    return gs.cls();
+  }
 
 
 
@@ -332,25 +374,4 @@ namespace dglib {
     return sn;
   }
 
-
 }
-
-
-
-
-
-
-
-
-
-/*   
-   if (tmp == "GENERATE_GRID")
-      pdp = new GridGenParam(plist);
-   else if (tmp == "OUTPUT_STATS")   
-      pdp = new MainParam(plist);
-
-   if (tmp == "GENERATE_GRID")
-      doGridGen(static_cast<GridGenParam&>(*pdp), plist);
-   else if (tmp == "OUTPUT_STATS")   
-      doTable(*pdp, plist);
-*/

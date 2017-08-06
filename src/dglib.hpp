@@ -17,6 +17,7 @@
 #include "DgOutAIGenFile.h"
 #include "DgProjGnomonicRF.h"
 #include "DgGeoProjConverter.h"
+#include "DgIDGGS.h"
 
 namespace dglib {
 
@@ -38,6 +39,9 @@ namespace dglib {
   };
 
   class GridThing {
+   private:
+    std::unique_ptr<const DgIDGGS> idggs;
+    int myres;
    protected:
     DgRFNetwork   net0;
     DgGeoSphRF    geoRF;
@@ -54,6 +58,23 @@ namespace dglib {
       std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
       std::string  projection  //ISEA/FULLER
     );
+    void init (
+      long double  pole_lon_deg,
+      long double  pole_lat_deg,
+      long double  azimuth_deg,
+      unsigned int aperture,
+      int          res,
+      std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
+      std::string  projection  //ISEA/FULLER
+    );
+    double nCells() const;
+    double cellAreaKM() const;
+    double cellDistKM() const;
+    double cls() const;
+    double nCells(int res) const;
+    double cellAreaKM(int res) const;
+    double cellDistKM(int res) const;
+    double cls(int res) const;
   };
 
   class Transformer : public GridThing {

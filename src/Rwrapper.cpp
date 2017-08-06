@@ -69,9 +69,41 @@ Rcpp::List SeqNumGrid(
   );
 }
 
+
+double GridStat_nCells    (std::string projection, std::string topology, int aperture, int res) {
+  dglib::GridThing gt(0,0,0,aperture,res,topology,projection);
+  return gt.nCells(res);
+}
+
+double GridStat_cellAreaKM(std::string projection, std::string topology, int aperture, int res) {
+  dglib::GridThing gt(0,0,0,aperture,res,topology,projection);
+  return gt.cellAreaKM(res);
+}
+
+double GridStat_cellDistKM(std::string projection, std::string topology, int aperture, int res) {
+  dglib::GridThing gt(0,0,0,aperture,res,topology,projection);
+  return gt.cellDistKM(res);
+}
+
+double GridStat_cls       (std::string projection, std::string topology, int aperture, int res) {
+  dglib::GridThing gt(0,0,0,aperture,res,topology,projection);
+  return gt.cls(res);
+}
+
+
+
+
+
 RCPP_MODULE(gridgens){
-  Rcpp::function("GlobalGrid", &GlobalGrid);
-  Rcpp::function("SeqNumGrid", &SeqNumGrid);
+  Rcpp::function("GlobalGrid",          &GlobalGrid          );
+  Rcpp::function("SeqNumGrid",          &SeqNumGrid          );
+}
+
+RCPP_MODULE(gridstats){
+  Rcpp::function("GridStat_nCells",     &GridStat_nCells     );
+  Rcpp::function("GridStat_cellAreaKM", &GridStat_cellAreaKM );
+  Rcpp::function("GridStat_cellDistKM", &GridStat_cellDistKM );
+  Rcpp::function("GridStat_cls",        &GridStat_cls        );
 }
 
 #include "cgen_body.h"

@@ -463,21 +463,15 @@ dginfo <- function(dggs){
 dggetres <- function(dggs){
   dgverify(dggs)
 
-  dggs[['dggrid_operation']] = 'OUTPUT_STATS'
-  dggs[['dggs_res_spec']]    = 30 #Used so that we get all resolution levels
-  dggs[['precision']]        = 30 #Used so that very fine meshes still give us numbers >0
+  ress <- 0:30
 
-  ret <- dgrun(dggs, check=FALSE, has_output_file=FALSE)
-
-  table_start <- grep('^Res',ret)-1
-
-  ret <- tail(ret,-table_start)
-  ret <- gsub(',','',ret)
-
-  #Redefine table header so that it converts to a nice data frame
-  ret[[1]]<-"Res Cells AreaKm SpacingKm CLSKm"
-
-  read.table(textConnection(ret), header=TRUE)
+  data.frame(
+    res        = ress,
+    cells      = sapply(ress, function(r) GridStat_nCells(dggs[['projection']], dggs[['topology']], dggs[['aperture']], r)),
+    area_km    = sapply(ress, function(r) GridStat_cellAreaKM(dggs[['projection']], dggs[['topology']], dggs[['aperture']], r)),
+    spacing_km = sapply(ress, function(r) GridStat_cellDistKM(dggs[['projection']], dggs[['topology']], dggs[['aperture']], r)),
+    cls_km     = sapply(ress, function(r) GridStat_cls(dggs[['projection']], dggs[['topology']], dggs[['aperture']], r))
+  )
 }
 
 
