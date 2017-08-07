@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgRF.hpp: DgRF template class definition.
+// DgRF_template.h: DgRF template class definition.
 //
 // Version 6.1 - Kevin Sahr, 5/23/13
 //

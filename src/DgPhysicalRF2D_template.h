@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgPhysicalRF2D.hpp: DgPhysicalRF2D template class definition.
+// DgPhysicalRF2D_template.h: DgPhysicalRF2D template class definition.
 //
 // Version 6.1 - Kevin Sahr, 5/23/13
 //

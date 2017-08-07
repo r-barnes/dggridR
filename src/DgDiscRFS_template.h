@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRFS.hpp: DgDiscRFS template class definition.
+// DgDiscRFS_template.h: DgDiscRFS template class definition.
 //
 // Version 6.1 - Kevin Sahr, 5/23/13
 //

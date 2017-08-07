@@ -55,6 +55,6 @@ template<class A, class C, class B, class DB> class DgPhysicalRF
 
 };
 
-#include "DgPhysicalRF.hpp"
+#include "DgPhysicalRF_template.h"
 
 #endif

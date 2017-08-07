@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgPhysicalRF.hpp: DgPhysicalRF template class definition.
+// DgPhysicalRF_template.h: DgPhysicalRF template class definition.
 //
 // Version 6.1 - Kevin Sahr, 5/23/13
 //

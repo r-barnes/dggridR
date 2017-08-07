@@ -122,6 +122,6 @@ template <class A, class D> class DgRF : public DgRFBase {
 
 };
 
-#include "DgRF.hpp"
+#include "DgRF_template.h"
 
 #endif
