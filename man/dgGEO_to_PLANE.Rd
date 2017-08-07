@@ -7,9 +7,9 @@
 dgGEO_to_PLANE(dggs, in_lon_deg, in_lat_deg)
 }
 \arguments{
-\item{lon_deg}{Vector of longitude, in degrees}
+\item{in_lon_deg}{Vector of longitude, in degrees}
 
-\item{lat_deg}{Vector of latitude, in degrees}
+\item{in_lat_deg}{Vector of latitude, in degrees}
 }
 \value{
 Returns a dggs object which can be passed to other dggridR
@@ -23,6 +23,6 @@ Uses a discrete global grid system to convert between GEO
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
-GEO_to_PLANE(dggs, in_lon_deg, in_lat_deg)
+dgGEO_to_PLANE(dggs, in_lon_deg, in_lat_deg)
 
 }

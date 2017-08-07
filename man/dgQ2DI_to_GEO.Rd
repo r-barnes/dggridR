@@ -7,11 +7,11 @@
 dgQ2DI_to_GEO(dggs, in_quad, in_i, in_j)
 }
 \arguments{
-\item{quad}{Vector of quad numbers}
+\item{in_quad}{Vector of quad numbers}
 
-\item{i}{Vector of quadrant i values}
+\item{in_i}{Vector of quadrant i values}
 
-\item{j}{Vector of quadrant j values}
+\item{in_j}{Vector of quadrant j values}
 }
 \value{
 Returns a dggs object which can be passed to other dggridR
@@ -25,6 +25,6 @@ Uses a discrete global grid system to convert between Q2DI
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
-Q2DI_to_GEO(dggs, in_quad, in_i, in_j)
+dgQ2DI_to_GEO(dggs, in_quad, in_i, in_j)
 
 }

@@ -7,11 +7,11 @@
 dgPROJTRI_to_Q2DD(dggs, in_tnum, in_tx, in_ty)
 }
 \arguments{
-\item{tnum}{Vector of triangle numbers}
+\item{in_tnum}{Vector of triangle numbers}
 
-\item{tx}{Vector of triangle x values}
+\item{in_tx}{Vector of triangle x values}
 
-\item{ty}{Vector of triangle y values}
+\item{in_ty}{Vector of triangle y values}
 }
 \value{
 Returns a dggs object which can be passed to other dggridR
@@ -25,6 +25,6 @@ Uses a discrete global grid system to convert between PROJTRI
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
-PROJTRI_to_Q2DD(dggs, in_tnum, in_tx, in_ty)
+dgPROJTRI_to_Q2DD(dggs, in_tnum, in_tx, in_ty)
 
 }

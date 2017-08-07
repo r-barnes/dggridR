@@ -7,7 +7,7 @@
 dgSEQNUM_to_Q2DD(dggs, in_seqnum)
 }
 \arguments{
-\item{seqnum}{Globally unique number identifying the surface polygon}
+\item{in_seqnum}{Globally unique number identifying the surface polygon}
 }
 \value{
 Returns a dggs object which can be passed to other dggridR
@@ -21,6 +21,6 @@ Uses a discrete global grid system to convert between SEQNUM
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
-SEQNUM_to_Q2DD(dggs, in_seqnum)
+dgSEQNUM_to_Q2DD(dggs, in_seqnum)
 
 }

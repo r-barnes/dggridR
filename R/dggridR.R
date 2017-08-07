@@ -1,6 +1,8 @@
 #' @importFrom utils read.csv read.table tail write.table
 #' @importFrom rgdal readOGR
+#' @importFrom rgdal writeOGR
 #' @importFrom ggplot2 fortify
+#' @importFrom methods as
 #' @import     dplyr
 #' @import     sp
 #' @useDynLib  dggridR

@@ -1,4 +1,4 @@
 library(testthat)
 library(dggridR)
 
-test_check("dggridR")
+#test_check("dggridR")

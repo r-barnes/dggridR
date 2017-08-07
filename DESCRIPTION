@@ -1,8 +1,8 @@
 Package: dggridR
 Type: Package
 Title: Discrete Global Grids for R
-Version: 1.0.1
-Date: 2017-04-23
+Version: 2.0.0
+Date: 2017-08-07
 Author: Richard Barnes [aut, cre], Kevin Sahr [ctb], Gerald Evenden [ctb], Angus Johnson [ctb], Frank Warmerdam [ctb]
 Maintainer: Richard Barnes <rbarnes@umn.edu>
 NeedsCompilation: yes
@@ -23,7 +23,8 @@ Description: Spatial analyses involving binning require that every bin have the 
 URL: https://github.com/r-barnes/dggridR/
 BugReports: https://github.com/r-barnes/dggridR/
 Imports:
-  Rcpp (>= 0.12.12)
+  Rcpp (>= 0.12.12),
+  methods (>= 3.4.0)
 LinkingTo: Rcpp
 RcppModules: dgfuncs, gridgens, gridstats
 RoxygenNote: 6.0.1

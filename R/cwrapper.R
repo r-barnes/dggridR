@@ -7,8 +7,8 @@
 #'             Uses a discrete global grid system to convert between GEO
 #'             and GEO (see vignette for details)
 #' 
-#' @param lon_deg  Vector of longitude, in degrees
-#' @param lat_deg  Vector of latitude, in degrees
+#' @param in_lon_deg  Vector of longitude, in degrees
+#' @param in_lat_deg  Vector of latitude, in degrees
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -17,7 +17,7 @@
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' GEO_to_GEO(dggs, in_lon_deg, in_lat_deg)
+#' dgGEO_to_GEO(dggs, in_lon_deg, in_lat_deg)
 #'
 #' @export 
 dgGEO_to_GEO <- function(dggs, in_lon_deg, in_lat_deg){
@@ -43,8 +43,8 @@ dgGEO_to_GEO <- function(dggs, in_lon_deg, in_lat_deg){
 #'             Uses a discrete global grid system to convert between GEO
 #'             and PROJTRI (see vignette for details)
 #' 
-#' @param lon_deg  Vector of longitude, in degrees
-#' @param lat_deg  Vector of latitude, in degrees
+#' @param in_lon_deg  Vector of longitude, in degrees
+#' @param in_lat_deg  Vector of latitude, in degrees
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -53,7 +53,7 @@ dgGEO_to_GEO <- function(dggs, in_lon_deg, in_lat_deg){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' GEO_to_PROJTRI(dggs, in_lon_deg, in_lat_deg)
+#' dgGEO_to_PROJTRI(dggs, in_lon_deg, in_lat_deg)
 #'
 #' @export 
 dgGEO_to_PROJTRI <- function(dggs, in_lon_deg, in_lat_deg){
@@ -81,8 +81,8 @@ dgGEO_to_PROJTRI <- function(dggs, in_lon_deg, in_lat_deg){
 #'             Uses a discrete global grid system to convert between GEO
 #'             and Q2DD (see vignette for details)
 #' 
-#' @param lon_deg  Vector of longitude, in degrees
-#' @param lat_deg  Vector of latitude, in degrees
+#' @param in_lon_deg  Vector of longitude, in degrees
+#' @param in_lat_deg  Vector of latitude, in degrees
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -91,7 +91,7 @@ dgGEO_to_PROJTRI <- function(dggs, in_lon_deg, in_lat_deg){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' GEO_to_Q2DD(dggs, in_lon_deg, in_lat_deg)
+#' dgGEO_to_Q2DD(dggs, in_lon_deg, in_lat_deg)
 #'
 #' @export 
 dgGEO_to_Q2DD <- function(dggs, in_lon_deg, in_lat_deg){
@@ -119,8 +119,8 @@ dgGEO_to_Q2DD <- function(dggs, in_lon_deg, in_lat_deg){
 #'             Uses a discrete global grid system to convert between GEO
 #'             and Q2DI (see vignette for details)
 #' 
-#' @param lon_deg  Vector of longitude, in degrees
-#' @param lat_deg  Vector of latitude, in degrees
+#' @param in_lon_deg  Vector of longitude, in degrees
+#' @param in_lat_deg  Vector of latitude, in degrees
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -129,7 +129,7 @@ dgGEO_to_Q2DD <- function(dggs, in_lon_deg, in_lat_deg){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' GEO_to_Q2DI(dggs, in_lon_deg, in_lat_deg)
+#' dgGEO_to_Q2DI(dggs, in_lon_deg, in_lat_deg)
 #'
 #' @export 
 dgGEO_to_Q2DI <- function(dggs, in_lon_deg, in_lat_deg){
@@ -157,8 +157,8 @@ dgGEO_to_Q2DI <- function(dggs, in_lon_deg, in_lat_deg){
 #'             Uses a discrete global grid system to convert between GEO
 #'             and SEQNUM (see vignette for details)
 #' 
-#' @param lon_deg  Vector of longitude, in degrees
-#' @param lat_deg  Vector of latitude, in degrees
+#' @param in_lon_deg  Vector of longitude, in degrees
+#' @param in_lat_deg  Vector of latitude, in degrees
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -167,7 +167,7 @@ dgGEO_to_Q2DI <- function(dggs, in_lon_deg, in_lat_deg){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' GEO_to_SEQNUM(dggs, in_lon_deg, in_lat_deg)
+#' dgGEO_to_SEQNUM(dggs, in_lon_deg, in_lat_deg)
 #'
 #' @export 
 dgGEO_to_SEQNUM <- function(dggs, in_lon_deg, in_lat_deg){
@@ -191,8 +191,8 @@ dgGEO_to_SEQNUM <- function(dggs, in_lon_deg, in_lat_deg){
 #'             Uses a discrete global grid system to convert between GEO
 #'             and PLANE (see vignette for details)
 #' 
-#' @param lon_deg  Vector of longitude, in degrees
-#' @param lat_deg  Vector of latitude, in degrees
+#' @param in_lon_deg  Vector of longitude, in degrees
+#' @param in_lat_deg  Vector of latitude, in degrees
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -201,7 +201,7 @@ dgGEO_to_SEQNUM <- function(dggs, in_lon_deg, in_lat_deg){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' GEO_to_PLANE(dggs, in_lon_deg, in_lat_deg)
+#' dgGEO_to_PLANE(dggs, in_lon_deg, in_lat_deg)
 #'
 #' @export 
 dgGEO_to_PLANE <- function(dggs, in_lon_deg, in_lat_deg){
@@ -227,9 +227,9 @@ dgGEO_to_PLANE <- function(dggs, in_lon_deg, in_lat_deg){
 #'             Uses a discrete global grid system to convert between PROJTRI
 #'             and GEO (see vignette for details)
 #' 
-#' @param tnum  Vector of triangle numbers
-#' @param tx  Vector of triangle x values
-#' @param ty  Vector of triangle y values
+#' @param in_tnum  Vector of triangle numbers
+#' @param in_tx  Vector of triangle x values
+#' @param in_ty  Vector of triangle y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -238,7 +238,7 @@ dgGEO_to_PLANE <- function(dggs, in_lon_deg, in_lat_deg){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' PROJTRI_to_GEO(dggs, in_tnum, in_tx, in_ty)
+#' dgPROJTRI_to_GEO(dggs, in_tnum, in_tx, in_ty)
 #'
 #' @export 
 dgPROJTRI_to_GEO <- function(dggs, in_tnum, in_tx, in_ty){
@@ -264,9 +264,9 @@ dgPROJTRI_to_GEO <- function(dggs, in_tnum, in_tx, in_ty){
 #'             Uses a discrete global grid system to convert between PROJTRI
 #'             and PROJTRI (see vignette for details)
 #' 
-#' @param tnum  Vector of triangle numbers
-#' @param tx  Vector of triangle x values
-#' @param ty  Vector of triangle y values
+#' @param in_tnum  Vector of triangle numbers
+#' @param in_tx  Vector of triangle x values
+#' @param in_ty  Vector of triangle y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -275,7 +275,7 @@ dgPROJTRI_to_GEO <- function(dggs, in_tnum, in_tx, in_ty){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' PROJTRI_to_PROJTRI(dggs, in_tnum, in_tx, in_ty)
+#' dgPROJTRI_to_PROJTRI(dggs, in_tnum, in_tx, in_ty)
 #'
 #' @export 
 dgPROJTRI_to_PROJTRI <- function(dggs, in_tnum, in_tx, in_ty){
@@ -303,9 +303,9 @@ dgPROJTRI_to_PROJTRI <- function(dggs, in_tnum, in_tx, in_ty){
 #'             Uses a discrete global grid system to convert between PROJTRI
 #'             and Q2DD (see vignette for details)
 #' 
-#' @param tnum  Vector of triangle numbers
-#' @param tx  Vector of triangle x values
-#' @param ty  Vector of triangle y values
+#' @param in_tnum  Vector of triangle numbers
+#' @param in_tx  Vector of triangle x values
+#' @param in_ty  Vector of triangle y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -314,7 +314,7 @@ dgPROJTRI_to_PROJTRI <- function(dggs, in_tnum, in_tx, in_ty){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' PROJTRI_to_Q2DD(dggs, in_tnum, in_tx, in_ty)
+#' dgPROJTRI_to_Q2DD(dggs, in_tnum, in_tx, in_ty)
 #'
 #' @export 
 dgPROJTRI_to_Q2DD <- function(dggs, in_tnum, in_tx, in_ty){
@@ -342,9 +342,9 @@ dgPROJTRI_to_Q2DD <- function(dggs, in_tnum, in_tx, in_ty){
 #'             Uses a discrete global grid system to convert between PROJTRI
 #'             and Q2DI (see vignette for details)
 #' 
-#' @param tnum  Vector of triangle numbers
-#' @param tx  Vector of triangle x values
-#' @param ty  Vector of triangle y values
+#' @param in_tnum  Vector of triangle numbers
+#' @param in_tx  Vector of triangle x values
+#' @param in_ty  Vector of triangle y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -353,7 +353,7 @@ dgPROJTRI_to_Q2DD <- function(dggs, in_tnum, in_tx, in_ty){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' PROJTRI_to_Q2DI(dggs, in_tnum, in_tx, in_ty)
+#' dgPROJTRI_to_Q2DI(dggs, in_tnum, in_tx, in_ty)
 #'
 #' @export 
 dgPROJTRI_to_Q2DI <- function(dggs, in_tnum, in_tx, in_ty){
@@ -381,9 +381,9 @@ dgPROJTRI_to_Q2DI <- function(dggs, in_tnum, in_tx, in_ty){
 #'             Uses a discrete global grid system to convert between PROJTRI
 #'             and SEQNUM (see vignette for details)
 #' 
-#' @param tnum  Vector of triangle numbers
-#' @param tx  Vector of triangle x values
-#' @param ty  Vector of triangle y values
+#' @param in_tnum  Vector of triangle numbers
+#' @param in_tx  Vector of triangle x values
+#' @param in_ty  Vector of triangle y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -392,7 +392,7 @@ dgPROJTRI_to_Q2DI <- function(dggs, in_tnum, in_tx, in_ty){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' PROJTRI_to_SEQNUM(dggs, in_tnum, in_tx, in_ty)
+#' dgPROJTRI_to_SEQNUM(dggs, in_tnum, in_tx, in_ty)
 #'
 #' @export 
 dgPROJTRI_to_SEQNUM <- function(dggs, in_tnum, in_tx, in_ty){
@@ -416,9 +416,9 @@ dgPROJTRI_to_SEQNUM <- function(dggs, in_tnum, in_tx, in_ty){
 #'             Uses a discrete global grid system to convert between PROJTRI
 #'             and PLANE (see vignette for details)
 #' 
-#' @param tnum  Vector of triangle numbers
-#' @param tx  Vector of triangle x values
-#' @param ty  Vector of triangle y values
+#' @param in_tnum  Vector of triangle numbers
+#' @param in_tx  Vector of triangle x values
+#' @param in_ty  Vector of triangle y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -427,7 +427,7 @@ dgPROJTRI_to_SEQNUM <- function(dggs, in_tnum, in_tx, in_ty){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' PROJTRI_to_PLANE(dggs, in_tnum, in_tx, in_ty)
+#' dgPROJTRI_to_PLANE(dggs, in_tnum, in_tx, in_ty)
 #'
 #' @export 
 dgPROJTRI_to_PLANE <- function(dggs, in_tnum, in_tx, in_ty){
@@ -453,9 +453,9 @@ dgPROJTRI_to_PLANE <- function(dggs, in_tnum, in_tx, in_ty){
 #'             Uses a discrete global grid system to convert between Q2DD
 #'             and GEO (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param qx  Vector of quadrant x values
-#' @param qy  Vector of quadrant y values
+#' @param in_quad  Vector of quad numbers
+#' @param in_qx  Vector of quadrant x values
+#' @param in_qy  Vector of quadrant y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -464,7 +464,7 @@ dgPROJTRI_to_PLANE <- function(dggs, in_tnum, in_tx, in_ty){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DD_to_GEO(dggs, in_quad, in_qx, in_qy)
+#' dgQ2DD_to_GEO(dggs, in_quad, in_qx, in_qy)
 #'
 #' @export 
 dgQ2DD_to_GEO <- function(dggs, in_quad, in_qx, in_qy){
@@ -490,9 +490,9 @@ dgQ2DD_to_GEO <- function(dggs, in_quad, in_qx, in_qy){
 #'             Uses a discrete global grid system to convert between Q2DD
 #'             and PROJTRI (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param qx  Vector of quadrant x values
-#' @param qy  Vector of quadrant y values
+#' @param in_quad  Vector of quad numbers
+#' @param in_qx  Vector of quadrant x values
+#' @param in_qy  Vector of quadrant y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -501,7 +501,7 @@ dgQ2DD_to_GEO <- function(dggs, in_quad, in_qx, in_qy){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DD_to_PROJTRI(dggs, in_quad, in_qx, in_qy)
+#' dgQ2DD_to_PROJTRI(dggs, in_quad, in_qx, in_qy)
 #'
 #' @export 
 dgQ2DD_to_PROJTRI <- function(dggs, in_quad, in_qx, in_qy){
@@ -529,9 +529,9 @@ dgQ2DD_to_PROJTRI <- function(dggs, in_quad, in_qx, in_qy){
 #'             Uses a discrete global grid system to convert between Q2DD
 #'             and Q2DD (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param qx  Vector of quadrant x values
-#' @param qy  Vector of quadrant y values
+#' @param in_quad  Vector of quad numbers
+#' @param in_qx  Vector of quadrant x values
+#' @param in_qy  Vector of quadrant y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -540,7 +540,7 @@ dgQ2DD_to_PROJTRI <- function(dggs, in_quad, in_qx, in_qy){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DD_to_Q2DD(dggs, in_quad, in_qx, in_qy)
+#' dgQ2DD_to_Q2DD(dggs, in_quad, in_qx, in_qy)
 #'
 #' @export 
 dgQ2DD_to_Q2DD <- function(dggs, in_quad, in_qx, in_qy){
@@ -568,9 +568,9 @@ dgQ2DD_to_Q2DD <- function(dggs, in_quad, in_qx, in_qy){
 #'             Uses a discrete global grid system to convert between Q2DD
 #'             and Q2DI (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param qx  Vector of quadrant x values
-#' @param qy  Vector of quadrant y values
+#' @param in_quad  Vector of quad numbers
+#' @param in_qx  Vector of quadrant x values
+#' @param in_qy  Vector of quadrant y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -579,7 +579,7 @@ dgQ2DD_to_Q2DD <- function(dggs, in_quad, in_qx, in_qy){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DD_to_Q2DI(dggs, in_quad, in_qx, in_qy)
+#' dgQ2DD_to_Q2DI(dggs, in_quad, in_qx, in_qy)
 #'
 #' @export 
 dgQ2DD_to_Q2DI <- function(dggs, in_quad, in_qx, in_qy){
@@ -607,9 +607,9 @@ dgQ2DD_to_Q2DI <- function(dggs, in_quad, in_qx, in_qy){
 #'             Uses a discrete global grid system to convert between Q2DD
 #'             and SEQNUM (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param qx  Vector of quadrant x values
-#' @param qy  Vector of quadrant y values
+#' @param in_quad  Vector of quad numbers
+#' @param in_qx  Vector of quadrant x values
+#' @param in_qy  Vector of quadrant y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -618,7 +618,7 @@ dgQ2DD_to_Q2DI <- function(dggs, in_quad, in_qx, in_qy){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DD_to_SEQNUM(dggs, in_quad, in_qx, in_qy)
+#' dgQ2DD_to_SEQNUM(dggs, in_quad, in_qx, in_qy)
 #'
 #' @export 
 dgQ2DD_to_SEQNUM <- function(dggs, in_quad, in_qx, in_qy){
@@ -642,9 +642,9 @@ dgQ2DD_to_SEQNUM <- function(dggs, in_quad, in_qx, in_qy){
 #'             Uses a discrete global grid system to convert between Q2DD
 #'             and PLANE (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param qx  Vector of quadrant x values
-#' @param qy  Vector of quadrant y values
+#' @param in_quad  Vector of quad numbers
+#' @param in_qx  Vector of quadrant x values
+#' @param in_qy  Vector of quadrant y values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -653,7 +653,7 @@ dgQ2DD_to_SEQNUM <- function(dggs, in_quad, in_qx, in_qy){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DD_to_PLANE(dggs, in_quad, in_qx, in_qy)
+#' dgQ2DD_to_PLANE(dggs, in_quad, in_qx, in_qy)
 #'
 #' @export 
 dgQ2DD_to_PLANE <- function(dggs, in_quad, in_qx, in_qy){
@@ -679,9 +679,9 @@ dgQ2DD_to_PLANE <- function(dggs, in_quad, in_qx, in_qy){
 #'             Uses a discrete global grid system to convert between Q2DI
 #'             and GEO (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param i  Vector of quadrant i values
-#' @param j  Vector of quadrant j values
+#' @param in_quad  Vector of quad numbers
+#' @param in_i  Vector of quadrant i values
+#' @param in_j  Vector of quadrant j values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -690,7 +690,7 @@ dgQ2DD_to_PLANE <- function(dggs, in_quad, in_qx, in_qy){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DI_to_GEO(dggs, in_quad, in_i, in_j)
+#' dgQ2DI_to_GEO(dggs, in_quad, in_i, in_j)
 #'
 #' @export 
 dgQ2DI_to_GEO <- function(dggs, in_quad, in_i, in_j){
@@ -716,9 +716,9 @@ dgQ2DI_to_GEO <- function(dggs, in_quad, in_i, in_j){
 #'             Uses a discrete global grid system to convert between Q2DI
 #'             and PROJTRI (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param i  Vector of quadrant i values
-#' @param j  Vector of quadrant j values
+#' @param in_quad  Vector of quad numbers
+#' @param in_i  Vector of quadrant i values
+#' @param in_j  Vector of quadrant j values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -727,7 +727,7 @@ dgQ2DI_to_GEO <- function(dggs, in_quad, in_i, in_j){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DI_to_PROJTRI(dggs, in_quad, in_i, in_j)
+#' dgQ2DI_to_PROJTRI(dggs, in_quad, in_i, in_j)
 #'
 #' @export 
 dgQ2DI_to_PROJTRI <- function(dggs, in_quad, in_i, in_j){
@@ -755,9 +755,9 @@ dgQ2DI_to_PROJTRI <- function(dggs, in_quad, in_i, in_j){
 #'             Uses a discrete global grid system to convert between Q2DI
 #'             and Q2DD (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param i  Vector of quadrant i values
-#' @param j  Vector of quadrant j values
+#' @param in_quad  Vector of quad numbers
+#' @param in_i  Vector of quadrant i values
+#' @param in_j  Vector of quadrant j values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -766,7 +766,7 @@ dgQ2DI_to_PROJTRI <- function(dggs, in_quad, in_i, in_j){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DI_to_Q2DD(dggs, in_quad, in_i, in_j)
+#' dgQ2DI_to_Q2DD(dggs, in_quad, in_i, in_j)
 #'
 #' @export 
 dgQ2DI_to_Q2DD <- function(dggs, in_quad, in_i, in_j){
@@ -794,9 +794,9 @@ dgQ2DI_to_Q2DD <- function(dggs, in_quad, in_i, in_j){
 #'             Uses a discrete global grid system to convert between Q2DI
 #'             and Q2DI (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param i  Vector of quadrant i values
-#' @param j  Vector of quadrant j values
+#' @param in_quad  Vector of quad numbers
+#' @param in_i  Vector of quadrant i values
+#' @param in_j  Vector of quadrant j values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -805,7 +805,7 @@ dgQ2DI_to_Q2DD <- function(dggs, in_quad, in_i, in_j){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DI_to_Q2DI(dggs, in_quad, in_i, in_j)
+#' dgQ2DI_to_Q2DI(dggs, in_quad, in_i, in_j)
 #'
 #' @export 
 dgQ2DI_to_Q2DI <- function(dggs, in_quad, in_i, in_j){
@@ -833,9 +833,9 @@ dgQ2DI_to_Q2DI <- function(dggs, in_quad, in_i, in_j){
 #'             Uses a discrete global grid system to convert between Q2DI
 #'             and SEQNUM (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param i  Vector of quadrant i values
-#' @param j  Vector of quadrant j values
+#' @param in_quad  Vector of quad numbers
+#' @param in_i  Vector of quadrant i values
+#' @param in_j  Vector of quadrant j values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -844,7 +844,7 @@ dgQ2DI_to_Q2DI <- function(dggs, in_quad, in_i, in_j){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DI_to_SEQNUM(dggs, in_quad, in_i, in_j)
+#' dgQ2DI_to_SEQNUM(dggs, in_quad, in_i, in_j)
 #'
 #' @export 
 dgQ2DI_to_SEQNUM <- function(dggs, in_quad, in_i, in_j){
@@ -868,9 +868,9 @@ dgQ2DI_to_SEQNUM <- function(dggs, in_quad, in_i, in_j){
 #'             Uses a discrete global grid system to convert between Q2DI
 #'             and PLANE (see vignette for details)
 #' 
-#' @param quad  Vector of quad numbers
-#' @param i  Vector of quadrant i values
-#' @param j  Vector of quadrant j values
+#' @param in_quad  Vector of quad numbers
+#' @param in_i  Vector of quadrant i values
+#' @param in_j  Vector of quadrant j values
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -879,7 +879,7 @@ dgQ2DI_to_SEQNUM <- function(dggs, in_quad, in_i, in_j){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' Q2DI_to_PLANE(dggs, in_quad, in_i, in_j)
+#' dgQ2DI_to_PLANE(dggs, in_quad, in_i, in_j)
 #'
 #' @export 
 dgQ2DI_to_PLANE <- function(dggs, in_quad, in_i, in_j){
@@ -905,7 +905,7 @@ dgQ2DI_to_PLANE <- function(dggs, in_quad, in_i, in_j){
 #'             Uses a discrete global grid system to convert between SEQNUM
 #'             and GEO (see vignette for details)
 #' 
-#' @param seqnum  Globally unique number identifying the surface polygon
+#' @param in_seqnum  Globally unique number identifying the surface polygon
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -914,7 +914,7 @@ dgQ2DI_to_PLANE <- function(dggs, in_quad, in_i, in_j){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' SEQNUM_to_GEO(dggs, in_seqnum)
+#' dgSEQNUM_to_GEO(dggs, in_seqnum)
 #'
 #' @export 
 dgSEQNUM_to_GEO <- function(dggs, in_seqnum){
@@ -940,7 +940,7 @@ dgSEQNUM_to_GEO <- function(dggs, in_seqnum){
 #'             Uses a discrete global grid system to convert between SEQNUM
 #'             and PROJTRI (see vignette for details)
 #' 
-#' @param seqnum  Globally unique number identifying the surface polygon
+#' @param in_seqnum  Globally unique number identifying the surface polygon
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -949,7 +949,7 @@ dgSEQNUM_to_GEO <- function(dggs, in_seqnum){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' SEQNUM_to_PROJTRI(dggs, in_seqnum)
+#' dgSEQNUM_to_PROJTRI(dggs, in_seqnum)
 #'
 #' @export 
 dgSEQNUM_to_PROJTRI <- function(dggs, in_seqnum){
@@ -977,7 +977,7 @@ dgSEQNUM_to_PROJTRI <- function(dggs, in_seqnum){
 #'             Uses a discrete global grid system to convert between SEQNUM
 #'             and Q2DD (see vignette for details)
 #' 
-#' @param seqnum  Globally unique number identifying the surface polygon
+#' @param in_seqnum  Globally unique number identifying the surface polygon
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -986,7 +986,7 @@ dgSEQNUM_to_PROJTRI <- function(dggs, in_seqnum){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' SEQNUM_to_Q2DD(dggs, in_seqnum)
+#' dgSEQNUM_to_Q2DD(dggs, in_seqnum)
 #'
 #' @export 
 dgSEQNUM_to_Q2DD <- function(dggs, in_seqnum){
@@ -1014,7 +1014,7 @@ dgSEQNUM_to_Q2DD <- function(dggs, in_seqnum){
 #'             Uses a discrete global grid system to convert between SEQNUM
 #'             and Q2DI (see vignette for details)
 #' 
-#' @param seqnum  Globally unique number identifying the surface polygon
+#' @param in_seqnum  Globally unique number identifying the surface polygon
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -1023,7 +1023,7 @@ dgSEQNUM_to_Q2DD <- function(dggs, in_seqnum){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' SEQNUM_to_Q2DI(dggs, in_seqnum)
+#' dgSEQNUM_to_Q2DI(dggs, in_seqnum)
 #'
 #' @export 
 dgSEQNUM_to_Q2DI <- function(dggs, in_seqnum){
@@ -1051,7 +1051,7 @@ dgSEQNUM_to_Q2DI <- function(dggs, in_seqnum){
 #'             Uses a discrete global grid system to convert between SEQNUM
 #'             and SEQNUM (see vignette for details)
 #' 
-#' @param seqnum  Globally unique number identifying the surface polygon
+#' @param in_seqnum  Globally unique number identifying the surface polygon
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -1060,7 +1060,7 @@ dgSEQNUM_to_Q2DI <- function(dggs, in_seqnum){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' SEQNUM_to_SEQNUM(dggs, in_seqnum)
+#' dgSEQNUM_to_SEQNUM(dggs, in_seqnum)
 #'
 #' @export 
 dgSEQNUM_to_SEQNUM <- function(dggs, in_seqnum){
@@ -1084,7 +1084,7 @@ dgSEQNUM_to_SEQNUM <- function(dggs, in_seqnum){
 #'             Uses a discrete global grid system to convert between SEQNUM
 #'             and PLANE (see vignette for details)
 #' 
-#' @param seqnum  Globally unique number identifying the surface polygon
+#' @param in_seqnum  Globally unique number identifying the surface polygon
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
@@ -1093,7 +1093,7 @@ dgSEQNUM_to_SEQNUM <- function(dggs, in_seqnum){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' SEQNUM_to_PLANE(dggs, in_seqnum)
+#' dgSEQNUM_to_PLANE(dggs, in_seqnum)
 #'
 #' @export 
 dgSEQNUM_to_PLANE <- function(dggs, in_seqnum){

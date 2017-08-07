@@ -7,11 +7,11 @@
 dgQ2DD_to_PLANE(dggs, in_quad, in_qx, in_qy)
 }
 \arguments{
-\item{quad}{Vector of quad numbers}
+\item{in_quad}{Vector of quad numbers}
 
-\item{qx}{Vector of quadrant x values}
+\item{in_qx}{Vector of quadrant x values}
 
-\item{qy}{Vector of quadrant y values}
+\item{in_qy}{Vector of quadrant y values}
 }
 \value{
 Returns a dggs object which can be passed to other dggridR
@@ -25,6 +25,6 @@ Uses a discrete global grid system to convert between Q2DD
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
-Q2DD_to_PLANE(dggs, in_quad, in_qx, in_qy)
+dgQ2DD_to_PLANE(dggs, in_quad, in_qx, in_qy)
 
 }
