@@ -9,6 +9,7 @@
 #include "dglib.h"
 #include <cassert>
 #include <fstream>
+#include <stdexcept>
 
 #include "dggrid.h"
 #include "DgIVec2D.h"

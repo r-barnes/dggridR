@@ -9,6 +9,7 @@
 #include <cmath>
 #include <limits>
 #include <iostream>
+#include <stdexcept>
 #include "DgProjISEA.h"
 
 ////////////////////////////////////////////////////////////////////////////////

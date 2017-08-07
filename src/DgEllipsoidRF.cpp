@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
+#include <stdexcept>
 
 #include "DgEllipsoidRF.h"
 #include "DgGeoSphRF.h"
