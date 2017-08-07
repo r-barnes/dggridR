@@ -46,18 +46,18 @@ void {intype}_to_{outtype}({typed_proj_args}, unsigned int N, {in_args}, {out_ar
 """
 
 rcode = """
-#' @name {intype}_to_{outtype}
+#' @name dg{intype}_to_{outtype}
 #' 
 #' @title      Convert from {intype} to {outtype}
 #'
 #' @description
 #'             Uses a discrete global grid system to convert between {intype}
-#'             and {outtype} (see below for details)
+#'             and {outtype} (see vignette for details)
 #' 
 {Rparams}
 #'
-#' @return          Returns a dggs object which can be passed to other dggridR
-#'                  functions
+#' @return     Returns a dggs object which can be passed to other dggridR
+#'             functions
 #'
 #' @examples 
 #' library(dggridR)

@@ -4,15 +4,22 @@
 \alias{dgconstruct}
 \title{Construct a discrete global grid system (dggs) object}
 \usage{
-dgconstruct(type = "ISEA3H", res = NA, precision = 7, area = NA,
-  spacing = NA, cls = NA, resround = "nearest", metric = TRUE,
-  show_info = TRUE, azimuth = 0, pole_lat = 58.28252559,
-  pole_lon = 11.25)
+dgconstruct(projection = "ISEA", aperture = 3, topology = "HEXAGON",
+  res = NA, precision = 7, area = NA, spacing = NA, cls = NA,
+  resround = "nearest", metric = TRUE, show_info = TRUE,
+  azimuth_deg = 0, pole_lat_deg = 58.28252559, pole_lon_deg = 11.25)
 }
 \arguments{
-\item{type}{Type of grid to use. Options are: ISEA3H, ISEA4H, ISEA43H, 
-ISEA4T, ISEA4D, FULLER3H, FULLER4H, FULLER43H, FULLER4T,
-and FULLER4D. Default: ISEA3H}
+\item{projection}{Type of grid to use. Options are: ISEA and FULLER.
+Default: ISEA3H}
+
+\item{aperture}{How finely subsequent resolution levels divide the grid.
+Options are: 3, 4. Not all options work with all 
+projections and topologies.
+Default: 3}
+
+\item{topology}{Shape of cell. Options are: HEXAGON, DIAMOND, TRIANGLE.
+Default: HEXAGON}
 
 \item{res}{Resolution. Must be in the range [0,30]. Larger values represent
 finer resolutions. Appropriate resolutions can be found with
@@ -40,13 +47,13 @@ imperial (FALSE)}
 
 \item{show_info}{Print the area, spacing, and CLS of the chosen resolution.}
 
-\item{azimuth}{Rotation in degrees of grid about its pole, value in [0,360].
+\item{azimuth_deg}{Rotation in degrees of grid about its pole, value in [0,360].
 Default=0.}
 
-\item{pole_lat}{Latitude in degrees of the pole, value in [-90,90].
+\item{pole_lat_deg}{Latitude in degrees of the pole, value in [-90,90].
 Default=58.28252559.}
 
-\item{pole_lon}{Longitude in degrees of the pole, value in [-180,180].
+\item{pole_lon_deg}{Longitude in degrees of the pole, value in [-180,180].
 Default=11.25.}
 }
 \value{

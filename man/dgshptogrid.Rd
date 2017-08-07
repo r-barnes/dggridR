@@ -5,13 +5,17 @@
 \title{Return boundary coordinates for cells intersecting a 
                  shapefile}
 \usage{
-dgshptogrid(dggs, shpfname, frame = TRUE, wrapcells = TRUE,
-  savegrid = FALSE)
+dgshptogrid(dggs, shpfname, cellsize = 0.1, frame = TRUE,
+  wrapcells = TRUE, savegrid = NA)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
 
 \item{shpfname}{File name of the shapefile. Filename should end with '.shp'}
+
+\item{cellsize}{Distance, in degrees, between the sample points used to
+generate the grid. Small values yield long generation times
+while large values may omit cells.}
 
 \item{frame}{If TRUE, return a data frame suitable for ggplot plotting.
 If FALSE, return an OGR poly object}
@@ -23,9 +27,10 @@ entirely to positive degrees (the Eastern hemisphere). As a
 result, such cells will have components in the range
 [180,360). Only used when \code{frame=TRUE}.}
 
-\item{savegrid}{If savegrid is true then a KML representation of the grid is
-produced and the filename returned. No other manipulations
-are done. Setting this true overrides all other commands.}
+\item{savegrid}{If savegrid is set to a file path, then a shapefile 
+containing the grid is written to that path and the filename
+is returned. No other manipulations are done.
+Default: NA (do not save grid, return it)}
 }
 \value{
 Returns a data frame or OGR poly object, as specified by \code{frame}.

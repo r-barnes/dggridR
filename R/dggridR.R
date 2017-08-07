@@ -2,6 +2,8 @@
 #' @importFrom rgdal readOGR
 #' @importFrom ggplot2 fortify
 #' @import     dplyr
+#' @import     sp
+#' @useDynLib  dggridR
 
 
 #' @name dg_exe_path
@@ -233,9 +235,9 @@ dgverify <- function(dggs){
 
 
 
-#' @name dgtransform (DEPRECATED)
+#' @name dgtransform
 #' 
-#' @title Converts lat-long pairs into discrete global grid cell numbers
+#' @title (DEPRECATED) Converts lat-long pairs into discrete global grid cell numbers
 #'
 #' @description
 #'          A discrete global grid maps lat-long points to particular cells.

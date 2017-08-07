@@ -2,7 +2,7 @@
 % Please edit documentation in R/dggridR.R
 \name{dgtransform}
 \alias{dgtransform}
-\title{Converts lat-long pairs into discrete global grid cell numbers}
+\title{(DEPRECATED) Converts lat-long pairs into discrete global grid cell numbers}
 \usage{
 dgtransform(dggs, lat, lon)
 }
@@ -23,6 +23,7 @@ A discrete global grid maps lat-long points to particular cells.
          These cells are uniquely numbered, for a given resolution, from
          1 to some maximum number. Cell numbers may be reused from one
          resolution to the next.
+         THIS FUNCTION IS DEPRECATED.
 }
 \examples{
 library(dggridR)
