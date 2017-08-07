@@ -60,7 +60,7 @@ dg_shpfname_south_africa <- function(){
 #' @param topology   Shape of cell. Options are: HEXAGON, DIAMOND, TRIANGLE.
 #'                   Default: HEXAGON
 #'
-#' @parma aperture   How finely subsequent resolution levels divide the grid.
+#' @param aperture   How finely subsequent resolution levels divide the grid.
 #'                   Options are: 3, 4. Not all options work with all 
 #'                   projections and topologies.
 #'                   Default: 3
