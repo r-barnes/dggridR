@@ -867,7 +867,7 @@ dgsavegrid <- function(grid,shpfname) {
 #' library(dggridR)
 #'
 #' dggs <- dgconstruct(spacing=25, metric=FALSE, resround='nearest')
-#' south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa)
+#' south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa())
 #'
 #' @export
 dgshptogrid <- function(dggs,shpfname,cellsize=0.1,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
