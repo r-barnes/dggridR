@@ -11,5 +11,6 @@ src/apps/appex/appex$
 src/apps/dggrid/dggrid$
 src/clean$
 src/Makefile
+src/misc
 mailinglist
 LICENSE
