@@ -75,7 +75,7 @@ dg{intype}_to_{outtype} <- function(dggs, {Rin}){{
   N <- length({Rin1})
 {init_out}
 
-  dggridR:::{intype}_to_{outtype}({dgproj_args}, N, {Rin}, {Rout})
+  {intype}_to_{outtype}({dgproj_args}, N, {Rin}, {Rout})
 
   list(
 {Routlist}

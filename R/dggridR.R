@@ -722,7 +722,7 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
   dgverify(dggs) 
 
-  grid <- dggridR:::GlobalGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]])
+  grid <- GlobalGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]])
   if(is.na(savegrid)){
     dg_process_polydata(grid,frame,wrapcells)
   } else {
@@ -786,7 +786,7 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TO
   if(max(cells)>dgmaxcell(dggs))
     stop("'cells' contained cell ids which were larger than the maximum id!")
 
-  grid <- dggridR:::SeqNumGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], cells)
+  grid <- SeqNumGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], cells)
   if(is.na(savegrid)){
     dg_process_polydata(grid,frame,wrapcells)
   } else {

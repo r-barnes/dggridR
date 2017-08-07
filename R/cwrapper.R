@@ -30,7 +30,7 @@ dgGEO_to_GEO <- function(dggs, in_lon_deg, in_lat_deg){
   out_lon_deg <- rep(0,N)
   out_lat_deg <- rep(0,N)
 
-  dggridR:::GEO_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_lon_deg, out_lat_deg)
+  GEO_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_lon_deg, out_lat_deg)
 
   list(
     lon_deg = out_lon_deg,
@@ -70,7 +70,7 @@ dgGEO_to_PROJTRI <- function(dggs, in_lon_deg, in_lat_deg){
   out_tx <- rep(0,N)
   out_ty <- rep(0,N)
 
-  dggridR:::GEO_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_tnum, out_tx, out_ty)
+  GEO_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_tnum, out_tx, out_ty)
 
   list(
     tnum = out_tnum,
@@ -111,7 +111,7 @@ dgGEO_to_Q2DD <- function(dggs, in_lon_deg, in_lat_deg){
   out_qx <- rep(0,N)
   out_qy <- rep(0,N)
 
-  dggridR:::GEO_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_quad, out_qx, out_qy)
+  GEO_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_quad, out_qx, out_qy)
 
   list(
     quad = out_quad,
@@ -152,7 +152,7 @@ dgGEO_to_Q2DI <- function(dggs, in_lon_deg, in_lat_deg){
   out_i <- rep(0,N)
   out_j <- rep(0,N)
 
-  dggridR:::GEO_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_quad, out_i, out_j)
+  GEO_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_quad, out_i, out_j)
 
   list(
     quad = out_quad,
@@ -191,7 +191,7 @@ dgGEO_to_SEQNUM <- function(dggs, in_lon_deg, in_lat_deg){
   N <- length(in_lon_deg)
   out_seqnum <- rep(0,N)
 
-  dggridR:::GEO_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_seqnum)
+  GEO_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_seqnum)
 
   list(
     seqnum = out_seqnum
@@ -229,7 +229,7 @@ dgGEO_to_PLANE <- function(dggs, in_lon_deg, in_lat_deg){
   out_px <- rep(0,N)
   out_py <- rep(0,N)
 
-  dggridR:::GEO_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_px, out_py)
+  GEO_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_px, out_py)
 
   list(
     px = out_px,
@@ -269,7 +269,7 @@ dgPROJTRI_to_GEO <- function(dggs, in_tnum, in_tx, in_ty){
   out_lon_deg <- rep(0,N)
   out_lat_deg <- rep(0,N)
 
-  dggridR:::PROJTRI_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_lon_deg, out_lat_deg)
+  PROJTRI_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_lon_deg, out_lat_deg)
 
   list(
     lon_deg = out_lon_deg,
@@ -310,7 +310,7 @@ dgPROJTRI_to_PROJTRI <- function(dggs, in_tnum, in_tx, in_ty){
   out_tx <- rep(0,N)
   out_ty <- rep(0,N)
 
-  dggridR:::PROJTRI_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_tnum, out_tx, out_ty)
+  PROJTRI_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_tnum, out_tx, out_ty)
 
   list(
     tnum = out_tnum,
@@ -352,7 +352,7 @@ dgPROJTRI_to_Q2DD <- function(dggs, in_tnum, in_tx, in_ty){
   out_qx <- rep(0,N)
   out_qy <- rep(0,N)
 
-  dggridR:::PROJTRI_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_quad, out_qx, out_qy)
+  PROJTRI_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_quad, out_qx, out_qy)
 
   list(
     quad = out_quad,
@@ -394,7 +394,7 @@ dgPROJTRI_to_Q2DI <- function(dggs, in_tnum, in_tx, in_ty){
   out_i <- rep(0,N)
   out_j <- rep(0,N)
 
-  dggridR:::PROJTRI_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_quad, out_i, out_j)
+  PROJTRI_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_quad, out_i, out_j)
 
   list(
     quad = out_quad,
@@ -434,7 +434,7 @@ dgPROJTRI_to_SEQNUM <- function(dggs, in_tnum, in_tx, in_ty){
   N <- length(in_tnum)
   out_seqnum <- rep(0,N)
 
-  dggridR:::PROJTRI_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_seqnum)
+  PROJTRI_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_seqnum)
 
   list(
     seqnum = out_seqnum
@@ -473,7 +473,7 @@ dgPROJTRI_to_PLANE <- function(dggs, in_tnum, in_tx, in_ty){
   out_px <- rep(0,N)
   out_py <- rep(0,N)
 
-  dggridR:::PROJTRI_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_px, out_py)
+  PROJTRI_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_px, out_py)
 
   list(
     px = out_px,
@@ -513,7 +513,7 @@ dgQ2DD_to_GEO <- function(dggs, in_quad, in_qx, in_qy){
   out_lon_deg <- rep(0,N)
   out_lat_deg <- rep(0,N)
 
-  dggridR:::Q2DD_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_lon_deg, out_lat_deg)
+  Q2DD_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_lon_deg, out_lat_deg)
 
   list(
     lon_deg = out_lon_deg,
@@ -554,7 +554,7 @@ dgQ2DD_to_PROJTRI <- function(dggs, in_quad, in_qx, in_qy){
   out_tx <- rep(0,N)
   out_ty <- rep(0,N)
 
-  dggridR:::Q2DD_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_tnum, out_tx, out_ty)
+  Q2DD_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_tnum, out_tx, out_ty)
 
   list(
     tnum = out_tnum,
@@ -596,7 +596,7 @@ dgQ2DD_to_Q2DD <- function(dggs, in_quad, in_qx, in_qy){
   out_qx <- rep(0,N)
   out_qy <- rep(0,N)
 
-  dggridR:::Q2DD_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_quad, out_qx, out_qy)
+  Q2DD_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_quad, out_qx, out_qy)
 
   list(
     quad = out_quad,
@@ -638,7 +638,7 @@ dgQ2DD_to_Q2DI <- function(dggs, in_quad, in_qx, in_qy){
   out_i <- rep(0,N)
   out_j <- rep(0,N)
 
-  dggridR:::Q2DD_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_quad, out_i, out_j)
+  Q2DD_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_quad, out_i, out_j)
 
   list(
     quad = out_quad,
@@ -678,7 +678,7 @@ dgQ2DD_to_SEQNUM <- function(dggs, in_quad, in_qx, in_qy){
   N <- length(in_quad)
   out_seqnum <- rep(0,N)
 
-  dggridR:::Q2DD_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_seqnum)
+  Q2DD_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_seqnum)
 
   list(
     seqnum = out_seqnum
@@ -717,7 +717,7 @@ dgQ2DD_to_PLANE <- function(dggs, in_quad, in_qx, in_qy){
   out_px <- rep(0,N)
   out_py <- rep(0,N)
 
-  dggridR:::Q2DD_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_px, out_py)
+  Q2DD_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_px, out_py)
 
   list(
     px = out_px,
@@ -757,7 +757,7 @@ dgQ2DI_to_GEO <- function(dggs, in_quad, in_i, in_j){
   out_lon_deg <- rep(0,N)
   out_lat_deg <- rep(0,N)
 
-  dggridR:::Q2DI_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_lon_deg, out_lat_deg)
+  Q2DI_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_lon_deg, out_lat_deg)
 
   list(
     lon_deg = out_lon_deg,
@@ -798,7 +798,7 @@ dgQ2DI_to_PROJTRI <- function(dggs, in_quad, in_i, in_j){
   out_tx <- rep(0,N)
   out_ty <- rep(0,N)
 
-  dggridR:::Q2DI_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_tnum, out_tx, out_ty)
+  Q2DI_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_tnum, out_tx, out_ty)
 
   list(
     tnum = out_tnum,
@@ -840,7 +840,7 @@ dgQ2DI_to_Q2DD <- function(dggs, in_quad, in_i, in_j){
   out_qx <- rep(0,N)
   out_qy <- rep(0,N)
 
-  dggridR:::Q2DI_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_quad, out_qx, out_qy)
+  Q2DI_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_quad, out_qx, out_qy)
 
   list(
     quad = out_quad,
@@ -882,7 +882,7 @@ dgQ2DI_to_Q2DI <- function(dggs, in_quad, in_i, in_j){
   out_i <- rep(0,N)
   out_j <- rep(0,N)
 
-  dggridR:::Q2DI_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_quad, out_i, out_j)
+  Q2DI_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_quad, out_i, out_j)
 
   list(
     quad = out_quad,
@@ -922,7 +922,7 @@ dgQ2DI_to_SEQNUM <- function(dggs, in_quad, in_i, in_j){
   N <- length(in_quad)
   out_seqnum <- rep(0,N)
 
-  dggridR:::Q2DI_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_seqnum)
+  Q2DI_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_seqnum)
 
   list(
     seqnum = out_seqnum
@@ -961,7 +961,7 @@ dgQ2DI_to_PLANE <- function(dggs, in_quad, in_i, in_j){
   out_px <- rep(0,N)
   out_py <- rep(0,N)
 
-  dggridR:::Q2DI_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_px, out_py)
+  Q2DI_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_px, out_py)
 
   list(
     px = out_px,
@@ -999,7 +999,7 @@ dgSEQNUM_to_GEO <- function(dggs, in_seqnum){
   out_lon_deg <- rep(0,N)
   out_lat_deg <- rep(0,N)
 
-  dggridR:::SEQNUM_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_lon_deg, out_lat_deg)
+  SEQNUM_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_lon_deg, out_lat_deg)
 
   list(
     lon_deg = out_lon_deg,
@@ -1038,7 +1038,7 @@ dgSEQNUM_to_PROJTRI <- function(dggs, in_seqnum){
   out_tx <- rep(0,N)
   out_ty <- rep(0,N)
 
-  dggridR:::SEQNUM_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_tnum, out_tx, out_ty)
+  SEQNUM_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_tnum, out_tx, out_ty)
 
   list(
     tnum = out_tnum,
@@ -1078,7 +1078,7 @@ dgSEQNUM_to_Q2DD <- function(dggs, in_seqnum){
   out_qx <- rep(0,N)
   out_qy <- rep(0,N)
 
-  dggridR:::SEQNUM_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_quad, out_qx, out_qy)
+  SEQNUM_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_quad, out_qx, out_qy)
 
   list(
     quad = out_quad,
@@ -1118,7 +1118,7 @@ dgSEQNUM_to_Q2DI <- function(dggs, in_seqnum){
   out_i <- rep(0,N)
   out_j <- rep(0,N)
 
-  dggridR:::SEQNUM_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_quad, out_i, out_j)
+  SEQNUM_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_quad, out_i, out_j)
 
   list(
     quad = out_quad,
@@ -1156,7 +1156,7 @@ dgSEQNUM_to_SEQNUM <- function(dggs, in_seqnum){
   N <- length(in_seqnum)
   out_seqnum <- rep(0,N)
 
-  dggridR:::SEQNUM_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_seqnum)
+  SEQNUM_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_seqnum)
 
   list(
     seqnum = out_seqnum
@@ -1193,7 +1193,7 @@ dgSEQNUM_to_PLANE <- function(dggs, in_seqnum){
   out_px <- rep(0,N)
   out_py <- rep(0,N)
 
-  dggridR:::SEQNUM_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_px, out_py)
+  SEQNUM_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_px, out_py)
 
   list(
     px = out_px,
