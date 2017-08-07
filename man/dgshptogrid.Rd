@@ -59,6 +59,6 @@ Returns the coordinates constituting the boundary of a
 library(dggridR)
 
 dggs <- dgconstruct(spacing=25, metric=FALSE, resround='nearest')
-south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa)
+south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa())
 
 }
