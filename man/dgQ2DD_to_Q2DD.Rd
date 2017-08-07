@@ -7,6 +7,8 @@
 dgQ2DD_to_Q2DD(dggs, in_quad, in_qx, in_qy)
 }
 \arguments{
+\item{dggs}{A dggs object from dgconstruct()}
+
 \item{in_quad}{Vector of quad numbers}
 
 \item{in_qx}{Vector of quadrant x values}
@@ -22,9 +24,11 @@ Uses a discrete global grid system to convert between Q2DD
             and Q2DD (see vignette for details)
 }
 \examples{
+\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
 dgQ2DD_to_Q2DD(dggs, in_quad, in_qx, in_qy)
+}
 
 }

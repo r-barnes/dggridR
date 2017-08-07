@@ -7,6 +7,8 @@
 dgPROJTRI_to_SEQNUM(dggs, in_tnum, in_tx, in_ty)
 }
 \arguments{
+\item{dggs}{A dggs object from dgconstruct()}
+
 \item{in_tnum}{Vector of triangle numbers}
 
 \item{in_tx}{Vector of triangle x values}
@@ -22,9 +24,11 @@ Uses a discrete global grid system to convert between PROJTRI
             and SEQNUM (see vignette for details)
 }
 \examples{
+\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
 dgPROJTRI_to_SEQNUM(dggs, in_tnum, in_tx, in_ty)
+}
 
 }

@@ -7,6 +7,8 @@
 dgSEQNUM_to_PROJTRI(dggs, in_seqnum)
 }
 \arguments{
+\item{dggs}{A dggs object from dgconstruct()}
+
 \item{in_seqnum}{Globally unique number identifying the surface polygon}
 }
 \value{
@@ -18,9 +20,11 @@ Uses a discrete global grid system to convert between SEQNUM
             and PROJTRI (see vignette for details)
 }
 \examples{
+\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
 dgSEQNUM_to_PROJTRI(dggs, in_seqnum)
+}
 
 }

@@ -7,6 +7,8 @@
 dgGEO_to_SEQNUM(dggs, in_lon_deg, in_lat_deg)
 }
 \arguments{
+\item{dggs}{A dggs object from dgconstruct()}
+
 \item{in_lon_deg}{Vector of longitude, in degrees}
 
 \item{in_lat_deg}{Vector of latitude, in degrees}
@@ -20,9 +22,11 @@ Uses a discrete global grid system to convert between GEO
             and SEQNUM (see vignette for details)
 }
 \examples{
+\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
 dgGEO_to_SEQNUM(dggs, in_lon_deg, in_lat_deg)
+}
 
 }

@@ -53,17 +53,20 @@ rcode = """
 #' @description
 #'             Uses a discrete global grid system to convert between {intype}
 #'             and {outtype} (see vignette for details)
-#' 
+#'
+#' @param dggs A dggs object from dgconstruct()
 {Rparams}
 #'
 #' @return     Returns a dggs object which can be passed to other dggridR
 #'             functions
 #'
 #' @examples 
+#' \dontrun{{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
 #' dg{intype}_to_{outtype}(dggs, {Rin})
+#' }}
 #'
 #' @export 
 dg{intype}_to_{outtype} <- function(dggs, {Rin}){{

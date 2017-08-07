@@ -2,7 +2,7 @@
 % Please edit documentation in R/dggridR.R
 \name{dgsavegrid}
 \alias{dgsavegrid}
-\title{Saves a generated grid to a given filename}
+\title{Saves a generated grid to a shapefile}
 \usage{
 dgsavegrid(grid, shpfname)
 }
@@ -13,4 +13,7 @@ dgsavegrid(grid, shpfname)
 }
 \value{
 The filename the grid was saved to
+}
+\description{
+Saves a generated grid to a shapefile
 }
