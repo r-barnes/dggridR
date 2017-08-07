@@ -1,7 +1,7 @@
 #ifndef _Rwrapper_hpp_
 #define _Rwrapper_hpp_
 
-#include "dglib.hpp"
+#include "dglib.h"
 #include <Rcpp.h>
 
 #endif

@@ -1,5 +1,5 @@
-#include "Rwrapper.hpp"
-#include "dglib.hpp"
+#include "Rwrapper.h"
+#include "dglib.h"
 #include <Rcpp.h>
 
 using namespace Rcpp;
