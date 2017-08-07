@@ -60,10 +60,10 @@ DgBoundedIDGG::DgBoundedIDGG (const DgIDGG& IDGGin)
 
    std::uint64_t tmpSize = size();
    if (firstAdd().quadNum() == 0) tmpSize -= 2;
-/*
-cout << "mag: " << idgg().mag() << ", /3: " << idgg().mag() / 3 << ", size: " << size() << ", tmpSize: " << tmpSize << ", tmpSize / 10: " << tmpSize/10 << endl;
-cout  << "quadNum: " << firstAdd().quadNum() << ", offsetPerQuad: " << offsetPerQuad() << endl;
-*/
+
+// cout << "mag: " << idgg().mag() << ", /3: " << idgg().mag() / 3 << ", size: " << size() << ", tmpSize: " << tmpSize << ", tmpSize / 10: " << tmpSize/10 << endl;
+// cout  << "quadNum: " << firstAdd().quadNum() << ", offsetPerQuad: " << offsetPerQuad() << endl;
+
    if ((tmpSize / 10) != offsetPerQuad())
    {
        report("DgBoundedIDGG::DgBoundedIDGG() invalid size setting due to "

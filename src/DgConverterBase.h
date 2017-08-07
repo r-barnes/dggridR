@@ -25,9 +25,9 @@ class DgConverterBase {
       static bool isTraceOn (void) { return isTraceOn_; }
       static bool setTraceOn (bool traceOnIn) 
                      { isTraceOn_ = traceOnIn; return isTraceOn(); }
-      static void setTraceStream (ostream& stream = cout) 
-                           { traceStream_ = &stream; }
-      static ostream& traceStream (void) { return *traceStream_; }
+      //static void setTraceStream (ostream& stream = cout) 
+      //                     { traceStream_ = &stream; }
+      //static ostream& traceStream (void) { return *traceStream_; }
 
       virtual DgLocation* convert (DgLocation* loc) const; // convert in place
 
@@ -52,7 +52,7 @@ class DgConverterBase {
                               (const DgAddressBase& addIn) const = 0;
 
       static bool isTraceOn_;
-      static ostream* traceStream_;
+      //static ostream* traceStream_;
 
       DgRFBase* fromFrame_;
       DgRFBase* toFrame_;

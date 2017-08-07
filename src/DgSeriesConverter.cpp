@@ -202,12 +202,12 @@ DgSeriesConverter::~DgSeriesConverter (void)
 DgAddressBase* 
 DgSeriesConverter::createConvertedAddress (const DgAddressBase& addIn) const
 {
-   if (isTraceOn()) traceStream() << "->series";
+   // if (isTraceOn()) traceStream() << "->series";
 
    DgAddressBase* pAdd0 = series_[0]->createConvertedAddress(addIn);
 
 #if DGDEBUG
-cout << "BEGIN series conversion" << endl;
+//cout << "BEGIN series conversion" << endl;
 #endif
    for (int i = 1; i < size(); i++)
    {
@@ -217,7 +217,7 @@ cout << "BEGIN series conversion" << endl;
       pAdd0 = pAdd1;
    }
 #if DGDEBUG
-cout << "END series conversion" << endl;
+//cout << "END series conversion" << endl;
 #endif
 
    return pAdd0;

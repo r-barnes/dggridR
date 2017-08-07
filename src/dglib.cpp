@@ -360,8 +360,7 @@ namespace dglib {
 
     std::unique_ptr<DgLocation> loc(static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(sn));
     if (!dgg.bndRF().validLocation(*loc)){
-      std::cerr<<"doTransform(): SEQNUM " << i << " not a valid location"<<std::endl;
-      ::report("doTransform(): Invalid SEQNUM found.", DgBase::Warning);
+      ::report("SeqNumGridGenerator: Invalid SEQNUM found.", DgBase::Warning);
     }
 
     DgPolygon verts(dgg);

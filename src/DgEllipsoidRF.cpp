@@ -119,17 +119,16 @@ DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
 
    long double E = bigA + bigB + bigC - dgM_PI;
 
-/*
-   cout << "geoTriArea: " << g1 << " " << g2 << " " << g3 << endl
-        << " a: " << a 
-        << " b: " << b
-        << " c: " << c << endl
-        << " A: " << bigA 
-        << " B: " << bigB
-        << " C: " << bigC << endl
-        << " E: " << E << " "
-        << E / (4.0L * dgM_PI) << endl;
-*/
+
+   // cout << "geoTriArea: " << g1 << " " << g2 << " " << g3 << endl
+   //      << " a: " << a 
+   //      << " b: " << b
+   //      << " c: " << c << endl
+   //      << " A: " << bigA 
+   //      << " B: " << bigB
+   //      << " C: " << bigC << endl
+   //      << " E: " << E << " "
+   //      << E / (4.0L * dgM_PI) << endl;
 
    return E;
 
@@ -238,10 +237,10 @@ void printInt (std::int64_t val)
    Print val or 'UNDEFVAL' to stdout as appropriate.
 */
 {
-   if (val == UNDEFVAL)
-      std::cout<<"UNDEFVAL";
-   else
-      std::cout<<val;
+   // if (val == UNDEFVAL)
+   //    std::cout<<"UNDEFVAL";
+   // else
+   //    std::cout<<val;
  
 } /* void printInt */
 
@@ -251,10 +250,10 @@ void printVal (long double val)
    Print val or 'UNDEFVAL' to stdout as appropriate.
 */
 {
-   if (val == UNDEFVAL) 
-      std::cout<<"UNDEFVAL";
-   else 
-      std::cout<<val;
+   // if (val == UNDEFVAL) 
+   //    std::cout<<"UNDEFVAL";
+   // else 
+   //    std::cout<<val;
 
 } /* void printVal */
 
