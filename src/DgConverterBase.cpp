@@ -11,7 +11,7 @@
 #include "DgConverterBase.h"
 
 bool DgConverterBase::isTraceOn_ = false;
-ostream* DgConverterBase::traceStream_ = &cout;
+//ostream* DgConverterBase::traceStream_ = &cout;
 
 ////////////////////////////////////////////////////////////////////////////////
 DgConverterBase::~DgConverterBase (void)
@@ -133,7 +133,7 @@ DgConverterBase::convert (DgLocation* loc) const
       return loc;
    }
 
-   if (isTraceOn()) traceStream() << *loc;
+   //if (isTraceOn()) traceStream() << *loc;
    
    loc->rf_ = &toFrame();
 
@@ -141,7 +141,7 @@ DgConverterBase::convert (DgLocation* loc) const
    delete loc->address_;
    loc->address_ = tmpAdd;
 
-   if (isTraceOn()) traceStream() << "->" << *loc << endl;
+   //if (isTraceOn()) traceStream() << "->" << *loc << endl;
   
    return loc;
 

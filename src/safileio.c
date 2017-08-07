@@ -165,7 +165,7 @@ int SADRemove( const char *filename )
 void SADError( const char *message )
 
 {
-    fprintf( stderr, "%s\n", message );
+    //fprintf( stderr, "%s\n", message );
 }
 
 /************************************************************************/

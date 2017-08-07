@@ -134,15 +134,15 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
 
    if (z > DH + 0.00000005)
    {
-      std::cout<<"nTri: "<<nTri
-               <<"z:    "<<z
-               <<"DH+:  "<<(DH + 0.00000005)
-               <<"diff: "<<((DH + 0.00000005) - z)
-               <<"\n";
-      std::cout<<"1: The point: ";
-      printGeoCoord(geoVect);
-      std::cout<<" is located on another polygon.\n";
-      exit(1);
+      // std::cout<<"nTri: "<<nTri
+      //          <<"z:    "<<z
+      //          <<"DH+:  "<<(DH + 0.00000005)
+      //          <<"diff: "<<((DH + 0.00000005) - z)
+      //          <<"\n";
+      // std::cout<<"1: The point: ";
+      // printGeoCoord(geoVect);
+      // std::cout<<" is located on another polygon.\n";
+      throw std::runtime_error("sllxy found a point in another polygon!");
    }
 
    azh = atan2(cosLat * sin(geoVect.lon - cent.pt.lon), 
@@ -161,10 +161,11 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
 
    if (z > dz + 0.00000005)
    {
-      printf("2: The point: ");
-      printGeoCoord(geoVect);
-      printf(" is located on another polygon.\n");
-      exit(1);
+      // printf("2: The point: ");
+      // printGeoCoord(geoVect);
+      // printf(" is located on another polygon.\n");
+      throw std::runtime_error("sllxy found a point located in another polygon!");
+      // exit(1);
    }
 
    h = acos(sinAzh * sinGH * cosDH - cosAzh * cosGH);
@@ -196,9 +197,9 @@ IcosaGridPt snyderFwd (const GeoCoord& ll, DgSphIcosa& sphicosa)
 
    if (gridpt.triangle < 0)
    {
-      printf("ERROR: point in no triangle:");
-      printGeoCoord(ll); 
-      printf("\n");
+      // printf("ERROR: point in no triangle:");
+      // printGeoCoord(ll); 
+      // printf("\n");
 
       gridpt.pt.x = M_ZERO;
       gridpt.pt.y = M_ZERO;

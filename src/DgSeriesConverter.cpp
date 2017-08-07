@@ -202,7 +202,7 @@ DgSeriesConverter::~DgSeriesConverter (void)
 DgAddressBase* 
 DgSeriesConverter::createConvertedAddress (const DgAddressBase& addIn) const
 {
-   if (isTraceOn()) traceStream() << "->series";
+   //if (isTraceOn()) traceStream() << "->series";
 
    DgAddressBase* pAdd0 = series_[0]->createConvertedAddress(addIn);
 

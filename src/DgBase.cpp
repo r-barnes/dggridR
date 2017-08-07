@@ -33,29 +33,30 @@ void report (const string& message, DgBase::DgReportLevel level)
    switch (level)
    {
       case DgBase::Debug0:
-	 cout << "DEBUG0: " << message << endl;
+	 //cout << "DEBUG0: " << message << endl;
 	 break;
 
       case DgBase::Debug1:
-	 cout << "DEBUG1: " << message << endl;
+	 //cout << "DEBUG1: " << message << endl;
 	 break;
 
       case DgBase::Info:
 
-         cout << message << endl;
+         //cout << message << endl;
          break;
 
       case DgBase::Warning:
 
-         cout.flush();  // in case stdout and stderr go to the same place
-         cerr << "WARNING: " << message << endl;
+         //cout.flush();  // in case stdout and stderr go to the same place
+         //cerr << "WARNING: " << message << endl;
          break;
 
       case DgBase::Fatal:
 
-         cout.flush();  // in case stdout and stderr go to the same place
-         cerr << "FATAL ERROR: " << message << endl;
-         exit(1);
+         throw std::runtime_error("FATAL ERROR: " + message);
+         // cout.flush();  // in case stdout and stderr go to the same place
+         // cerr << "FATAL ERROR: " << message << endl;
+         //exit(1);
 
       case DgBase::Silent:
 

@@ -238,10 +238,10 @@ void printInt (std::int64_t val)
    Print val or 'UNDEFVAL' to stdout as appropriate.
 */
 {
-   if (val == UNDEFVAL)
-      std::cout<<"UNDEFVAL";
-   else
-      std::cout<<val;
+   // if (val == UNDEFVAL)
+   //    std::cout<<"UNDEFVAL";
+   // else
+   //    std::cout<<val;
  
 } /* void printInt */
 
@@ -251,10 +251,10 @@ void printVal (long double val)
    Print val or 'UNDEFVAL' to stdout as appropriate.
 */
 {
-   if (val == UNDEFVAL) 
-      std::cout<<"UNDEFVAL";
-   else 
-      std::cout<<val;
+   // if (val == UNDEFVAL) 
+   //    std::cout<<"UNDEFVAL";
+   // else 
+   //    std::cout<<val;
 
 } /* void printVal */
 
@@ -265,11 +265,11 @@ void printGeoCoord (const GeoCoord& p)
 */
 {
    /*printVec2D(*((Vec2D*) &p));*/
-   printf("(");
-   printVal(p.lon* M_180_PI);
-   printf(",");
-   printVal(p.lat* M_180_PI);
-   printf(")");
+   // printf("(");
+   // printVal(p.lon* M_180_PI);
+   // printf(",");
+   // printVal(p.lat* M_180_PI);
+   // printf(")");
 
 } /* void printGeoCoord */
 
@@ -279,11 +279,11 @@ void printVec2D (const Vec2D& p)
    Print p to stdout.
 */
 {
-   printf("(");
-   printVal(p.x);
-   printf(", ");
-   printVal(p.y);
-   printf(")");
+   // printf("(");
+   // printVal(p.x);
+   // printf(", ");
+   // printVal(p.y);
+   // printf(")");
 
 } /* void printVec2D */
 
@@ -293,13 +293,13 @@ void printVec3D (const Vec3D& p)
    Print p to stdout.
 */
 {
-   printf("(");
-   printVal(p.x);
-   printf(", ");
-   printVal(p.y);
-   printf(", ");
-   printVal(p.z);
-   printf(")");
+   // printf("(");
+   // printVal(p.x);
+   // printf(", ");
+   // printVal(p.y);
+   // printf(", ");
+   // printVal(p.z);
+   // printf(")");
 
 } /* void printVec3D */
 
@@ -309,33 +309,33 @@ void printSphTri (const SphTri& tri)
    Print tri to stdout.
 */
 {
-   int i;
+   // int i;
 
-   printf("{\n  code: "); printInt(tri.code);
-   printf("\n  vertices: ");
-   for (i = 0; i < 3; i++) 
-   {
-      printf(" ");
-      printGeoCoord(tri.verts[i]);
-   }
-   printf("\n");
+   // printf("{\n  code: "); printInt(tri.code);
+   // printf("\n  vertices: ");
+   // for (i = 0; i < 3; i++) 
+   // {
+   //    printf(" ");
+   //    printGeoCoord(tri.verts[i]);
+   // }
+   // printf("\n");
    
-   printf("  A: "); printVal(tri.edges[0]);
-   printf("  B: "); printVal(tri.edges[1]);
-   printf("  C: "); printVal(tri.edges[2]);
-   printf("\n");
+   // printf("  A: "); printVal(tri.edges[0]);
+   // printf("  B: "); printVal(tri.edges[1]);
+   // printf("  C: "); printVal(tri.edges[2]);
+   // printf("\n");
 
-   printf("  a: "); printVal(tri.angles[0]* M_180_PI);
-   printf("  b: "); printVal(tri.angles[1]* M_180_PI);
-   printf("  c: "); printVal(tri.angles[2]* M_180_PI);
-   printf("\n");
+   // printf("  a: "); printVal(tri.angles[0]* M_180_PI);
+   // printf("  b: "); printVal(tri.angles[1]* M_180_PI);
+   // printf("  c: "); printVal(tri.angles[2]* M_180_PI);
+   // printf("\n");
 
-   printf("  area: "); printVal(tri.area);
-   printf("  perimeter: "); printVal(tri.perimeter);
-   printf("  compactness: "); printVal(tri.compactness);
-   printf("\n");
+   // printf("  area: "); printVal(tri.area);
+   // printf("  perimeter: "); printVal(tri.perimeter);
+   // printf("  compactness: "); printVal(tri.compactness);
+   // printf("\n");
 
-   printf("}\n");
+   // printf("}\n");
 
 } /* void printSphTri */
 
@@ -345,20 +345,20 @@ void printPlaneTri (const PlaneTri& tri)
    Print tri to stdout.
 */
 {
-   int i;
+   // int i;
  
-   printf("{\n  code: "); printInt(tri.code);
-   printf("\n  vertices: ");
-   for (i = 0; i < 3; i++)
-   {
-      printf(" ");
-      printVec2D(tri.points[i]);
-   }
-   printf("\n");
-   printVec2D(tri.cenpoint);
-   printf("\n");
+   // printf("{\n  code: "); printInt(tri.code);
+   // printf("\n  vertices: ");
+   // for (i = 0; i < 3; i++)
+   // {
+   //    printf(" ");
+   //    printVec2D(tri.points[i]);
+   // }
+   // printf("\n");
+   // printVec2D(tri.cenpoint);
+   // printf("\n");
  
-   printf("}\n");
+   // printf("}\n");
  
 } /* void PlaneTri */
 
@@ -529,7 +529,7 @@ GeoCoord xyzll(const Vec3D& v0)
   }
   else 
   {
-     printf("Error: in function xyzll, asin domain error.\n");
+     //printf("Error: in function xyzll, asin domain error.\n");
      return sv;
   }
 
@@ -696,8 +696,7 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
    }
   else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) &&
          ((nn1.x*nn2.y-nn2.x*nn1.y)==0.0L) && ((nn1.x*nn2.z-nn2.x*nn1.z)==0.0L))   {
-    printf("Error of GCintersect: the two great circle planes are parallel.\n");
-    exit(1);
+    throw std::runtime_error("Error of GCintersect: the two great circle planes are parallel.");
    }  
   else if (((nn2.z*nn1.y-nn1.z*nn2.y)==0.0L) && (nn1.z!=0.0L))
    {  
@@ -754,7 +753,7 @@ GeoCoord GCintersect(const GeoCoord& sv11, const GeoCoord& sv12,
      return pt;
     else
      {
-      printf("Error of GCintersect: the point is not on great circle segment.\n");
+      //printf("Error of GCintersect: the point is not on great circle segment.\n");
       pt.lat=UNDEFVAL; pt.lon=UNDEFVAL;
       return pt;
      }
@@ -783,7 +782,7 @@ long double GCptlat(long double lon, const GeoCoord& sv1, const GeoCoord& sv2)
   c=(p1.x*p2.y-p1.y*p2.x);
   if (c!=0.0L) lat=atan((b-a)/c);
   else { lat = UNDEFVAL;
-         printf("Error of GCptlat: the two end points are at one longitude.\n");
+         //printf("Error of GCptlat: the two end points are at one longitude.\n");
        }
   return(lat);
  } /* long double GCptlat */
