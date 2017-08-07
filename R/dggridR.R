@@ -8,20 +8,6 @@
 #' @useDynLib  dggridR
 
 
-#' @name dg_exe_path
-#' 
-#' @title Get path to dggrid executable
-#'
-#' @description
-#'        Returns a path to the dggrid executable. Used for running stuff.
-#'
-#' @return A string representing the path to the dggrid executable.
-#'
-dg_exe_path <- function(){
-  exe_name <- switch(Sys.info()[['sysname']], Windows='dggrid.exe', 'dggrid')
-  file.path(find.package('dggridR'), "bin", exe_name)
-}
-
 #' @name dg_env
 #' 
 #' @title Control global aspects of the dggridR package
