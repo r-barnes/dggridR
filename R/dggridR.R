@@ -185,33 +185,9 @@ dgconstruct <- function(
 #'
 #' @export 
 dgsetres <- function(dggs,res){
-  dggs[['dggs_res_spec']] = res
+  dggs[['res']] = res
   dgverify(dggs)
   dggs
-}
-
-
-
-#' @name dg_transform_for_output
-#' 
-#' @title Transform a dggs object's fields to a form suitable for output
-#'
-#' @param dggs A dggs object from dgconstruct().
-#'
-#' @description
-#'        A dggs object may contain variables that are named for user
-#'        friendliness. This function removes the friendliness. It's enemies
-#'        from here on out.
-#'
-dg_transform_for_output <- function(dggs){
-  dggsnew                         <- dggs
-  dggsnew[['dggs_vert0_azimuth']] <- dggs[['azimuth']]
-  dggsnew[['dggs_vert0_lat']]     <- dggs[['pole_lat']]
-  dggsnew[['dggs_vert0_lon']]     <- dggs[['pole_lon']]
-  dggsnew[['azimuth']]            <- NULL
-  dggsnew[['pole_lat']]           <- NULL
-  dggsnew[['pole_lon']]           <- NULL
-  dggsnew
 }
 
 
@@ -257,13 +233,7 @@ dgverify <- function(dggs){
 
 
 
-
-
-
-
-
-
-#' @name dgtransform
+#' @name dgtransform (DEPRECATED)
 #' 
 #' @title Converts lat-long pairs into discrete global grid cell numbers
 #'
@@ -272,6 +242,7 @@ dgverify <- function(dggs){
 #'          These cells are uniquely numbered, for a given resolution, from
 #'          1 to some maximum number. Cell numbers may be reused from one
 #'          resolution to the next.
+#'          THIS FUNCTION IS DEPRECATED.
 #' 
 #' @param dggs A dggs object from dgconstruct().
 #'
@@ -295,110 +266,10 @@ dgverify <- function(dggs){
 dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying the original dggs
   dgverify(dggs)
 
-  glon      <- lon>180
-  lon[glon] <- lon[glon]-360
-  llon      <- lon< (-180)
-  lon[llon] <- lon[llon]+360
+  warning("The 'dgtransform' function has been deprecated. Please use 'dgGEO_to_SEQNUM' instead!")
 
-  inputfile  <- tempfile(pattern = "dggridR-", fileext=".indat" )
-  outputfile <- tempfile(pattern = "dggridR-", fileext=".outdat")
-
-  df <- data.frame(long=lon,lat=lat)
-  write.table(df, inputfile, sep=",", col.names=FALSE, row.names=FALSE) #TODO: Verify output precision
-
-  dggs[['dggrid_operation']]   = 'TRANSFORM_POINTS'
-
-  dggs[['input_file_name']]    = inputfile
-  dggs[['input_address_type']] = 'GEO'
-  dggs[['input_delimiter']]    = '","'
-  
-  dggs[['output_file_name']]    = outputfile
-  dggs[['output_address_type']] = 'SEQNUM'
-  dggs[['output_delimiter']]    = '","'
-
-  dgrun(dggs)
-
-  #TODO: Consider reading cell ids as strings instead :-(
-  ret <- read.csv(outputfile, header=FALSE)$V1
-
-  #Clean up
-  if(!get("dg_debug", envir=dg_env)){
-    file.remove(inputfile)
-    file.remove(outputfile)
-  } else {
-    print(paste("Inputfile:", inputfile))
-    print(paste("Outputfile:", outputfile))
-  }
-
-  if(any(ret>=2^53)) #R stores large numbers as an IEEE754 double, so we get 53 bits of exact integer goodness.
-    message('dgtransform(): Length of cell ids overflowed R\'s numeric storage capacity. Use a lower resolution')
-
-  ret
+  dgGEO_to_SEQNUM(dggs, lon, lat)$seqnum
 }
-
-
-
-
-
-
-
-
-
-
-
-#' @name dgrun
-#' 
-#' @title A generic function for running dggrid and returning values from it
-#'
-#' @description
-#'          A discrete global grid maps lat-long points to particular cells.
-#'          These cells are uniquely numbered, for a given resolution, from
-#'          1 to some maximum number. Cell numbers may be reused from one
-#'          resolution to the next.
-#'
-#' @param dggs  A dggs object from dgconstruct()
-#'
-#' @param clean If TRUE, delete the temporary files used/produced by dggrid. TODO
-#'
-#' @param check If TRUE, raise a stop signal if dggrid doesn't run successfully.
-#'
-#' @param has_output_file If TRUE, look for output file. If FALSE, capture and
-#'                        return stdout and stderr.
-#'
-#' @return  If \code{has_output_file} is TRUE, a data frame is returned.
-#'          The calling function is responsible for understanding this frame.
-#'          If \code{has_output_file} is FALSE, the stdout and stderr of dggrid
-#'          are captured and returned as a character vector.
-dgrun <- function(dggs, clean=TRUE, check=TRUE, has_output_file=TRUE){
-  dggs     <- dg_transform_for_output(dggs)
-  metafile <- tempfile(pattern = "dggridR-", fileext=".meta")
-  write.table(as.data.frame(do.call(rbind, dggs)), metafile, col.names=FALSE, quote=FALSE)
-  com <- paste(dg_exe_path(),metafile)
-  ret <- system(com, intern = TRUE, ignore.stdout = FALSE, ignore.stderr = FALSE)
-  if(get("dg_debug", envir=dg_env)){
-    cat(ret, sep='\n')
-  }
-  if(check && length(grep("complete \\*\\*",ret))!=1){
-      cat(ret)
-      stop('dggridR: Error in processing!', call.=FALSE)
-  }
-  #TODO: Clean up metafile here
-  if(get("dg_debug", envir=dg_env)){
-    print(paste("Metafile:",metafile))
-  } else {
-    file.remove(metafile)
-  }
-  ret
-}
-
-
-
-
-
-
-
-
-
 
 
 
@@ -423,23 +294,17 @@ dgrun <- function(dggs, clean=TRUE, check=TRUE, has_output_file=TRUE){
 dginfo <- function(dggs){
   dgverify(dggs)
 
-  dggs[['dggrid_operation']] = 'OUTPUT_STATS'
-  dggs[['dggs_res_spec']]    = 30
+  res <- dggetres(dggs)
 
-  cat(dgrun(dggs, check=FALSE, has_output_file=FALSE), sep="\r\n")
+  scipen <- getOption('scipen')
+  options(scipen=999)
+
+  print(res, sep="\r\n")
+
+  options(scipen=scipen)
 
   NULL
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -478,10 +343,6 @@ dggetres <- function(dggs){
 
 
 
-
-
-
-
 #' @name dgmaxcell
 #' 
 #' @title      Get largest cell id for a dggs
@@ -512,24 +373,13 @@ dgmaxcell <- function(dggs,res=NA){
 
   reses <- dggetres(dggs)
 
-  restoget <- dggs[['dggs_res_spec']]
+  restoget <- dggs[['res']]
   if(!is.na(res))
     restoget <- res
 
   #Add one because R uses 1-based indexing and there is a row 0
-  reses$Cells[restoget+1] 
+  reses$cells[restoget+1] 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -590,12 +440,13 @@ dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TR
     stop('Unrecognised rounding direction. Must be up, down, or nearest.', call.=FALSE)
 
   if(show_info && metric)
-    cat(paste("Resolution: ",ret$Res[idx],", Area (km^2): ",ret$AreaKm[idx],", Spacing (km): ", ret$SpacingKm[idx],", CLS (km): ", ret$CLSKm[idx], "\n", sep=""))
+    cat(paste("Resolution: ",ret$res[idx],", Area (km^2): ",ret$area_km[idx],", Spacing (km): ", ret$spacing_km[idx],", CLS (km): ", ret$cls_km[idx], "\n", sep=""))
   else if(show_info && !metric)
-    cat(paste("Resolution: ",ret$Res[idx],", Area (mi^2): ",ret$AreaKm[idx]*KM_TO_M,", Spacing (mi): ", ret$SpacingKm[idx]*KM_TO_M,", CLS (mi): ", ret$CLSKm[idx]*KM_TO_M, "\n", sep=""))
+    cat(paste("Resolution: ",ret$res[idx],", Area (mi^2): ",ret$area_km[idx]*KM_TO_M,", Spacing (mi): ", ret$spacing_km[idx]*KM_TO_M,", CLS (mi): ", ret$cls_km[idx]*KM_TO_M, "\n", sep=""))
 
-  ret$Res[idx]
+  ret$res[idx]
 }
+
 
 
 #' @name dg_closest_res_to_area
@@ -627,8 +478,9 @@ dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TR
 #'
 #' @export 
 dg_closest_res_to_area <- function(dggs,area,round='nearest',show_info=TRUE,metric=TRUE){
-  dg_closest_res(dggs,'AreaKm',area,round,show_info,metric)
+  dg_closest_res(dggs,'area_km',area,round,show_info,metric)
 }
+
 
 
 #' @name dg_closest_res_to_spacing
@@ -659,7 +511,7 @@ dg_closest_res_to_area <- function(dggs,area,round='nearest',show_info=TRUE,metr
 #'
 #' @export 
 dg_closest_res_to_spacing <- function(dggs,spacing,round='nearest',show_info=TRUE,metric=TRUE){
-  dg_closest_res(dggs,'SpacingKm',spacing,round,show_info,metric)
+  dg_closest_res(dggs,'spacing_km',spacing,round,show_info,metric)
 }
 
 
@@ -694,15 +546,8 @@ dg_closest_res_to_spacing <- function(dggs,spacing,round='nearest',show_info=TRU
 #'
 #' @export
 dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric=TRUE){
-  dg_closest_res(dggs,'CLSKm',cls,round,show_info,metric)
+  dg_closest_res(dggs,'cls_km',cls,round,show_info,metric)
 }
-
-
-
-
-
-
-
 
 
 
@@ -741,7 +586,9 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
   group <- NULL
 
   if(frame){
-    polydata.points <- fortify(polydata, region="seqnum")
+    polydata.points      <- fortify(polydata, region="seqnum")
+    polydata.points$cell <- polydata.points$id
+    polydata.points$id   <- NULL
 
     if(wrapcells){
       #Find dangerous polygons based on how many degrees of longitude they span
@@ -759,10 +606,6 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
     polydata
   }
 }
-
-
-
-
 
 
 
@@ -795,9 +638,14 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
 #'                  result, such cells will have components in the range
 #'                  [180,360). Only used when \code{frame=TRUE}.
 #'
-#' @param savegrid  If savegrid is true then a KML representation of the grid is
-#'                  produced and the filename returned. No other manipulations
-#'                  are done. Setting this true overrides all other arguments.
+#' @param cellsize  Distance, in degrees, between the sample points used to
+#'                  generate the grid. Small values yield long generation times
+#'                  while large values may omit cells.
+#'
+#' @param savegrid  If savegrid is set to a file path, then a shapefile 
+#'                  containing the grid is written to that path and the filename
+#'                  is returned. No other manipulations are done.
+#'                  Default: NA (do not save grid, return it)
 #'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
 #'         If \code{savegrid=TRUE}, returns a filename.
@@ -810,73 +658,23 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
 #' grid <- dgrectgrid(dggs,
 #'                minlat=24.7433195, minlon=-124.7844079, 
 #'                maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
-# #'
-# #' @export
-# dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: Densify?
-#   dgverify(dggs) 
+#'
+#' @export
+dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: Densify?
+  dgverify(dggs) 
 
-#   inputfile <- tempfile(pattern = "dggridR-", fileext=".indat"   )
-#   cellfile  <- tempfile(pattern = "dggridR-", fileext=".cell_dat")
+  coords <- matrix(c(minlon, minlat, maxlon, minlat, maxlon, maxlat, maxlon, minlat, minlon, minlat), ncol = 2, byrow = TRUE)
+  regbox <- Polygon(coords)
+  regbox <- SpatialPolygons(list(Polygons(list(regbox), ID = "a")), proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
-#   dggs[['dggrid_operation']] = 'GENERATE_GRID'
-#   dggs[['update_frequency']] = 10000000
+  #Generate a dense grid of points
+  samp_points <- sp::makegrid(regbox, cellsize = 0.1)
 
-#   #Write output in ARC/INFO Generate polygon format
-#   #minlon,maxlat maxlon,maxlat
-#   #minlon,minlat maxlon,minlat
-#   fout <- file(inputfile, "w")  # open an output file connection
-#   cat("1", sep="\n", file=fout)
-#   cat(paste(minlon,maxlat), sep="\n", file=fout)
-#   cat(paste(maxlon,maxlat), sep="\n", file=fout)
-#   cat(paste(maxlon,minlat), sep="\n", file=fout)
-#   cat(paste(minlon,minlat), sep="\n", file=fout)
-#   cat(paste(minlon,maxlat), sep="\n", file=fout)
-#   cat("END", sep="\n", file=fout) #End list of polygon points
-#   cat("END", sep="\n", file=fout) #End file
-#   close(fout)
-#   dggs[['clip_region_files']] = inputfile
-#   dggs[['clip_subset_type']]  = 'AIGEN'
+  #Convert the points to SEQNUM ids for dggs
+  samp_points <- dgGEO_to_SEQNUM(dggs,samp_points$x1, samp_points$x2)$seqnum
 
-#   dggs[['cell_output_file_name']] = cellfile
-#   dggs[['cell_output_type']]      = 'KML' #SHAPEFILE or KML or GEOJSON or AIGEN
-
-#   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
-
-#   cellfile <- paste(cellfile,".kml",sep="")
-
-#   #Clean up
-#   if(!get("dg_debug", envir=dg_env)){
-#     file.remove(inputfile)
-#   } else {
-#     print(paste("Inputfile:",inputfile))
-#   }
-
-#   if(savegrid)
-#     return(cellfile)
-
-#   ret <- dg_process_polydata(cellfile,frame,wrapcells)
-
-#   #Clean up more
-#   if(!get("dg_debug", envir=dg_env)){
-#     file.remove(cellfile)
-#   } else {
-#     print(paste("Cellfile: ",cellfile))
-#   }
-
-#   ret
-# }
-
-
-
-
-
-
-
-
-
-
-
-
+  dgcellstogrid(dggs, samp_points, frame=frame, wrapcells=wrapcells, savegrid=savegrid)
+}
 
 
 
@@ -900,6 +698,11 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
 #'                  result, such cells will have components in the range
 #'                  [180,360). Only used when \code{frame=TRUE}.
 #'
+#' @param savegrid  If savegrid is set to a file path, then a shapefile 
+#'                  containing the grid is written to that path and the filename
+#'                  is returned. No other manipulations are done.
+#'                  Default: NA (do not save grid, return it)
+#'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
 #'         If \code{savegrid=TRUE}, returns a filename.
 #'
@@ -911,30 +714,17 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
 #' gridfilename <- dgearthgrid(dggs,savegrid=TRUE) #Save directly to a file
 #'
 #' @export
-dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
+dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
   dgverify(dggs) 
 
   grid <- dggridR:::GlobalGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]])
-
-  dg_process_polydata(grid,frame,wrapcells)
+  if(is.na(savegrid)){
+    dg_process_polydata(grid,frame,wrapcells)
+  } else {
+    grid <- dg_process_polydata(grid,frame=FALSE,wrapcells=FALSE)
+    dgsavegrid(grid,savegrid)
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -960,6 +750,11 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
 #'                  result, such cells will have components in the range
 #'                  [180,360). Only used when \code{frame=TRUE}.
 #'
+#' @param savegrid  If savegrid is set to a file path, then a shapefile 
+#'                  containing the grid is written to that path and the filename
+#'                  is returned. No other manipulations are done.
+#'                  Default: NA (do not save grid, return it)
+#'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
 #'         If \code{savegrid=TRUE}, returns a filename.
 #'
@@ -975,7 +770,7 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
 #' grid          <- dgcellstogrid(dggs, dgquakes$cell, frame=TRUE)
 #'
 #' @export
-dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
+dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
   dgverify(dggs) 
 
   #dggrid also eliminates duplicate cells, but doing so here saves disk space
@@ -983,25 +778,33 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
   #data set is huge
   cells <- unique(cells)
 
-#TODO
-#  if(max(cells)>dgmaxcell(dggs))
-#    stop("'cells' contained cell ids which were larger than the maximum id!")
+  if(max(cells)>dgmaxcell(dggs))
+    stop("'cells' contained cell ids which were larger than the maximum id!")
 
   grid <- dggridR:::SeqNumGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], cells)
-
-  dg_process_polydata(grid,frame,wrapcells)
+  if(is.na(savegrid)){
+    dg_process_polydata(grid,frame,wrapcells)
+  } else {
+    grid <- dg_process_polydata(grid,frame=FALSE,wrapcells=FALSE)
+    dgsavegrid(grid,savegrid)
+  }
 }
 
 
 
-
-
-
-
-
-
-
-
+#' @name dgsavegrid
+#'
+#' @title           Saves a generated grid to a given filename
+#'
+#' @param grid      Grid to be saved
+#' @param shpfname  File to save the grid to
+#'
+#' @return          The filename the grid was saved to
+dgsavegrid <- function(grid,shpfname) {
+  grid<-as(grid, "SpatialPolygonsDataFrame")
+  writeOGR(grid, shpfname, driver='ESRI Shapefile', layer='dggrid')
+  shpfname
+}
 
 
 #' @name dgshptogrid
@@ -1041,9 +844,14 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
 #'                  result, such cells will have components in the range
 #'                  [180,360). Only used when \code{frame=TRUE}.
 #'
-#' @param savegrid  If savegrid is true then a KML representation of the grid is
-#'                  produced and the filename returned. No other manipulations
-#'                  are done. Setting this true overrides all other commands.
+#' @param cellsize  Distance, in degrees, between the sample points used to
+#'                  generate the grid. Small values yield long generation times
+#'                  while large values may omit cells.
+#'
+#' @param savegrid  If savegrid is set to a file path, then a shapefile 
+#'                  containing the grid is written to that path and the filename
+#'                  is returned. No other manipulations are done.
+#'                  Default: NA (do not save grid, return it)
 #'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
 #'         If \code{savegrid=TRUE}, returns a filename.
@@ -1055,44 +863,25 @@ dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE){ #TODO: Densify?
 #' south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa)
 #'
 #' @export
-# dgshptogrid <- function(dggs,shpfname,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: Densify?
-#   dgverify(dggs) 
+dgshptogrid <- function(dggs,shpfname,cellsize=0.1,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
+  dgverify(dggs) 
 
-#   shpfname <- trimws(shpfname)
+  shpfname <- trimws(shpfname)
 
-#   if(!grepl('\\.shp$',shpfname))
-#     stop("Shapefile name does to end with '.shp'!")
-#   if(!file.exists(shpfname))
-#     stop('Shapefile does not exist!')
+  if(!grepl('\\.shp$',shpfname))
+    stop("Shapefile name does to end with '.shp'!")
+  if(!file.exists(shpfname))
+    stop('Shapefile does not exist!')
 
-#   shpfname <- substr(shpfname,1,nchar(shpfname)-4)
+  dsn   <- dirname(shpfname)
+  layer <- tools::file_path_sans_ext(basename(shpfname))
+  poly  <- readOGR(dsn=dsn, layer=layer)
 
-#   cellfile <- tempfile(pattern = "dggridR-", fileext=".cell_dat")
+  #Generate a dense grid of points
+  samp_points <- sp::makegrid(poly, cellsize = 0.1)
 
-#   dggs[['dggrid_operation']] = 'GENERATE_GRID'
-#   dggs[['update_frequency']] = 10000000
+  #Convert the points to SEQNUM ids for dggs
+  samp_points <- dgGEO_to_SEQNUM(dggs,samp_points$x1, samp_points$x2)$seqnum
 
-#   dggs[['clip_region_files']] = shpfname
-#   dggs[['clip_subset_type']]  = 'SHAPEFILE'
-
-#   dggs[['cell_output_file_name']] = cellfile
-#   dggs[['cell_output_type']]      = 'KML' #SHAPEFILE or KML or GEOJSON or AIGEN
-
-#   ret <- dgrun(dggs,check=FALSE,has_output_file=FALSE)
-
-#   cellfile <- paste(cellfile,".kml",sep="")
-
-#   if(savegrid)
-#     return(cellfile)
-
-#   ret <- dg_process_polydata(cellfile,frame,wrapcells)
-
-#   #Clean up more
-#   if(!get("dg_debug", envir=dg_env)){
-#     file.remove(cellfile)
-#   } else {
-#     print(paste("Cellfile:",cellfile))
-#   }
-
-#   ret
-# }
+  dgcellstogrid(dggs, samp_points, frame=frame, wrapcells=wrapcells, savegrid=savegrid)
+}
