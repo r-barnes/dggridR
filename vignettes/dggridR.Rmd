@@ -153,13 +153,7 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 
 1. Construct a discrete global grid system (dggs) object using `dgconstruct()`
 
-2. Modify this dggs object using:
-    * `dg_closest_res_to_area()`
-    * `dg_closest_res_to_cls()`
-    * `dg_closest_res_to_spacing()`
-    * `dgsetres()`
-
-3. Get information about your dggs object using:
+2. Get information about your dggs object using:
 
     * `dggetres()`
     * `dginfo()`
@@ -167,13 +161,14 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 
 4. Get the grid cells of some lat-long points with:
 
-    * `dgtransform()`
+    * `dgGEO_to_SEQNUM()`
+    * One of many, many other such functions
 
 5. Get the boundaries of the associated grid cells for use in plotting with:
 
+    * `dgcellstogrid()`
     * `dgearthgrid()`
     * `dgrectgrid()`
-    * `dgcellstogrid()`
     * `dgshptogrid()`
 
 6. Check that your dggs object is valid (if you've mucked with it) using:
@@ -201,7 +196,7 @@ dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
 data(dgquakes)
 
 #Get the corresponding grid cells for each earthquake epicenter (lat-long pair)
-dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
+dgquakes$cell <- dgGEO_to_SEQNUM(dggs,dgquakes$lon,dgquakes$lat)$seqnum
 
 #Get the number of earthquakes in each cell
 quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
@@ -211,7 +206,7 @@ grid          <- dgcellstogrid(dggs,quakecounts$cell,frame=TRUE,wrapcells=TRUE)
 
 #Update the grid cells' properties to include the number of earthquakes
 #in each cell
-grid          <- merge(grid,quakecounts,by.x="Name",by.y="cell")
+grid          <- merge(grid,quakecounts,by.x="cell",by.y="cell")
 
 #Make adjustments so the output is more visually interesting
 grid$count    <- log(grid$count)
@@ -265,7 +260,7 @@ grid          <- dgearthgrid(dggs,frame=FALSE)
 
 #Update the grid cells' properties to include the number of earthquakes
 #in each cell
-grid@data$count <- merge(grid@data, quakecounts, by.x="Name", by.y="cell", all.x=TRUE)$count
+grid@data$count <- merge(grid@data, quakecounts, by.x="cell", by.y="cell", all.x=TRUE)$count
 
 #Write out the grid
 writeOGR(grid, "quakes_per_cell.kml", "quakes", "KML")
@@ -312,10 +307,10 @@ df    <- data.frame(lat=lat,lon=lon)
 dggs    <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
 
 #Get the corresponding grid cells for each randomly chosen lat-long
-df$cell <- dgtransform(dggs,df$lat,df$lon)
+df$cell <- dgGEO_to_SEQNUM(dggs,df$lon,df$lat)$seqnum
 
 #Get the hexes for each of these cells
-gridfilename <- dgcellstogrid(dggs,df$cell,savegrid=TRUE)
+gridfilename <- dgcellstogrid(dggs,df$cell)
 ```
 
 The resulting distribution of cells appears as follows:
@@ -397,15 +392,16 @@ p
 
 ##Save a grid for use in other software
 
-Reading the grid into R, as is done in the examples above, can be expensive. You
-can instead generate the grid directly to a temporary file, as follows:
+Sometimes you want to use a grid in software other than R. To faciliate this,
+the grid generation commands include the `savegrid` argument, as demonstrated
+below.
 
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 library(dggridR)
 #Generate a global grid whose cells are ~100,000 miles^2
 dggs         <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
 #Save the cells to a KML file for use in other software
-gridfilename <- dgearthgrid(dggs,savegrid=TRUE)
+gridfilename <- dgearthgrid(dggs,savegrid=tempfile())
 ```
 
 ##Get a grid that covers South Africa
@@ -413,14 +409,13 @@ gridfilename <- dgearthgrid(dggs,savegrid=TRUE)
 library(dggridR)
 
 #Generate a dggs specifying an intercell spacing of ~25 miles
-dggs      <- dgconstruct(spacing=25, metric=FALSE, resround='nearest')
-
-#Use the included South Africa borders shapefile to generate a grid covering
-#South Africa (including Lesotho - holes are not excluded)
-sa_grid   <- dgshptogrid(dggs,dg_shpfname_south_africa)
+dggs      <- dgconstruct(spacing=100, metric=FALSE, resround='nearest')
 
 #Read in the South Africa's borders from the shapefile
-sa_border <- readOGR(dsn=dg_shpfname_south_africa, layer="ZAF_adm0")
+sa_border <- readOGR(dsn=dg_shpfname_south_africa(), layer="ZAF_adm0")
+
+#Get a grid covering South Africa
+sa_grid   <- dgshptogrid(dggs, dg_shpfname_south_africa())
 
 #Plot South Africa's borders and the associated grid
 p<- ggplot() + 
@@ -445,7 +440,7 @@ lat <- c(90,-90,26.57,-26.57,26.57,-26.57,26.57,-26.57,26.57,-26.57,26.57,-26.57
 lon <- c(0,0,0,36,72,108,144,180,216,252,288,324)
 
 dggs  <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
-cells <- dgtransform(dggs,lat,lon)
+cells <- dgGEO_to_SEQNUM(dggs,lon,lat)$seqnum
 grid  <- dgcellstogrid(dggs,cells,frame=TRUE,wrapcells=TRUE) #Get grid
 
 #Get polygons for each country of the world
