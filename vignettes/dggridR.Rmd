@@ -180,9 +180,9 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 
 ##Binning Lat-Long Points
 
-The following example demonstrates converting lat-long locations (the epicenters
-of earthquakes) to discrete global grid locations (cell numbers), binning based
-on these numbers, and plotting the result.
+The following example demonstrates converting lat-long locations (the 
+epicenters of earthquakes) to discrete global grid locations (cell numbers), binning based on these numbers, and plotting the result. Additionally, the 
+example demonstrates how to get the center coordinates of the cells.
 
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
@@ -197,6 +197,9 @@ data(dgquakes)
 
 #Get the corresponding grid cells for each earthquake epicenter (lat-long pair)
 dgquakes$cell <- dgGEO_to_SEQNUM(dggs,dgquakes$lon,dgquakes$lat)$seqnum
+
+#Converting SEQNUM to GEO gives the center coordinates of the cells
+cellcenters   <- dgSEQNUM_to_GEO(dggs,dgquakes$cell)
 
 #Get the number of earthquakes in each cell
 quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
@@ -228,6 +231,7 @@ p<- ggplot() +
     geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
     geom_polygon(data=grid,      aes(x=long, y=lat, group=group, fill=count), alpha=0.4)    +
     geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white") +
+    geom_point  (aes(x=cellcenters$lon_deg, y=cellcenters$lat_deg)) +
     scale_fill_gradient(low="blue", high="red")
 p
 ```
