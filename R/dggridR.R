@@ -41,7 +41,9 @@ assign("dg_debug", FALSE, envir=dg_env)
 #' @return A filename of a shapefile containing the national border of South Africa
 #'
 #' @export
-dg_shpfname_south_africa <- file.path(find.package('dggridR'), "extdata", "ZAF_adm0.shp")
+dg_shpfname_south_africa <- function(){
+  file.path(find.package('dggridR'), "extdata", "ZAF_adm0.shp")
+}
 
 
 
