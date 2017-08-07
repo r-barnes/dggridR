@@ -134,16 +134,15 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
 
    if (z > DH + 0.00000005)
    {
-      ::report("sllxy found a point which is located in another polygon!", DgBase::Fatal);
-      // std::cout<<"nTri: "<<nTri
-      //          <<"z:    "<<z
-      //          <<"DH+:  "<<(DH + 0.00000005)
-      //          <<"diff: "<<((DH + 0.00000005) - z)
-      //          <<"\n";
-      // std::cout<<"1: The point: ";
-      // printGeoCoord(geoVect);
-      // std::cout<<" is located on another polygon.\n";
-      // exit(1);
+      std::cout<<"nTri: "<<nTri
+               <<"z:    "<<z
+               <<"DH+:  "<<(DH + 0.00000005)
+               <<"diff: "<<((DH + 0.00000005) - z)
+               <<"\n";
+      std::cout<<"1: The point: ";
+      printGeoCoord(geoVect);
+      std::cout<<" is located on another polygon.\n";
+      exit(1);
    }
 
    azh = atan2(cosLat * sin(geoVect.lon - cent.pt.lon), 
@@ -162,11 +161,10 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
 
    if (z > dz + 0.00000005)
    {
-      ::report("sllxy found a point which is located in another polygon!", DgBase::Fatal);
-      // printf("2: The point: ");
-      // printGeoCoord(geoVect);
-      // printf(" is located on another polygon.\n");
-      // exit(1);
+      printf("2: The point: ");
+      printGeoCoord(geoVect);
+      printf(" is located on another polygon.\n");
+      exit(1);
    }
 
    h = acos(sinAzh * sinGH * cosDH - cosAzh * cosGH);

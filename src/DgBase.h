@@ -88,11 +88,11 @@ DgBase::debug (const string& message) const
 ////////////////////////////////////////////////////////////////////////////////
 {
 
-// #if DGDEBUG
+#if DGDEBUG
 
-//    cout << "DEBUG: [" << instanceName_ << "] " << message << endl;
+   cout << "DEBUG: [" << instanceName_ << "] " << message << endl;
 
-// #endif
+#endif
 
 } // void DgBase::debug
 

@@ -37,8 +37,10 @@ DgTriGrid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
       v.push_back(new DgAddress<DgDVec2D>(cent + DgDVec2D(       0.0, -1.0)));
    }
 
-   // cout << "triangle: " << add << " " << tmpLoc << endl;
-   // cout << vec << endl;
+/*
+   cout << "triangle: " << add << " " << tmpLoc << endl;
+   cout << vec << endl;
+*/
 
 } // void DgTriGrid2D::setAddVertices
 
