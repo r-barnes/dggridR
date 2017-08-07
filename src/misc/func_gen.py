@@ -63,7 +63,7 @@ rcode = """
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
-#' {intype}_to_{outtype}(dggs, {Rin})
+#' dg{intype}_to_{outtype}(dggs, {Rin})
 #'
 #' @export 
 dg{intype}_to_{outtype} <- function(dggs, {Rin}){{
@@ -104,7 +104,7 @@ for c in codes:
         in_args         = ', '.join(['Rcpp::NumericVector in_{1}'.format(ia[0],ia[1]) for ia in i[1]]),
         out_args        = ', '.join(['Rcpp::NumericVector out_{1}'.format(oa[0],oa[1]) for oa in o[1]]),
         size            = 'N',
-        Rparams         = '\n'.join(["#' @param {0}  {1}".format(ia[1],ia[2]) for ia in i[1]]),
+        Rparams         = '\n'.join(["#' @param in_{0}  {1}".format(ia[1],ia[2]) for ia in i[1]]),
         Rin             = ', '.join('in_'+ia[1] for ia in i[1]),
         Rout            = ', '.join('out_'+oa[1] for oa in o[1]),
         init_out        = '\n'.join(['  out_{0} <- rep(0,N)'.format(oa[1]) for oa in o[1]]),
