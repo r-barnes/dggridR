@@ -1,3 +1,24 @@
+dggridR v2.0.1  (Release date: 2017-08-07)
+===============
+
+Changes:
+
+* Fixes necessary to build on Windows systems.
+* Added cell center example
+
+
+dggridR v2.0.0  (Release date: 2017-08-07)
+===============
+
+Changes:
+
+* Complete restructuring of internal engine to improve speed, robustness across
+  operating systems, and to improve access to alternative coordinate systems
+* Make dg_shpfname_south_africa into a function
+* Restructuring of internal engine's directory layout to reduce compilation 
+  complexity
+
+
 dggridR v1.0.1  (Release date: 2017-04-23)
 ===============
 
