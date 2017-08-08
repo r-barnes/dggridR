@@ -210,7 +210,7 @@ namespace dglib {
 
   void Transformer::outPLANE  (std::shared_ptr<DgLocation> loc, long double &x, long double &y){
     dgg.planeRF().convert(loc.get());
-    const DgRFBase* pOutRF = &dgg;
+    const DgRFBase* pOutRF = &dgg.planeRF();
     const DgDVec2D *add = static_cast<const DgRF<DgDVec2D, long double>*>(pOutRF)->getAddress(*loc);
     x = add->x();
     y = add->y();
