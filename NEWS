@@ -1,3 +1,11 @@
+dggridR v2.0.2  (Release date: 2017-08-19)
+===============
+
+Changes:
+
+* Updates dgtransform warning message to note swapped order of arguments. Sorry, Brent :-)
+
+
 dggridR v2.0.1  (Release date: 2017-08-07)
 ===============
 

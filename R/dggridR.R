@@ -256,7 +256,7 @@ dgverify <- function(dggs){
 dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying the original dggs
   dgverify(dggs)
 
-  warning("The 'dgtransform' function has been deprecated. Please use 'dgGEO_to_SEQNUM' instead!")
+  warning("The 'dgtransform(dggs,lat,lon)' function has been deprecated. Please use 'dgGEO_to_SEQNUM(dggs,lon,lat)' instead! NOTE THE ARGUMENT ORDER!")
 
   dgGEO_to_SEQNUM(dggs, lon, lat)$seqnum
 }
