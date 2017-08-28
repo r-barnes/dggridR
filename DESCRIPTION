@@ -3,7 +3,7 @@ Type: Package
 Title: Discrete Global Grids
 Version: 2.0.2
 Date: 2017-08-19
-Author: Richard Barnes [aut, cre], Kevin Sahr [ctb], Gerald Evenden [ctb], Angus Johnson [ctb], Frank Warmerdam [ctb]
+Author: Richard Barnes [aut, cre], Kevin Sahr [cph], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph]
 Maintainer: Richard Barnes <rbarnes@umn.edu>
 NeedsCompilation: yes
 Depends: R (>= 3.4.0), rgdal (>= 1.1), ggplot2 (>= 2.1), dplyr (>= 0.4), sp (>= 1.2)
@@ -15,10 +15,10 @@ Suggests: knitr,
     testthat
 License: MIT + file LICENCE
 Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rbarnes@umn.edu"),
-             person("Kevin",   "Sahr",      role = "ctb", email = "sahrk@sou.edu"),
-             person("Gerald",  "Evenden",   role = "ctb"),
-             person("Angus",   "Johnson",   role = "ctb"),
-             person("Frank",   "Warmerdam", role = "ctb"))
+             person("Kevin",   "Sahr",      role = "cph", email = "sahrk@sou.edu"),
+             person("Gerald",  "Evenden",   role = "cph"),
+             person("Angus",   "Johnson",   role = "cph"),
+             person("Frank",   "Warmerdam", role = "cph"))
 Description: Spatial analyses involving binning require that every bin have the same area, but this is impossible using a rectangular grid laid over the Earth or over any projection of the Earth. Discrete global grids use hexagons, triangles, and diamonds to overcome this issue, overlaying the Earth with equally-sized bins. This package provides utilities for working with discrete global grids, along with utilities to aid in plotting such data.
 URL: https://github.com/r-barnes/dggridR/
 BugReports: https://github.com/r-barnes/dggridR/
