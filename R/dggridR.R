@@ -659,7 +659,7 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
   regbox <- SpatialPolygons(list(Polygons(list(regbox), ID = "a")), proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
   #Generate a dense grid of points
-  samp_points <- sp::makegrid(regbox, cellsize = 0.1)
+  samp_points <- sp::makegrid(regbox, cellsize = cellsize)
 
   #Convert the points to SEQNUM ids for dggs
   samp_points <- dgGEO_to_SEQNUM(dggs,samp_points$x1, samp_points$x2)$seqnum
@@ -871,7 +871,7 @@ dgshptogrid <- function(dggs,shpfname,cellsize=0.1,frame=TRUE,wrapcells=TRUE,sav
   poly  <- readOGR(dsn=dsn, layer=layer)
 
   #Generate a dense grid of points
-  samp_points <- sp::makegrid(poly, cellsize = 0.1)
+  samp_points <- sp::makegrid(poly, cellsize = cellsize)
 
   #Convert the points to SEQNUM ids for dggs
   samp_points <- dgGEO_to_SEQNUM(dggs,samp_points$x1, samp_points$x2)$seqnum
