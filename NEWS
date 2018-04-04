@@ -5,6 +5,7 @@ dggridR v2.0.3  (Release date: 2018-04-04)
 *More helpful warning messages
 *CRAN-compliant package title
 *Adjusted function documentation to match behaviour
+*Fixed issue with default value of `savegrid`
 
 
 dggridR v2.0.2  (Release date: 2017-08-19)

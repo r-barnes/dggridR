@@ -6,7 +6,7 @@
          specified region}
 \usage{
 dgrectgrid(dggs, minlat = -1, minlon = -1, maxlat = -1, maxlon = -1,
-  cellsize = 0.1, frame = TRUE, wrapcells = TRUE, savegrid = FALSE)
+  cellsize = 0.1, frame = TRUE, wrapcells = TRUE, savegrid = NA)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
