@@ -40,7 +40,7 @@ Default: NA (do not save grid, return it)}
 }
 \value{
 Returns a data frame or OGR poly object, as specified by \code{frame}.
-        If \code{savegrid=TRUE}, returns a filename.
+        If \code{!is.na(savegrid)}, returns a filename.
 }
 \description{
 Note: This may generate odd results for very large

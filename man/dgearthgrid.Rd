@@ -27,7 +27,7 @@ Default: NA (do not save grid, return it)}
 }
 \value{
 Returns a data frame or OGR poly object, as specified by \code{frame}.
-        If \code{savegrid=TRUE}, returns a filename.
+        If \code{!is.na(savegrid)}, returns a filename.
 }
 \description{
 Note: If you have a high-resolution grid this may take a
@@ -35,9 +35,9 @@ Note: If you have a high-resolution grid this may take a
 }
 \examples{
 library(dggridR)
-dggs <- dgconstruct(res=20)
-res  <- dg_closest_res_to_spacing(dggs,spacing=1000,round='down',metric=FALSE)
-dggs <- dgsetres(dggs,res)
-gridfilename <- dgearthgrid(dggs,savegrid=TRUE) #Save directly to a file
+dggs         <- dgconstruct(res=20)
+res          <- dg_closest_res_to_spacing(dggs,spacing=1000,round='down',metric=FALSE)
+dggs         <- dgsetres(dggs,res)
+gridfilename <- dgearthgrid(dggs,savegrid="temp.shp") #Save directly to a file
 
 }
