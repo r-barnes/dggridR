@@ -800,6 +800,7 @@ dgsavegrid <- function(grid,shpfname) {
 }
 
 
+
 #' @name dgshptogrid
 #' 
 #' @title           Return boundary coordinates for cells intersecting a 
