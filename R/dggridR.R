@@ -651,7 +651,7 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
 #'                maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
 #'
 #' @export
-dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1,frame=TRUE,wrapcells=TRUE,savegrid=FALSE){ #TODO: Densify?
+dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
   dgverify(dggs) 
 
   coords <- matrix(c(minlon, minlat, maxlon, minlat, maxlon, maxlat, maxlon, minlat, minlon, minlat), ncol = 2, byrow = TRUE)
