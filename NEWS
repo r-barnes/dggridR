@@ -1,6 +1,10 @@
-Next release
+dggridR v2.0.3  (Release date: 2018-04-04)
 ===============
 *Fix bugs in dgshptogrid() and dgrectgrid() with cellsize not being respected
+*Updated authorship info for accuracy
+*More helpful warning messages
+*CRAN-compliant package title
+*Adjusted function documentation to match behaviour
 
 
 dggridR v2.0.2  (Release date: 2017-08-19)
