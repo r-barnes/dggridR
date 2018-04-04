@@ -639,7 +639,7 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
 #'                  Default: NA (do not save grid, return it)
 #'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
-#'         If \code{savegrid=TRUE}, returns a filename.
+#'         If \code{!is.na(savegrid)}, returns a filename.
 #'
 #' @examples 
 #' library(dggridR)
@@ -695,14 +695,14 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #'                  Default: NA (do not save grid, return it)
 #'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
-#'         If \code{savegrid=TRUE}, returns a filename.
+#'         If \code{!is.na(savegrid)}, returns a filename.
 #'
 #' @examples 
 #' library(dggridR)
-#' dggs <- dgconstruct(res=20)
-#' res  <- dg_closest_res_to_spacing(dggs,spacing=1000,round='down',metric=FALSE)
-#' dggs <- dgsetres(dggs,res)
-#' gridfilename <- dgearthgrid(dggs,savegrid=TRUE) #Save directly to a file
+#' dggs         <- dgconstruct(res=20)
+#' res          <- dg_closest_res_to_spacing(dggs,spacing=1000,round='down',metric=FALSE)
+#' dggs         <- dgsetres(dggs,res)
+#' gridfilename <- dgearthgrid(dggs,savegrid="temp.shp") #Save directly to a file
 #'
 #' @export
 dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
@@ -747,7 +747,7 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Dens
 #'                  Default: NA (do not save grid, return it)
 #'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
-#'         If \code{savegrid=TRUE}, returns a filename.
+#'         If \code{!is.na(savegrid)}, returns a filename.
 #'
 #' @examples 
 #' library(dggridR)
@@ -848,7 +848,7 @@ dgsavegrid <- function(grid,shpfname) {
 #'                  Default: NA (do not save grid, return it)
 #'
 #' @return Returns a data frame or OGR poly object, as specified by \code{frame}.
-#'         If \code{savegrid=TRUE}, returns a filename.
+#'         If \code{!is.na(savegrid)}, returns a filename.
 #'
 #' @examples 
 #' library(dggridR)
