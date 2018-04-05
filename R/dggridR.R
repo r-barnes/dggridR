@@ -94,11 +94,12 @@ dg_shpfname_south_africa <- function(){
 #'                  functions
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #'
 #' dggs <- dgconstruct(area=5,metric=FALSE)
-#'
+#' }
 #' @export 
 dgconstruct <- function(
   projection   = 'ISEA',
@@ -169,10 +170,11 @@ dgconstruct <- function(
 #'             functions
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' dggs <- dgsetres(dggs,10)
-#'
+#' }
 #' @export 
 dgsetres <- function(dggs,res){
   dggs[['res']] = res
@@ -194,10 +196,11 @@ dgsetres <- function(dggs,res){
 #' @return     The function has no return value. A stop signal is raised if the
 #'             object is misspecified
 #' @examples
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' dgverify(dggs)
-#'
+#' }
 #' @export
 dgverify <- function(dggs){
   #See page 21 of documentation for further bounds
@@ -245,13 +248,14 @@ dgverify <- function(dggs){
 #'             in the discrete grid.
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' data(dgquakes)
 #'
 #' #Construct a grid with cells about ~1000 miles wide
 #' dggs          <- dgconstruct(spacing=1000,metric=FALSE) 
 #' dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
-#'
+#' }
 #' @export 
 dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying the original dggs
   dgverify(dggs)
@@ -276,10 +280,11 @@ dgtransform <- function(dggs, lat, lon){ #TODO: Make sure we're not modifying th
 #' @return No return. All info is printed to the screen.
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' dginfo(dggs)
-#'
+#' }
 #' @export 
 dginfo <- function(dggs){
   dgverify(dggs)
@@ -312,10 +317,11 @@ dginfo <- function(dggs){
 #'             scale of the cells. All values are in kilometres.
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' dggetres(dggs)
-#'
+#' }
 #' @export 
 dggetres <- function(dggs){
   dgverify(dggs)
@@ -349,6 +355,7 @@ dggetres <- function(dggs){
 #' @return     The maximum cell id.
 #'
 #' @examples 
+#' \dontrun{
 #' #Choose a set of cells randomly distributed over the Earth
 #' library(dggridR)
 #' dggs    <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
@@ -356,7 +363,7 @@ dggetres <- function(dggs){
 #' maxcell <- dgmaxcell(dggs)                     #Get maximum cell id
 #' cells   <- sample(1:maxcell, N, replace=FALSE) #Choose random cells
 #' grid    <- dgcellstogrid(dggs,cells,frame=TRUE,wrapcells=TRUE) #Get grid
-#'
+#' }
 #' @export 
 dgmaxcell <- function(dggs,res=NA){
   dgverify(dggs)
@@ -461,11 +468,12 @@ dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TR
 #' @return A number representing the grid resolution
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' res  <- dg_closest_res_to_area(dggs,1)
 #' dggs <- dgsetres(dggs,res)
-#'
+#' }
 #' @export 
 dg_closest_res_to_area <- function(dggs,area,round='nearest',show_info=TRUE,metric=TRUE){
   dg_closest_res(dggs,'area_km',area,round,show_info,metric)
@@ -494,11 +502,12 @@ dg_closest_res_to_area <- function(dggs,area,round='nearest',show_info=TRUE,metr
 #' @return A number representing the grid resolution
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' res  <- dg_closest_res_to_spacing(dggs,1)
 #' dggs <- dgsetres(dggs,res)
-#'
+#' }
 #' @export 
 dg_closest_res_to_spacing <- function(dggs,spacing,round='nearest',show_info=TRUE,metric=TRUE){
   dg_closest_res(dggs,'spacing_km',spacing,round,show_info,metric)
@@ -529,11 +538,12 @@ dg_closest_res_to_spacing <- function(dggs,spacing,round='nearest',show_info=TRU
 #' @return A number representing the grid resolution
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' res  <- dg_closest_res_to_cls(dggs,1)
 #' dggs <- dgsetres(dggs,res)
-#'
+#' }
 #' @export
 dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric=TRUE){
   dg_closest_res(dggs,'cls_km',cls,round,show_info,metric)
@@ -642,6 +652,7 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
 #'         If \code{!is.na(savegrid)}, returns a filename.
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs <- dgconstruct(spacing=1000,metric=FALSE,resround='down')
 #'
@@ -649,7 +660,7 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
 #' grid <- dgrectgrid(dggs,
 #'                minlat=24.7433195, minlon=-124.7844079, 
 #'                maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
-#'
+#' }
 #' @export
 dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
   dgverify(dggs) 
@@ -698,12 +709,13 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #'         If \code{!is.na(savegrid)}, returns a filename.
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' dggs         <- dgconstruct(res=20)
 #' res          <- dg_closest_res_to_spacing(dggs,spacing=1000,round='down',metric=FALSE)
 #' dggs         <- dgsetres(dggs,res)
 #' gridfilename <- dgearthgrid(dggs,savegrid="temp.shp") #Save directly to a file
-#'
+#' }
 #' @export
 dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
   dgverify(dggs) 
@@ -750,6 +762,7 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Dens
 #'         If \code{!is.na(savegrid)}, returns a filename.
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #' data(dgquakes)
 #'
@@ -759,7 +772,7 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Dens
 #'
 #' #Get grid cells for the earthquakes identified
 #' grid          <- dgcellstogrid(dggs, dgquakes$cell, frame=TRUE)
-#'
+#' }
 #' @export
 dgcellstogrid <- function(dggs,cells,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
   dgverify(dggs) 
@@ -851,11 +864,12 @@ dgsavegrid <- function(grid,shpfname) {
 #'         If \code{!is.na(savegrid)}, returns a filename.
 #'
 #' @examples 
+#' \dontrun{
 #' library(dggridR)
 #'
 #' dggs <- dgconstruct(spacing=25, metric=FALSE, resround='nearest')
 #' south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa())
-#'
+#' }
 #' @export
 dgshptogrid <- function(dggs,shpfname,cellsize=0.1,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
   dgverify(dggs) 

@@ -36,6 +36,7 @@ Returns the coordinates constituting the boundary of a
                  processing and storage requirements.
 }
 \examples{
+\dontrun{
 library(dggridR)
 data(dgquakes)
 
@@ -45,5 +46,5 @@ dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 
 #Get grid cells for the earthquakes identified
 grid          <- dgcellstogrid(dggs, dgquakes$cell, frame=TRUE)
-
+}
 }
