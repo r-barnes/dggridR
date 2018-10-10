@@ -29,8 +29,6 @@ size.** (There are some minor caveats which are detailed in the vignettes.)
 
 (Naturally, you can use _much_ smaller cells than those shown in the image above.)
 
-This package includes everything you need to make spatial binning great again.
-
 Many details and examples are included in the vignette.
 
 
