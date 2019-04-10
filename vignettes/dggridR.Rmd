@@ -45,7 +45,7 @@ orthobase+
 
 
 
-#_Spatial Analysis Done Right_
+# _Spatial Analysis Done Right_
 
 You want to do spatial statistics, and it's going to involve binning.
 
