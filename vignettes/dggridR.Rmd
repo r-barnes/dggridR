@@ -120,8 +120,9 @@ package. (TODO)
 
 ## ISEA3H Details
 
-The following chart shows the number of cells, their area, and statistics
+The following table shows the number of cells, their area, and statistics
 regarding the spacing of their center nodes for the ISEA3H grid type.
+
 
 |Res |Number of Cells  | Cell Area (km^2) |    Min      |     Max     |    Mean     |    Std    |
 |---:|----------------:|-----------------:|------------:|------------:|------------:|----------:|
@@ -147,6 +148,7 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 | 19 |  11,622,614,672 |          0.04389 |     0.20743 |     0.26137 |     0.22643 |   0.01371 |
 | 20 |  34,867,844,012 |          0.01463 |     0.11208 |     0.14489 |     0.13071 |   0.00827 |
 
+Table: ISEA3H grid cell characteristics.
 
 
 # How do I use it?
