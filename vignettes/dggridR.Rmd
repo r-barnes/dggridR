@@ -45,7 +45,7 @@ orthobase+
 
 
 
-#_Spatial Analysis Done Right_
+# _Spatial Analysis Done Right_
 
 You want to do spatial statistics, and it's going to involve binning.
 
@@ -64,7 +64,7 @@ dggridR solves this problem.
 
 dggridR builds discrete global grids which partition the surface of the Earth
 into hexagonal, triangular, or diamond cells, **all of which have the same
-size.** (There are some minor caveats which are detailed in the vignettes.)
+size.** (There are some minor details which are detailed in the [Caveats section](#caveats) below.)
 
 ![Discrete Global Grid in use](dggrid.png)
 
@@ -75,7 +75,7 @@ Many details are included in the vignette.
 
 
 
-#Grids
+# Grids
 
 The following grids are available: 
 
@@ -118,10 +118,11 @@ package. (TODO)
 
 
 
-##ISEA3H Details
+## ISEA3H Details
 
-The following chart shows the number of cells, their area, and statistics
+The following table shows the number of cells, their area, and statistics
 regarding the spacing of their center nodes for the ISEA3H grid type.
+
 
 |Res |Number of Cells  | Cell Area (km^2) |    Min      |     Max     |    Mean     |    Std    |
 |---:|----------------:|-----------------:|------------:|------------:|------------:|----------:|
@@ -147,9 +148,10 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
 | 19 |  11,622,614,672 |          0.04389 |     0.20743 |     0.26137 |     0.22643 |   0.01371 |
 | 20 |  34,867,844,012 |          0.01463 |     0.11208 |     0.14489 |     0.13071 |   0.00827 |
 
+Table: ISEA3H grid cell characteristics.
 
 
-#How do I use it?
+# How do I use it?
 
 1. Construct a discrete global grid system (dggs) object using `dgconstruct()`
 
@@ -176,9 +178,9 @@ regarding the spacing of their center nodes for the ISEA3H grid type.
     * `dgverify()`
 
 
-#Examples
+# Examples
 
-##Binning Lat-Long Points
+## Binning Lat-Long Points
 
 The following example demonstrates converting lat-long locations (the 
 epicenters of earthquakes) to discrete global grid locations (cell numbers), binning based on these numbers, and plotting the result. Additionally, the 
@@ -271,7 +273,7 @@ writeOGR(grid, "quakes_per_cell.kml", "quakes", "KML")
 ```
 
 
-##Randomly Sampling the Earth: Method 1
+## Randomly Sampling the Earth: Method 1
 
 Say you want to sample `N` areas of equal size uniformly distributed on the
 Earth. dggridR provides two possible ways to accomplish this. The conceptually
@@ -341,7 +343,7 @@ p
 
 
 
-##Randomly Sampling the Earth: Method 2
+## Randomly Sampling the Earth: Method 2
 
 Say you want to sample `N` areas of equal size uniformly distributed on the
 Earth. dggridR provides two possible ways to accomplish this. The easiest way to
@@ -394,7 +396,7 @@ p
 
 
 
-##Save a grid for use in other software
+## Save a grid for use in other software
 
 Sometimes you want to use a grid in software other than R. To faciliate this,
 the grid generation commands include the `savegrid` argument, as demonstrated
@@ -408,7 +410,7 @@ dggs         <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
 gridfilename <- dgearthgrid(dggs,savegrid=tempfile())
 ```
 
-##Get a grid that covers South Africa
+## Get a grid that covers South Africa
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE, fig.align='center', fig.width=5, fig.height=5}
 library(dggridR)
 
@@ -431,7 +433,7 @@ p
 ```
 
 
-#Caveats
+# Caveats
 
 At every resolution, the Icosahedral grids contain 12 pentagonal cells which
 each have an area exactly 5/6 that of the hexagonal cells. In the standard
@@ -460,7 +462,7 @@ p
 
 
 
-#Roadmap
+# Roadmap
 
 * Method to convert between grid cell ids at different resolutions
 
@@ -474,7 +476,7 @@ time, Sahr's dggrid is the best option I've found.
 
 
 
-#Credits
+# Credits
 
 This R package was developed by Richard Barnes (http://rbarnes.org).
 
@@ -487,7 +489,7 @@ User Documentation, which is available in its entirety
 
 
 
-#Disclaimer
+# Disclaimer
 
 This package *should* operate in the manner described here, in the package's
 main documentation, and in Kevin Sahr's dggrid documentation. Unfortunately,
@@ -497,7 +499,7 @@ enhancements, we want to hear about them.
 
 
 
-#Citing this Package
+# Citing this Package
 
 Please cite this package as:
 
@@ -505,4 +507,4 @@ Please cite this package as:
 
 
 
-#References
+# References
