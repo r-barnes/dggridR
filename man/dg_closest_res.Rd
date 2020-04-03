@@ -4,8 +4,14 @@
 \alias{dg_closest_res}
 \title{Determine an appropriate grid resolution based on input data.}
 \usage{
-dg_closest_res(dggs, col, val, round = "nearest", show_info = TRUE,
-  metric = TRUE)
+dg_closest_res(
+  dggs,
+  col,
+  val,
+  round = "nearest",
+  show_info = TRUE,
+  metric = TRUE
+)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}

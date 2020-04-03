@@ -4,7 +4,9 @@
 \name{dg_env}
 \alias{dg_env}
 \title{Control global aspects of the dggridR package}
-\format{An object of class \code{environment} of length 1.}
+\format{
+An object of class \code{environment} of length 1.
+}
 \usage{
 dg_env
 }

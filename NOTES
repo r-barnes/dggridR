@@ -1,3 +1,19 @@
+Checking
+====================
+
+Clean:
+
+find . -iname "*.so" | xargs rm -f
+find . -iname "*.o" | xargs rm -f
+find . -iname "*.a" | xargs rm -f
+rm -f src/apps/appex/appex
+rm -f src/apps/dggrid/dggrid
+
+R CMD check --as-cran src
+
+echo put my-local-file.txt | ftp win-builder.r-project.org
+
+
 Releasing
 ====================
 

@@ -1,3 +1,9 @@
+dggridR v2.0.4  (Release date: 2020-03-04)
+===============
+*Fix some new warnings identified by CRAN's updated compilers.
+*Added doi
+
+
 dggridR v2.0.3  (Release date: 2018-04-04)
 ===============
 *Fix bugs in dgshptogrid() and dgrectgrid() with cellsize not being respected

@@ -4,8 +4,13 @@
 \alias{dg_closest_res_to_spacing}
 \title{Determine grid resolution from desired spacing.}
 \usage{
-dg_closest_res_to_spacing(dggs, spacing, round = "nearest",
-  show_info = TRUE, metric = TRUE)
+dg_closest_res_to_spacing(
+  dggs,
+  spacing,
+  round = "nearest",
+  show_info = TRUE,
+  metric = TRUE
+)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}

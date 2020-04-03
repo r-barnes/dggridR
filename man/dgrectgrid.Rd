@@ -5,8 +5,17 @@
 \title{Return the coordinates constituting the boundary of cells within a
          specified region}
 \usage{
-dgrectgrid(dggs, minlat = -1, minlon = -1, maxlat = -1, maxlon = -1,
-  cellsize = 0.1, frame = TRUE, wrapcells = TRUE, savegrid = NA)
+dgrectgrid(
+  dggs,
+  minlat = -1,
+  minlon = -1,
+  maxlat = -1,
+  maxlon = -1,
+  cellsize = 0.1,
+  frame = TRUE,
+  wrapcells = TRUE,
+  savegrid = NA
+)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}

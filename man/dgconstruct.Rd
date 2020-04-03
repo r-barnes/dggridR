@@ -4,10 +4,22 @@
 \alias{dgconstruct}
 \title{Construct a discrete global grid system (dggs) object}
 \usage{
-dgconstruct(projection = "ISEA", aperture = 3, topology = "HEXAGON",
-  res = NA, precision = 7, area = NA, spacing = NA, cls = NA,
-  resround = "nearest", metric = TRUE, show_info = TRUE,
-  azimuth_deg = 0, pole_lat_deg = 58.28252559, pole_lon_deg = 11.25)
+dgconstruct(
+  projection = "ISEA",
+  aperture = 3,
+  topology = "HEXAGON",
+  res = NA,
+  precision = 7,
+  area = NA,
+  spacing = NA,
+  cls = NA,
+  resround = "nearest",
+  metric = TRUE,
+  show_info = TRUE,
+  azimuth_deg = 0,
+  pole_lat_deg = 58.28252559,
+  pole_lon_deg = 11.25
+)
 }
 \arguments{
 \item{projection}{Type of grid to use. Options are: ISEA and FULLER.

@@ -5,8 +5,14 @@
 \title{Return boundary coordinates for cells intersecting a 
                  shapefile}
 \usage{
-dgshptogrid(dggs, shpfname, cellsize = 0.1, frame = TRUE,
-  wrapcells = TRUE, savegrid = NA)
+dgshptogrid(
+  dggs,
+  shpfname,
+  cellsize = 0.1,
+  frame = TRUE,
+  wrapcells = TRUE,
+  savegrid = NA
+)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}

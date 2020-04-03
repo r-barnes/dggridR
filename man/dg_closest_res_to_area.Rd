@@ -4,8 +4,13 @@
 \alias{dg_closest_res_to_area}
 \title{Determine resolution based on desired area}
 \usage{
-dg_closest_res_to_area(dggs, area, round = "nearest", show_info = TRUE,
-  metric = TRUE)
+dg_closest_res_to_area(
+  dggs,
+  area,
+  round = "nearest",
+  show_info = TRUE,
+  metric = TRUE
+)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}

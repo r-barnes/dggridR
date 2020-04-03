@@ -5,8 +5,13 @@
 \title{Determine an appropriate grid resolution based on a desired 
        characteristic length scale of the cells.}
 \usage{
-dg_closest_res_to_cls(dggs, cls, round = "nearest", show_info = TRUE,
-  metric = TRUE)
+dg_closest_res_to_cls(
+  dggs,
+  cls,
+  round = "nearest",
+  show_info = TRUE,
+  metric = TRUE
+)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
