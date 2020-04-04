@@ -276,7 +276,7 @@ namespace dglib {
     y.resize(reg.size());
 
     const auto &grf = dgg.geoRF();
-    for(unsigned int i=0;i<reg.size();i++){
+    for(int i=0;i<reg.size();i++){
       const DgGeoCoord *add = grf.getAddress(reg[i]);
       x.at(i) = add->lonDegs();
       y.at(i) = add->latDegs();

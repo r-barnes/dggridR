@@ -24,7 +24,7 @@ Rcpp::List GlobalGrid(
     const auto sn = ggg(tempx,tempy);
     x.insert(x.end(),tempx.begin(),tempx.end());
     y.insert(y.end(),tempy.begin(),tempy.end());
-    for(int i=0;i<tempx.size();i++)
+    for(unsigned int i=0;i<tempx.size();i++)
       seqnum.push_back(sn);
   }
 
@@ -58,7 +58,7 @@ Rcpp::List SeqNumGrid(
     const auto sn = sngg(tempx,tempy);
     x.insert(x.end(),tempx.begin(),tempx.end());
     y.insert(y.end(),tempy.begin(),tempy.end());
-    for(int i=0;i<tempx.size();i++)
+    for(unsigned int i=0;i<tempx.size();i++)
       seqnum.push_back(sn);
   }
 
