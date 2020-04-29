@@ -281,12 +281,12 @@ dginfo <- function(dggs){
 
   res <- dggetres(dggs)
 
-  scipen <- getOption('scipen')
+  oops <- options()
+  on.exit(options(oops))
+
   options(scipen=999)
 
   print(res, sep="\r\n")
-
-  options(scipen=scipen)
 
   NULL
 }
