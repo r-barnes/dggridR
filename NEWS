@@ -1,7 +1,8 @@
-dggridR v2.0.4  (Release date: 2020-03-04)
+dggridR v2.0.4  (Release date: 2020-04-29)
 ===============
 *Fix some new warnings identified by CRAN's updated compilers.
 *Added doi
+*Updated shapelib
 
 
 dggridR v2.0.3  (Release date: 2018-04-04)
