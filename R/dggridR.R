@@ -379,7 +379,7 @@ dgmaxcell <- function(dggs,res=NA){
 #' @param dggs      A dggs object from dgconstruct()
 #'
 #' @param col       Column in which to search for a close value. Should be: 
-#'                  AreaKm, SpacingKm, or CLSKm.
+#'                  area_km, spacing_km, or cls_km.
 #'
 #' @param val       The value to search for
 #'
@@ -395,7 +395,7 @@ dgmaxcell <- function(dggs,res=NA){
 #' @examples 
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
-#' res  <- dg_closest_res(dggs,'AreaKm',1)
+#' res  <- dg_closest_res(dggs,'area_km',1)
 #' dggs <- dgsetres(dggs,res)
 #' @export
 dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TRUE){
@@ -404,6 +404,9 @@ dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TR
   dgverify(dggs)
 
   ret <- dggetres(dggs)
+
+  if(!(col %in% c('area_km', 'spacing_km', 'cls_km')))
+    stop("'col' must be one of area_km, spacing_km, or cls_km")
 
   searchvec = ret[col]
 
