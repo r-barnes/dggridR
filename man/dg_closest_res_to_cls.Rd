@@ -33,10 +33,8 @@ The characteristic length scale (CLS) is the diameter of a spherical
          cap of the same area as a cell of the specified resolution.
 }
 \examples{
-\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 res  <- dg_closest_res_to_cls(dggs,1)
 dggs <- dgsetres(dggs,res)
-}
 }

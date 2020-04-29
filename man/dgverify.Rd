@@ -17,9 +17,7 @@ The function has no return value. A stop signal is raised if the
 Verify that a dggs object has appropriate values
 }
 \examples{
-\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 dgverify(dggs)
-}
 }

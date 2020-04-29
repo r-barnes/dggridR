@@ -57,7 +57,6 @@ Note: This may generate odd results for very large
                  weird... as you should know, if you're using this package.
 }
 \examples{
-\dontrun{
 library(dggridR)
 dggs <- dgconstruct(spacing=1000,metric=FALSE,resround='down')
 
@@ -65,5 +64,4 @@ dggs <- dgconstruct(spacing=1000,metric=FALSE,resround='down')
 grid <- dgrectgrid(dggs,
                minlat=24.7433195, minlon=-124.7844079, 
                maxlat=49.3457868, maxlon=-66.9513812, frame=TRUE)
-}
 }

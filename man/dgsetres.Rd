@@ -24,9 +24,7 @@ Returns a dggs object which can be passed to other dggridR
 Set the resolution of a dggs object
 }
 \examples{
-\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 dggs <- dgsetres(dggs,10)
-}
 }

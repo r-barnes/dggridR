@@ -17,9 +17,7 @@ dggs objects have many settings. This returns all of them, along
          with info about the grid being specified.
 }
 \examples{
-\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 dginfo(dggs)
-}
 }

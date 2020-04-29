@@ -18,9 +18,7 @@ A data frame containing the resolution levels, number of cells,
 Gets a grid's resolution and cell property info as a data frame.
 }
 \examples{
-\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 dggetres(dggs)
-}
 }

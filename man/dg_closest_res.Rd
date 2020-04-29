@@ -17,7 +17,7 @@ dg_closest_res(
 \item{dggs}{A dggs object from dgconstruct()}
 
 \item{col}{Column in which to search for a close value. Should be: 
-AreaKm, SpacingKm, or CLSKm.}
+area_km, spacing_km, or cls_km.}
 
 \item{val}{The value to search for}
 
@@ -38,10 +38,8 @@ This is a generic function that is used to determine an appropriate
          searching it for a value close to the input.
 }
 \examples{
-\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
-res  <- dg_closest_res(dggs,'AreaKm',1)
+res  <- dg_closest_res(dggs,'area_km',1)
 dggs <- dgsetres(dggs,res)
-}
 }

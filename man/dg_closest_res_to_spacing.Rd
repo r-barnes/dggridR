@@ -32,10 +32,8 @@ Determine an appropriate grid resolution based on a desired
                  spacing between the center of adjacent cells.
 }
 \examples{
-\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 res  <- dg_closest_res_to_spacing(dggs,1)
 dggs <- dgsetres(dggs,res)
-}
 }

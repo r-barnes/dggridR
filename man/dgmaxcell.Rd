@@ -20,7 +20,6 @@ Cells are labeled 1-N. This function returns N. This is useful if
             you want to choose cells from the dggs randomly.
 }
 \examples{
-\dontrun{
 #Choose a set of cells randomly distributed over the Earth
 library(dggridR)
 dggs    <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
@@ -28,5 +27,4 @@ N       <- 100                                 #Number of cells
 maxcell <- dgmaxcell(dggs)                     #Get maximum cell id
 cells   <- sample(1:maxcell, N, replace=FALSE) #Choose random cells
 grid    <- dgcellstogrid(dggs,cells,frame=TRUE,wrapcells=TRUE) #Get grid
-}
 }

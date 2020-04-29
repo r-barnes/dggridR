@@ -76,10 +76,8 @@ Returns a dggs object which can be passed to other dggridR
 Construct a discrete global grid system (dggs) object
 }
 \examples{
-\dontrun{
 library(dggridR)
 dggs <- dgconstruct(res=20)
 
 dggs <- dgconstruct(area=5,metric=FALSE)
-}
 }
