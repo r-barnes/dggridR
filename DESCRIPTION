@@ -2,8 +2,8 @@ Package: dggridR
 Type: Package
 Title: Discrete Global Grids
 Version: 2.0.4
-Date: 2020-03-03
-Author: Richard Barnes [aut, cre], Kevin Sahr [cph], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph]
+Date: 2020-04-29
+Author: Richard Barnes [aut, cre], Kevin Sahr [cph, ctb], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph], Even Rouault [cph], Lian Song [ctb]
 Maintainer: Richard Barnes <rijard.barnes@gmail.com>
 NeedsCompilation: yes
 Depends: R (>= 3.4.0), rgdal (>= 1.1), ggplot2 (>= 2.1), dplyr (>= 0.4), sp (>= 1.2)
@@ -14,11 +14,14 @@ Suggests: knitr,
     R.rsp,
     testthat
 License: MIT + file LICENCE
-Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rbarnes@umn.edu"),
-             person("Kevin",   "Sahr",      role = "cph", email = "sahrk@sou.edu"),
+Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rijard.barnes@gmail.com"),
+             person("Kevin",   "Sahr",      role = c("cph", "ctb"), email = "sahrk@sou.edu"),
              person("Gerald",  "Evenden",   role = "cph"),
              person("Angus",   "Johnson",   role = "cph"),
-             person("Frank",   "Warmerdam", role = "cph"))
+             person("Frank",   "Warmerdam", role = "cph"),
+             person("Even",    "Rouault",   role = "cph"),
+             person("Lian",    "Song",      role = "ctb")
+             )
 Description: Spatial analyses involving binning require that every bin have the same area, but this is impossible using a rectangular grid laid over the Earth or over any projection of the Earth. Discrete global grids use hexagons, triangles, and diamonds to overcome this issue, overlaying the Earth with equally-sized bins. This package provides utilities for working with discrete global grids, along with utilities to aid in plotting such data.
 URL: https://github.com/r-barnes/dggridR/
 BugReports: https://github.com/r-barnes/dggridR/
