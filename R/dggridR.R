@@ -689,11 +689,13 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #'         If \code{!is.na(savegrid)}, returns a filename.
 #'
 #' @examples 
+#' \donttest{
 #' library(dggridR)
 #' dggs         <- dgconstruct(res=20)
 #' res          <- dg_closest_res_to_spacing(dggs,spacing=1000,round='down',metric=FALSE)
 #' dggs         <- dgsetres(dggs,res)
 #' gridfilename <- dgearthgrid(dggs,savegrid="temp.shp") #Save directly to a file
+#' }
 #' @export
 dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Densify?
   dgverify(dggs) 
