@@ -3,7 +3,7 @@ Type: Package
 Title: Discrete Global Grids
 Version: 2.0.4
 Date: 2020-04-29
-Author: Richard Barnes [aut, cre], Kevin Sahr [cph, ctb], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph], Even Rouault [cph], Lian Song [ctb]
+Author: Richard Barnes [aut, cre], Kevin Sahr [aut, cph], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph], Even Rouault [cph], Lian Song [ctb]
 Maintainer: Richard Barnes <rijard.barnes@gmail.com>
 NeedsCompilation: yes
 Depends: R (>= 3.4.0), rgdal (>= 1.1), ggplot2 (>= 2.1), dplyr (>= 0.4), sp (>= 1.2)
@@ -15,7 +15,7 @@ Suggests: knitr,
     testthat
 License: MIT + file LICENCE
 Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rijard.barnes@gmail.com"),
-             person("Kevin",   "Sahr",      role = c("cph", "ctb"), email = "sahrk@sou.edu"),
+             person("Kevin",   "Sahr",      role = c("aut", "cph"), email = "sahrk@sou.edu"),
              person("Gerald",  "Evenden",   role = "cph"),
              person("Angus",   "Johnson",   role = "cph"),
              person("Frank",   "Warmerdam", role = "cph"),
