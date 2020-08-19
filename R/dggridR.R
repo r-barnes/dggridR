@@ -558,7 +558,10 @@ dg_process_polydata <- function(polydata,frame,wrapcells){
   polydata  <- as.data.frame(polydata)
   polydata  <- split(polydata, polydata$seqnum)
   an        <- names(polydata)
-  polydata  <- lapply(polydata, function(x) { x["seqnum"] <- NULL; x })
+  polydata  <- lapply(polydata, function(x) {
+    x["seqnum"] <- NULL
+    x <- rbind(x, x[1,])
+    x })
   polydata  <- lapply(polydata, Polygon)
   polydata  <- lapply(seq_along(polydata), function(i) Polygons(list(polydata[[i]]), ID = an[i]  ))
   polydata  <- SpatialPolygons(polydata, proj4string = CRS("+proj=longlat +datum=WGS84") )
