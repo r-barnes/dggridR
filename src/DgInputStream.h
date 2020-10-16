@@ -3,7 +3,7 @@
 // DgInputStream.h: DgInputStream class definition
 //
 //   This class provides wrappers around some basic input stream functionality
-//   to increase ease of use. 
+//   to increase ease of use.
 //
 // Version 6.2 - Kevin Sahr, 9/10/13
 //
@@ -27,12 +27,12 @@ class DgInputStream : public ifstream, public DgBase {
       DgInputStream (void) : DgBase ("DgInputStream") {}
 
       DgInputStream (const string& fileNameIn,
-                     const string& suffixIn  = string(""), 
+                     const string& suffixIn  = string(""),
                      DgReportLevel failLevel = DgBase::Fatal);
 
       bool open (string fileName, DgReportLevel failLevel = DgBase::Fatal);
 
-      static void setDefaultDir (const string& defaultDirIn) 
+      static void setDefaultDir (const string& defaultDirIn)
                      { defaultDirectory_ = defaultDirIn; }
 
       void setSuffix (const string& suffixIn) { suffix_ = suffixIn; }
@@ -41,7 +41,7 @@ class DgInputStream : public ifstream, public DgBase {
       const string& fileName   (void) const { return fileName_; }
       const string& suffix     (void) const { return suffix_; }
 
-      void rewind (void) { seekg(streampos(0)); clear(); }
+      void rewind (void) { seekg(std::streampos(0)); clear(); }
 
    private:
 

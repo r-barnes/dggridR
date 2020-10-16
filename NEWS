@@ -1,3 +1,11 @@
+dggridR v2.0.5  (Release date: 2020-10-15)
+===============
+*Fix CRAN warning about `streampos` deprecation.
+
+dggridR v2.0.5  (Release date: 2020-04-30)
+===============
+*Update authorship information
+
 dggridR v2.0.4  (Release date: 2020-04-29)
 ===============
 *Fix some new warnings identified by CRAN's updated compilers.
@@ -40,7 +48,7 @@ Changes:
 * Complete restructuring of internal engine to improve speed, robustness across
   operating systems, and to improve access to alternative coordinate systems
 * Make dg_shpfname_south_africa into a function
-* Restructuring of internal engine's directory layout to reduce compilation 
+* Restructuring of internal engine's directory layout to reduce compilation
   complexity
 
 
@@ -73,10 +81,10 @@ dggridR v0.1.11 (Release date: 2016-09-18)
 
 Changes:
 
-* Fixes a `long double` output formatting issue that gives bad results when  
+* Fixes a `long double` output formatting issue that gives bad results when
   code is compiled using MingW on certain Windows systems.
-  
-* Adds a debugging capability to the R code to make it easier to get 
+
+* Adds a debugging capability to the R code to make it easier to get
   diagnostics from users.
 
 

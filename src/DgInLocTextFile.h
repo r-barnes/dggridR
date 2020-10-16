@@ -28,12 +28,12 @@ class DgInLocTextFile : public ifstream, public DgInLocFile {
 
    public:
 
-      DgInLocTextFile (const DgRFBase& rfIn, 
-                       const string* fileNameIn = NULL, 
+      DgInLocTextFile (const DgRFBase& rfIn,
+                       const string* fileNameIn = NULL,
                        bool isPointFileIn = false,
                        DgReportLevel failLevel = DgBase::Fatal);
 
-      void rewind (void) { seekg(streampos(0)); clear(); }
+      void rewind (void) { seekg(std::streampos(0)); clear(); }
 
       virtual bool open (const string* fileName = NULL,
                  DgReportLevel failLevel = DgBase::Fatal);
