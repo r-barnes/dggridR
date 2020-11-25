@@ -1,8 +1,8 @@
 Package: dggridR
 Type: Package
 Title: Discrete Global Grids
-Version: 2.0.6
-Date: 2020-10-15
+Version: 2.0.8
+Date: 2020-11-25
 Author: Richard Barnes [aut, cre], Kevin Sahr [aut, cph], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph], Even Rouault [cph], Lian Song [ctb]
 Maintainer: Richard Barnes <rijard.barnes@gmail.com>
 NeedsCompilation: yes
@@ -30,6 +30,6 @@ Imports:
   methods (>= 3.4.0)
 LinkingTo: Rcpp
 RcppModules: dgfuncs, gridgens, gridstats
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr, R.rsp
 SystemRequirements: C++11

@@ -116,7 +116,7 @@ Credits
 -------
 
 The code in the 'src' directory is based off of
-[DGGRIDv6.2b](http://www.discreteglobalgrids.org) by Kevin Sahr.
+[DGGRIDv6.2b](https://www.discreteglobalgrids.org/) by Kevin Sahr.
 
 However, Richard Barnes has made some significant alterations. These include:
 
@@ -139,10 +139,10 @@ Licensing
 
 This package uses the following libraries:
 
- * clipper:  The clipper library has been released under the Boostv1 license by 
+ * clipper:  The clipper library has been released under the Boostv1 license by
              Angus Johnson
 
- * dggrid:   Kevin Sahr has released dggrid as a 
+ * dggrid:   Kevin Sahr has released dggrid as a
              "public domain software program"
 
  * proj4lib: Gerald Evenden has released this code into the public domain. More
