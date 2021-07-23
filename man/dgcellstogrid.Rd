@@ -14,14 +14,14 @@ dgcellstogrid(dggs, cells, frame = TRUE, wrapcells = TRUE, savegrid = NA)
 \item{frame}{If TRUE, return a data frame suitable for ggplot plotting.
 If FALSE, return an OGR poly object}
 
-\item{wrapcells}{Cells which cross -180/180 degrees can present 
+\item{wrapcells}{Cells which cross -180/180 degrees can present
 difficulties for plotting. Setting this TRUE will result in
 cells with components in both hemispheres to be mapped
 entirely to positive degrees (the Eastern hemisphere). As a
 result, such cells will have components in the range
 [180,360). Only used when \code{frame=TRUE}.}
 
-\item{savegrid}{If savegrid is set to a file path, then a shapefile 
+\item{savegrid}{If savegrid is set to a file path, then a shapefile
 containing the grid is written to that path and the filename
 is returned. No other manipulations are done.
 Default: NA (do not save grid, return it)}
@@ -31,7 +31,7 @@ Returns a data frame or OGR poly object, as specified by \code{frame}.
         If \code{!is.na(savegrid)}, returns a filename.
 }
 \description{
-Returns the coordinates constituting the boundary of a 
+Returns the coordinates constituting the boundary of a
                  specified set of cells. Duplicates are eliminated to reduce
                  processing and storage requirements.
 }
@@ -40,7 +40,7 @@ library(dggridR)
 data(dgquakes)
 
 #Construct a grid with cells about ~1000 miles wide
-dggs          <- dgconstruct(spacing=1000,metric=FALSE) 
+dggs          <- dgconstruct(spacing=1000,metric=FALSE)
 dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 
 #Get grid cells for the earthquakes identified

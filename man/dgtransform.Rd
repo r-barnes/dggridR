@@ -14,7 +14,7 @@ dgtransform(dggs, lat, lon)
 \item{lon}{A vector of longitudes. Same length as the latitudes.}
 }
 \value{
-A vector of the same length as latitudes and longitudes 
+A vector of the same length as latitudes and longitudes
             containing the cell id numbers of the points' cells
             in the discrete grid.
 }
@@ -30,6 +30,6 @@ library(dggridR)
 data(dgquakes)
 
 #Construct a grid with cells about ~1000 miles wide
-dggs          <- dgconstruct(spacing=1000,metric=FALSE) 
+dggs          <- dgconstruct(spacing=1000,metric=FALSE)
 dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
 }

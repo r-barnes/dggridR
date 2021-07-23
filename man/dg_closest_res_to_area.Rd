@@ -28,7 +28,7 @@ imperial (FALSE)}
 A number representing the grid resolution
 }
 \description{
-Determine an appropriate grid resolution based on a desired 
+Determine an appropriate grid resolution based on a desired
                  cell area.
 }
 \examples{

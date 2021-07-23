@@ -23,3 +23,5 @@ LICENCE
 *.so
 doc
 Meta
+.Rproj.user
+dggridR.Rproj
