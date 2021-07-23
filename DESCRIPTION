@@ -7,12 +7,18 @@ Author: Richard Barnes [aut, cre], Kevin Sahr [aut, cph], Gerald Evenden [cph], 
 Maintainer: Richard Barnes <rijard.barnes@gmail.com>
 NeedsCompilation: yes
 Depends: R (>= 3.4.0), rgdal (>= 1.1), ggplot2 (>= 2.1), dplyr (>= 0.4), sp (>= 1.2)
+Imports:
+  methods (>= 3.4.0),
+  Rcpp (>= 0.12.12),
+  sf
 Suggests: 
     knitr,
-    rmarkdown,
+    mapproj,
     maps,
+    rmarkdown,
+    R.rsp,
     testthat
-License: MIT + file LICENCE
+License: file LICENSE
 Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rijard.barnes@gmail.com"),
              person("Kevin",   "Sahr",      role = c("aut", "cph"), email = "sahrk@sou.edu"),
              person("Gerald",  "Evenden",   role = "cph"),
@@ -24,12 +30,6 @@ Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rij
 Description: Spatial analyses involving binning require that every bin have the same area, but this is impossible using a rectangular grid laid over the Earth or over any projection of the Earth. Discrete global grids use hexagons, triangles, and diamonds to overcome this issue, overlaying the Earth with equally-sized bins. This package provides utilities for working with discrete global grids, along with utilities to aid in plotting such data.
 URL: https://github.com/r-barnes/dggridR/
 BugReports: https://github.com/r-barnes/dggridR/
-Imports:
-  mapproj,
-  methods (>= 3.4.0),
-  sf,
-  R.rsp,
-  Rcpp (>= 0.12.12)
 LinkingTo: Rcpp
 RcppModules: dgfuncs, gridgens, gridstats
 RoxygenNote: 7.1.1
