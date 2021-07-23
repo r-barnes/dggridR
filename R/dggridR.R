@@ -712,6 +712,7 @@ dgearthgrid <- function(dggs,frame=TRUE,wrapcells=TRUE,savegrid=NA){ #TODO: Dens
   dgverify(dggs)
 
   grid <- GlobalGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]])
+  # gridout<<-grid
   if(is.na(savegrid)){
     dg_process_polydata(grid,frame,wrapcells)
   } else {
