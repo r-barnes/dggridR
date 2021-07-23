@@ -1,0 +1,32 @@
+RCPP_MODULE(dgfuncs){
+  Rcpp::function("GEO_to_GEO", &GEO_to_GEO);
+  Rcpp::function("GEO_to_PROJTRI", &GEO_to_PROJTRI);
+  Rcpp::function("GEO_to_Q2DD", &GEO_to_Q2DD);
+  Rcpp::function("GEO_to_Q2DI", &GEO_to_Q2DI);
+  Rcpp::function("GEO_to_SEQNUM", &GEO_to_SEQNUM);
+  Rcpp::function("GEO_to_PLANE", &GEO_to_PLANE);
+  Rcpp::function("PROJTRI_to_GEO", &PROJTRI_to_GEO);
+  Rcpp::function("PROJTRI_to_PROJTRI", &PROJTRI_to_PROJTRI);
+  Rcpp::function("PROJTRI_to_Q2DD", &PROJTRI_to_Q2DD);
+  Rcpp::function("PROJTRI_to_Q2DI", &PROJTRI_to_Q2DI);
+  Rcpp::function("PROJTRI_to_SEQNUM", &PROJTRI_to_SEQNUM);
+  Rcpp::function("PROJTRI_to_PLANE", &PROJTRI_to_PLANE);
+  Rcpp::function("Q2DD_to_GEO", &Q2DD_to_GEO);
+  Rcpp::function("Q2DD_to_PROJTRI", &Q2DD_to_PROJTRI);
+  Rcpp::function("Q2DD_to_Q2DD", &Q2DD_to_Q2DD);
+  Rcpp::function("Q2DD_to_Q2DI", &Q2DD_to_Q2DI);
+  Rcpp::function("Q2DD_to_SEQNUM", &Q2DD_to_SEQNUM);
+  Rcpp::function("Q2DD_to_PLANE", &Q2DD_to_PLANE);
+  Rcpp::function("Q2DI_to_GEO", &Q2DI_to_GEO);
+  Rcpp::function("Q2DI_to_PROJTRI", &Q2DI_to_PROJTRI);
+  Rcpp::function("Q2DI_to_Q2DD", &Q2DI_to_Q2DD);
+  Rcpp::function("Q2DI_to_Q2DI", &Q2DI_to_Q2DI);
+  Rcpp::function("Q2DI_to_SEQNUM", &Q2DI_to_SEQNUM);
+  Rcpp::function("Q2DI_to_PLANE", &Q2DI_to_PLANE);
+  Rcpp::function("SEQNUM_to_GEO", &SEQNUM_to_GEO);
+  Rcpp::function("SEQNUM_to_PROJTRI", &SEQNUM_to_PROJTRI);
+  Rcpp::function("SEQNUM_to_Q2DD", &SEQNUM_to_Q2DD);
+  Rcpp::function("SEQNUM_to_Q2DI", &SEQNUM_to_Q2DI);
+  Rcpp::function("SEQNUM_to_SEQNUM", &SEQNUM_to_SEQNUM);
+  Rcpp::function("SEQNUM_to_PLANE", &SEQNUM_to_PLANE);
+}

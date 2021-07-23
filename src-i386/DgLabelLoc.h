@@ -1,0 +1,51 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+// DgLabelLoc.h: DgLabelLoc class definitions
+//
+// Version 6.1 - Kevin Sahr, 5/23/13
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#ifndef DGLABELLOC_H
+#define DGLABELLOC_H
+
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+#include "DgRFBase.h"
+
+////////////////////////////////////////////////////////////////////////////////
+class DgLabelLoc {
+
+   public:
+
+      DgLabel (DgLocBase& locIn, string labelIn = "")
+         : location_ (locIn), label_ (labelIn) { }
+
+      const string& label (void) const { return label_; }
+      const DgLocBase& location (void) const { return location_; }
+
+      void setLabel (const string& labelIn) { label_ = labelIn; }
+      void setLocation (DgLocBase& locIn) { label_ = &locIn; }
+
+
+};
+
+////////////////////////////////////////////////////////////////////////////////
+inline ostream& operator<< (ostream& stream, const DgLabel& label)
+            { return stream << label.label(); }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+class DgLabelLocBase : public DgLocBase, public DgLabel {
+
+   public:
+
+      
+
+};
+
+////////////////////////////////////////////////////////////////////////////////
+#endif

@@ -398,7 +398,7 @@ p
 
 ## Save a grid for use in other software
 
-Sometimes you want to use a grid in software other than R. To faciliate this,
+Sometimes you want to use a grid in software other than R. To facilitate this,
 the grid generation commands include the `savegrid` argument, as demonstrated
 below.
 

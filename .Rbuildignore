@@ -16,3 +16,5 @@ mailinglist
 LICENSE
 ^doc$
 ^Meta$
+^.*\.Rproj$
+^\.Rproj\.user$

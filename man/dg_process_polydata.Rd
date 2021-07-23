@@ -12,7 +12,7 @@ dg_process_polydata(polydata, frame, wrapcells)
 \item{frame}{If TRUE, return a data frame suitable for ggplot plotting.
 If FALSE, return an SpatialPolygons}
 
-\item{wrapcells}{Cells which cross -180/180 degrees can present 
+\item{wrapcells}{Cells which cross -180/180 degrees can present
 difficulties for plotting. Setting this TRUE will result in
 cells with components in both hemispheres to be mapped
 entirely to positive degrees (the Eastern hemisphere). As a
