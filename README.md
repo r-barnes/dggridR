@@ -64,7 +64,7 @@ dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
 data(dgquakes)
 
 #Get the corresponding grid cells for each earthquake epicenter (lat-long pair)
-dgquakes$cell <- dgtransform(dggs,dgquakes$lat,dgquakes$lon)
+dgquakes$cell <- dgGEO_to_SEQNUM(dggs, dgquakes$lat, dgquakes$lon)$seqnum
 
 #Get the number of earthquakes in each equally-sized cell
 quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())

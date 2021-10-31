@@ -1,13 +1,31 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgHexC1Grid2D.cpp: DgHexC1Grid2D class implementation
 //
+// Version 7.0 - Kevin Sahr, 12/14/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#include <cstdint>
 
 #include "DgHexC1Grid2D.h"
 #include "DgPolygon.h"
@@ -49,12 +67,29 @@ DgHexC1Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 {
    vector<DgAddressBase*>& v = vec.addressVec();
 
+   // ccw starting at (1, 0)
+   v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 1,     add.j())));
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 1, add.j() + 1)));
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(    add.i(), add.j() + 1)));
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() - 1,     add.j())));
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() - 1, add.j() - 1)));
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(    add.i(), add.j() - 1)));
-   v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 1,     add.j())));
+
+} // void DgHexC1Grid2D::setAddNeighbors
+
+////////////////////////////////////////////////////////////////////////////////
+void
+DgHexC1Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) const
+{
+   vector<DgAddressBase*>& v = vec.addressVec();
+
+   // ccw starting at (1, 0)
+   v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 2, add.j() + 1)));
+   v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 1, add.j() + 2)));
+   v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() - 1, add.j() + 1)));
+   v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() - 2, add.j() - 1)));
+   v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() - 1, add.j() - 2)));
+   v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 1, add.j() - 1)));
 
 } // void DgHexC1Grid2D::setAddNeighbors
 
@@ -64,12 +99,12 @@ DgHexC1Grid2D::quantify (const DgDVec2D& point) const
 {
    long double a1, a2;
    long double x1, x2;
-   std::int64_t m1, m2;
+   long long int m1, m2;
    long double r1, r2;
    DgIVec2D add;
 
-   a1 = fabs(point.x());
-   a2 = fabs(point.y());
+   a1 = fabsl(point.x());
+   a2 = fabsl(point.y());
 
    /* first do a reverse conversion */
 
@@ -78,8 +113,8 @@ DgHexC1Grid2D::quantify (const DgDVec2D& point) const
 
    /* check if we have the center of a hex */
 
-   m1 = static_cast<std::int64_t>(x1);
-   m2 = static_cast<std::int64_t>(x2);
+   m1 = static_cast<long long int>(x1);
+   m2 = static_cast<long long int>(x2);
 
    /* otherwise round correctly */
 
@@ -165,14 +200,14 @@ DgHexC1Grid2D::quantify (const DgDVec2D& point) const
    {
       if ((add.j() % 2) == 0) // even
       {
-         std::int64_t axisi = add.j() / 2;
-         std::int64_t diff = add.i() - axisi;
+         long long int axisi = add.j() / 2;
+         long long int diff = add.i() - axisi;
          add.setI(add.i() - 2 * diff);
       }
       else
       {
-         std::int64_t axisi = (add.j() + 1) / 2;
-         std::int64_t diff = add.i() - axisi;
+         long long int axisi = (add.j() + 1) / 2;
+         long long int diff = add.i() - axisi;
          add.setI(add.i() - (2 * diff + 1));
       }
    }

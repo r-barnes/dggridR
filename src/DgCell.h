@@ -1,8 +1,24 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgCell.h: DgCell class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -11,8 +27,8 @@
 
 #include <string>
 
-#include "DgLocBase.h"
 #include "DgLocation.h"
+#include "DgLocBase.h"
 #include "DgPolygon.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -22,12 +38,12 @@ class DgCell : public DgLocBase {
 
       DgCell (void) : region_ (0) {}
 
-      DgCell (const DgRFBase& rfIn, const string& labelIn, 
+      DgCell (const DgRFBase& rfIn, const string& labelIn,
               const DgLocation& nodeIn, DgPolygon* regionIn = 0)
-         : DgLocBase(rfIn), label_ (labelIn), node_ (nodeIn), 
-           region_ (regionIn) 
+         : DgLocBase(rfIn), label_ (labelIn), node_ (nodeIn),
+           region_ (regionIn)
       { rf().convert(&node_); if (hasRegion()) rf().convert(region_); }
-  
+
      ~DgCell (void) { delete region_; }
 
       const string&     label  (void) const { return label_; }
@@ -42,14 +58,14 @@ class DgCell : public DgLocBase {
 
       void setLabel (const string& labelIn) { label_ = labelIn; }
 
-      virtual void setNode (const DgLocation& nodeIn)  
+      virtual void setNode (const DgLocation& nodeIn)
            { node_ = nodeIn; if (node_.rf() != rf()) rf().convert(&node_); }
 
-      void setRegion (DgPolygon* regionIn) 
-           { 
+      void setRegion (DgPolygon* regionIn)
+           {
               delete region_;
-              region_ = regionIn; 
-              if (hasRegion() && region_->rf() != rf()) rf().convert(region_); 
+              region_ = regionIn;
+              if (hasRegion() && region_->rf() != rf()) rf().convert(region_);
            }
 
       DgCell& operator= (const DgCell& cell) // deep copy
@@ -58,7 +74,7 @@ class DgCell : public DgLocBase {
          {
             setLabel(cell.label());
             setNode(cell.node());
-            if (cell.hasRegion()) 
+            if (cell.hasRegion())
             {
                DgPolygon* poly = new DgPolygon(cell.region());
                setRegion(poly);
@@ -85,10 +101,10 @@ class DgCell : public DgLocBase {
 
       virtual const char* fromString (const char* str, char delimiter);
 
-      virtual int cardinality (void) const 
-           { return 1 + region().cardinality(); } 
+      virtual int cardinality (void) const
+           { return 1 + region().cardinality(); }
 
-      virtual void clearAddress (void) 
+      virtual void clearAddress (void)
            { node_.clearAddress(); if (hasRegion()) region_->clearAddress(); }
 
    protected:
@@ -106,10 +122,10 @@ class DgCell : public DgLocBase {
 
 ////////////////////////////////////////////////////////////////////////////////
 inline ostream& operator<< (ostream& stream, const DgCell& cell)
-            { 
+            {
               stream << "[" << cell.label() << ":" << cell.node();
               if (cell.hasRegion()) stream << ":" << cell.region();
-              return stream << endl; 
+              return stream << endl;
             }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,8 @@
 /* determine latitude from authalic latitude */
+#ifndef lint
+//static const char SCCSID[]="@(#)pj_auth.c	4.3	93/06/12	GIE	REL";
+#endif
 #include "proj4.h"
-#include <cmath>
-#include <cstdlib>
 # define P00 .33333333333333333333
 # define P01 .17222222222222222222
 # define P02 .10257936507936507936
@@ -28,5 +29,5 @@ pj_authset(long double es) {
 	long double
 pj_authlat(long double beta, long double *APA) {
 	long double t = beta+beta;
-	return(beta + APA[0] * std::sin(t) + APA[1] * std::sin(t+t) + APA[2] * std::sin(t+t+t));
+	return(beta + APA[0] * sin(t) + APA[1] * sin(t+t) + APA[2] * sin(t+t+t));
 }

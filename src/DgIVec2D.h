@@ -1,21 +1,36 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgIVec2D.h: DgIVec2D class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGIVEC2D_H
 #define DGIVEC2D_H
 
-#include <cmath>
-#include <string>
-#include <cstdint>
-
-#include "DgUtil.h"
 #include "DgConstants.h"
 #include "DgDVec2D.h"
+#include "DgUtil.h"
+
+#include <cmath>
+#include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgIVec2D {
@@ -25,36 +40,36 @@ class DgIVec2D {
       static DgIVec2D midPoint (const DgIVec2D& pt1, const DgIVec2D& pt2)
                        { return pt1 * 0.5L + pt2 * 0.5L; }
 
-      static DgIVec2D fracPoint (const DgIVec2D& pt1, const DgIVec2D& pt2, 
+      static DgIVec2D fracPoint (const DgIVec2D& pt1, const DgIVec2D& pt2,
                                 long double fraction)
                        { return pt2 * fraction + pt1 * (1 - fraction); }
 
       static const DgIVec2D& undefDgIVec2D;
 
-      DgIVec2D (std::int64_t i = 0, std::int64_t j = 0) 
+      DgIVec2D (long long int i = 0, long long int j = 0)
        : i_(i), j_(j)
       {}
 
-      DgIVec2D (const DgIVec2D& pt) 
-       : i_ (pt.i_), j_ (pt.j_) 
+      DgIVec2D (const DgIVec2D& pt)
+       : i_ (pt.i_), j_ (pt.j_)
       {}
 
-      DgIVec2D (const DgDVec2D&  pt) 
-       : i_ (dgg::util::lrint(pt.x())),  
-         j_ (dgg::util::lrint(pt.y())) 
+      DgIVec2D (const DgDVec2D&  pt)
+       : i_ (dgg::util::lrint(pt.x())),
+         j_ (dgg::util::lrint(pt.y()))
       {}
 
-      void setI (std::int64_t i) { i_ = i; }
-      void setJ (std::int64_t j) { j_ = j; }
+      void setI (long long int i) { i_ = i; }
+      void setJ (long long int j) { j_ = j; }
 
       long double distance (const DgIVec2D& pt) const
               { return (pt - *this).magnitude(); }
 
-      std::int64_t i (void) const { return i_; }
-      std::int64_t j (void) const { return j_; }
-      
-      long double magnitude (void) const 
-              { return sqrt((long double) (i_ * i_ + j_ * j_)); }
+      long long int i (void) const { return i_; }
+      long long int j (void) const { return j_; }
+
+      long double magnitude (void) const
+              { return sqrtl((long double) (i_ * i_ + j_ * j_)); }
 
       DgIVec2D diffVec (const DgIVec2D& pt0) const
                           { return DgIVec2D(*this - pt0); }
@@ -95,8 +110,8 @@ class DgIVec2D {
 
    private:
 
-      std::int64_t i_;
-      std::int64_t j_;
+      long long int i_;
+      long long int j_;
 
 };
 
@@ -110,8 +125,8 @@ DgIVec2D::scale (long double xScaleFactor, long double yScaleFactor)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   i_ = (std::int64_t) dgg::util::lrint(i_ * xScaleFactor);
-   j_ = (std::int64_t) dgg::util::lrint(j_ * yScaleFactor);
+   i_ = (long long int) dgg::util::lrint(i_ * xScaleFactor);
+   j_ = (long long int) dgg::util::lrint(j_ * yScaleFactor);
 
    return *this;
 
@@ -127,14 +142,14 @@ DgIVec2D::rotate (long double degrees)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   long double rotAng = degrees * dgM_PI_180;
-   long double cosAng = cos(rotAng);
-   long double sinAng = sin(rotAng);
-   std::int64_t i = i_;
-   std::int64_t j = j_;
+   long double rotAng = degrees * M_PI_180;
+   long double cosAng = cosl(rotAng);
+   long double sinAng = sinl(rotAng);
+   long long int i = i_;
+   long long int j = j_;
 
-   i_ = (std::int64_t) dgg::util::lrint(i * cosAng - j * sinAng);
-   j_ = (std::int64_t) dgg::util::lrint(i * sinAng + j * cosAng);
+   i_ = (long long int) dgg::util::lrint(i * cosAng - j * sinAng);
+   j_ = (long long int) dgg::util::lrint(i * sinAng + j * cosAng);
 
    return *this;
 
@@ -163,7 +178,7 @@ inline DgIVec2D::operator XPoint (void) const
 ////////////////////////////////////////////////////////////////////////////////
 inline DgIVec2D::operator DgDVec2D (void) const
 //
-// DgDVec2D conversion function. 
+// DgDVec2D conversion function.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {

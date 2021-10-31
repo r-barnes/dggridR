@@ -1,19 +1,35 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgOutKMLfile.h: DgOutKMLfile class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGOUTKMLFILE_H
 #define DGOUTKMLFILE_H
 
-#include <string>
-#include <iostream>
-
-#include "DgUtil.h"
 #include "DgOutLocTextFile.h"
+#include "DgUtil.h"
+
+#include <iostream>
+#include <string>
 
 class DgDVec2D;
 class DgPolygon;
@@ -25,11 +41,11 @@ class DgOutKMLfile : public DgOutLocTextFile
 
    public:
 
-      DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename = "", 
+      DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename = "",
                int precision = 7, bool isPointFile = false,
-               const string& colorIn = defaultKMLColor, int widthIn = defaultKMLWidth, 
-               const string& nameIn = defaultKMLName, const string& descIn = defaultKMLDescription, 
-               DgReportLevel failLevel = DgBase::Fatal); 
+               const string& colorIn = defaultKMLColor, int widthIn = defaultKMLWidth,
+               const string& nameIn = defaultKMLName, const string& descIn = defaultKMLDescription,
+               DgReportLevel failLevel = DgBase::Fatal);
 
       ~DgOutKMLfile();
 
@@ -75,9 +91,9 @@ class DgOutKMLfile : public DgOutLocTextFile
       void preamble();
       void postamble();
 
-      /* take a string that contains a colour in RRGGBB format, and convert this 
+      /* take a string that contains a colour in RRGGBB format, and convert this
          to the BBGGRR format used by KML */
-      string RGBtoBGR(string colour) 
+      string RGBtoBGR(string colour)
       {
 	     return colour.substr(4,2) + colour.substr(2,2) + colour.substr(0,2);
       }

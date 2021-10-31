@@ -1,13 +1,32 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Dg2WayConverter.h: Dg2WayConverter class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DG2WAYCONVERTER_H
 #define DG2WAYCONVERTER_H
+
+#include "DgBase.h"
+#include "DgConverterBase.h"
 
 class DgRFBase;
 
@@ -23,7 +42,7 @@ class Dg2WayConverter {
          : forward_ (&con.forward()), inverse_ (&con.inverse()) {}
 
       Dg2WayConverter& operator= (const Dg2WayConverter& con)
-         { forward_ = &con.forward(); inverse_ = &con.inverse(); 
+         { forward_ = &con.forward(); inverse_ = &con.inverse();
            return *this; }
 
       const DgConverterBase& forward (void) const { return *forward_; }

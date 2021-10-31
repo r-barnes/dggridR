@@ -1,33 +1,62 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // dggrid.h: this file defines the classes (effectively structures) which hold
 //           the parameter info
 //
-// Version 6.1  - Kevin Sahr, 5/23/13
-// Version 6.2  - Kevin Sahr, 10/25/14
-// Version 6.2r - Richard Barnes, 2016-07-14
+// Version 6.1 - Kevin Sahr, 5/23/13
+// Version 6.2 - Kevin Sahr, 10/25/14
+// Version 7.0 - Kevin Sahr, 9/1/19
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGGRID_H
 #define DGGRID_H
 
-#include <iostream>
-#include <set>
-#include <cstdint>
 #include "DgParamList.h"
 #include "DgEllipsoidRF.h"
 #include "DgRandom.h"
 #include "DgOutLocFile.h"
 #include "DgIDGG.h"
 #include "DgInShapefileAtt.h"
+#include "DgApSeq.h"
 #include "util.h"
+#include "DgRunningStats.h"
+#include "DgGridTopo.h"
+
+#include <iostream>
+#include <set>
 
 using namespace std;
 
 class DggridParam;
 class DgEvalData;
 class DgOutShapefile;
+class DgOutPRCellsFile;
+class DgOutPRPtsFile;
+class DgOutNeighborsFile;
+class DgOutChildrenFile;
+class DgOutputStream;
+
+// constants
+#define MAX_DGG_RES 35
 
 ////////////////////////////////////////////////////////////////////////////////
 //// function prototypes ////
@@ -36,6 +65,7 @@ class DgOutShapefile;
 
 class MainParam;
 class DgGridPList;
+void orientGrid (MainParam& dp, DgGridPList& plist);
 
 // gridgen.cpp
 
@@ -68,7 +98,7 @@ void doTable (MainParam& dp, DgGridPList& plist);
 ////////////////////////////////////////////////////////////////////////////////
 //// the parameter structures ////
 // no attempt to be subtle here; these contain the "global" parameters for
-// the specified dggrid operation 
+// the specified dggrid operation
 
 // common parameters
 
@@ -86,7 +116,8 @@ class MainParam {
 
       string operation;             // operation for dggrid to perform
       string dggsType;              // preset DGGS type
-      string gridTopo;              // diamond/hex/triangle
+      dgg::topo::DgGridTopology gridTopo;      // Diamond/Hexagon/Triangle
+      dgg::topo::DgGridMetric   gridMetric;    // D4/D8
       int aperture;      // aperture
       string projType;              // projection type
       int res;           // resolution (may be adjusted)
@@ -97,20 +128,22 @@ class MainParam {
       int numGrids;      // number of grids to generate
       int curGrid;       // grid counter
       bool lastGrid;                    // last grid?
-      DgGeoCoord vert0;                 // placement vert 
+      DgGeoCoord vert0;                 // placement vert
       long double azimuthDegs;               // orientation azimuth
       long double earthRadius;               // earth radius in km
       string datum;               // datum used to determine the earthRadius
       int precision;     // number of digits after decimal pt to output
       int verbosity;     // debugging info verbosity
-      bool megaVerbose;                 // 
+      bool megaVerbose;                 //
       bool useMother;                   // use Mother RNG?
       string metaOutFileNameBase;
       string metaOutFileName;
-      string apertureType;		// "PURE", "MIXED43", or "SUPERFUND"
+      string apertureType;		// "PURE", "MIXED43", "SUPERFUND", or "SEQUENCE"
       bool   isMixed43;		// are we using mixed43 aperture?
       int numAp4;      // # of leading ap 4 resolutions in a mixed grid
       bool   isSuperfund;
+      bool   isApSeq;		// are we using an aperture sequence?
+      DgApSeq apSeq;
       int   sfRes; // superfund digit resolution
 
    protected:
@@ -124,7 +157,7 @@ class MainParam {
 // grid generation parameter structure
 
 class GridGenParam : public MainParam {
-   
+
    public:
 
       GridGenParam (DgParamList& plist);
@@ -136,7 +169,11 @@ class GridGenParam : public MainParam {
 
       bool wholeEarth;       // generate entire grid?
       bool seqToPoly;        // whether user wants polys from seqnum
+      bool pointClip;        // whether user wants to generate using points
+      bool useGDAL;          // use GDAL for either input or output
       bool clipAIGen;        // clip using AIGen files (or Shapefiles)
+      bool clipGDAL;         // clip using GDAL files
+      bool clipShape;        // clip using Shapefiles
       vector<string> regionFiles;
       int nRandPts;          // # of random pts generated for each hex
       bool clipRandPts;      // clip randpts to polys
@@ -145,8 +182,17 @@ class GridGenParam : public MainParam {
       DgRandom* ptsRand;     // RNG for generating random points
 
       string cellOutType;
+      string gdalCellDriver;
       string pointOutType;
+      string gdalPointDriver;
       string randPtsOutType;
+
+      string neighborsOutType;
+      string childrenOutType;
+      string neighborsOutFileNameBase;
+      string neighborsOutFileName;
+      string childrenOutFileNameBase;
+      string childrenOutFileName;
 
       string cellOutFileNameBase;
       string cellOutFileName;
@@ -163,28 +209,39 @@ class GridGenParam : public MainParam {
 
       bool doPointInPoly;             // perform pt-in-poly intersection
       bool doPolyIntersect;           // perform poly intersection
-      std::int64_t sampleCount; // last sample point sequence number
-      std::uint64_t nSamplePts;
+      long long int sampleCount; // last sample point sequence number
+      unsigned long long int nSamplePts;
       bool doRandPts;                 // generate random points for the cells
+      unsigned long int clipperFactor; // clipper scaling factor
+      long double invClipperFactor; // 1.0L / clipper scaling factor
 
       DgOutLocFile *cellOut, *ptOut, *randPtsOut;
       DgOutShapefile *cellOutShp, *ptOutShp;
+      DgOutPRCellsFile *prCellOut;
+      DgOutPRPtsFile *prPtOut;
+      DgOutNeighborsFile *nbrOut;
+      DgOutChildrenFile *chdOut;
 
-      bool concatPtOut;         
-      char formatStr[50];         
-      bool useEnumLbl;         
-      std::uint64_t nCellsTested; 
-      std::uint64_t nCellsAccepted;         
-      std::uint64_t nCellsOutputToFile; // cells output to current file 
+      DgRunningStats runStats;
+
+      bool concatPtOut;
+      char formatStr[50];
+      bool useEnumLbl;
+      unsigned long long int nCellsTested;
+      unsigned long long int nCellsAccepted;
+      unsigned long long int nCellsOutputToFile; // cells output to current file
       unsigned long int nOutputFile; // # of current output file
 
-      unsigned long int updateFreq; // how often to output updates         
+      unsigned long int updateFreq; // how often to output updates
       unsigned long int maxCellsPerFile; // max cells in a single output file
+      unsigned long int outFirstSeqNum;  // start generating with this seqnum
+      unsigned long int outLastSeqNum;   //  generate through this one
+
       long double geoDens;          // max arc length in radians
 
       bool buildShapeFileAttributes; // create fields for shapefile output
       bool buildClipFileAttributes;  // use clipping shape files (vs. others)
-     
+
       int shapefileDefaultInt;
       long double shapefileDefaultDouble;
       string shapefileDefaultString;
@@ -201,11 +258,11 @@ class GridGenParam : public MainParam {
 // bin point values parameter structure
 
 class BinValsParam : public MainParam {
-   
+
    public:
 
       BinValsParam (DgParamList& plist);
-     
+
       ~BinValsParam ();
 
       void dump (void);   // output to cout
@@ -229,7 +286,7 @@ class BinValsParam : public MainParam {
 // bin point presence parameter structure
 
 class BinPresenceParam : public MainParam {
-   
+
    public:
 
       BinPresenceParam (DgParamList& plist);
@@ -259,7 +316,7 @@ class BinPresenceParam : public MainParam {
 // transform addresses parameter structure
 
 class TransformParam : public MainParam {
-   
+
    public:
 
       TransformParam (DgParamList& plist);

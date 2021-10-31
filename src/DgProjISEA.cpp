@@ -1,15 +1,30 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgProjISEA.cpp: DgProjISEA class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#include <limits>
-#include <iostream>
-#include <stdexcept>
+#include <climits>
+
 #include "DgProjISEA.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +89,7 @@ DgProjISEAFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 {
          
 //cout << "***DgProjISEAFwd: geoPt: " << addIn << endl;
-         GeoCoord ll;
+   GeoCoord ll;
 
    ll.lon = addIn.lon();
    ll.lat = addIn.lat();
@@ -83,7 +98,7 @@ DgProjISEAFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 
    IcosaGridPt gridpt = snyderFwd(ll, projTriRF().sphIcosa());
 //cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
-//      gridpt.pt.x << ", " << gridpt.pt.y << endl;
+//gridpt.pt.x << ", " << gridpt.pt.y << endl;
 
 //cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle, 
 //                               DgDVec2D(gridpt.pt.x, gridpt.pt.y)) << endl;
@@ -103,13 +118,13 @@ DgProjISEAFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 static const long double R1 = 0.9103832815L;
 static const long double R1S = R1 * R1;
 
-static const long double DH    = 37.37736814L * dgM_PI_180;
-static const long double GH    = 36.0L * dgM_PI_180;
-static const long double cot30 = 1.0L / tan(30.0 * dgM_PI_180);
-static const long double tanDH = tan(DH);
-static const long double cosDH = cos(DH);
-static const long double sinGH = sin(GH);
-static const long double cosGH = cos(GH);
+static const long double DH    = 37.37736814L * M_PI_180;
+static const long double GH    = 36.0L * M_PI_180;
+static const long double cot30 = 1.0L / tanl(30.0L * M_PI_180);
+static const long double tanDH = tanl(DH);
+static const long double cosDH = cosl(DH);
+static const long double sinGH = sinl(GH);
+static const long double cosGH = cosl(GH);
 
 static const long double originXOff = 0.6022955029L;
 static const long double originYOff = 0.3477354707L;
@@ -125,61 +140,60 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
    Vec2D  Planevect;
    const PreCompGeo& cent = sphico.triCen[nTri];
 
-   long double cosLat = cos(geoVect.lat);
-   long double sinLat = sin(geoVect.lat);
+   long double cosLat = cosl(geoVect.lat);
+   long double sinLat = sinl(geoVect.lat);
 
    dazh = sphico.dazh[nTri];
 
-   z = acos(cent.sinLat * sinLat + cent.cosLat * cosLat * 
-       cos(geoVect.lon - cent.pt.lon));
+   long double tmp = cent.sinLat * sinLat + cent.cosLat * cosLat * 
+       cosl(geoVect.lon - cent.pt.lon);
+   if (tmp > M_ONE) tmp = M_ONE;
+   if (tmp < -M_ONE) tmp = -M_ONE;
+   z = acosl(tmp);
 
-   if (z > DH + 0.00000005)
+   if (z > DH + 0.00000005L)
    {
-      // std::cout<<"nTri: "<<nTri
-      //          <<"z:    "<<z
-      //          <<"DH+:  "<<(DH + 0.00000005)
-      //          <<"diff: "<<((DH + 0.00000005) - z)
-      //          <<"\n";
-      // std::cout<<"1: The point: ";
-      // printGeoCoord(geoVect);
-      // std::cout<<" is located on another polygon.\n";
-      throw std::runtime_error("sllxy found a point in another polygon!");
+      printf("nTri: %d  z: %Lf  DH+: %Lf  diff: %Lf\n", nTri, z, 
+             DH + 0.00000005L, (DH + 0.00000005L) - z);
+      printf("1: The point: ");
+      printGeoCoord(geoVect);
+      printf(" is located on another polygon.\n");
+      exit(1);
    }
 
-   azh = atan2(cosLat * sin(geoVect.lon - cent.pt.lon), 
-         cent.cosLat * sinLat - cent.sinLat * cosLat * cos(geoVect.lon - 
+   azh = atan2l(cosLat * sinl(geoVect.lon - cent.pt.lon), 
+         cent.cosLat * sinLat - cent.sinLat * cosLat * cosl(geoVect.lon - 
          cent.pt.lon)) - dazh;
 
-   if (azh < 0.0) azh = azh + 2.0 * dgM_PI;
+   if (azh < 0.0) azh = azh + 2.0 * M_PI;
    azh0 = azh;
-   if ((azh >= 120.0 * dgM_PI_180) && (azh <= 240.0 * dgM_PI_180)) azh -= 120.0 * dgM_PI_180;
-   if (azh > 240.0 * dgM_PI_180) azh -= 240.0 * dgM_PI_180;
+   if ((azh >= 120.0 * M_PI_180) && (azh <= 240.0 * M_PI_180)) azh -= 120.0 * M_PI_180;
+   if (azh > 240.0 * M_PI_180) azh -= 240.0 * M_PI_180;
 
-   cosAzh = cos(azh);
-   sinAzh = sin(azh);
+   cosAzh = cosl(azh);
+   sinAzh = sinl(azh);
 
-   dz = atan2(tanDH, cosAzh + cot30 * sinAzh);
+   dz = atan2l(tanDH, cosAzh + cot30 * sinAzh);
 
    if (z > dz + 0.00000005)
    {
-      // printf("2: The point: ");
-      // printGeoCoord(geoVect);
-      // printf(" is located on another polygon.\n");
-      throw std::runtime_error("sllxy found a point located in another polygon!");
-      // exit(1);
+      printf("2: The point: ");
+      printGeoCoord(geoVect);
+      printf(" is located on another polygon.\n");
+      exit(1);
    }
 
-   h = acos(sinAzh * sinGH * cosDH - cosAzh * cosGH);
-   ag = azh + GH + h - 180.0 * dgM_PI_180;
-   azh1 = atan2(2.0 * ag, R1S * tanDH * tanDH - 2.0 * ag * cot30);
-   fh = tanDH / (2.0 * (cos(azh1) + cot30 * sin(azh1)) * sin(dz / 2.0));
-   ph = 2.0 * R1 * fh * sin(z / 2.0);
+   h = acosl(sinAzh * sinGH * cosDH - cosAzh * cosGH);
+   ag = azh + GH + h - 180.0L * M_PI_180;
+   azh1 = atan2l(2.0L * ag, R1S * tanDH * tanDH - 2.0L * ag * cot30);
+   fh = tanDH / (2.0L * (cosl(azh1) + cot30 * sinl(azh1)) * sinl(dz / 2.0L));
+   ph = 2.0L * R1 * fh * sinl(z / 2.0L);
 
-   if ((azh0 >= 120.0 * dgM_PI_180) && (azh0 < 240.0 * dgM_PI_180)) azh1 += 120.0 * dgM_PI_180;
-   if (azh0 >= 240.0 * dgM_PI_180) azh1 += 240 * dgM_PI_180;
+   if ((azh0 >= 120.0L * M_PI_180) && (azh0 < 240.0L * M_PI_180)) azh1 += 120.0L * M_PI_180;
+   if (azh0 >= 240.0L * M_PI_180) azh1 += 240L * M_PI_180;
 
-   Planevect.x = (ph * sin(azh1) + originXOff) / icosaEdge;
-   Planevect.y = (ph * cos(azh1) + originYOff) / icosaEdge;
+   Planevect.x = (ph * sinl(azh1) + originXOff) / icosaEdge;
+   Planevect.y = (ph * cosl(azh1) + originYOff) / icosaEdge;
 
    return (Planevect);
 
@@ -198,9 +212,9 @@ IcosaGridPt snyderFwd (const GeoCoord& ll, DgSphIcosa& sphicosa)
 
    if (gridpt.triangle < 0)
    {
-      // printf("ERROR: point in no triangle:");
-      // printGeoCoord(ll); 
-      // printf("\n");
+      printf("ERROR: point in no triangle:");
+      printGeoCoord(ll); 
+      printf("\n");
 
       gridpt.pt.x = M_ZERO;
       gridpt.pt.y = M_ZERO;
@@ -235,80 +249,80 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
 
   ddazh = sphicosa.dazh[icosaPt.triangle];
 
-  if ((fabs(pt.x) < PRECISION) && (fabs(pt.y) < PRECISION))
+  if ((fabsl(pt.x) < PRECISION) && (fabsl(pt.y) < PRECISION))
   {
     Geovect.lat=cent.pt.lat; Geovect.lon=cent.pt.lon;
   }
   else
   {  
-    ph=sqrt(pt.x*pt.x+pt.y*pt.y);
-    azh1=atan2(pt.x,pt.y);
+    ph=sqrtl(pt.x*pt.x+pt.y*pt.y);
+    azh1=atan2l(pt.x,pt.y);
 
-    if (azh1<0.0) azh1=azh1+2*dgM_PI;
+    if (azh1<0.0L) azh1=azh1+2*M_PI;
     azh0=azh1;
-    if ((azh1>120.0*dgM_PI_180) && (azh1<=240.0*dgM_PI_180)) azh1=azh1-120.0*dgM_PI_180;
-    if (azh1>240.0*dgM_PI_180) azh1=azh1-240.0*dgM_PI_180;
+    if ((azh1>120.0L*M_PI_180) && (azh1<=240.0L*M_PI_180)) azh1=azh1-120.0L*M_PI_180;
+    if (azh1>240.0L*M_PI_180) azh1=azh1-240.0L*M_PI_180;
 
     azh=azh1;
 
-    if (fabs(azh1) > PRECISION) 
+    if (fabsl(azh1) > PRECISION) 
     {
-       long double agh=R1S*tanDH*tanDH/(2.0*(1.0/tan(azh1)+cot30));
+       long double agh=R1S*tanDH*tanDH/(2.0L*(1.0L/tanl(azh1)+cot30));
 
        //cout << "agh: " << agh << endl;
 
        dazh=1.0; 
-       while (fabs(dazh) > PRECISION)
+       while (fabsl(dazh) > PRECISION)
         {
-         h=acos(sin(azh)*sinGH*cosDH-cos(azh)*cosGH);
-         fazh=agh-azh-GH-h+dgM_PI;
-         flazh=((cos(azh)*sinGH*cosDH+sin(azh)*cosGH)/sin(h))-1.0;      
+         h=acosl(sinl(azh)*sinGH*cosDH-cosl(azh)*cosGH);
+         fazh=agh-azh-GH-h+M_PI;
+         flazh=((cosl(azh)*sinGH*cosDH+sinl(azh)*cosGH)/sinl(h))-1.0;      
          dazh=-fazh/flazh;
          azh=azh+dazh;
-         //cout << "loop: h: " << h << "  fazh: " << fazh*(180.0/dgM_PI) << 
-         //  "  flazh: " << flazh*(180.0/dgM_PI) <<
-         //  "  dazh: " << dazh*(180.0/dgM_PI) << 
-         //  "  azh: " << azh*(180.0/dgM_PI) << endl;
+         //cout << "loop: h: " << h << "  fazh: " << fazh*(180.0/M_PI) << 
+         //  "  flazh: " << flazh*(180.0/M_PI) <<
+         //  "  dazh: " << dazh*(180.0/M_PI) << 
+         //  "  azh: " << azh*(180.0/M_PI) << endl;
         }   
     }
     else azh = azh1 = 0.0;
 
-    dz=atan2(tanDH,cos(azh)+cot30*sin(azh));
-    fh=tanDH/(2.0*(cos(azh1)+cot30*sin(azh1))*sin(dz/2.0));
-    z=2.0*asin(ph/(2.0*R1*fh));
-    if ((azh0>=120*dgM_PI_180) && (azh0<240*dgM_PI_180)) azh=azh+120*dgM_PI_180;
-    if (azh0>=240*dgM_PI_180) azh=azh+240*dgM_PI_180;
+    dz=atan2l(tanDH,cosl(azh)+cot30*sinl(azh));
+    fh=tanDH/(2.0L*(cosl(azh1)+cot30*sinl(azh1))*sinl(dz/2.0L));
+    z=2.0*asinl(ph/(2.0L*R1*fh));
+    if ((azh0>=120*M_PI_180) && (azh0<240.0L*M_PI_180)) azh=azh+120*M_PI_180;
+    if (azh0>=240.0L*M_PI_180) azh=azh+240.0L*M_PI_180;
 
     // now reposition to the actual triangle
 
     azh += ddazh;
 
-    while (azh <= -dgM_PI) azh += M_2PI;
-    while (azh > dgM_PI) azh -= M_2PI;
+    while (azh <= -M_PI) azh += M_2PI;
+    while (azh > M_PI) azh -= M_2PI;
 
-    sinlat=cent.sinLat * cos(z) + cent.cosLat * sin(z) * cos(azh);
+    sinlat=cent.sinLat * cosl(z) + cent.cosLat * sinl(z) * cosl(azh);
     if (sinlat > M_ONE) sinlat = M_ONE;
     if (sinlat < -M_ONE) sinlat = -M_ONE;
-    Geovect.lat = asin(sinlat);
+    Geovect.lat = asinl(sinlat);
 
-    if (fabs(fabs(Geovect.lat) - dgM_PI_2) < M_EPSILON)
+    if (fabsl(fabsl(Geovect.lat) - M_PI_2) < M_EPSILON)
     {
-       Geovect.lat = (Geovect.lat > M_ZERO) ? dgM_PI_2 : -dgM_PI_2;
+       Geovect.lat = (Geovect.lat > M_ZERO) ? M_PI_2 : -M_PI_2;
        Geovect.lon = M_ZERO;
     }
     else
     {
-      sinlon = sin(azh)*sin(z)/cos(Geovect.lat);
-      long double coslon = (cos(z) - cent.sinLat * sin(Geovect.lat)) /
-              cent.cosLat/cos(Geovect.lat);
+      sinlon = sinl(azh)*sinl(z)/cosl(Geovect.lat);
+      long double coslon = (cosl(z) - cent.sinLat * sinl(Geovect.lat)) /
+              cent.cosLat/cosl(Geovect.lat);
       if (sinlon > M_ONE) sinlon = M_ONE;
       if (sinlon < -M_ONE) sinlon = -M_ONE;
       if (coslon > M_ONE) coslon = M_ONE;
       if (coslon < -M_ONE) coslon =-M_ONE;
-      Geovect.lon = cent.pt.lon+asin(sinlon);
-      Geovect.lon = cent.pt.lon+atan2(sinlon, coslon);
-      if (Geovect.lon <= -dgM_PI) Geovect.lon += M_2PI;
-      if (Geovect.lon >= dgM_PI) Geovect.lon -= M_2PI;
+      Geovect.lon = cent.pt.lon+asinl(sinlon);
+      Geovect.lon = cent.pt.lon+atan2l(sinlon, coslon);
+      if (Geovect.lon <= -M_PI) Geovect.lon += M_2PI;
+      if (Geovect.lon >= M_PI) Geovect.lon -= M_2PI;
     }
   }
   return Geovect;

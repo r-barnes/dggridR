@@ -1,12 +1,26 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgRFNetwork.cpp: DgRFNetwork class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
-
-#include <cstdint>
 
 #include "DgBase.h"
 #include "DgRFBase.h"
@@ -16,12 +30,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgRFNetwork::~DgRFNetwork (void)
 {
-   for (std::uint64_t i = 0; i < size(); i++)
-   {
-      for (std::uint64_t j = 0; j < size(); j++) 
-      {
-         if (matrix_[i][j] && !(matrix_[i][j]->userGenerated()))
-         {
+   for (unsigned long long int i = 0; i < size(); i++) {
+      for (unsigned long long int j = 0; j < size(); j++) {
+         //if (matrix_[i][j] && !(matrix_[i][j]->userGenerated())) {
+         if (matrix_[i][j]) {
             delete matrix_[i][j];
             matrix_[i][j] = 0;
          }
@@ -29,13 +41,10 @@ DgRFNetwork::~DgRFNetwork (void)
       matrix_[i].clear();
    }
 
-/* 
-   for (int i = 0; i < frames_.size(); i++)
-   {
-      delete frames_[i];
-      frames_[i] = 0;
+   for (auto &frame : frames_) {
+      delete frame;
+      frame = nullptr;
    }
-*/
 
 } // DgRFNetwork::~DgRFNetwork
 
@@ -49,8 +58,8 @@ DgRFNetwork::existsConverter (const DgRFBase& fromFrame,
 } // bool DgRFNetwork::existsConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgConverterBase* 
-DgRFNetwork::getConverter (const DgLocation& fromLoc, 
+const DgConverterBase*
+DgRFNetwork::getConverter (const DgLocation& fromLoc,
                                  const DgRFBase& toFrame) const
 {
    return getConverter(fromLoc.rf(), toFrame);
@@ -58,8 +67,8 @@ DgRFNetwork::getConverter (const DgLocation& fromLoc,
 } // const DgConverter* DgRFNetwork::getConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-const DgConverterBase* 
-DgRFNetwork::getConverter (const DgRFBase& fromFrame, 
+const DgConverterBase*
+DgRFNetwork::getConverter (const DgRFBase& fromFrame,
                                  const DgRFBase& toFrame) const
 {
    // check for network match
@@ -73,10 +82,10 @@ DgRFNetwork::getConverter (const DgRFBase& fromFrame,
 
    // check for existing converter
 
-   if (!matrix_[fromFrame.id()][toFrame.id()]) 
+   if (!matrix_[fromFrame.id()][toFrame.id()])
    {
       // attempt to generate a passthrough converter
-      
+
       if (!fromFrame.connectTo() || !toFrame.connectFrom())
       {
          report("DgRFNetwork::getConverter() frames not connected: " +
@@ -84,9 +93,9 @@ DgRFNetwork::getConverter (const DgRFBase& fromFrame,
                 DgBase::Fatal);
          return 0;
       }
-      
+
       const_cast<DgRFNetwork*>(this)->matrix_
-                           [fromFrame.id()][toFrame.id()] = 
+                           [fromFrame.id()][toFrame.id()] =
                                 new DgSeriesConverter(fromFrame, toFrame);
    }
 
@@ -98,9 +107,9 @@ DgRFNetwork::getConverter (const DgRFBase& fromFrame,
 void
 DgRFNetwork::update (void)
 {
-   for (std::uint64_t i = 0; i < size(); i++)
+   for (unsigned long long int i = 0; i < size(); i++)
    {
-      for (std::uint64_t j = 0; j < size(); j++)
+      for (unsigned long long int j = 0; j < size(); j++)
       {
          if (i != j && matrix_[i][j] && !matrix_[i][j]->userGenerated())
          {
@@ -122,8 +131,9 @@ DgRFNetwork::reserve (const size_t& capacity)
    frames_.reserve(capacity);
    matrix_.reserve(capacity);
 
-   for (unsigned long i = 0; i < matrix_.size(); i++) 
-    matrix_[i].reserve(capacity);
+   for(auto &row : matrix_){
+      row.reserve(capacity);
+   }
 
 } // void DgRFNetwork::reserve
 
@@ -131,27 +141,24 @@ DgRFNetwork::reserve (const size_t& capacity)
 int
 DgRFNetwork::generateId (DgRFBase* frame)
 {
-   std::uint64_t newSize = size() + 1;
+   frames_.push_back(frame);
+   matrix_.resize(frames_.size());
 
-   frames_.resize(newSize, 0);
-   matrix_.resize(newSize);
+   for (auto& row : matrix_){
+      row.resize(frames_.size(), 0);
+   }
 
-   for (std::uint64_t i = 0; i < newSize; i++) 
-    matrix_[i].resize(newSize, 0);
-   
-   frames_[nextId_] = frame;
-   
    matrix_[nextId_][nextId_] = new DgIdentityConverter(*frame);
-   
-   if (nextId_ == 0) 
+
+   if (nextId_ == 0)
     frame->connectTo_ = frame->connectFrom_ = frame; // ground
 
-   if (nextId_ == (int) capacity()) 
+   if (nextId_ == (int) capacity())
     reserve(capacity() + chunkSize());
-   
+
    nextId_++;
-   
+
    return (nextId_ - 1);
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,30 +1,46 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgProjFuller.h: DgProjFuller class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGPROJ_FULLER_H
 #define DGPROJ_FULLER_H
 
-#include <limits>
-#include <iostream>
-
-#include "DgIVec2D.h"
-#include "DgDVec2D.h"
-#include "DgPolygon.h"
-#include "DgRF.h"
-#include "DgLocation.h"
-#include "DgConverter.h"
 #include "Dg2WayConverter.h"
 #include "DgContCartRF.h"
-#include "DgGeoSphRF.h"
-#include "DgProjTriRF.h"
+#include "DgConverter.h"
+#include "DgDVec2D.h"
 #include "DgEllipsoidRF.h"
-#include "DgUtil.h"
+#include "DgGeoSphRF.h"
 #include "DgIcosaProj.h"
+#include "DgIVec2D.h"
+#include "DgLocation.h"
+#include "DgPolygon.h"
+#include "DgProjTriRF.h"
+#include "DgRF.h"
+#include "DgUtil.h"
+
+#include <climits>
+#include <iostream>
 
 using namespace std;
 
@@ -39,7 +55,7 @@ class DgProjFullerFwd : public DgConverter<DgGeoCoord, long double,
 
       const DgProjTriRF& projTriRF (void) const { return *pProjTriRF_; }
 
-      virtual DgProjTriCoord convertTypedAddress (const DgGeoCoord& addIn) 
+      virtual DgProjTriCoord convertTypedAddress (const DgGeoCoord& addIn)
                                                                const;
 
    private:
@@ -49,7 +65,7 @@ class DgProjFullerFwd : public DgConverter<DgGeoCoord, long double,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgProjFullerInv : public DgConverter<DgProjTriCoord, long double, 
+class DgProjFullerInv : public DgConverter<DgProjTriCoord, long double,
                                            DgGeoCoord, long double> {
 
    public:
@@ -59,7 +75,7 @@ class DgProjFullerInv : public DgConverter<DgProjTriCoord, long double,
 
       const DgProjTriRF& projTriRF (void) const { return *pProjTriRF_; }
 
-      virtual DgGeoCoord convertTypedAddress (const DgProjTriCoord& addIn) 
+      virtual DgGeoCoord convertTypedAddress (const DgProjTriCoord& addIn)
                                                                       const;
 
    private:
@@ -75,7 +91,7 @@ class DgProjFuller : public DgIcosaProj {
 
       DgProjFuller (const DgRF<DgGeoCoord, long double>& geoRF,
                     const DgRF<DgProjTriCoord, long double>& projTriRF)
-         : DgIcosaProj(*(new DgProjFullerFwd(geoRF, projTriRF)), 
+         : DgIcosaProj(*(new DgProjFullerFwd(geoRF, projTriRF)),
                        *(new DgProjFullerInv(projTriRF, geoRF))) {}
 };
 
@@ -88,10 +104,10 @@ GeoCoord fullerInv (const IcosaGridPt& pt, SphIcosa& sphicosa);
 */
 ////////////////////////////////////////////////////////////////////////////////
 
-Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1, 
+Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1,
                        long double * v2, long double * v3);
 
-GeoCoord fullerInvOneTri (const IcosaGridPt pt, long double R, long double* pAzimuth, 
+GeoCoord fullerInvOneTri (const IcosaGridPt pt, long double R, long double* pAzimuth,
                        long double* pTheta);
 
 ////////////////////////////////////////////////////////////////////////////////

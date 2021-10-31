@@ -1,19 +1,35 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgDmdD4Grid2D.cpp: DgDmdD4Grid2D class implementation
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DgDmdD4Grid2D.h"
 #include "DgPolygon.h"
 
-const long double DgDmdD4Grid2D::yOff_ = sqrt(3.0) / 4.0;
-const long double DgDmdD4Grid2D::yOff2_ = yOff_ * 2.0;
-const long double DgDmdD4Grid2D::xOff_ = 0.25;
-const long double DgDmdD4Grid2D::xOffComp_ = 1.0 - xOff_;
-const long double DgDmdD4Grid2D::skewFac_ = sqrt(3.0) / 3.0;
+const long double DgDmdD4Grid2D::yOff_ = M_SQRT3 / 4.0L;
+const long double DgDmdD4Grid2D::yOff2_ = yOff_ * 2.0L;
+const long double DgDmdD4Grid2D::xOff_ = 0.25L;
+const long double DgDmdD4Grid2D::xOffComp_ = 1.0L - xOff_;
+const long double DgDmdD4Grid2D::skewFac_ = M_SQRT3 / 3.0L;
 
 ////////////////////////////////////////////////////////////////////////////////
 void

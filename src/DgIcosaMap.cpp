@@ -1,8 +1,24 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgIcosaMap.cpp: DgIcosaMap class implementation
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -68,8 +84,8 @@ DgIcosaTri::translate (DgDVec2D* pt) const
    long double y0 = pt->y();
    if (rot60_)
    {
-      long double cosAng = cos((rot60_ * 60.0L) * dgM_PI_180);
-      long double sinAng = sin((rot60_ * 60.0L) * dgM_PI_180);
+      long double cosAng = cosl((rot60_ * 60.0L) * M_PI_180);
+      long double sinAng = sinl((rot60_ * 60.0L) * M_PI_180);
       pt->setX(x0 * cosAng - y0 * sinAng);
       pt->setY(x0 * sinAng + y0 * cosAng);
    }
@@ -93,8 +109,8 @@ DgIcosaTri::untranslate (DgDVec2D* pt, bool shiftOrigin) const
    long double y0 = pt->y();
    if (rot60_)
    {
-      long double cosAng = cos(-1.0L * (rot60_ * 60.0L) * dgM_PI_180);
-      long double sinAng = sin(-1.0L * (rot60_ * 60.0L) * dgM_PI_180);
+      long double cosAng = cosl(-1.0L * (rot60_ * 60.0L) * M_PI_180);
+      long double sinAng = sinl(-1.0L * (rot60_ * 60.0L) * M_PI_180);
       pt->setX(x0 * cosAng - y0 * sinAng);
       pt->setY(x0 * sinAng + y0 * cosAng);
    }

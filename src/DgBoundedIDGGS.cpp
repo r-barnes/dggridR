@@ -1,13 +1,28 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgBoundedIDGGS.cpp: DgBoundedIDGGS class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <limits>
-#include <cstdint>
+#include <climits>
 
 #include "DgBoundedIDGGS.h"
 #include "DgBoundedHexC2RF2D.h"
@@ -18,30 +33,31 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgBoundedIDGGS::DgBoundedIDGGS (const DgIDGGS& rf)
    : DgBoundedRF< DgResAdd<DgQ2DICoord>, DgGeoCoord, long double > (rf, 
-                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, 0), 0),
-                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, 0), 0), 
+                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, DgIVec2D(0, 0)), 0),
+                  DgResAdd<DgQ2DICoord> (DgQ2DICoord(0, DgIVec2D(0, 0)), 0), 
                   rf.undefAddress()), IDGGS_ (rf)
 { 
    // allocate the grids
 
-   grids_ = new vector<DgBoundedIDGG*>(IDGGS().nRes());
+   grids_ = new vector<const DgBoundedIDGG*>(IDGGS().nRes());
 
    for (int i = 0; i < IDGGS().nRes(); i++)
       (*grids_)[i] = new DgBoundedIDGG(rf.idgg(i));
 
+   // set the correct first address
+   setFirstAdd(DgResAdd<DgQ2DICoord>((*grids_)[0]->firstAdd(), 0));
+
    // set the correct last address
 
    int maxRes = IDGGS().nRes() - 1;
-   DgResAdd<DgQ2DICoord> last((*grids_)[maxRes]->lastAdd(), maxRes);
-
-   setLastAdd(last);
+   setLastAdd(DgResAdd<DgQ2DICoord>((*grids_)[maxRes]->lastAdd(), maxRes));
 
    // set the size
 
    size_ = 0;
    for (int i = 0; i < IDGGS().nRes(); i++)
    {
-      std::uint64_t lastSize = size_;
+      unsigned long long int lastSize = size_;
 
       const DgBoundedIDGG* g = (*grids_)[i];
 
@@ -126,7 +142,7 @@ DgBoundedIDGGS::decrementAddress (DgResAdd<DgQ2DICoord>& add) const
 } // DgResAdd<DgQ2DICoord>& DgBoundedIDGGS::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-std::uint64_t 
+unsigned long long int 
 DgBoundedIDGGS::seqNumAddress (const DgResAdd<DgQ2DICoord>& add) const
 {
    if (!validSize())
@@ -136,7 +152,7 @@ DgBoundedIDGGS::seqNumAddress (const DgResAdd<DgQ2DICoord>& add) const
       return 0;
    }
 
-   std::uint64_t sNum = 0;
+   unsigned long long int sNum = 0;
    if (!zeroBased()) sNum++;
 
    for (int i = 0; i < add.res(); i++) sNum += (*grids_)[i]->size();
@@ -145,11 +161,11 @@ DgBoundedIDGGS::seqNumAddress (const DgResAdd<DgQ2DICoord>& add) const
 
    return sNum;
 
-} // std::uint64_t DgBoundedIDGGS::seqNumAddress
+} // unsigned long long int DgBoundedIDGGS::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 DgResAdd<DgQ2DICoord> 
-DgBoundedIDGGS::addFromSeqNum (std::uint64_t sNum) const
+DgBoundedIDGGS::addFromSeqNum (unsigned long long int sNum) const
 {
    if (!validSize())
    {
@@ -161,7 +177,7 @@ DgBoundedIDGGS::addFromSeqNum (std::uint64_t sNum) const
    if (!zeroBased()) sNum--;
 
    DgResAdd<DgQ2DICoord> tmp;
-   std::uint64_t n = sNum;
+   unsigned long long int n = sNum;
    tmp.setRes(0);
 
    int r;

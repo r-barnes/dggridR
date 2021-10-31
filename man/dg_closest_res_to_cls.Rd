@@ -2,7 +2,7 @@
 % Please edit documentation in R/dggridR.R
 \name{dg_closest_res_to_cls}
 \alias{dg_closest_res_to_cls}
-\title{Determine an appropriate grid resolution based on a desired 
+\title{Determine an appropriate grid resolution based on a desired
        characteristic length scale of the cells.}
 \usage{
 dg_closest_res_to_cls(

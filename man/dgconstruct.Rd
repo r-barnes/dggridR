@@ -26,7 +26,7 @@ dgconstruct(
 Default: ISEA3H}
 
 \item{aperture}{How finely subsequent resolution levels divide the grid.
-Options are: 3, 4. Not all options work with all 
+Options are: 3, 4. Not all options work with all
 projections and topologies.
 Default: 3}
 

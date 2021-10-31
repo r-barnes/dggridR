@@ -1,7 +1,26 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgGeoSphRF.cpp: DgGeoSphRF class implementation
 //
+// Version 7.0 - Kevin Sahr, 12/14/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +36,7 @@ long double DgGeoSphRF::icosaEdgeRads_ = M_ATAN2;
 long double DgGeoSphRF::icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
 long double DgGeoSphRF::icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
 long double DgGeoSphRF::totalAreaKM_ = 
-                      4.0L * dgM_PI * earthRadiusKM_ * earthRadiusKM_;
+                      4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +48,7 @@ DgGeoSphRF::densify (DgPolygon& p, long double maxDist, bool rads)
    const DgGeoSphRF* gs = dynamic_cast<const DgGeoSphRF*>(&p.rf());
    if (gs == 0) report("DgGeoSphRF::densify() with non-CCRF", DgBase::Fatal);
 
-   if (!rads) maxDist *= dgM_PI_180;
+   if (!rads) maxDist *= M_PI_180;
 
    DgPolygon densVerts(*gs);
 
@@ -127,8 +146,8 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
 
    if (!inputRads)
    {
-      distance *= dgM_PI_180;
-      azimuth *= dgM_PI_180;
+      distance *= M_PI_180;
+      azimuth *= M_PI_180;
    }
 
    GeoCoord ans = GCdaz(pp0, distance, azimuth);
@@ -141,6 +160,6 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
 DgGeoSphDegRF::DgGeoSphDegRF (const DgGeoSphRF& geoRFin, const string& nameIn)
          : DgContCartRF (geoRFin.network(), nameIn), geoRF_ (geoRFin)
 {
-   new DgDegConverter(geoRFin, *this);
+   DgDegRadConverter (geoRFin, *this);
 }
 

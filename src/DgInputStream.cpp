@@ -1,11 +1,27 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgInputStream.C: DgInputStream class implementation
 //
 //   This class provides wrappers around some basic input stream functionality
 //   to increase ease of use. 
-//
-// Version 6.2 - Kevin Sahr, 9/10/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -48,7 +64,7 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
 
    names[0] = fileNameIn;
    names[1] = fileNameIn + "." + suffix_;
-   names[2] = defaultDirectory_ + "" + names[0];
+   names[2] = defaultDirectory_ + "/" + names[0];
    names[3] = names[2] + "." + suffix_;
 
    int i;

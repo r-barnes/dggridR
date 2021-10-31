@@ -1,8 +1,24 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgRFBase.cpp: DgRFBase class implementation
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -21,8 +37,6 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 DgRFBase::~DgRFBase (void)
 {
-   /* JFW: We don't delete connectTo and connectFrom (we don't really own them);
-   for that matter, I'm not sure we actually ever touch undefLoc_, below: */
    delete undefLoc_;
 
 } // DgRFBase::~DgRFBase
@@ -100,14 +114,13 @@ DgRFBase::convert (DgLocVector& vec) const
    }
 
    vector<DgAddressBase*>& v = vec.addressVec();
-   for (unsigned long i = 0; i < v.size(); i++)
-   {
-      DgAddressBase* addIn = v[i];
-
-      if (addIn) 
-       v[i] = conv->createConvertedAddress(*addIn);
-
-      delete addIn;
+   for (unsigned long i = 0; i < v.size(); i++) {
+      if (v[i]) { 
+         DgAddressBase* addIn = v[i];
+         DgAddressBase* newAdd = conv->createConvertedAddress(*addIn);
+         v[i] = newAdd;
+         delete addIn;
+      }
    }
 
    vec.rf_ = this;
@@ -220,6 +233,14 @@ DgRFBase::toAddressString (const DgLocBase& lb, char delimiter) const
    return lb.asAddressString(delimiter);
 
 } // string DgRFBase::toAddressString
+
+////////////////////////////////////////////////////////////////////////////////
+void 
+DgRFBase::setUndefLoc (DgLocation* undefLoc) 
+{
+   if (undefLoc_) delete undefLoc_;
+   undefLoc_ = undefLoc;
+} // void DgRFBase::setUndefLoc
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

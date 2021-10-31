@@ -1,48 +1,93 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgHexC2Grid2D.cpp: DgHexC2Grid2D class implementation
 //
+// Version 7.0 - Kevin Sahr, 12/14/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
-
-#include <cmath>
-#include <cstdint>
 
 #include "DgContCartRF.h"
 #include "DgHexC2Grid2D.h"
 #include "DgHexC1Grid2D.h"
 #include "DgPolygon.h"
+#include "DgSeriesConverter.h"
+
+#include <cmath>
 
 ////////////////////////////////////////////////////////////////////////////////
-DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn, 
+DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
              const DgRF<DgDVec2D, long double>& ccFrameIn, const string& nameIn)
-         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, M_1_SQRT3, M_1_SQRT3, 
-                       M_SQRT3_2, 1.0L)
-{ 
-   area_ = c(); 
+         : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D3,
+                 M_1_SQRT3, M_1_SQRT3, M_SQRT3_2, 1.0L)
+{
+   area_ = c();
 
    // create the surrogate hex grid: a class I hex grid rotated 30 degrees
 
-   DgContCartRF* surCCRF = new DgContCartRF(network(), 
-                              nameIn + string("SurBF"));
+   const DgContCartRF* surCCRF = DgContCartRF::makeRF(network(), nameIn + string("SurBF"));
 
-   new Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, 30.0L);
-   surrogate_ = new DgHexC1Grid2D(network(), *surCCRF, nameIn + string("Sur"));
+   // version 6.4 and previous rotated by 30.0L
+   Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, -30.0L);
+   surrogate_ = DgHexC1Grid2D::makeRF(network(), *surCCRF, nameIn + string("Sur"));
 
    // create the substrate hex grid: a class I hex one aperture 3 resolution
    // finer
 
-   DgContCartRF* subCCRF = new DgContCartRF(network(), 
-                              nameIn + string("SubBF"));
+   const DgContCartRF* subCCRF = DgContCartRF::makeRF(network(), nameIn + string("SubBF"));
 
-   new Dg2WayContAffineConverter(backFrame(), *subCCRF, M_SQRT3);
-   substrate_ = new DgHexC1Grid2D(network(), *subCCRF, nameIn + string("Sub"));
+   Dg2WayContAffineConverter(backFrame(), *subCCRF, M_SQRT3);
+   substrate_ = DgHexC1Grid2D::makeRF(network(), *subCCRF, nameIn + string("Sub"));
+
+   // connect the surrogate to the substrate
+   vector<const DgConverterBase*> sc;
+   sc.push_back(network().getConverter(*surrogate_, *surCCRF));
+   sc.push_back(network().getConverter(*surCCRF, backFrame()));
+   new DgSeriesConverter(sc, true);
+   sc.resize(0);
+
+   sc.push_back(network().getConverter(*surrogate_, *surCCRF));
+   sc.push_back(network().getConverter(*surCCRF, backFrame()));
+   sc.push_back(network().getConverter(backFrame(), *subCCRF));
+   sc.push_back(network().getConverter(*subCCRF, *substrate_));
+   new DgSeriesConverter(sc, true);
+   sc.resize(0);
+
+   // connect the substrate to the surrogate
+   sc.push_back(network().getConverter(*substrate_, *subCCRF));
+   sc.push_back(network().getConverter(*subCCRF, backFrame()));
+   new DgSeriesConverter(sc, true);
+   sc.resize(0);
+
+   sc.push_back(network().getConverter(*substrate_, *subCCRF));
+   sc.push_back(network().getConverter(*subCCRF, backFrame()));
+   sc.push_back(network().getConverter(backFrame(), *surCCRF));
+   sc.push_back(network().getConverter(*surCCRF, *surrogate_));
+   new DgSeriesConverter(sc, true);
+   sc.resize(0);
 
 } // DgHexC2Grid2D::DgHexC2Grid2D
 
 ////////////////////////////////////////////////////////////////////////////////
-std::int64_t
+long long int
 DgHexC2Grid2D::dist (const DgIVec2D& add1, const DgIVec2D& add2) const
 {
    DgLocation* loc1 = substrate().makeLocation(add1);
@@ -51,7 +96,7 @@ DgHexC2Grid2D::dist (const DgIVec2D& add1, const DgIVec2D& add2) const
    surrogate().convert(loc1);
    surrogate().convert(loc2);
 
-   std::int64_t d = surrogate().dist(*(surrogate().getAddress(*loc1)),
+   long long int d = surrogate().dist(*(surrogate().getAddress(*loc1)),
                             *(surrogate().getAddress(*loc2)));
 
    delete loc1;
@@ -87,7 +132,7 @@ DgHexC2Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
    delete tmpLoc;
 
    vector<DgAddressBase*>& v = vec.addressVec();
-   for (std::int64_t i = 0; i < tmpVec.size(); i++)
+   for (int i = 0; i < (int) tmpVec.size(); i++)
    {
       v.push_back(new DgAddress<DgIVec2D>(
                      *(substrate().getAddress(tmpVec[i]))));
@@ -96,7 +141,28 @@ DgHexC2Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 } // void DgHexC2Grid2D::setAddNeighbors
 
 ////////////////////////////////////////////////////////////////////////////////
-DgIVec2D 
+void
+DgHexC2Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) const
+{
+   DgLocation* tmpLoc = substrate().makeLocation(add);
+
+   DgLocVector tmpVec;
+   surrogate().setNeighborsBdry2(*tmpLoc, tmpVec);
+   substrate().convert(tmpVec);
+
+   delete tmpLoc;
+
+   vector<DgAddressBase*>& v = vec.addressVec();
+   for (int i = 0; i < (int) tmpVec.size(); i++)
+   {
+      v.push_back(new DgAddress<DgIVec2D>(
+                     *(substrate().getAddress(tmpVec[i]))));
+   }
+
+} // void DgHexC2Grid2D::setAddNeighborsBdry2
+
+////////////////////////////////////////////////////////////////////////////////
+DgIVec2D
 DgHexC2Grid2D::quantify (const DgDVec2D& point) const
 {
    DgLocation* tmpLoc = backFrame().makeLocation(point);
@@ -114,7 +180,7 @@ DgHexC2Grid2D::quantify (const DgDVec2D& point) const
 } // DgIVec2D DgHexC2Grid2D::quantify
 
 ////////////////////////////////////////////////////////////////////////////////
-DgDVec2D 
+DgDVec2D
 DgHexC2Grid2D::invQuantify (const DgIVec2D& add) const
 {
    DgLocation* tmpLoc = substrate().makeLocation(add);

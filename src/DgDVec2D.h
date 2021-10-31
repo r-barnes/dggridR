@@ -1,20 +1,37 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgDVec2D.h: DgDVec2D class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGDVEC2D_H
 #define DGDVEC2D_H
 
-#include <cmath>
-#include <iostream>
-
-#include "DgUtil.h"
 #include "DgConstants.h"
 #include "DgString.h"
+#include "DgUtil.h"
+
+#include <cfloat>
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
@@ -28,7 +45,7 @@ class DgDVec2D {
       static DgDVec2D midPoint (const DgDVec2D& pt1, const DgDVec2D& pt2)
                        { return pt1 * M_HALF + pt2 * M_HALF; }
 
-      static DgDVec2D fracPoint (const DgDVec2D& pt1, const DgDVec2D& pt2, 
+      static DgDVec2D fracPoint (const DgDVec2D& pt1, const DgDVec2D& pt2,
                                 long double fraction)
                        { return pt2 * fraction + pt1 * (M_ONE - fraction); }
 
@@ -50,14 +67,14 @@ class DgDVec2D {
 
       long double x (void) const { return x_; }
       long double y (void) const { return y_; }
-      
-      long double magnitude (void) const { return sqrt(x_ * x_ + y_ * y_); }
 
-      long double dotProd (const DgDVec2D& pt) const 
+      long double magnitude (void) const { return sqrtl(x_ * x_ + y_ * y_); }
+
+      long double dotProd (const DgDVec2D& pt) const
                 { return x_ * pt.x() + y_ * pt.y(); }
 
       long double angle (const DgDVec2D& pt) const  // angle between in radians
-                { return acos(dotProd(pt) / (magnitude() * pt.magnitude())); }
+                { return acosl(dotProd(pt) / (magnitude() * pt.magnitude())); }
 
       const char* fromString (const char* str, char delimiter);
 
@@ -125,11 +142,11 @@ DgDVec2D::rotate (long double degrees)
 {
    while (degrees < M_ZERO) degrees += 360.0L;
    while (degrees >= 360.0L) degrees -= 360.0L;
-   if (fabs(degrees - M_ZERO) < M_EPSILON) return *this;
+   if (fabsl(degrees - M_ZERO) < M_EPSILON) return *this;
 
-   long double rotAng = degrees * dgM_PI_180;
-   long double cosAng = cos(rotAng);
-   long double sinAng = sin(rotAng);
+   long double rotAng = degrees * M_PI_180;
+   long double cosAng = cosl(rotAng);
+   long double sinAng = sinl(rotAng);
    long double x = x_;
    long double y = y_;
 
@@ -144,7 +161,7 @@ DgDVec2D::rotate (long double degrees)
 inline DgDVec2D::operator string (void) const
 {
    const char* fmtStr = "%.9LF";
-   return "(" + dgg::util::to_string(x_, fmtStr) + ", " 
+   return "(" + dgg::util::to_string(x_, fmtStr) + ", "
           + dgg::util::to_string(y_, fmtStr) + ")";
 
 } // DgDVec2D::operator string

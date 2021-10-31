@@ -1,13 +1,28 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgTriGrid2DS.cpp: DgTriGrid2DS class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#include <cstdint>
 
 #include "DgContCartRF.h"
 #include "DgIVec2D.h"
@@ -15,12 +30,14 @@
 #include "DgTriGrid2D.h"
 #include "DgTriGrid2DS.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn, 
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, 
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Triangle, D3,
                        isCongruentIn, isAlignedIn, nameIn) 
 { 
    if (!isCongruent())
@@ -40,10 +57,10 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
 
    // do the grids
 
-   long double fac = sqrt(3.0); // scale so e == 1
+   long double fac = M_SQRT3; // scale so e == 1
 
    DgDVec2D trans;
-   trans = DgDVec2D(-sqrt(3.0) / 2.0, -0.5);
+   trans = DgDVec2D(-M_SQRT3_2, -0.5L);
 
    for (int i = 0; i < nRes(); i++)
    {
@@ -51,14 +68,12 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
 
       //cout << newName << " " << fac << ' ' << trans << endl;
 
-      DgContCartRF* ccRF = new DgContCartRF(network(), newName + string("bf"));
+      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
 
-      new Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, 
-                                    trans); 
+      Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, trans); 
 
-      (*grids_)[i] = new DgTriGrid2D(network(), *ccRF, newName);
-      new Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>
-                                                  (*this, *(grids()[i]), i);
+      (*grids_)[i] = DgTriGrid2D::makeRF(network(), *ccRF, newName);
+      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
 
       fac *= radix();
    }
@@ -75,13 +90,7 @@ DgTriGrid2DS::DgTriGrid2DS (const DgTriGrid2DS& rf)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgTriGrid2DS::~DgTriGrid2DS (void)
-{
-   for (unsigned long i = 0; i < grids().size(); i++) 
-    delete (*grids_)[i]; 
-
-   delete grids_;
-
-} // DgTriGrid2DS::~DgTriGrid2DS
+{ } // DgTriGrid2DS::~DgTriGrid2DS
 
 ////////////////////////////////////////////////////////////////////////////////
 DgTriGrid2DS&
@@ -133,10 +142,10 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
          const DgIVec2D lowerLeft((add.address().i() * radix()),
                                   (add.address().j() * radix()));
 
-         std::int64_t maxJ = 0;
+         long long int maxJ = 0;
          for (int i = 0; i < radix(); i++)
          {
-            for (std::int64_t j = 0; j <= maxJ; j++)
+            for (long long int j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgIVec2D> >(
                            DgResAdd<DgIVec2D>(DgIVec2D(lowerLeft.i() + i, 
@@ -150,10 +159,10 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
          const DgIVec2D upperRight((add.address().i() * radix() + radix() - 1),
                                    (add.address().j() * radix() + radix() - 1));
 
-         std::int64_t maxJ = 0;
+         long long int maxJ = 0;
          for (int i = 0; i < radix(); i++)
          {
-            for (std::int64_t j = 0; j <= maxJ; j++)
+            for (long long int j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgIVec2D> >(
                            DgResAdd<DgIVec2D>(DgIVec2D(upperRight.i() - i, 

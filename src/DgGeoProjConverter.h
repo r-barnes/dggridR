@@ -1,8 +1,24 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgGeoProjConverter.h: DgGeoProjConverter class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -14,8 +30,6 @@
 #include "Dg2WayConverter.h"
 #include "DgDVec2D.h"
 #include "DgGeoProjRF.h"
-#include "proj4.h"
-#include "errno.h"
 
 #define EPS 1.0e-12L
 
@@ -27,7 +41,7 @@ class DgGeoProjConverter :
 
       DgGeoProjConverter (const DgRF<DgGeoCoord, long double>& fromFrameIn,
                           const DgRF<DgDVec2D, long double>& toFrameIn)
-         : DgConverter<DgGeoCoord, long double, DgDVec2D, long double> 
+         : DgConverter<DgGeoCoord, long double, DgDVec2D, long double>
                   (fromFrameIn, toFrameIn), geoProjRF_ (0), ellipsoidRF_ (0)
         {
            geoProjRF_ = dynamic_cast<const DgGeoProjRF*>(&toFrame());
@@ -47,7 +61,7 @@ class DgGeoProjConverter :
 
       DgGeoProjConverter (const DgGeoProjConverter& con)
          : DgConverter<DgGeoCoord, long double, DgDVec2D, long double> (con),
-           geoProjRF_ (&con.geoProjRF()), ellipsoidRF_ (&con.ellipsoidRF()) { } 
+           geoProjRF_ (&con.geoProjRF()), ellipsoidRF_ (&con.ellipsoidRF()) { }
 
       virtual DgDVec2D convertTypedAddress (const DgGeoCoord& addIn) const
         {
@@ -58,28 +72,33 @@ class DgGeoProjConverter :
            DgGeoCoord lp(addIn);
            DgDVec2D xy;
            long double t;
-     
-           // check for forward and latitude or longitude overange 
 
-           if ((t = fabs(lp.lat())-dgM_PI_2) > EPS || fabs(lp.lon()) > 10.0L) {
+           // check for forward and latitude or longitude overange
+
+           if ((t = fabsl(lp.lat())-M_PI_2) > EPS || fabsl(lp.lon()) > 10.0L) {
                 xy = DgDVec2D::undefDgDVec2D;
                 report("DgGeoProjConverter::convertTypedAddress(): "
                    " lat or lon out of range", DgBase::Fatal);
            } else { /* proceed with projection */
-              if (fabs(t) <= EPS)
-                 lp.setLat(lp.lat() < 0.0L ? -dgM_PI_2 : dgM_PI_2);
+              if (fabsl(t) <= EPS)
+                 lp.setLat(lp.lat() < 0.0L ? -M_PI_2 : M_PI_2);
               else if (p.geoc())
-                 lp.setLat(atan(e.rone_es() * tan(lp.lat())));
+                 lp.setLat(atanl(e.rone_es() * tanl(lp.lat())));
 //cout << "cta: lp: " << lp << endl;
               lp.setLon(lp.lon() - p.lam0());  /* compute del lp.lam */
 //cout << "cta: lp: " << lp << endl;
-              if (!p.over())
-                 lp.setLon(adjlon(lp.lon())); /* adjust del longitude */
+              if (!p.over()) {
+                 if (lp.lon() < 0.0)
+                    lp.setLon(lp.lon() + M_2PI);
+                 if (lp.lon() > M_2PI)
+                    lp.setLon(lp.lon() - M_2PI);
+              }
+
 //cout << "cta: lp: " << lp << endl;
 
               xy = p.projForward(lp, e);
 
-              // adjust for major axis and easting/northings 
+              // adjust for major axis and easting/northings
 
               xy = DgDVec2D(p.fr_meter() * (e.a() * xy.x() + p.x0()),
               p.fr_meter() * (e.a() * xy.y() + p.y0()));
@@ -111,7 +130,7 @@ class DgGeoInvProjConverter :
 
       DgGeoInvProjConverter (const DgRF<DgDVec2D, long double>& fromFrameIn,
                              const DgRF<DgGeoCoord, long double>& toFrameIn)
-         : DgConverter<DgDVec2D, long double, DgGeoCoord, long double> 
+         : DgConverter<DgDVec2D, long double, DgGeoCoord, long double>
                   (fromFrameIn, toFrameIn), geoProjRF_ (0), ellipsoidRF_ (0)
         {
            geoProjRF_ = dynamic_cast<const DgGeoProjRF*>(&fromFrame());
@@ -127,7 +146,7 @@ class DgGeoInvProjConverter :
               report("DgGeoInvrojConverter::DgGeoInvrojConverter(): "
                  " toFrame not of type DgEllipsoidRF", DgBase::Fatal);
            }
-      } 
+      }
 
       DgGeoInvProjConverter (const DgGeoInvProjConverter& con)
          : DgConverter<DgDVec2D, long double, DgGeoCoord, long double> (con),
@@ -141,7 +160,7 @@ class DgGeoInvProjConverter :
            DgDVec2D xy(addIn);
            DgGeoCoord lp;
 
-           // can't do as much preliminary checking as with forward 
+           // can't do as much preliminary checking as with forward
 
            if (xy.x() == HUGE_VAL || xy.y() == HUGE_VAL) {
                 lp = DgGeoCoord::undefGeoCoord;
@@ -156,11 +175,16 @@ class DgGeoInvProjConverter :
 
            lp = p.projInverse(xy, e);
 
-           lp.setLon(lp.lon() + p.lam0()); // reduce from del lp.lam 
-           if (!p.over())
-              lp.setLon(adjlon(lp.lon())); // adjust longitude to CM 
-           if (p.geoc() && fabs(fabs(lp.lat())-dgM_PI_2) > EPS)
-              lp.setLat(atan(e.one_es() * tan(lp.lat())));
+           lp.setLon(lp.lon() + p.lam0()); // reduce from del lp.lam
+           if (!p.over()) {
+              if (lp.lon() < 0.0)
+                 lp.setLon(lp.lon() + M_2PI);
+              if (lp.lon() > M_2PI)
+                 lp.setLon(lp.lon() - M_2PI);
+           }
+
+           if (p.geoc() && fabsl(fabsl(lp.lat())-M_PI_2) > EPS)
+              lp.setLat(atanl(e.one_es() * tanl(lp.lat())));
 
            lp.normalize();
 

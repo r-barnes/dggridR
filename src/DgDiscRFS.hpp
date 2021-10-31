@@ -1,7 +1,26 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRFS_template.h: DgDiscRFS template class definition.
+// DgDiscRFS.hpp: DgDiscRFS template class definition.
 //
+// Version 7.0 - Kevin Sahr, 12/14/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +91,23 @@ DgDiscRFS<A, B, DB>::setBoundaryChildren (int res, const DgLocation& loc,
       grids()[res]->convert(&tmpLoc);
       this->convert(&tmpLoc);
       setAddBoundaryChildren(*(this->getAddress(tmpLoc)), vec);
+   }
+
+} // void DgDiscRFS::setBoundaryChildren
+
+////////////////////////////////////////////////////////////////////////////////
+template<class A, class B, class DB> void
+DgDiscRFS<A, B, DB>::setBoundary2Children (int res, const DgLocation& loc, 
+                                   DgLocVector& vec) const
+{
+   vec.clearAddress(); 
+   this->convert(vec); 
+   if (res >= 0 && res < (nRes() - 1))
+   {
+      DgLocation tmpLoc(loc);
+      grids()[res]->convert(&tmpLoc);
+      this->convert(&tmpLoc);
+      setAddBoundary2Children(*(this->getAddress(tmpLoc)), vec);
    }
 
 } // void DgDiscRFS::setBoundaryChildren

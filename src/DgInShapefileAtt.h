@@ -1,18 +1,36 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgInShapefileAtt.h: DgInShapefileAtt class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGINSHAPEFILEATT_H
 #define DGINSHAPEFILEATT_H
 
-#include <string>
-#include <set>
-#include "shapefil.h"
 #include "DgInShapefile.h"
+
+#include "shapefil.h"
+
+#include <set>
+#include <string>
 
 using namespace std;
 
@@ -35,7 +53,7 @@ class DgDBFfield {
       { }
 
       const string& fieldName (void) const { return fieldName_; }
-      DBFFieldType  type      (void) const { return type_; } 
+      DBFFieldType  type      (void) const { return type_; }
       int           fieldNum  (void) const { return fieldNum_; }
       int           width     (void) const { return width_; }
       int           precision (void) const { return precision_; }
@@ -64,7 +82,7 @@ class DgInShapefileAtt : public DgInShapefile {
    public:
 
       DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
-                     const string* fileNameIn = NULL, 
+                     const string* fileNameIn = NULL,
                      DgReportLevel failLevel = DgBase::Fatal);
 
       virtual bool open (const string* fileName = NULL,
@@ -76,7 +94,7 @@ class DgInShapefileAtt : public DgInShapefile {
 
       int numFields (void) const { return numFields_; }
 
-      const set<DgDBFfield>& curObjFields (void) const 
+      const set<DgDBFfield>& curObjFields (void) const
                                              { return curObjFields_; }
 
    protected:
@@ -154,8 +172,8 @@ operator<< (ostream& stream, const DgDBFfield& f)
       case FTInvalid: type = 'X'; break;
       default: type = 'X'; break;
    }
-   return stream << " type: " << type << " #" << f.fieldNum() 
-                 << " (" << f.width() << "" << f.precision() << ")";
+   return stream << " type: " << type << " #" << f.fieldNum()
+                 << " (" << f.width() << "/" << f.precision() << ")";
 
 } // ostream& operator<<
 

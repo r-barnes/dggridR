@@ -1,18 +1,36 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgInShapefile.h: DgInShapefile class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGINSHAPEFILE_H
 #define DGINSHAPEFILE_H
 
-#include <string>
-#include <fstream>
-#include "shapefil.h"
 #include "DgInLocFile.h"
+
+#include "shapefil.h"
+
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -30,7 +48,7 @@ class DgInShapefile : public DgInLocFile {
    public:
 
       DgInShapefile (const DgGeoSphRF& geoRFIn,
-                     const string* fileNameIn = NULL, 
+                     const string* fileNameIn = NULL,
                      DgReportLevel failLevel = DgBase::Fatal);
 
       virtual bool open (const string* fileName = NULL,

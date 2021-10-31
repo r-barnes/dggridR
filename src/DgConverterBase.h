@@ -1,33 +1,52 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgConverterBase.h: DgConverterBase class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGCONVERTERBASE_H
 #define DGCONVERTERBASE_H
 
+#include <Rcpp.h>
+#undef M_2PI
+
 #include <vector>
 
 using namespace std;
 
-#include "DgRFBase.h"
 #include "DgLocation.h"
+#include "DgRFBase.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgConverterBase {
 
    public:
       virtual ~DgConverterBase (void);
-     
+
       static bool isTraceOn (void) { return isTraceOn_; }
-      static bool setTraceOn (bool traceOnIn) 
+      static bool setTraceOn (bool traceOnIn)
                      { isTraceOn_ = traceOnIn; return isTraceOn(); }
-      //static void setTraceStream (ostream& stream = cout) 
-      //                     { traceStream_ = &stream; }
-      //static ostream& traceStream (void) { return *traceStream_; }
+      static void setTraceStream (ostream& stream = Rcpp::Rcout)
+                           { traceStream_ = &stream; }
+      static ostream& traceStream (void) { return *traceStream_; }
 
       virtual DgLocation* convert (DgLocation* loc) const; // convert in place
 
@@ -36,27 +55,27 @@ class DgConverterBase {
 
       const DgRFBase& fromFrame (void) const { return *fromFrame_; }
       const DgRFBase& toFrame   (void) const { return *toFrame_; }
-      
+
       bool userGenerated (void) const { return userGenerated_; }
 
    protected:
 
-      DgConverterBase (const DgRFBase& fromFrame, 
+      DgConverterBase (const DgRFBase& fromFrame,
                        const DgRFBase& toFrame, bool userGenerated = true);
 
       DgConverterBase (const DgConverterBase& con) { operator=(con); }
 
       DgConverterBase& operator= (const DgConverterBase& con);
 
-      virtual DgAddressBase* createConvertedAddress 
+      virtual DgAddressBase* createConvertedAddress
                               (const DgAddressBase& addIn) const = 0;
 
       static bool isTraceOn_;
-      //static ostream* traceStream_;
+      static ostream* traceStream_;
 
       DgRFBase* fromFrame_;
       DgRFBase* toFrame_;
-      
+
       bool userGenerated_;
 
    friend class DgRFBase;
@@ -80,7 +99,7 @@ class DgIdentityConverter : public DgConverterBase {
 
    protected:
 
-      virtual DgAddressBase* createConvertedAddress 
+      virtual DgAddressBase* createConvertedAddress
                                   (const DgAddressBase& addIn) const
               { return fromFrame().createAddress(addIn); }
 

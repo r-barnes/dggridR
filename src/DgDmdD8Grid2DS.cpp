@@ -1,7 +1,26 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgDmdD8Grid2DS.cpp: DgDmdD8Grid2DS class implementation
 //
+// Version 7.0 - Kevin Sahr, 12/14/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,12 +32,14 @@
 #include "DgDmdD8Grid2D.h"
 #include "DgDmdD8Grid2DS.h"
 
+using namespace dgg::topo;
+
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn, 
                const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
                const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, 
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Diamond, D8,
                        isCongruentIn, isAlignedIn, nameIn) 
 { 
    // determine the radix
@@ -68,14 +89,12 @@ DgDmdD8Grid2DS::DgDmdD8Grid2DS (DgRFNetwork& networkIn,
 
       //cout << newName << " " << fac << ' ' << trans << endl;
 
-      DgContCartRF* ccRF = new DgContCartRF(network(), newName + string("bf"));
+      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
 
-      new Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, 
-                                    trans); 
+      Dg2WayContAffineConverter (backFrame(), *ccRF, (long double) fac, 0.0, trans); 
 
-      (*grids_)[i] = new DgDmdD8Grid2D(network(), *ccRF, newName);
-      new Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>
-                                                  (*this, *(grids()[i]), i);
+      (*grids_)[i] = DgDmdD8Grid2D::makeRF(network(), *ccRF, newName);
+      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double> (*this, *(grids()[i]), i);
 
       fac *= radix();
    }
@@ -93,10 +112,7 @@ DgDmdD8Grid2DS::DgDmdD8Grid2DS (const DgDmdD8Grid2DS& rf)
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdD8Grid2DS::~DgDmdD8Grid2DS (void)
 {
-   for (unsigned long i = 0; i < grids().size(); i++)
-    delete (*grids_)[i]; 
 
-   delete grids_;
 } // DgDmdD8Grid2DS::~DgDmdD8Grid2DS
 
 ////////////////////////////////////////////////////////////////////////////////

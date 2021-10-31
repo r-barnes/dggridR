@@ -1,21 +1,44 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgRF_template.h: DgRF template class definition.
+// DgRF.hpp: DgRF template class definition.
 //
+// Version 7.0 - Kevin Sahr, 12/14/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <cstdint>
-
 #include "DgBase.h"
+#include "DgConverter.h"
+#include "DgDistance.h"
 #include "DgLocation.h"
 #include "DgLocVector.h"
-#include "DgDistance.h"
-#include "DgConverter.h"
+// USE_NUCELL is set in MakeIncludes
+#ifdef USE_NUCELL
+#include <nulib/NuCell.h>
+#endif
+
+#include <Rcpp/iostream/Rstreambuf.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class D> 
+template<class A, class D>
 DgRF<A, D>::~DgRF (void)
 {
    // virtual destructor
@@ -53,12 +76,45 @@ DgRF<A, D>::createLocation (const DgLocation& loc, bool conv) const
 
 } // DgLocation* DgRF<A>::createLocation
 
+// USE_NUCELL is set in MakeIncludes
+#ifdef USE_NUCELL
+////////////////////////////////////////////////////////////////////////////////
+template<class A, class D> NuCell*
+DgRF<A, D>::createCell (const NuCell& cell, bool conv) const
+{
+   if (cell.rf() == *this)
+   {
+      return new NuCell(cell);
+   }
+   else if (cell.rf().network() != network())
+   {
+      report("DgRF<A, D>::getConverter() cell not in this network",
+             DgBase::Fatal);
+      return 0;
+   }
+   else if (conv)
+   {
+      NuCell* newCell = new NuCell(cell);
+      convert(newCell);
+
+      return newCell;
+   }
+   else
+   {
+      report("DgRF<A, D>::getConverter() cell not from this rf"
+             " and conversion not specified",
+             DgBase::Fatal);
+      return 0;
+   }
+
+} // NuCell* DgRF<A>::createCell
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class D> DgLocation*
 DgRF<A, D>::makeLocation (const A& addIn) const
 {
    return buildLocation(new DgAddress<A>(addIn));
-
 } // DgLocation* DgRF<A>::makeLocation
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,6 +123,7 @@ DgRF<A, D>::getAddress (const DgLocation& loc) const
 {
    if (loc.rf() != *this)
    {
+      Rcpp::Rcerr << "ABORTING *this: " << *this << " loc: " << loc << endl;
       report("DgRF<A, D>::getAddress() location not from this rf",
              DgBase::Fatal);
       return 0;
@@ -74,7 +131,7 @@ DgRF<A, D>::getAddress (const DgLocation& loc) const
 
    if (loc.address())
    {
-      return (&(static_cast<const DgAddress<A>*>(loc.address()))->address()); 
+      return (&(static_cast<const DgAddress<A>*>(loc.address()))->address());
    }
    else
    {
@@ -84,12 +141,21 @@ DgRF<A, D>::getAddress (const DgLocation& loc) const
 } // const A* DgRF<A>::getAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class D> void 
+// deletes old address
+template<class A, class D> void
+DgRF<A, D>::forceAddress (DgLocation* loc, const A& addIn) const {
+   if (loc->address_)
+      loc->clearAddress();
+   loc->address_ = new DgAddress<A>(addIn);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+template<class A, class D> void
 DgRF<A, D>::buildLocVector (DgLocVector* vec, const vector<A*> inVec) const
 {
    vec->clearAddress();
    vec->resize(inVec.size());
-   for (unsigned int i = 0; i < vec->size(); i++) 
+   for (unsigned int i = 0; i < vec->size(); i++)
    {
       vec->vec_[i] = new DgAddress<A>(*inVec[i]);
    }
@@ -175,7 +241,7 @@ DgRF<A, D>::getDistance (const DgDistanceBase& dist) const
              DgBase::Fatal);
    }
 
-   return ((static_cast<const DgDistance<D>&>(dist)).distance()); 
+   return ((static_cast<const DgDistance<D>&>(dist)).distance());
 
 } // D DgRF<A, D>::getDistance
 
@@ -187,7 +253,7 @@ DgRF<A, D>::toString (const DgLocation& loc) const
 
    if (loc.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + loc.asString() + 
+      report("DgRF<A, D>::toString(" + loc.asString() +
              ") location not from this rf", DgBase::Fatal);
       return str;
    }
@@ -216,7 +282,7 @@ DgRF<A, D>::toString (const DgLocation& loc, char delimiter) const
 
    if (loc.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + loc.asString() + 
+      report("DgRF<A, D>::toString(" + loc.asString() +
              ") location not from this rf", DgBase::Fatal);
       return str;
    }
@@ -263,7 +329,7 @@ DgRF<A, D>::toString (const DgLocVector& locVec) const
 
    if (locVec.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + locVec.asString() + 
+      report("DgRF<A, D>::toString(" + locVec.asString() +
              ") location vector not from this rf", DgBase::Fatal);
       return str;
    }
@@ -289,7 +355,7 @@ DgRF<A, D>::toString (const DgLocVector& locVec, char delimiter) const
 
    if (locVec.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + locVec.asString() + 
+      report("DgRF<A, D>::toString(" + locVec.asString() +
              ") location vector not from this rf", DgBase::Fatal);
       return str;
    }
@@ -313,7 +379,7 @@ DgRF<A, D>::toAddressString (const DgLocation& loc) const
 
    if (loc.rf() != *this)
    {
-      report("DgRF<A, D>::toAddressString(" + loc.asString() + 
+      report("DgRF<A, D>::toAddressString(" + loc.asString() +
              ") location not from this rf", DgBase::Fatal);
       return str;
    }
@@ -340,7 +406,7 @@ DgRF<A, D>::toAddressString (const DgLocation& loc, char delimiter) const
 
    if (loc.rf() != *this)
    {
-      report("DgRF<A, D>::toAddressString(" + loc.asString() + 
+      report("DgRF<A, D>::toAddressString(" + loc.asString() +
              ") location not from this rf", DgBase::Fatal);
       return str;
    }
@@ -367,7 +433,7 @@ DgRF<A, D>::toAddressString (const DgLocVector& locVec) const
 
    if (locVec.rf() != *this)
    {
-      report("DgRF<A, D>::toAddressString(" + locVec.asString() + 
+      report("DgRF<A, D>::toAddressString(" + locVec.asString() +
              ") location vector not from this rf", DgBase::Fatal);
       return str;
    }
@@ -393,7 +459,7 @@ DgRF<A, D>::toAddressString (const DgLocVector& locVec, char delimiter) const
 
    if (locVec.rf() != *this)
    {
-      report("DgRF<A, D>::toAddressString(" + locVec.asString() + 
+      report("DgRF<A, D>::toAddressString(" + locVec.asString() +
              ") location vector not from this rf", DgBase::Fatal);
       return str;
    }
@@ -417,12 +483,12 @@ DgRF<A, D>::toString (const DgDistanceBase& dist) const
 
    if (dist.rf() != *this)
    {
-      report("DgRF<A, D>::toString(" + dist.asString() + 
+      report("DgRF<A, D>::toString(" + dist.asString() +
              ") distance not from this rf", DgBase::Fatal);
       return str;
    }
 
-   str = name() + "{" + 
+   str = name() + "{" +
          dist2str((static_cast<const DgDistance<D>&>(dist)).distance()) + "}";
 
    return str;
@@ -435,7 +501,7 @@ DgRF<A, D>::toDouble (const DgDistanceBase& dist) const
 {
    if (dist.rf() != *this)
    {
-      report("DgRF<A, D>::toDouble(" + dist.asString() + 
+      report("DgRF<A, D>::toDouble(" + dist.asString() +
              ") distance not from this rf", DgBase::Fatal);
       return -1;
    }
@@ -445,20 +511,20 @@ DgRF<A, D>::toDouble (const DgDistanceBase& dist) const
 } // long double DgRF<A, D>::toDouble
 
 ////////////////////////////////////////////////////////////////////////////////
-template <class A, class D> 
-std::uint64_t
+template <class A, class D>
+unsigned long long int
 DgRF<A, D>::toInt (const DgDistanceBase& dist) const
 {
    if (dist.rf() != *this)
    {
-      report("DgRF<A, D>::toInt(" + dist.asString() + 
+      report("DgRF<A, D>::toInt(" + dist.asString() +
              ") distance not from this rf", DgBase::Fatal);
       return 0;
    }
 
    return dist2int((static_cast<const DgDistance<D>&>(dist)).distance());
 
-} // std::uint64_t DgRF<A, D>::toInt
+} // unsigned long long int DgRF<A, D>::toInt
 
 ////////////////////////////////////////////////////////////////////////////////
 template <class A, class D> void
@@ -467,7 +533,7 @@ DgRF<A, D>::jumpRF (DgLocation* loc)
    const DgRF<A, D>* newRF = dynamic_cast<const DgRF<A, D>*>(&loc->rf());
    if (!newRF)
    {
-      report("DgRF<A, D>::jumpTo(" + loc->asString() + 
+      report("DgRF<A, D>::jumpTo(" + loc->asString() +
              ") does not match type of " + name(), DgBase::Fatal);
    }
 
@@ -477,4 +543,3 @@ DgRF<A, D>::jumpRF (DgLocation* loc)
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-

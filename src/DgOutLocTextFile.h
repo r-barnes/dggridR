@@ -1,20 +1,36 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgOutLocTextFile.h: DgOutLocTextFile class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGOUTLOCTEXTFILE_H
 #define DGOUTLOCTEXTFILE_H
 
-#include <string>
-#include <fstream>
-
-#include "DgUtil.h"
-#include "DgOutputStream.h"
 #include "DgOutLocFile.h"
+#include "DgOutputStream.h"
+#include "DgUtil.h"
+
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -30,7 +46,7 @@ class DgOutLocTextFile : public DgOutputStream, public DgOutLocFile {
 
       // direct the DgOutLocFile abstract methods to the DgOutputStream ones
       virtual bool open (const string& fileName,
-                DgReportLevel failLevel = DgBase::Fatal) 
+                DgReportLevel failLevel = DgBase::Fatal)
               { return DgOutputStream::open(fileName, failLevel); }
 
       virtual void close (void) { DgOutputStream::close(); }
@@ -38,10 +54,10 @@ class DgOutLocTextFile : public DgOutputStream, public DgOutLocFile {
 
    protected:
 
-      DgOutLocTextFile (const string& fileName, const DgRFBase& rf, 
+      DgOutLocTextFile (const string& fileName, const DgRFBase& rf,
                         bool isPointFile = false,
-                        const string& suffix = string(""), 
-			int precision = 7, 
+                        const string& suffix = string(""),
+			int precision = 7,
                         DgReportLevel failLevel = DgBase::Fatal);
 
       virtual void setFormatStr(void) = 0;
@@ -49,7 +65,7 @@ class DgOutLocTextFile : public DgOutputStream, public DgOutLocFile {
       std::string formatStr_;
 
    private:
-      
+
       int             precision_;
 };
 

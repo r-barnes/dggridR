@@ -1,64 +1,80 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgIDGGS.h: DgIDGGS class definitions
+// DgIDGGS.h: original v6.1 DgIDGGS class for pre-mixed aperture grids
 //
+// Version 7.0 - Kevin Sahr,11/16/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGIDGGS_H 
+#ifndef DGIDGGS_H
 #define DGIDGGS_H
+
+#include "DgIDGGSBase.h"
+#include "DgIDGG.h"
 
 #include <cmath>
 
-#include "DgDiscRFS.h"
-#include "DgIDGG.h"
-#include "DgEllipsoidRF.h"
+using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgIDGGS : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
+class DgIDGGS : public DgIDGGSBase {
 
    public:
 
-      static const DgIDGGS* makeRF (DgRFNetwork& network, 
+      static const DgIDGGS* makeRF (DgRFNetwork& network,
                const DgGeoSphRF& backFrame, const DgGeoCoord& vert0,
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
-               const string& gridTopo = string("HEXAGON"),
-               const string& name = "IDGGS", const string& projType = "ISEA", 
-               bool isMixed43 = false, int numAp4 = 0, 
-               bool isSuperfund = false);
+               DgGridTopology gridTopo = Hexagon,
+               DgGridMetric gridMetric = D6,
+               const string& name = "IDGGS", const string& projType = "ISEA",
+               bool isMixed43 = false, int numAp4 = 0,
+               bool isSuperfund = false, bool isApSeq = false,
+               const DgApSeq& apSeq = DgApSeq::defaultApSeq);
 
       // copy constructor and operator= not implemented
 
-      virtual const DgResAdd<DgQ2DICoord>& undefAddress (void) const 
-           { static DgResAdd<DgQ2DICoord> 
-                        undef(DgQ2DICoord::undefDgQ2DICoord, -1); 
-             return undef; }
-
       const DgIDGG& idgg (int res) const
-             { return static_cast<const DgIDGG&>(operator[](res)); }
+             { return static_cast<const DgIDGG&>(idggBase(res)); }
 
-      const DgGeoSphRF&  geoRF       (void) const { return geoRF_; }
-      const DgGeoCoord&  vert0       (void) const { return vert0_; }
-      long double           azDegs      (void) const { return azDegs_; }
-      unsigned int       aperture    (void) const { return aperture_; }
+      bool               isApSeq     (void) const { return isApSeq_; }
+      const DgApSeq&     apSeq       (void) const { return apSeq_; }
+      //bool               isMixed43   (void) const { return !(isPure() || isApSeq()); }
       bool               isMixed43   (void) const { return isMixed43_; }
       bool               isSuperfund (void) const { return isSuperfund_; }
       int                numAp4      (void) const { return numAp4_; }
-      const string&      gridTopo    (void) const { return gridTopo_; }
-      const string&      projType    (void) const { return projType_; }
 
    protected:
 
-      DgIDGGS (DgRFNetwork& network, 
+      DgIDGGS (DgRFNetwork& network,
                const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0,
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
-               const string& gridTopo = string("HEXAGON"),
-               const string& name = "IDGGS", 
-               const string& projType = "ISEA", 
-               bool isMixed43 = false, int numAp4 = 0, 
-               bool isSuperfund = false);
+               DgGridTopology gridTopo = Hexagon,
+               DgGridMetric gridMetric = D6,
+               const string& name = "IDGGS",
+               const string& projType = "ISEA",
+               bool isMixed43 = false, int numAp4 = 0,
+               bool isSuperfund = false, bool isApSeq = false,
+               const DgApSeq& apSeq = DgApSeq::defaultApSeq);
 
       // remind sub-classes of the pure virtual functions remaining from above
 
@@ -76,17 +92,11 @@ class DgIDGGS : public DgDiscRFS<DgQ2DICoord, DgGeoCoord, long double> {
 
    private:
 
-      const DgGeoSphRF& geoRF_;
-
-      DgGeoCoord vert0_;
-      long double azDegs_;
-
-      string gridTopo_;
-      string projType_;
-
-      bool isMixed43_;
       int  numAp4_;
       bool isSuperfund_;
+      bool isMixed43_;
+      bool isApSeq_;
+      DgApSeq apSeq_;
 
 };
 

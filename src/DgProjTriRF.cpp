@@ -1,8 +1,24 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgProjTriRF.cpp: DgProjTriRF class implementation
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -14,7 +30,7 @@ DgSphIcosa::DgSphIcosa (const DgGeoCoord& vert0, long double azimuthDegs)
 {
    sphIcosa_.pt.lon = vert0.lon();
    sphIcosa_.pt.lat = vert0.lat();
-   sphIcosa_.azimuth = azimuthDegs * dgM_PI/180;
+   sphIcosa_.azimuth = azimuthDegs * M_PI/180;
 
    ico12verts();
 
@@ -27,7 +43,7 @@ ostream& operator<< (ostream& str, const DgSphIcosa& dgsi)
 
    DgGeoCoord tmp(si.pt);
    str << "vert0: " << tmp << endl;
-   str << "az0: " << si.azimuth * 180.0 / dgM_PI << endl;
+   str << "az0: " << si.azimuth * 180.0 / M_PI << endl;
 
    str << "vertices:\n";
    str << "{\n";
@@ -70,29 +86,29 @@ GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,
   long double cosptnewlat, cosptnewlon;
   GeoCoord ptnew;
 
-  cosptnewlat = sin(newNPold.lat)*sin(ptold.lat) + 
-                cos(newNPold.lat)*cos(ptold.lat)*cos(newNPold.lon-ptold.lon);
-  if (cosptnewlat>1.) cosptnewlat=1.0;
-  if (cosptnewlat<-1.) cosptnewlat=-1.0;
-  ptnew.lat = acos(cosptnewlat);
-  if (fabs(ptnew.lat-0.) < PRECISION*100000)
+  cosptnewlat = sinl(newNPold.lat)*sinl(ptold.lat) + 
+                cosl(newNPold.lat)*cosl(ptold.lat)*cosl(newNPold.lon-ptold.lon);
+  if (cosptnewlat>1.0L) cosptnewlat=1.0L;
+  if (cosptnewlat<-1.0L) cosptnewlat=-1.0L;
+  ptnew.lat = acosl(cosptnewlat);
+  if (fabsl(ptnew.lat-0.) < PRECISION*100000)
       ptnew.lon=0.; 
-  else if (fabs(ptnew.lat-dgM_PI) < PRECISION*100000)
+  else if (fabsl(ptnew.lat-M_PI) < PRECISION*100000)
       ptnew.lon=0.; 
   else
    {
-    cosptnewlon = (sin(ptold.lat)*cos(newNPold.lat) - cos(ptold.lat)*
-                  sin(newNPold.lat)*cos(newNPold.lon-ptold.lon))/sin(ptnew.lat);
-    if (cosptnewlon>1.) cosptnewlon=1.0;
-    if (cosptnewlon<-1.) cosptnewlon=-1.0;
-    ptnew.lon = acos(cosptnewlon);
-    if ((ptold.lon-newNPold.lon)>=0 && (ptold.lon-newNPold.lon) < dgM_PI)
+    cosptnewlon = (sinl(ptold.lat)*cosl(newNPold.lat) - cosl(ptold.lat)*
+                  sinl(newNPold.lat)*cosl(newNPold.lon-ptold.lon))/sinl(ptnew.lat);
+    if (cosptnewlon>1.0L) cosptnewlon=1.0L;
+    if (cosptnewlon<-1.0L) cosptnewlon=-1.0L;
+    ptnew.lon = acosl(cosptnewlon);
+    if ((ptold.lon-newNPold.lon)>=0 && (ptold.lon-newNPold.lon) < M_PI)
       ptnew.lon=-ptnew.lon+lon0;
     else ptnew.lon=ptnew.lon+lon0;
-    if (ptnew.lon>dgM_PI) ptnew.lon -= 2*dgM_PI;
-    if (ptnew.lon<-dgM_PI) ptnew.lon += 2*dgM_PI;
+    if (ptnew.lon>M_PI) ptnew.lon -= 2*M_PI;
+    if (ptnew.lon<-M_PI) ptnew.lon += 2*M_PI;
    }
-  ptnew.lat = dgM_PI/2-ptnew.lat;
+  ptnew.lat = M_PI/2-ptnew.lat;
   return ptnew;
  }
 
@@ -101,40 +117,24 @@ int
 DgSphIcosa::whichIcosaTri (const GeoCoord& pt)
 /*
    Return the index of the icosahedron triangle in which pt occurs.
-
-   The guts of the ptinsphtri function have been in-lined here and converted
-   to make use of pre-computed information (Kevin Sahr).
 */
 {
-   int i;
-   long double p0;
-   Vec3D pp = llxyz(pt);
+   // start by assuming the first face is the minimum
+   int minFace = 0;
+   long double minDist = DgGeoCoord::gcDist(sphIcosa().triCen[0].pt, pt);
 
-   for (i = 0; i < 20; i++)
+   // compare against the rest of the faces
+   for (int i = 1; i < 20; i++)
    {
-      const PreCompInTri& intri = sphIcosa().ptin[i];
-
-      p0 = pp.x * intri.p0x0 - pp.y * intri.p0y0 + pp.z * intri.p0z0;
-
-      if (p0 * intri.t00 < 0.0) continue;
-      
-      p0 = pp.x * intri.p0x1 - pp.y * intri.p0y1 + pp.z * intri.p0z1;
-
-      if (p0 * intri.t01 < 0.0) continue;
-      
-      p0 = pp.x * intri.p0x2 - pp.y * intri.p0y2 + pp.z * intri.p0z2;
-
-      if (p0 * intri.t02 < 0.0) continue;
-      
-      /* if we're here we're still in the triangle */
-     
-      return i;
-
+      const DgGeoCoord& triCen = sphIcosa().triCen[i].pt;
+      long double dist = DgGeoCoord::gcDist(triCen, pt);
+      if (dist < minDist) {
+         minDist = dist;
+         minFace = i;
+      }
    }
 
-   /* if we get here something is wrong */
-
-   return -1;
+   return minFace;
 
 } /* int DgSphIcosa::whichIcosaTri */
 
@@ -177,28 +177,28 @@ DgSphIcosa::ico12verts (void)
    newnpold.lon = 0.0;
    for (i = 1; i <= 5; i++) 
    {
-     vertsnew[i].lat = 26.565051177 * dgM_PI / 180.0;
-     vertsnew[i].lon = -sphIcosa().azimuth + 72 * (i - 1) * dgM_PI / 180.0;
-     if (vertsnew[i].lon > dgM_PI-PRECISION) vertsnew[i].lon -= 2 * dgM_PI;
-     if (vertsnew[i].lon < -(dgM_PI+PRECISION)) vertsnew[i].lon += 2 * dgM_PI;
-     vertsnew[i+5].lat = -26.565051177 * dgM_PI / 180;
+     vertsnew[i].lat = 26.565051177 * M_PI / 180.0;
+     vertsnew[i].lon = -sphIcosa().azimuth + 72 * (i - 1) * M_PI / 180.0;
+     if (vertsnew[i].lon > M_PI-PRECISION) vertsnew[i].lon -= 2 * M_PI;
+     if (vertsnew[i].lon < -(M_PI+PRECISION)) vertsnew[i].lon += 2 * M_PI;
+     vertsnew[i+5].lat = -26.565051177 * M_PI / 180;
      vertsnew[i+5].lon = 
-              -sphIcosa().azimuth + (36.0 + 72.0 * (i - 1)) * dgM_PI / 180.0;
-     if (vertsnew[i + 5].lon > dgM_PI - PRECISION) 
+              -sphIcosa().azimuth + (36.0 + 72.0 * (i - 1)) * M_PI / 180.0;
+     if (vertsnew[i + 5].lon > M_PI - PRECISION) 
      {
-        vertsnew[i + 5].lon -= 2 * dgM_PI;
+        vertsnew[i + 5].lon -= 2 * M_PI;
      }
-     if (vertsnew[i+5].lon < -(dgM_PI+PRECISION)) vertsnew[i+5].lon += 2 * dgM_PI;
+     if (vertsnew[i+5].lon < -(M_PI+PRECISION)) vertsnew[i+5].lon += 2 * M_PI;
    }
-   vertsnew[11].lat = -90.0 * dgM_PI / 180.0;
-   vertsnew[11].lon = 0.0 * dgM_PI / 180.0;
+   vertsnew[11].lat = -90.0 * M_PI / 180.0;
+   vertsnew[11].lon = 0.0 * M_PI / 180.0;
    sphIcosa().icoverts[0].lat = sphIcosa().pt.lat;
    sphIcosa().icoverts[0].lon = sphIcosa().pt.lon;
 /***** hardwire for bug test ******/
 
 /*
-vertsnew[0].lat = 90.0 * dgM_PI / 180.0;
-vertsnew[0].lon = 0.0 * dgM_PI / 180.0;
+vertsnew[0].lat = 90.0 * M_PI / 180.0;
+vertsnew[0].lon = 0.0 * M_PI / 180.0;
 for (i = 0; i < 12; i++) 
 {
    sphIcosa().icoverts[i].lat = vertsnew[i].lat; 
@@ -227,25 +227,25 @@ for (i = 0; i < 12; i++)
       /* pre-calculate the center point values */
 
       sphIcosa().triCen[i].pt = sphTricenpoint(sphIcosa().icotri[i]);
-      sphIcosa().triCen[i].sinLat = sin(sphIcosa().triCen[i].pt.lat);
-      sphIcosa().triCen[i].sinLon = sin(sphIcosa().triCen[i].pt.lon);
-      sphIcosa().triCen[i].cosLat = cos(sphIcosa().triCen[i].pt.lat);
-      sphIcosa().triCen[i].cosLon = cos(sphIcosa().triCen[i].pt.lon);
+      sphIcosa().triCen[i].sinLat = sinl(sphIcosa().triCen[i].pt.lat);
+      sphIcosa().triCen[i].sinLon = sinl(sphIcosa().triCen[i].pt.lon);
+      sphIcosa().triCen[i].cosLat = cosl(sphIcosa().triCen[i].pt.lat);
+      sphIcosa().triCen[i].cosLon = cosl(sphIcosa().triCen[i].pt.lon);
 
       /* pre-calculate the dazh's */
 
       const GeoCoord* t = sphIcosa().icotri[i];
       const PreCompGeo& c = sphIcosa().triCen[i];
-      sphIcosa().dazh[i] = atan2(cos(t[0].lat) * sin(t[0].lon - c.pt.lon),
-                  c.cosLat * sin(t[0].lat) - c.sinLat * cos(t[0].lat) *
-                  cos(t[0].lon - c.pt.lon));
+      sphIcosa().dazh[i] = atan2l(cosl(t[0].lat) * sinl(t[0].lon - c.pt.lon),
+                  c.cosLat * sinl(t[0].lat) - c.sinLat * cosl(t[0].lat) *
+                  cosl(t[0].lon - c.pt.lon));
 
 /*
-      sphIcosa().dazh[i] = atan2(cos(sphIcosa().icotri[i][0].lat) * 
-                  sin(sphIcosa().icotri[i][0].lon - sphIcosa().triCen[i].pt.lon),
-                  sphIcosa().triCen[i].cosLat * sin(sphIcosa().icotri[i][0].lat) -
-                  sphIcosa().triCen[i].sinLat * cos(sphIcosa().icotri[i][0].lat) *
-                  cos(sphIcosa().icotri[i][0].lon - sphIcosa().triCen[i].pt.lon));
+      sphIcosa().dazh[i] = atan2l(cosl(sphIcosa().icotri[i][0].lat) * 
+                  sinl(sphIcosa().icotri[i][0].lon - sphIcosa().triCen[i].pt.lon),
+                  sphIcosa().triCen[i].cosLat * sinl(sphIcosa().icotri[i][0].lat) -
+                  sphIcosa().triCen[i].sinLat * cosl(sphIcosa().icotri[i][0].lat) *
+                  cosl(sphIcosa().icotri[i][0].lon - sphIcosa().triCen[i].pt.lon));
 */
 
       /* pre-calculate the pt-in-triangle constants */

@@ -1,13 +1,28 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgBoundedRFS2D.cpp: DgBoundedRFS2D class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <limits>
-#include <cstdint>
+#include <climits>
 
 #include "DgBoundedRFS2D.h"
 #include "DgBoundedHexC2RF2D.h"
@@ -34,11 +49,11 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
 
    // allocate the grids
 
-   grids_ = new vector<DgBoundedRF2D*>(discRFS().nRes());
+   grids_ = new vector<const DgBoundedRF2D*>(discRFS().nRes());
 
    int totTicks = 1;
-   std::int64_t numI = upperRight0.i() + 1;
-   std::int64_t numJ = upperRight0.j() + 1;
+   long long int numI = upperRight0.i() + 1;
+   long long int numJ = upperRight0.j() + 1;
    if (rf.aperture() == 3) // better be hex!
    {
       for (int i = 0; i < discRFS().nRes(); i++)
@@ -99,7 +114,7 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
    size_ = 0;
    for (int i = 0; i < discRFS().nRes(); i++)
    {
-      std::uint64_t lastSize = size_;
+      unsigned long long int lastSize = size_;
 
       const DgBoundedRF2D* g = (*grids_)[i];
 
@@ -184,7 +199,7 @@ DgBoundedRFS2D::decrementAddress (DgResAdd<DgIVec2D>& add) const
 } // DgResAdd<DgIVec2D>& DgBoundedRFS2D::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-std::uint64_t 
+unsigned long long int 
 DgBoundedRFS2D::seqNumAddress (const DgResAdd<DgIVec2D>& add) const
 {
    if (!validSize())
@@ -194,7 +209,7 @@ DgBoundedRFS2D::seqNumAddress (const DgResAdd<DgIVec2D>& add) const
       return 0;
    }
 
-   std::uint64_t sNum = 0;
+   unsigned long long int sNum = 0;
    if (!zeroBased()) sNum++;
 
    for (int i = 0; i < add.res(); i++) sNum += (*grids_)[i]->size();
@@ -203,11 +218,11 @@ DgBoundedRFS2D::seqNumAddress (const DgResAdd<DgIVec2D>& add) const
 
    return sNum;
 
-} // std::uint64_t DgBoundedRFS2D::seqNumAddress
+} // unsigned long long int DgBoundedRFS2D::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 DgResAdd<DgIVec2D> 
-DgBoundedRFS2D::addFromSeqNum (std::uint64_t sNum) const
+DgBoundedRFS2D::addFromSeqNum (unsigned long long int sNum) const
 {
    if (!validSize())
    {
@@ -219,7 +234,7 @@ DgBoundedRFS2D::addFromSeqNum (std::uint64_t sNum) const
    if (!zeroBased()) sNum--;
 
    DgResAdd<DgIVec2D> tmp;
-   std::uint64_t n = sNum;
+   unsigned long long int n = sNum;
    tmp.setRes(0);
 
    int r;

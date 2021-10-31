@@ -1,18 +1,34 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgDmdD8Grid2DS.h: DgDmdD8Grid2DS class definitions
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGDMDD8GRID2DS_H 
-#define DGDMDD8GRID2DS_H 
+#ifndef DGDMDD8GRID2DS_H
+#define DGDMDD8GRID2DS_H
 
-#include "DgRF.h"
-#include "DgLocVector.h"
 #include "DgDiscRFS2D.h"
 #include "DgIVec2D.h"
+#include "DgLocVector.h"
+#include "DgRF.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,13 +36,13 @@ class DgDmdD8Grid2DS : public DgDiscRFS2D {
 
    public:
 
-      DgDmdD8Grid2DS (DgRFNetwork& networkIn, 
+      static const DgDmdD8Grid2DS* makeRF (DgRFNetwork& networkIn,
                  const DgRF<DgDVec2D, long double>& backFrameIn,
-                 int nRes = 1, unsigned int apertureIn = 4, 
+                 int nRes = 1, unsigned int apertureIn = 4,
                  bool isCongruentIn = true, bool isAlignedIn = false,
-                 const string& nameIn = "8D4");
-
-      DgDmdD8Grid2DS (const DgDmdD8Grid2DS& rf);
+                 const string& nameIn = "8D4")
+         { return new DgDmdD8Grid2DS (networkIn, backFrameIn, nRes, apertureIn,
+                 isCongruentIn, isAlignedIn, nameIn); }
 
      ~DgDmdD8Grid2DS (void);
 
@@ -35,6 +51,14 @@ class DgDmdD8Grid2DS : public DgDiscRFS2D {
       int radix (void) const { return radix_; }
 
    protected:
+
+      DgDmdD8Grid2DS (DgRFNetwork& networkIn,
+                 const DgRF<DgDVec2D, long double>& backFrameIn,
+                 int nRes = 1, unsigned int apertureIn = 4,
+                 bool isCongruentIn = true, bool isAlignedIn = false,
+                 const string& nameIn = "8D4");
+
+      DgDmdD8Grid2DS (const DgDmdD8Grid2DS& rf);
 
       int radix_;
 

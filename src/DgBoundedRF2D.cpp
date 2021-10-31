@@ -1,13 +1,28 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgBoundedRF2D.cpp: DgBoundedRF2D class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <limits>
-#include <cstdint>
+#include <climits>
 
 #include "DgBoundedRF2D.h"
 #include "DgDiscRF.h"
@@ -79,22 +94,22 @@ DgBoundedRF2D::decrementAddress (DgIVec2D& add) const
 } // DgIVec2D& DgBoundedRF2D::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-std::uint64_t
+unsigned long long int
 DgBoundedRF2D::seqNumAddress (const DgIVec2D& add) const
 {
    DgIVec2D tVec = add - lowerLeft();
 
-   std::int64_t sNum = tVec.i() * numJ() + tVec.j();
+   long long int sNum = tVec.i() * numJ() + tVec.j();
 
    if (!zeroBased()) 
     sNum++;
 
    return sNum;
-} // std::uint64_t DgBoundedRF2D::seqNumAddress
+} // unsigned long long int DgBoundedRF2D::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIVec2D 
-DgBoundedRF2D::addFromSeqNum (std::uint64_t sNum) const
+DgBoundedRF2D::addFromSeqNum (unsigned long long int sNum) const
 {
    DgIVec2D res;
 

@@ -1,15 +1,31 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgRandom.C: DgRandom class implementation. Includes Marsaglia's "mother"
 //             function and notes.
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DgRandom.h"
 
-double Mother (unsigned long *pSeed);
+static double Mother (unsigned long *pSeed);
 
 ////////////////////////////////////////////////////////////////////////////////
 DgRandom::~DgRandom(void)
@@ -73,7 +89,7 @@ switch.
 |	Bob Wheeler 8/8/94
 */
 
-double Mother(unsigned long *pSeed)
+static double Mother(unsigned long *pSeed)
 {
 	unsigned long  number, number1, number2;
 	short n, *p;

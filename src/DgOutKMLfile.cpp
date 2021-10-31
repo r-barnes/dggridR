@@ -1,8 +1,24 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgOutKMLfile.cpp: DgOutKMLfile class implementation
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -21,11 +37,12 @@ DgOutKMLfile::DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename,
     const string& nameIn, const string& descIn, DgReportLevel failLevel)
    : DgOutLocTextFile (filename, rf, isPointFile, "kml", precision, failLevel)
 {
-   if (0 == rf.vecAddress(DgDVec2D()))
-   {
+   // test for override of vecAddress
+   DgAddressBase* dummy = rf.vecAddress(DgDVec2D(M_ZERO, M_ZERO));
+   if (!dummy)
       DgOutputStream::report("DgOutKMLfile::DgOutKMLfile(): RF " + rf.name() +
-        " must override the vecAddress() method", DgBase::Fatal);
-   }
+             " must override the vecAddress() method", DgBase::Fatal);
+   delete dummy;
 
    setColor(colorIn);
    setWidth(widthIn);
@@ -101,12 +118,12 @@ void DgOutKMLfile::preamble()
 
    o << "<Folder>\n";
 
-   o << "   <name>dgout</name>\n";
-   // if (name_ == "")
-   //    o << o.DgOutputStream::fileName();
-   // else
-   //    o << name_;
-   //o << "dgout</name>\n";
+   o << "   <name>";
+   if (name_ == "")
+      o << o.DgOutputStream::fileName();
+   else
+      o << name_;
+   o << "</name>\n";
 
    o << "   <description>";
    o << description_;
@@ -135,11 +152,14 @@ DgOutKMLfile::insert(const DgDVec2D& pt)
 {
    DgOutKMLfile& o(*this);
 
-   o << "            "
-     << std::setprecision(getPrecision()) << (double) pt.x()
-     << ","
-     << std::setprecision(getPrecision()) << (double) pt.y()
-     << ",0.0\n";
+   const int maxBuffSize = 200;
+   char buff[maxBuffSize];
+
+   sprintf(buff, formatStr(), pt.x(), pt.y());
+
+   o << "            " << buff;
+
+   o.flush();
 
    return o;
 }

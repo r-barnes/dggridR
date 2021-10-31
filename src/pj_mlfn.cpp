@@ -1,6 +1,7 @@
+#ifndef lint
+//static const char SCCSID[]="@(#)pj_mlfn.c	4.3	93/06/12	GIE	REL";
+#endif
 #include "proj4.h"
-#include <cmath>
-#include <cstdlib>
 /* meridinal distance for ellipsoid and inverse
 **	8th degree - accurate to < 1e-5 meters when used in conjuction
 **		with typical major axis values.
@@ -51,9 +52,9 @@ pj_inv_mlfn(long double arg, long double es, long double *en) {
 	for (i = MAX_ITER; i ; --i) { /* rarely goes over 5 iterations */
 		s = sin(phi);
 		t = 1. - es * s * s;
-		t = (pj_mlfn(phi, s, std::cos(phi), en) - arg) / ( k * t * std::sqrt(t));
+		t = (pj_mlfn(phi, s, cos(phi), en) - arg) / ( k * t * sqrt(t));
 		phi -= t;
-		if (std::fabs(t) < EPS)
+		if (fabsl(t) < EPS)
 			break;
 	}
 /*

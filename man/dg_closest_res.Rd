@@ -16,7 +16,7 @@ dg_closest_res(
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
 
-\item{col}{Column in which to search for a close value. Should be: 
+\item{col}{Column in which to search for a close value. Should be:
 area_km, spacing_km, or cls_km.}
 
 \item{val}{The value to search for}

@@ -1,20 +1,39 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgOutGeoJSONFile.h: DgOutGeoJSONFile class definitions
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
+// Version 7.0 - Kevin Sahr, 12/14/14
 // - Matt Gregory, Added GeoJSON support, 10/4/13
+// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGOUTGEOJSONFILE_H
 #define DGOUTGEOJSONFILE_H
 
-#include <string>
-#include <iostream>
-
-#include "DgUtil.h"
 #include "DgOutLocTextFile.h"
+#include "DgUtil.h"
+
+#include <iostream>
+#include <string>
 
 class DgDVec2D;
 class DgPolygon;

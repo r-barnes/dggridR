@@ -1,0 +1,3 @@
+[submodule "submodules/DGGRID"]
+	path = submodules/DGGRID
+	url = git@github.com:r-barnes/DGGRID.git

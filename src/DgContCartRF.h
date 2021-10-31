@@ -1,33 +1,43 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgContCartRF.h: DgContCartRF class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGCONTCARTRF_H
 #define DGCONTCARTRF_H
 
-#include <cstdint>
-
-#include "DgRF.h"
-#include "DgConverter.h"
 #include "Dg2WayConverter.h"
+#include "DgConverter.h"
 #include "DgDVec2D.h"
+#include "DgRF.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgContCartRF : public DgRF<DgDVec2D, long double> {
 
    public:
 
-      DgContCartRF (DgRFNetwork& networkIn, const string& nameIn = "ContCart")
-         : DgRF<DgDVec2D, long double> (networkIn, nameIn) 
-           { undefLoc_ = makeLocation(undefAddress()); }
-
-      DgContCartRF (const DgContCartRF& rf)
-         : DgRF<DgDVec2D, long double>(rf) 
-           { undefLoc_ = makeLocation(undefAddress()); }
+      static const DgContCartRF* makeRF (DgRFNetwork& networkIn,
+                const string& nameIn = "ContCart")
+      { return new DgContCartRF(networkIn, nameIn); }
 
       DgContCartRF& operator= (const DgContCartRF& rf)
          { DgRF<DgDVec2D, long double>::operator=(rf); return *this; }
@@ -39,10 +49,10 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
                        { return string(add); }
 
       virtual string add2str (const DgDVec2D& add, char delimiter) const
-                  { return dgg::util::to_string(add.x(), formatStr()) + delimiter + 
+                  { return dgg::util::to_string(add.x(), formatStr()) + delimiter +
 			   dgg::util::to_string(add.y(), formatStr()); }
 
-      virtual const char* str2add (DgDVec2D* add, const char* str, 
+      virtual const char* str2add (DgDVec2D* add, const char* str,
                                    char delimiter) const
                   {    if (!add) add = new DgDVec2D();
                        return add->fromString(str, delimiter); }
@@ -53,8 +63,8 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual std::uint64_t dist2int (const long double& dist) const
-                       { return static_cast<std::uint64_t>(dist); }
+      virtual unsigned long long int dist2int (const long double& dist) const
+                       { return static_cast<unsigned long long int>(dist); }
 
       virtual const DgDVec2D& undefAddress (void) const
                             { return DgDVec2D::undefDgDVec2D; }
@@ -74,6 +84,15 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
       virtual DgDVec2D getVecLocation (const DgLocation& loc) const
                     { return *getAddress(loc); }
 
+   protected:
+
+      DgContCartRF (DgRFNetwork& networkIn, const string& nameIn = "ContCart")
+         : DgRF<DgDVec2D, long double> (networkIn, nameIn)
+           { setUndefLoc(makeLocation(undefAddress())); }
+
+      DgContCartRF (const DgContCartRF& rf)
+         : DgRF<DgDVec2D, long double>(rf)
+           { setUndefLoc(makeLocation(undefAddress())); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////

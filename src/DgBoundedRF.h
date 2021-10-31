@@ -1,15 +1,29 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgBoundedRF.h: DgBoundedRF class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGBOUNDEDRF_H
 #define DGBOUNDEDRF_H
-
-#include <cstdint>
 
 #include "DgBoundedRFBase.h"
 #include "DgDiscRF.h"
@@ -19,32 +33,32 @@ class DgLocation;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template<class A, class B, class DB> class DgBoundedRF 
+template<class A, class B, class DB> class DgBoundedRF
                                          : public DgBoundedRFBase<B, DB> {
 
    public:
 
-      DgBoundedRF<A, B, DB> (const DgDiscRF<A, B, DB>& rfIn, 
-                             const A& firstAddIn, 
+      DgBoundedRF<A, B, DB> (const DgDiscRF<A, B, DB>& rfIn,
+                             const A& firstAddIn,
                              const A& lastAddIn, const A& endAddIn,
                              bool zBasedIn = true);
-                          
+
       const DgDiscRF<A, B, DB>& discRF (void) const { return discRF_; }
 
-      virtual bool validLocation (const DgLocation& loc, 
+      virtual bool validLocation (const DgLocation& loc,
                                   bool convert = true) const;
 
-      virtual DgLocation& incrementLocation (DgLocation& loc, 
+      virtual DgLocation& incrementLocation (DgLocation& loc,
                                              bool convert = true) const;
-                       
-      virtual DgLocation& decrementLocation (DgLocation& loc, 
-                                             bool convert = true) const; 
 
-      virtual std::uint64_t seqNum (const DgLocation& loc,
+      virtual DgLocation& decrementLocation (DgLocation& loc,
+                                             bool convert = true) const;
+
+      virtual unsigned long long int seqNum (const DgLocation& loc,
                                         bool convert = true) const;
 
-      virtual DgLocation* locFromSeqNum (std::uint64_t sNum) const;
-                                             
+      virtual DgLocation* locFromSeqNum (unsigned long long int sNum) const;
+
       const A& firstAdd (void) const { return firstAdd_; }
       const A& lastAdd  (void) const { return lastAdd_; }
       const A& endAdd   (void) const { return endAdd_; }
@@ -54,13 +68,13 @@ template<class A, class B, class DB> class DgBoundedRF
       virtual const DgRF<B, DB>& backFrame (void) const
                      { return discRF().backFrame(); }
 
-      virtual string dist2str (const std::int64_t& dist) const
+      virtual string dist2str (const long long int& dist) const
                      { return discRF().dist2str(dist); }
 
-      virtual long double dist2dbl (const std::int64_t& dist) const
+      virtual long double dist2dbl (const long long int& dist) const
                      { return discRF().dist2dbl(dist); }
 
-      virtual std::uint64_t dist2int (const std::int64_t& dist) const
+      virtual unsigned long long int dist2int (const long long int& dist) const
                      { return discRF().dist2int(dist); }
 
       virtual void setPoint (const DgLocation& loc, DgLocation& point) const
@@ -70,7 +84,7 @@ template<class A, class B, class DB> class DgBoundedRF
                                                        DgLocation& point) const
                    { discRF().setPoint(loc, rf, point); }
 
-      virtual void setPoint (const A& add, const DgRFBase& rf, 
+      virtual void setPoint (const A& add, const DgRFBase& rf,
                                                        DgLocation& point) const
                    { discRF().setPoint(add, rf, point); }
 
@@ -84,14 +98,14 @@ template<class A, class B, class DB> class DgBoundedRF
                                                         DgPolygon& vec) const
                    { discRF().setVertices(loc, rf, vec); }
 
-      virtual void setVertices (const A& add, const DgRFBase& rf, 
+      virtual void setVertices (const A& add, const DgRFBase& rf,
                                                         DgPolygon& vec) const
                    { discRF().setVertices(add, rf, vec); }
 
       virtual void setNeighbors (const DgLocation& loc, DgLocVector& vec) const
                    { discRF().setNeighbors(loc, vec); }
 
-      virtual void setNeighbors (const A& add, const DgRFBase& rf, 
+      virtual void setNeighbors (const A& add, const DgRFBase& rf,
                                                         DgLocVector& vec) const
                    { discRF().setNeighbors(add, rf, vec); }
 
@@ -113,34 +127,37 @@ template<class A, class B, class DB> class DgBoundedRF
       // pure virtual functions that must be defined by sub-classes
 
       virtual bool validAddress (const A& add) const = 0;
-      
+
       virtual A& incrementAddress (A& add) const = 0;
       virtual A& decrementAddress (A& add) const = 0;
 
-      virtual std::uint64_t seqNumAddress (const A& loc) const = 0;
+      virtual unsigned long long int seqNumAddress (const A& loc) const = 0;
 
-      virtual A addFromSeqNum (std::uint64_t sNum) const = 0;
+      virtual A addFromSeqNum (unsigned long long int sNum) const = 0;
 
       virtual bool lessThanAddress (const A& a1, const A& a2) const
                       { return (seqNumAddress(a1) < seqNumAddress(a2)); }
-                                             
+
    protected:
 
-      void setFirstAdd (const A& firstAddIn) { firstAdd_ = firstAddIn; }
+      void setFirstAdd (const A& firstAddIn) 
+         { firstAdd_ = firstAddIn;
+           discRF().forceAddress(DgBoundedRFBase0::first_, firstAddIn); }
+
       void setLastAdd  (const A& lastAddIn)  { lastAdd_ = lastAddIn; }
       void setEndAdd   (const A& endAddIn)   { endAdd_ = endAddIn; }
 
    private:
 
       const DgDiscRF<A, B, DB>& discRF_;
-         
+
       A firstAdd_;
       A lastAdd_;
       A endAdd_;
-      
+
 };
 
-#include "DgBoundedRF_template.h"
+#include "DgBoundedRF.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

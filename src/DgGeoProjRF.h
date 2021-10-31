@@ -1,21 +1,36 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgGeoProjRF.h: DgGeoProjRF class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGGEOPROJRF_H
 #define DGGEOPROJRF_H
 
-#include <iostream>
-#include <cstdint>
-
 #include "DgConstants.h"
-#include "DgGeoDatumRF.h"
-#include "DgEllipsoidRF.h"
 #include "DgDVec2D.h"
+#include "DgEllipsoidRF.h"
+#include "DgGeoDatumRF.h"
+
+#include <iostream>
 
 using namespace std;
 
@@ -33,7 +48,7 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
                    long double x0In = M_ZERO, long double y0In = M_ZERO,
                    long double k0In = M_ONE, long double to_meterIn = M_ONE,
                    long double fr_meterIn = M_ONE)
-               : DgGeoDatumRF<DgDVec2D, long double> (networkIn, nameIn), 
+               : DgGeoDatumRF<DgDVec2D, long double> (networkIn, nameIn),
                  proj0_ (proj0In), x0_ (x0In), y0_ (y0In),
                  k0_ (k0In), to_meter_ (to_meterIn), fr_meter_ (fr_meterIn)
                { }
@@ -81,16 +96,16 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
                { return DgDVec2D::undefDgDVec2D; }
 
       virtual long double dist (const DgDVec2D& add1, const DgDVec2D& add2) const
-         { return add1.distance(add2); } 
+         { return add1.distance(add2); }
 
       virtual string add2str (const DgDVec2D& add) const
                        { return string(add); }
 
       virtual string add2str (const DgDVec2D& add, char delimiter) const
-                  { return dgg::util::to_string(add.x(), formatStr()) + delimiter + 
+                  { return dgg::util::to_string(add.x(), formatStr()) + delimiter +
                            dgg::util::to_string(add.y(), formatStr()); }
 
-      virtual const char* str2add (DgDVec2D* add, const char* str, 
+      virtual const char* str2add (DgDVec2D* add, const char* str,
                                    char delimiter) const
                   {    if (!add) add = new DgDVec2D();
                        return add->fromString(str, delimiter); }
@@ -101,8 +116,8 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
       virtual long double dist2dbl (const long double& dist) const
                        { return dist; }
 
-      virtual std::uint64_t dist2int (const long double& dist) const
-                       { return static_cast<std::uint64_t>(dist); }
+      virtual unsigned long long int dist2int (const long double& dist) const
+                       { return static_cast<unsigned long long int>(dist); }
 
       // the following routines are "back-doors" included for speed;
       // use with care!

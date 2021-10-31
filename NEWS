@@ -1,3 +1,9 @@
+dggridR v3.0.0  (Release date: 2021-10-31)
+===============
+* Fixes memory leaks in DGGRID
+* Switches to using sf package from rgdal
+* Removed `dgtransform`, which was previously deprecated. Use `dgGEO_to_SEQNUM` instead.
+
 dggridR v2.0.8  (Release date: 2020-11-25)
 ===============
 * Still trying to get CRAN upload to work
@@ -12,23 +18,23 @@ dggridR v2.0.6  (Release date: 2020-10-15)
 
 dggridR v2.0.5  (Release date: 2020-04-30)
 ===============
-*Update authorship information
+* Update authorship information
 
 dggridR v2.0.4  (Release date: 2020-04-29)
 ===============
-*Fix some new warnings identified by CRAN's updated compilers.
-*Added doi
-*Updated shapelib
+* Fix some new warnings identified by CRAN's updated compilers.
+* Added doi
+* Updated shapelib
 
 
 dggridR v2.0.3  (Release date: 2018-04-04)
 ===============
-*Fix bugs in dgshptogrid() and dgrectgrid() with cellsize not being respected
-*Updated authorship info for accuracy
-*More helpful warning messages
-*CRAN-compliant package title
-*Adjusted function documentation to match behaviour
-*Fixed issue with default value of `savegrid`
+* Fix bugs in dgshptogrid() and dgrectgrid() with cellsize not being respected
+* Updated authorship info for accuracy
+* More helpful warning messages
+* CRAN-compliant package title
+* Adjusted function documentation to match behaviour
+* Fixed issue with default value of `savegrid`
 
 
 dggridR v2.0.2  (Release date: 2017-08-19)

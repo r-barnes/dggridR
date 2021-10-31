@@ -1,24 +1,39 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgBoundedHexC2RF2D.cpp: DgBoundedHexC2RF2D class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
-
-#include <limits>
-#include <cstdint>
 
 #include "DgBoundedHexC2RF2D.h"
 #include "DgDiscRF.h"
 
+#include <climits>
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgBoundedHexC2RF2D::DgBoundedHexC2RF2D 
-           (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf, 
+DgBoundedHexC2RF2D::DgBoundedHexC2RF2D
+           (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf,
             const DgIVec2D& lowerLeft, const DgIVec2D& upperRight)
-   : DgBoundedRF2D (rf, lowerLeft, upperRight) 
-{ 
+   : DgBoundedRF2D (rf, lowerLeft, upperRight)
+{
    DgIVec2D magVec = upperRight - lowerLeft + DgIVec2D(1, 1);
 
    size_ = magVec.i() / 3 * magVec.j();
@@ -29,7 +44,7 @@ DgBoundedHexC2RF2D::DgBoundedHexC2RF2D
        validSize_ = false;
    }
    else validSize_ = true;
-  
+
    setLastAdd(addFromSeqNum(size() - 1));
 
 } // DgBoundedHexC2RF2D::DgBoundedHexC2RF2D
@@ -66,7 +81,7 @@ DgIVec2D&
 DgBoundedHexC2RF2D::decrementAddress (DgIVec2D& add) const
 {
    if (!validAddress(add) || add == lowerLeft()) return add = invalidAdd();
-   
+
    do {
 
       if (add.j() == lowerLeft().j())
@@ -87,11 +102,11 @@ DgBoundedHexC2RF2D::decrementAddress (DgIVec2D& add) const
 } // DgIVec2D& DgBoundedHexC2RF2D::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-std::uint64_t
+unsigned long long int
 DgBoundedHexC2RF2D::seqNumAddress (const DgIVec2D& add) const
 {
    DgIVec2D tVec = add - lowerLeft();
-   std::uint64_t sNum = tVec.i() * numI() / 3;
+   unsigned long long int sNum = tVec.i() * numI() / 3;
 
    switch (tVec.i() % 3)
    {
@@ -109,15 +124,15 @@ DgBoundedHexC2RF2D::seqNumAddress (const DgIVec2D& add) const
 
    return sNum;
 
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIVec2D
-DgBoundedHexC2RF2D::addFromSeqNum (std::uint64_t sNum) const
+DgBoundedHexC2RF2D::addFromSeqNum (unsigned long long int sNum) const
 {
    DgIVec2D res;
 
-   if (!zeroBased()) 
+   if (!zeroBased())
     sNum--;
 
    res.setI((sNum * 3) / numI());
@@ -142,5 +157,3 @@ DgBoundedHexC2RF2D::addFromSeqNum (std::uint64_t sNum) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
-

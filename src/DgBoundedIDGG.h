@@ -1,30 +1,48 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgBoundedIDGG.h: DgBoundedIDGG class definitions
 //
+// Version 7.0 - Kevin Sahr, 12/14/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGBOUNDEDIDGG_H 
+#ifndef DGBOUNDEDIDGG_H
 #define DGBOUNDEDIDGG_H
 
-#include <cstdint>
-
-#include "DgIDGG.h"
-#include "DgGeoSphRF.h"
 #include "DgBoundedRF.h"
+#include "DgBoundedRF2D.h"
+#include "DgGeoSphRF.h"
+#include "DgIDGGBase.h"
+#include "DgIDGGutil.h"
 
 using namespace std;
-
-class DgBoundedRF2D;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgBoundedIDGG : public DgBoundedRF<DgQ2DICoord, DgGeoCoord, long double> {
 
    public:
 
-      DgBoundedIDGG (const DgIDGG& IDGGin);
+      DgBoundedIDGG (const DgIDGGBase& IDGGin);
+     ~DgBoundedIDGG (void) { delete bnd2D_; }
 
       virtual DgQ2DICoord& incrementAddress (DgQ2DICoord& add) const;
       virtual DgQ2DICoord& decrementAddress (DgQ2DICoord& add) const;
@@ -34,23 +52,35 @@ class DgBoundedIDGG : public DgBoundedRF<DgQ2DICoord, DgGeoCoord, long double> {
       const DgQ2DICoord& invalidAdd (void) const
                          { return idgg().undefAddress(); }
 
-      const DgIDGG& idgg (void) const { return IDGG_; }
+      const DgIDGGBase& idgg (void) const { return IDGG_; }
 
-      std::uint64_t offsetPerQuad (void) const { return offsetPerQuad_; }
+      unsigned long long int offsetPerQuad (void) const { return offsetPerQuad_; }
 
-      virtual std::uint64_t seqNumAddress (const DgQ2DICoord& add) const;
+      virtual unsigned long long int seqNumAddress (const DgQ2DICoord& add) const;
 
-      virtual DgQ2DICoord addFromSeqNum (std::uint64_t sNum) const;
+      virtual DgQ2DICoord addFromSeqNum (unsigned long long int sNum) const;
 
-   protected:
+      virtual DgQ2DICoord q2dixToQ2di (const DgQ2DICoord& add) const;
+
+      virtual operator string (void) const
+        {
+           string s = "=== DgBoundedIDGG: " + DgBoundedRF::operator string();
+           s += "\n offsetPerQuad: " + dgg::util::to_string(offsetPerQuad());
+           s += "\n BND2D: " + string(*bnd2D_);
+
+           return s;
+        }
+
+
+   //protected:
 
       const DgBoundedRF2D& bnd2D (void) const { return *bnd2D_; }
 
    private:
 
-      const DgIDGG& IDGG_;
+      const DgIDGGBase& IDGG_;
       DgBoundedRF2D* bnd2D_;
-      std::uint64_t offsetPerQuad_;
+      unsigned long long int offsetPerQuad_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

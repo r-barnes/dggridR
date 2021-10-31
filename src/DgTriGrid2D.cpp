@@ -1,13 +1,28 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgTriGrid2D.cpp: DgTriGrid2D class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#include <cstdint>
 
 #include "DgTriGrid2D.h"
 #include "DgPolygon.h"
@@ -70,17 +85,17 @@ DgIVec2D
 DgTriGrid2D::quantify (const DgDVec2D& point) const
 {
    DgDVec2D p(point);  // p prime
-   p += DgDVec2D(e() / 2.0, 0.5);   // move origin to lower left
+   p += DgDVec2D(e() / 2.0L, 0.5L);   // move origin to lower left
 
-   DgDVec2D pp(p.x() + p.y() / sqrt(3.0), p.y()); // p long double prime
+   DgDVec2D pp(p.x() + p.y() / M_SQRT3, p.y()); // p long double prime
 
-   std::int64_t i    = static_cast<std::int64_t>(floor(pp.x() / e()));
-   std::int64_t jTmp = static_cast<std::int64_t>(floor(2.0/3.0 * pp.y()));
+   long long int i    = static_cast<long long int>(floor(pp.x() / e()));
+   long long int jTmp = static_cast<long long int>(floor(2.0/3.0 * pp.y()));
 
-   DgDVec2D ppp(p.x() - p.y() / sqrt(3.0), p.y()); // p triple prime
-   std::int64_t k    = static_cast<std::int64_t>(floor(ppp.x() / e()));
+   DgDVec2D ppp(p.x() - p.y() / M_SQRT3, p.y()); // p triple prime
+   long long int k = static_cast<long long int>(floor(ppp.x() / e()));
 
-   std::int64_t j = jTmp * 2;
+   long long int j = jTmp * 2;
    if (jTmp % 2) // i + j + k should be odd
    {
       if (!((i + j + k) % 2)) j++;
@@ -107,7 +122,7 @@ DgTriGrid2D::invQuantify (const DgIVec2D& add) const
 } // DgDVec2D DgTriGrid2D::invQuantify
 
 ////////////////////////////////////////////////////////////////////////////////
-std::int64_t
+long long int
 DgTriGrid2D::dist (const DgIVec2D& add1, const DgIVec2D& add2) const
 {
    return 0;

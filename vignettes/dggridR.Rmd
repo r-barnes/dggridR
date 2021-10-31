@@ -13,34 +13,37 @@ vignette: >
 
 
 ```{r, fig.width=5, fig.height=5, results='hide', warning=FALSE, error=FALSE, message=FALSE, echo=FALSE, fig.align='center'}
-#Generate cover picture
+# Generate cover picture
 library(dggridR)
-#Generate grids of various sizes
-hdggses <- lapply(3:5, function(res) dgconstruct(res=res))
-hgrids  <- lapply(hdggses, function(dggs) dgearthgrid(dggs))
+library(ggplot2)
+
+# Generate grids of various sizes
+hgrids <- lapply(3:5, function(res) dgconstruct(res=res))
+hgrids <- lapply(hgrids, function(dggs) dgearthgrid(dggs))
+hgrids <- lapply(hgrids, function(x) st_wrap_dateline(x, options = c("WRAPDATELINE=YES","DATELINEOFFSET=180"), quiet = TRUE))
 
 countries <- map_data("world")
 
-orthobase <-ggplot() +
+# Crop generate dgrids to areas of interest
+bounds = st_bbox(c(xmin = -90, xmax = 75, ymin = -90, ymax = 90), crs = st_crs(4326))
+hgrids[[1]] = hgrids[[1]] %>% st_filter(st_as_sfc(bounds), .predicate=st_within)
+bounds = st_bbox(c(xmin = 20, xmax = 145, ymin = -90, ymax = 90), crs = st_crs(4326))
+hgrids[[2]] = hgrids[[2]] %>% st_filter(st_as_sfc(bounds), .predicate=st_within)
+bounds = st_bbox(c(xmin = 90, xmax = 215, ymin = -90, ymax = 90), crs = st_crs(4326))
+hgrids[[3]] = hgrids[[3]] %>% st_filter(st_as_sfc(bounds), .predicate=st_within)
+
+ggplot() +
     geom_polygon(data=countries,  aes(x=long, y=lat, group=group), fill=NA, color="black")   +
     scale_fill_gradient(low="blue", high="red")+
-    coord_map("ortho", orientation = c(0, 90, 0))+
-    #coord_map("ortho", orientation = c(-89.49831, -179.9223, 0))+
+    geom_sf(data=hgrids[[1]], fill=NA, color="#1B9E77")+
+    geom_sf(data=hgrids[[2]], fill=NA, color="#D95F02")+
+    geom_sf(data=hgrids[[3]], fill=NA, color="#7570B3")+
+    # coord_sf(crs="+proj=ortho +lat_0=0 +lon_0=90")+
     xlab('')+ylab('')+
     theme(axis.ticks.x=element_blank())+
     theme(axis.ticks.y=element_blank())+
     theme(axis.text.x=element_blank())+
     theme(axis.text.y=element_blank())
-
-for(i in 1:3) {
-  cellstosave <- (hgrids[[i]] %>% group_by(group) %>% summarise(long=max(long)) %>% filter((i-1)*70-5<=long & long<=i*70+5))$group
-  hgrids[[i]] <- hgrids[[i]] %>% filter(group %in% cellstosave)
-}
-
-orthobase+
- geom_path(data=hgrids[[1]], aes(x=long, y=lat, group=group), alpha=1, color="#1B9E77")+
- geom_path(data=hgrids[[2]], aes(x=long, y=lat, group=group), alpha=1, color="#D95F02")+
- geom_path(data=hgrids[[3]], aes(x=long, y=lat, group=group), alpha=1, color="#7570B3")
 ```
 
 
@@ -207,11 +210,11 @@ cellcenters   <- dgSEQNUM_to_GEO(dggs,dgquakes$cell)
 quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
 
 #Get the grid cell boundaries for cells which had quakes
-grid          <- dgcellstogrid(dggs,quakecounts$cell,frame=TRUE,wrapcells=TRUE)
+grid          <- dgcellstogrid(dggs,quakecounts$cell)
 
 #Update the grid cells' properties to include the number of earthquakes
 #in each cell
-grid          <- merge(grid,quakecounts,by.x="cell",by.y="cell")
+grid          <- merge(grid,quakecounts,by.x="seqnum",by.y="cell")
 
 #Make adjustments so the output is more visually interesting
 grid$count    <- log(grid$count)
@@ -229,47 +232,58 @@ didn't use this package :-)
 
 ```{r, fig.width=6, fig.height=4}
 #Plot everything on a flat map
-p<- ggplot() +
+
+# Handle cells that cross 180 degrees
+wrapped_grid = st_wrap_dateline(grid, options = c("WRAPDATELINE=YES","DATELINEOFFSET=180"), quiet = TRUE)
+
+ggplot() +
     geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
-    geom_polygon(data=grid,      aes(x=long, y=lat, group=group, fill=count), alpha=0.4)    +
-    geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white") +
+    geom_sf     (data=wrapped_grid, aes(fill=count), color=alpha("white", 0.4)) +
     geom_point  (aes(x=cellcenters$lon_deg, y=cellcenters$lat_deg)) +
     scale_fill_gradient(low="blue", high="red")
-p
 ```
+
+<!--
 
 If we replot things on a sphere, it's easy to see that all of the hexagons are
 the same size, as they should be. Note how they deal easily with the
 longitudinal convergence towards Antarctica, as well as with crossing -180/180
 degrees.
 
-```{r, fig.width=6, fig.height=6}
+```{r, fig.width=6, fig.height=6, echo=FALSE, results='hide'}
 #Replot on a spherical projection
-p+coord_map("ortho", orientation = c(-38.49831, -179.9223, 0))+
-  xlab('')+ylab('')+
-  theme(axis.ticks.x=element_blank())+
-  theme(axis.ticks.y=element_blank())+
-  theme(axis.text.x=element_blank())+
-  theme(axis.text.y=element_blank())+
-  ggtitle('Your data could look like this')
+ggplot() +
+    geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
+    geom_sf     (data=grid, aes(fill=count), color=alpha("white", 0.4)) +
+    geom_point  (aes(x=cellcenters$lon_deg, y=cellcenters$lat_deg)) +
+    scale_fill_gradient(low="blue", high="red") +
+    # coord_sf(crs="+proj=ortho +lat_0=20 +lon_0=90")+
+    xlab('')+ylab('')+
+    theme(axis.ticks.x=element_blank())+
+    theme(axis.ticks.y=element_blank())+
+    theme(axis.text.x=element_blank())+
+    theme(axis.text.y=element_blank())+
+    ggtitle('Your data could look like this')
 ```
+
+-->
 
 You can also write out a KML file with your data included for displaying in,
 say, Google Earth:
 
 ```{r, eval=FALSE}
-library(rgdal)
+library(sf)
 
 #Get the grid cell boundaries for the whole Earth using this dggs in a form
 #suitable for printing to a KML file
-grid          <- dgearthgrid(dggs,frame=FALSE)
+grid <- dgearthgrid(dggs)
 
 #Update the grid cells' properties to include the number of earthquakes
 #in each cell
-grid@data$count <- merge(grid@data, quakecounts, by.x="cell", by.y="cell", all.x=TRUE)$count
+grid$count <- merge(grid, quakecounts, by.x="seqnum", by.y="cell", all.x=TRUE)
 
 #Write out the grid
-writeOGR(grid, "quakes_per_cell.kml", "quakes", "KML")
+st_write(grid, "quakes_per_cell.kml", layer="quakes", driver="KML")
 ```
 
 
@@ -283,7 +297,6 @@ their associated grid cells:
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
-library(rgdal)
 library(dplyr)
 
 N <- 100    #How many cells to sample
@@ -323,16 +336,16 @@ The resulting distribution of cells appears as follows:
 
 ```{r, fig.width=6, fig.height=4}
 #Get the grid in a more convenient format
-grid           <- dgcellstogrid(dggs,df$cell,frame=TRUE,wrapcells=TRUE)
+grid <- dgcellstogrid(dggs,df$cell)
+grid <- st_wrap_dateline(grid, options = c("WRAPDATELINE=YES","DATELINEOFFSET=180"), quiet = TRUE)
 
 #Get polygons for each country of the world
-countries      <- map_data("world")
+countries <- map_data("world")
 
 #Plot everything on a flat map
-p<- ggplot() +
+p <- ggplot() +
     geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
-    geom_polygon(data=grid,      aes(x=long, y=lat, group=group), fill="green", alpha=0.4)    +
-    geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white")
+    geom_sf(data=grid, fill=alpha("green", alpha=0.4), color=alpha("white", alpha=0.4))
 p
 ```
 
@@ -373,23 +386,23 @@ dggs    <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
 
 maxcell <- dgmaxcell(dggs)                     #Get maximum cell id
 cells   <- sample(1:maxcell, N, replace=FALSE) #Choose random cells
-grid    <- dgcellstogrid(dggs,cells,frame=TRUE,wrapcells=TRUE) #Get grid
+grid    <- dgcellstogrid(dggs,cells)           #Get grid
 ```
 
 The resulting distribution of cells appears as follows:
 
 ```{r, fig.width=6, fig.height=4}
 #Get the grid in a more convenient format
-grid           <- dgcellstogrid(dggs,df$cell,frame=TRUE,wrapcells=TRUE)
+grid <- dgcellstogrid(dggs,df$cell)
+grid <- st_wrap_dateline(grid, options = c("WRAPDATELINE=YES","DATELINEOFFSET=180"), quiet = TRUE)
 
 #Get polygons for each country of the world
-countries      <- map_data("world")
+countries <- map_data("world")
 
 #Plot everything on a flat map
-p<- ggplot() +
+p <- ggplot() +
     geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
-    geom_polygon(data=grid,      aes(x=long, y=lat, group=group), fill="green", alpha=0.4)    +
-    geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white")
+    geom_sf(data=grid, fill=alpha("green", 0.4), color=alpha("white", 0.4))
 p
 ```
 
@@ -418,17 +431,16 @@ library(dggridR)
 dggs      <- dgconstruct(spacing=100, metric=FALSE, resround='nearest')
 
 #Read in the South Africa's borders from the shapefile
-sa_border <- readOGR(dsn=dg_shpfname_south_africa(), layer="ZAF_adm0")
+sa_border <- st_read(dg_shpfname_south_africa(), layer="ZAF_adm0")
+st_crs(sa_border) = 4326
 
 #Get a grid covering South Africa
 sa_grid   <- dgshptogrid(dggs, dg_shpfname_south_africa())
 
 #Plot South Africa's borders and the associated grid
-p<- ggplot() +
-    geom_polygon(data=sa_border, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
-    geom_polygon(data=sa_grid,   aes(x=long, y=lat, group=group), fill="blue", alpha=0.4)   +
-    geom_path   (data=sa_grid,   aes(x=long, y=lat, group=group), alpha=0.4, color="white") +
-    coord_equal()
+p <- ggplot() +
+    geom_sf(data=sa_border, fill=NA, color="black")   +
+    geom_sf(data=sa_grid, fill=alpha("blue", 0.4), color=alpha("white", 0.4))
 p
 ```
 
@@ -447,16 +459,16 @@ lon <- c(0,0,0,36,72,108,144,180,216,252,288,324)
 
 dggs  <- dgconstruct(area=100000, metric=FALSE, resround='nearest')
 cells <- dgGEO_to_SEQNUM(dggs,lon,lat)$seqnum
-grid  <- dgcellstogrid(dggs,cells,frame=TRUE,wrapcells=TRUE) #Get grid
+grid  <- dgcellstogrid(dggs,cells) #Get grid
+grid  <- st_wrap_dateline(grid, options = c("WRAPDATELINE=YES","DATELINEOFFSET=180"), quiet = TRUE)
 
 #Get polygons for each country of the world
-countries      <- map_data("world")
+countries <- map_data("world")
 
 #Plot everything on a flat map
-p<- ggplot() +
+p <- ggplot() +
     geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black")   +
-    geom_polygon(data=grid,      aes(x=long, y=lat, group=group), alpha=0.6, fill="purple")    +
-    geom_path   (data=grid,      aes(x=long, y=lat, group=group), alpha=0.4, color="white")
+    geom_sf(data=grid, fill=alpha("purple", 0.6), color=alpha("white", 0.4))
 p
 ```
 

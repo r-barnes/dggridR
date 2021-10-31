@@ -1,18 +1,34 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgRadixString.h: DgRadixString class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGRADIXSTRING_H
 #define DGRADIXSTRING_H
 
-#include <iostream>
-
 #include "DgBase.h"
 #include "DgString.h"
+
+#include <iostream>
 
 using namespace std;
 
@@ -21,7 +37,7 @@ class DgRadixString {
 
    public:
 
-      static string digitInterleave (const DgRadixString& s1, 
+      static string digitInterleave (const DgRadixString& s1,
                                      const DgRadixString& s2,
                                      bool combineDigits = true)
           {
@@ -40,8 +56,8 @@ class DgRadixString {
              string tmp1 = s1.digits();
              string tmp2 = s2.digits();
 
-             int n1 = tmp1.length();
-             int n2 = tmp2.length();
+             int n1 = (int) tmp1.length();
+             int n2 = (int) tmp2.length();
 
              // pad shorter one with 0's
 
@@ -65,7 +81,7 @@ class DgRadixString {
                 {
                    c1[0] = tmp1[i];
                    c2[0] = tmp2[i];
-    
+
                    result += string(c1) + string(c2);
                 }
              }
@@ -81,7 +97,7 @@ class DgRadixString {
 
                    result += dgg::util::to_string(d1 * s1.base() + d2);
                 }
-             } 
+             }
 
              return result;
           }
@@ -127,6 +143,22 @@ class DgRadixString {
 
       const string& digits (void) const { return digits_; }
 
+      long long int value (void) const {
+
+         long long int val = 0;
+         int exponent = 1;
+         for (int index = (int) digits().size() - 1;
+              index >= 0; index--) {
+
+            int d = digits()[index] - '0'; // convert digit to int
+            val += d * exponent;
+// cout << " ==== d: " << d << " exp: " << exponent << " val: " << val << endl;
+            exponent *= base();
+         }
+
+         return val;
+      }
+
       // set methods
 
       void setBase (unsigned int baseIn) { base_ = baseIn; }
@@ -136,7 +168,7 @@ class DgRadixString {
       // conversion methods
 
       void convert (int val, int padWidth = -1)
-         // 
+         //
          // Algorithm from Knuth, Vol 2, with padding code by K. Sahr
          //
          // padWidth of -1 indicates no padding
@@ -159,7 +191,7 @@ class DgRadixString {
 
             // pad to specified width
 
-            int nPad = padWidth - digits().length();
+            int nPad = padWidth - (int) digits().length();
             for (int i = 0; i < nPad; i++) setDigits("0" + digits());
 
             // adjust if negative

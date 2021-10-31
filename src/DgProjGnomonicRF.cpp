@@ -1,8 +1,24 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgProjGnomonicRF.cpp: DgProjGnomonicRF class implementation
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -20,12 +36,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 DgProjGnomonicRF::DgProjGnomonicRF(DgRFNetwork& networkIn, const string& nameIn,
-       const DgGeoCoord& proj0In, long double x0In, long double y0In, long double k0In, 
+       const DgGeoCoord& proj0In, long double x0In, long double y0In, long double k0In,
        long double to_meterIn, long double fr_meterIn)
-   : DgGeoProjRF (networkIn, nameIn, proj0In, x0In, y0In, k0In, 
+   : DgGeoProjRF (networkIn, nameIn, proj0In, x0In, y0In, k0In,
                   to_meterIn, fr_meterIn)
-{ 
-   if (fabs(fabs(phi0()) - dgM_PI_2) < EPS10)
+{
+   if (fabs(fabs(phi0()) - M_PI_2) < EPS10)
       mode_ = phi0() < 0.0L ? S_POLE : N_POLE;
    else if (fabs(phi0()) < EPS10)
       mode_ = EQUIT;
@@ -67,10 +83,10 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
       break;
    }
 
-   if (xy.y() <= EPS10) 
+   if (xy.y() <= EPS10)
    {
       ::report(string("DgProjGnomonicRF::projForward() point out of range\n") +
-           string("proj0: ") + string(proj0()) + 
+           string("proj0: ") + string(proj0()) +
            string("\nprojecting point: ") + string(addIn), DgBase::Fatal);
    }
 
@@ -86,6 +102,7 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
       break;
    case N_POLE:
       coslam = - coslam;
+      break;
    case S_POLE:
       xy.setY(xy.y() * cosphi * coslam);
       break;
@@ -99,7 +116,7 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 DgGeoCoord
-DgProjGnomonicRF::projInverse (const DgDVec2D& addIn, 
+DgProjGnomonicRF::projInverse (const DgDVec2D& addIn,
                                const DgEllipsoidRF& e) const
 //
 // spheroid only; needs to be verified at some point
@@ -110,7 +127,7 @@ DgProjGnomonicRF::projInverse (const DgDVec2D& addIn,
 
    long double  rh, cosz, sinz;
 
-   rh = usgs_hypot(xy.x(), xy.y());
+   rh = hypot(xy.x(), xy.y());
    lp.setLat(atan(rh));
    sinz = sin(lp.lat());
    cosz = sqrt(1. - sinz * sinz);
@@ -122,7 +139,7 @@ DgProjGnomonicRF::projInverse (const DgDVec2D& addIn,
       case OBLIQ:
          lp.setLat(cosz * sinph0_ + xy.y() * sinz * cosph0_ / rh);
          if (fabs(lp.lat()) >= 1.0L)
-            lp.setLat(lp.lat() > 0.0L ? dgM_PI_2 : - dgM_PI_2);
+            lp.setLat(lp.lat() > 0.0L ? M_PI_2 : - M_PI_2);
          else
             lp.setLat(asin(lp.lat()));
          xy.setY((cosz - sinph0_ * sin(lp.lat())) * rh);
@@ -131,17 +148,17 @@ DgProjGnomonicRF::projInverse (const DgDVec2D& addIn,
       case EQUIT:
          lp.setLat(xy.y() * sinz / rh);
          if (fabs(lp.lat()) >= 1.0L)
-            lp.setLat(lp.lat() > 0.0L ? dgM_PI_2 : - dgM_PI_2);
+            lp.setLat(lp.lat() > 0.0L ? M_PI_2 : - M_PI_2);
          else
             lp.setLat(asin(lp.lat()));
          xy.setY(cosz * rh);
          xy.setX(xy.x() * sinz);
          break;
       case S_POLE:
-         lp.setLat(lp.lat() - dgM_PI_2);
+         lp.setLat(lp.lat() - M_PI_2);
          break;
       case N_POLE:
-         lp.setLat(dgM_PI_2 - lp.lat());
+         lp.setLat(M_PI_2 - lp.lat());
          xy.setY(-xy.y());
          break;
       }

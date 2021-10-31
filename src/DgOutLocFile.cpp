@@ -1,8 +1,24 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgOutLocFile.cpp: DgOutLocFile class implementation
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -15,10 +31,13 @@
 #include "DgPolygon.h"
 #include "DgLocation.h"
 #include "DgOutAIGenFile.h"
+#include "DgOutGdalFile.h"
 #include "DgOutKMLfile.h"
 #include "DgOutGeoJSONFile.h"
 #include "DgOutShapefile.h"
 #include "DgOutPtsText.h"
+#include "DgOutPRCellsFile.h"
+#include "DgOutPRPtsFile.h"
 #include "DgGeoSphRF.h"
 
 const string DgOutLocFile::defaultKMLColor = "ffffffff";
@@ -35,6 +54,7 @@ DgOutLocFile::~DgOutLocFile (void)
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile* 
 DgOutLocFile::makeOutLocFile (const string& type, const string& fileName, 
+                    const string& gdalDriver,
                     const DgRFBase& rf, bool isPointFile, int precision,
                     int shapefileIdLen, const string& kmlColor, int kmlWidth,
                     const string& kmlName, const string& kmlDesc,
@@ -46,7 +66,7 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
                                  failLevelIn);
    else if (!type.compare("TEXT"))
       file = new DgOutPtsText(rf, fileName, precision, failLevelIn);
-   else // must be KML, GEOJSON or SHAPEFILE
+   else // must be KML, GEOJSON, SHAPEFILE, or GDAL
    {
       const DgGeoSphDegRF* geoRF = dynamic_cast<const DgGeoSphDegRF*>(&rf);
       if (geoRF == NULL)
@@ -61,6 +81,11 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
       else if (!type.compare("SHAPEFILE"))
          file = new DgOutShapefile(*geoRF, fileName, precision, isPointFile, 
                                     shapefileIdLen, failLevelIn);
+// USE_GDAL is set in MakeIncludes
+#ifdef USE_GDAL
+      else if (!type.compare("GDAL"))
+         file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, precision, isPointFile, failLevelIn);
+#endif
       else if (type.compare("NONE"))
          ::report("DgOutLocFile::makeOutLoc(): invalid file type " + type, 
                                  failLevelIn);
@@ -132,4 +157,4 @@ DgOutLocFile::insert (DgCell& cell)
 
 } // DgOutLocFile& DgOutLocFile::insert
 
-////////////////////////////////////////////////////////////////////////////////
+

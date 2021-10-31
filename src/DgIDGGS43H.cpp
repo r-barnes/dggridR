@@ -1,7 +1,26 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgIDGGS43H.cpp: DgIDGGS43H class implementation
 //
+// Version 7.0 - Kevin Sahr, 12/14/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +36,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS43H::DgIDGGS43H (const DgIDGGS43H& rf) 
-  : DgIDGGS (rf)
+  : DgHexIDGGS (rf)
 {
    report("DgIDGGS43H::operator=() not implemented yet", DgBase::Fatal);
 
@@ -26,10 +45,6 @@ DgIDGGS43H::DgIDGGS43H (const DgIDGGS43H& rf)
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS43H::~DgIDGGS43H (void)
 {
-   for (unsigned int i = 0; i < grids().size(); i++) 
-    delete (*grids_)[i]; 
-
-   delete grids_;
 
 } // DgIDGGS43H::~DgIDGGS43H
 

@@ -1,7 +1,26 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgBase.h: DgBase class definitions
 //
+// Version 7.0 - Kevin Sahr, 11/15/14
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -15,7 +34,11 @@
 using namespace std;
 
 #define DGDEBUG         0
-#define DGGRID_VERSION  "6.2b1" 
+#define DGGRID_VERSION  "7.3"
+
+// adapted from stackoverflow user Pierre
+// #define WHERE fprintf(stderr,"[LOG]%s:%s#%d\n",__PRETTY_FUNCTION__,__FILE__,__LINE__);
+// #define WHERE {};
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgBase {
@@ -38,24 +61,24 @@ class DgBase {
 
       static DgReportLevel minReportLevel (void) { return minReportLevel_; }
 
-      static bool testArgEqual (int argc, int expected, 
+      static bool testArgEqual (int argc, int expected,
                      const string& message = string("invalid argument count"),
                      DgReportLevel level = Fatal);
 
-      static bool testArgEqual (int argc, char* argv[], int expected, 
+      static bool testArgEqual (int argc, char* argv[], int expected,
                      const string& message = string("invalid argument count"));
 
-      static bool testArgMin (int argc, int minExpected, 
+      static bool testArgMin (int argc, int minExpected,
                      const string& message = string("invalid argument count"),
                      DgReportLevel level = Fatal);
 
-      static bool testArgMin (int argc, char* argv[], int minExpected, 
+      static bool testArgMin (int argc, char* argv[], int minExpected,
                      const string& message = string("invalid argument count"));
 
       DgBase (const string& instanceName = defaultName);
 
       DgBase (const string* instanceName = NULL);
-      
+
       void setInstanceName (const string& instanceName)
               { instanceName_ = instanceName; }
 
@@ -74,7 +97,7 @@ class DgBase {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-extern "C" void report (const string& message, 
+extern "C" void report (const string& message,
                         DgBase::DgReportLevel level = DgBase::Info);
 
 ////////////////////////////////////////////////////////////////////////////////

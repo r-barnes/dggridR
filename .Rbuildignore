@@ -3,7 +3,7 @@
 dggridR.*.tar.gz
 wintest
 NOTES
-dggridR.Rcheck
+dggridR.Rcheck/
 src/.*\.o$
 src/.*\.depends$
 src/.*\.a$
@@ -12,7 +12,15 @@ src/apps/dggrid/dggrid$
 src/clean$
 src/Makefile
 src/misc
+src/func_gen.py
 mailinglist
 LICENSE
 ^doc$
 ^Meta$
+submodules/
+update_from_upstream.sh
+CONTRIBUTING.md
+copy_to_src/
+build/
+.vscode/
+CMakeLists.txt

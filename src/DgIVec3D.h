@@ -1,21 +1,36 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgIVec3D.h: DgIVec3D class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGIVEC3D_H
 #define DGIVEC3D_H
 
+#include "DgDVec2D.h"
+#include "DgIVec2D.h"
+#include "DgUtil.h"
+
 #include <cmath>
 #include <string>
-#include <cstdint>
-
-#include "DgUtil.h"
-#include "DgIVec2D.h"
-#include "DgDVec2D.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgIVec3D {
@@ -24,34 +39,34 @@ class DgIVec3D {
 
       static const DgIVec3D& undefDgIVec3D;
 
-      DgIVec3D (std::int64_t i = 0, std::int64_t j = 0,
-                std::int64_t k = 0) 
+      DgIVec3D (long long int i = 0, long long int j = 0,
+                long long int k = 0)
        : i_(i), j_(j), k_(k)
       {}
 
-      DgIVec3D (const DgIVec3D& pt) 
-       : i_ (pt.i_), j_ (pt.j_), k_ (pt.k_) 
+      DgIVec3D (const DgIVec3D& pt)
+       : i_ (pt.i_), j_ (pt.j_), k_ (pt.k_)
       {}
 
-      DgIVec3D (const DgDVec2D&  pt) 
-       : i_ ((int) dgg::util::lrint(pt.x())),  
+      DgIVec3D (const DgDVec2D&  pt)
+       : i_ ((int) dgg::util::lrint(pt.x())),
          j_ ((int) dgg::util::lrint(pt.y())),
-         k_ (0) 
+         k_ (0)
       {}
 
-      void setI (std::int64_t i) { i_ = i; }
-      void setJ (std::int64_t j) { j_ = j; }
-      void setK (std::int64_t k) { k_ = k; }
+      void setI (long long int i) { i_ = i; }
+      void setJ (long long int j) { j_ = j; }
+      void setK (long long int k) { k_ = k; }
 
       long double distance (const DgIVec3D& pt) const
               { return (pt - *this).magnitude(); }
 
-      std::int64_t i (void) const { return i_; }
-      std::int64_t j (void) const { return j_; }
-      std::int64_t k (void) const { return k_; }
-      
-      long double magnitude (void) const 
-              { return sqrt((long double) (i_ * i_ + j_ * j_) + k_ * k_); }
+      long long int i (void) const { return i_; }
+      long long int j (void) const { return j_; }
+      long long int k (void) const { return k_; }
+
+      long double magnitude (void) const
+              { return sqrtl((long double) (i_ * i_ + j_ * j_) + k_ * k_); }
 
       DgIVec3D diffVec (const DgIVec3D& pt0) const
                           { return DgIVec3D(*this - pt0); }
@@ -63,7 +78,7 @@ class DgIVec3D {
 
       const char* fromString (const char* str, char delimiter);
 
-      inline DgIVec3D& scale (long double iScaleFactor, long double jScaleFactor, 
+      inline DgIVec3D& scale (long double iScaleFactor, long double jScaleFactor,
                  long double zScaleFacgtor);
 
       inline operator string (void) const;
@@ -91,25 +106,25 @@ class DgIVec3D {
 
    private:
 
-      std::int64_t i_;
-      std::int64_t j_;
-      std::int64_t k_;
+      long long int i_;
+      long long int j_;
+      long long int k_;
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 inline DgIVec3D&
-DgIVec3D::scale (long double iScaleFactor, long double jScaleFactor, 
+DgIVec3D::scale (long double iScaleFactor, long double jScaleFactor,
                  long double kScaleFactor)
 //
 // Scale me by each factor in the corresponding ijk direction.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   i_ = (std::int64_t) dgg::util::lrint(i_ * iScaleFactor);
-   j_ = (std::int64_t) dgg::util::lrint(j_ * jScaleFactor);
-   k_ = (std::int64_t) dgg::util::lrint(k_ * kScaleFactor);
+   i_ = (long long int) dgg::util::lrint(i_ * iScaleFactor);
+   j_ = (long long int) dgg::util::lrint(j_ * jScaleFactor);
+   k_ = (long long int) dgg::util::lrint(k_ * kScaleFactor);
 
    return *this;
 
@@ -119,7 +134,7 @@ DgIVec3D::scale (long double iScaleFactor, long double jScaleFactor,
 ////////////////////////////////////////////////////////////////////////////////
 inline DgIVec3D::operator DgIVec2D (void) const
 //
-// DgIVec2D conversion function. 
+// DgIVec2D conversion function.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
@@ -130,7 +145,7 @@ inline DgIVec3D::operator DgIVec2D (void) const
 ////////////////////////////////////////////////////////////////////////////////
 inline DgIVec3D::operator string (void) const
 {
-   return "(" + dgg::util::to_string(i_) + ", " 
+   return "(" + dgg::util::to_string(i_) + ", "
               + dgg::util::to_string(j_) + ", "
               + dgg::util::to_string(k_) + ")";
 

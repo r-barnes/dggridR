@@ -1,16 +1,33 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgDVec3D.cpp: DgDVec3D class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
+
+#include <cfloat>
 
 #include "DgDVec3D.h"
-#include <limits>
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const DgDVec3D& DgDVec3D::undefDgDVec3D = DgDVec3D(std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+const DgDVec3D& DgDVec3D::undefDgDVec3D = DgDVec3D(DBL_MAX, DBL_MAX, DBL_MAX);
 
 ////////////////////////////////////////////////////////////////////////////////

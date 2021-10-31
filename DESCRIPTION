@@ -1,13 +1,14 @@
 Package: dggridR
 Type: Package
 Title: Discrete Global Grids
-Version: 2.0.8
-Date: 2020-11-25
+Version: 3.0.0
+Date: 2021-10-31
 Author: Richard Barnes [aut, cre], Kevin Sahr [aut, cph], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph], Even Rouault [cph], Lian Song [ctb]
 Maintainer: Richard Barnes <rijard.barnes@gmail.com>
 NeedsCompilation: yes
-Depends: R (>= 3.4.0), rgdal (>= 1.1), ggplot2 (>= 2.1), dplyr (>= 0.4), sp (>= 1.2)
-Suggests: knitr,
+Depends: R (>= 3.4.0), dplyr (>= 0.4), rlang (>= 0.4), sf (>= 1.0), sp (>= 1.2)
+Suggests: ggplot2,
+    knitr,
     rmarkdown,
     maps,
     mapproj,
@@ -30,6 +31,6 @@ Imports:
   methods (>= 3.4.0)
 LinkingTo: Rcpp
 RcppModules: dgfuncs, gridgens, gridstats
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr, R.rsp
 SystemRequirements: C++11

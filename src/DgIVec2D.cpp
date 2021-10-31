@@ -1,20 +1,35 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgIVec2D.cpp: DgIVec2D class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <limits>
-#include <cstdint>
+#include <climits>
 
 #include "DgBase.h"
 #include "DgIVec2D.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const DgIVec2D& DgIVec2D::undefDgIVec2D = DgIVec2D(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
+const DgIVec2D& DgIVec2D::undefDgIVec2D = DgIVec2D(INT_MAX, INT_MAX);
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
@@ -30,16 +45,16 @@ DgIVec2D::fromString (const char* str, char delimiter)
    // Get i and j:
    char* tok;
 
-   std::int64_t	iIn(0),
+   long long int	iIn(0),
 	   		jIn(0);
 
    try
     {
    	tok = strtok(tmpStr, delimStr);
-   	iIn = dgg::util::from_string<std::int64_t>(tok);
+   	iIn = dgg::util::from_string<long long int>(tok);
 	
    	tok = strtok(NULL, delimStr);
-   	jIn = dgg::util::from_string<std::int64_t>(tok);
+   	jIn = dgg::util::from_string<long long int>(tok);
     }  
    catch(...)
     {
@@ -50,7 +65,7 @@ DgIVec2D::fromString (const char* str, char delimiter)
    setI(iIn);
    setJ(jIn);
 
-   std::uint64_t offset = (tok - tmpStr) + strlen(tok) + 1;
+   unsigned long long int offset = (tok - tmpStr) + strlen(tok) + 1;
    if (offset >= strlen(str)) 
     return 0;
 

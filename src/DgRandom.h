@@ -1,3 +1,21 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgRandom.h: DgRandom class definitions.
@@ -6,18 +24,16 @@
 //      DgRandMother is based on George Marsaglia's multiply-with-carry
 //      "mother" function.
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGRANDOM_H
 #define DGRANDOM_H
 
+#include "DgEllipsoidRF.h"
+
 #include <iostream>
 
 using namespace std;
-
-#include "DgEllipsoidRF.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgRandom {
@@ -60,19 +76,19 @@ class DgRandom {
           { setStatus(nextRand()); return status(); }
 
       double nextDouble (void)  // return 0.0...1.0
-          { 
-             setStatus(nextRand()); 
-             return (double) status() / (double) maxVal(); 
+          {
+             setStatus(nextRand());
+             return (double) status() / (double) maxVal();
           }
 
       double randInRange (double min, double max) // inclusive
-          { 
+          {
              return (min + (max - min) * nextDouble());
           }
 
-      DgGeoCoord nextGeo (void) 
-         { 
-            return DgGeoCoord(randInRange(-dgM_PI, dgM_PI),
+      DgGeoCoord nextGeo (void)
+         {
+            return DgGeoCoord(randInRange(-M_PI, M_PI),
                               asin(randInRange(-1.0, 1.0)));
          }
 

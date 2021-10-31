@@ -13,7 +13,7 @@
  * option is discussed in more detail in shapelib.html.
  *
  * --
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -51,8 +51,8 @@
  *
  * Revision 1.2  2007/12/15 20:25:30  bram
  * dbfopen.c now reads the Code Page information from the DBF file, and exports
- * this information as a string through the DBFGetCodePage function.  This is 
- * either the number from the LDID header field ("LDID/<number>") or as the 
+ * this information as a string through the DBFGetCodePage function.  This is
+ * either the number from the LDID header field ("LDID/<number>") or as the
  * content of an accompanying .CPG file.  When creating a DBF file, the code can
  * be set using DBFCreateEx.
  *
@@ -68,6 +68,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 SHP_CVSID("$Id: safileio.c,v 1.5 2016-12-05 12:44:05 erouault Exp $")
 
@@ -97,7 +98,7 @@ SAFile SADFOpen( const char *pszFilename, const char *pszAccess )
 SAOffset SADFRead( void *p, SAOffset size, SAOffset nmemb, SAFile file )
 
 {
-    return (SAOffset) fread( p, (size_t) size, (size_t) nmemb, 
+    return (SAOffset) fread( p, (size_t) size, (size_t) nmemb,
                              (FILE *) file );
 }
 
@@ -108,7 +109,7 @@ SAOffset SADFRead( void *p, SAOffset size, SAOffset nmemb, SAFile file )
 SAOffset SADFWrite( void *p, SAOffset size, SAOffset nmemb, SAFile file )
 
 {
-    return (SAOffset) fwrite( p, (size_t) size, (size_t) nmemb, 
+    return (SAOffset) fwrite( p, (size_t) size, (size_t) nmemb,
                               (FILE *) file );
 }
 
@@ -168,7 +169,9 @@ int SADRemove( const char *filename )
 
 void SADError( const char *message )
 
-{}
+{
+    // fprintf( stderr, "%s\n", message );
+}
 
 /************************************************************************/
 /*                        SASetupDefaultHooks()                         */
@@ -203,7 +206,7 @@ const wchar_t* Utf8ToWideChar( const char *pszFilename )
 {
     int nMulti, nWide;
     wchar_t *pwszFileName;
-    
+
     nMulti = strlen(pszFilename) + 1;
     nWide = MultiByteToWideChar( CP_UTF8, 0, pszFilename, nMulti, 0, 0);
     if( nWide == 0 )
@@ -249,7 +252,7 @@ SAFile SAUtf8WFOpen( const char *pszFilename, const char *pszAccess )
 int SAUtf8WRemove( const char *pszFilename )
 {
     const wchar_t *pwszFileName = Utf8ToWideChar( pszFilename );
-    int rc = -1; 
+    int rc = -1;
     if( pwszFileName != NULL )
     {
         rc = _wremove( pwszFileName );
@@ -268,7 +271,7 @@ int SAUtf8WRemove( const char *pszFilename )
 
 void SASetupUtf8Hooks( SAHooks *psHooks )
 {
-#ifdef SHPAPI_WINDOWS    
+#ifdef SHPAPI_WINDOWS
     psHooks->FOpen   = SAUtf8WFOpen;
     psHooks->Remove  = SAUtf8WRemove;
 #else

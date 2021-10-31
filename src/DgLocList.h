@@ -1,12 +1,28 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgLocList.h: DgLocList class definitions
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 //
-//  The DgLocList class defines a set of locations which can be treated as a 
+//  The DgLocList class defines a set of locations which can be treated as a
 //  group for purposes of conversion, etc.
 //
 //  Note: add only loc's of the correct RF or use push_back. Other STL list
@@ -17,10 +33,10 @@
 #ifndef DGLOCLIST_H
 #define DGLOCLIST_H
 
-#include <list>
-#include <functional>
-
 #include "DgLocBase.h"
+
+#include <functional>
+#include <list>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgLocList : public DgLocBase, public list<DgLocBase*> {

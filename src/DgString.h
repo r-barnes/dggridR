@@ -1,25 +1,38 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgString.h: DgString class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGSTRING_H
 #define DGSTRING_H
 
-#include <string>
-#include <cstdio>
-#include <sstream>
-#include <iomanip>
-#include <cstring>
-#include <cstdlib>
-#include <cstdint>
-#include <sstream>
-#include <stdexcept>
-
 #include "DgUtil.h"
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -92,7 +105,7 @@ inline string toLower (const string& strIn)
 namespace dgg { namespace util {
 
 ////////////////////////////////////////////////////////////////////////////////
-inline string addCommas (std::uint64_t num)
+inline string addCommas (unsigned long long int num)
 {
     std::stringstream ss;
     ss << num;
@@ -104,7 +117,7 @@ inline string addCommas (std::uint64_t num)
     else
     {
        int offset = s.length() % 3; // adjust for different # of digits
-    
+
        for (unsigned int i = 0; i < s.length(); i++)
        {
           if (i && !(i % 3 - offset))
@@ -119,7 +132,7 @@ inline string addCommas (std::uint64_t num)
 ////////////////////////////////////////////////////////////////////////////////
 inline string addCommas (long double num, unsigned int precision)
 {
-   std::uint64_t intPart = num;
+   unsigned long long int intPart = num;
 
    string newS = addCommas(intPart);
 
@@ -171,13 +184,13 @@ inline void trim(char *line, const std::string& candidates = "\n\r")
   ++i;
 
  // Shift left:
- memcpy(static_cast<void *>(line), static_cast<void *>(&line[i]), len - i); 
- 
+ memcpy(static_cast<void *>(line), static_cast<void *>(&line[i]), len - i);
+
  line[len - i] = 0;	// add NULL
 }
 
 template <class TargetT>
-inline TargetT from_string(const std::string& source)
+inline static TargetT from_string(const std::string& source)
 {
  TargetT result;
 
@@ -195,31 +208,35 @@ inline TargetT from_string(const std::string& source)
 // JFW: clean up (gcc specific)
 template <>
 inline
-std::int64_t from_string(const std::string& source)
+/* Test for GCC < 4.3.0 */
+#if !defined  __APPLE__ && !defined __clang__ && GCC_VERSION < 40300
+/* Template specializations are not allowed to have their own storage
+   classes, but older g++ didn't know that. Without this, you'll get
+   linker errors. */
+static
+#endif
+long long int from_string(const std::string& source)
 {
- std::int64_t n;
-  std::istringstream convert(source);
-  convert>>n;
-  if(convert.fail())
-    throw std::runtime_error("from_string(): Conversion failed on: " + source);
+ long long int n;
+ sscanf(source.c_str(), "%lld", &n);
  return n;
 }
 
 // JFW: clean up (gcc specific)
 template <>
-inline 
-std::uint64_t from_string(const std::string& source)
-{ 
- std::uint64_t n;
-  std::istringstream convert(source);
-  convert>>n;
-  if(convert.fail())
-    throw std::runtime_error("from_string(): Conversion failed on: " + source);
+inline
+#if !defined  __APPLE__ && !defined __clang__ && GCC_VERSION < 40300
+static
+#endif
+unsigned long long int from_string(const std::string& source)
+{
+ unsigned long long int n;
+ sscanf(source.c_str(), "%llu", &n);
  return n;
 }
 
 template <class SourceT>
-std::string to_string(const SourceT& source)
+static std::string to_string(const SourceT& source)
 {
  std::ostringstream os;
  os << source;

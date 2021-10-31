@@ -1,13 +1,30 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgProjFuller.cpp: DgProjFuller class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#include <limits>
+#include <climits>
+
 #include "DgProjFuller.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -15,7 +32,7 @@ DgProjFullerInv::DgProjFullerInv (const DgRF<DgProjTriCoord, long double>& from,
                        const DgRF<DgGeoCoord, long double>& to)
          : DgConverter<DgProjTriCoord, long double, DgGeoCoord, long double>(from, to),
            pProjTriRF_ (0)
-{ 
+{
    pProjTriRF_ = dynamic_cast<const DgProjTriRF*>(&fromFrame());
 
    if (!pProjTriRF_)
@@ -27,7 +44,7 @@ DgProjFullerInv::DgProjFullerInv (const DgRF<DgProjTriCoord, long double>& from,
 } // DgProjFullerInv::DgProjFullerInv
 
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoCoord 
+DgGeoCoord
 DgProjFullerInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 {
 //cout << "***DgProjFullerInv: DgProjTriCoord: " << addIn << endl;
@@ -41,7 +58,7 @@ DgProjFullerInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 
    GeoCoord ll = fullerInv(gridpt, projTriRF().sphIcosa().sphIcosa());
 
-//cout << " ll.lon, ll.lat: " << ll.lon << ", " << 
+//cout << " ll.lon, ll.lat: " << ll.lon << ", " <<
 //ll.lat << endl;
    DgGeoCoord geoPt(ll.lon, ll.lat);
    geoPt.normalize();
@@ -54,8 +71,8 @@ DgProjFullerInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 ////////////////////////////////////////////////////////////////////////////////
 DgProjFullerFwd::DgProjFullerFwd (const DgRF<DgGeoCoord, long double>& from,
                     const DgRF<DgProjTriCoord, long double>& to)
-         : DgConverter<DgGeoCoord, long double, DgProjTriCoord, long double>(from, to) 
-{ 
+         : DgConverter<DgGeoCoord, long double, DgProjTriCoord, long double>(from, to)
+{
    pProjTriRF_= dynamic_cast<const DgProjTriRF*>(&toFrame());
 
    if (!pProjTriRF_)
@@ -64,13 +81,13 @@ DgProjFullerFwd::DgProjFullerFwd (const DgRF<DgGeoCoord, long double>& from,
         " toFrame not of type DgProjTriRF", DgBase::Fatal);
    }
 
-} // DgProjFullerFwd::DgProjFullerFwd 
+} // DgProjFullerFwd::DgProjFullerFwd
 
 ////////////////////////////////////////////////////////////////////////////////
-DgProjTriCoord 
+DgProjTriCoord
 DgProjFullerFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 {
-         
+
 //cout << "***DgProjFullerFwd: geoPt: " << addIn << endl;
          GeoCoord ll;
 
@@ -83,16 +100,16 @@ DgProjFullerFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 //cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
 //      gridpt.pt.x << ", " << gridpt.pt.y << endl;
 
-//cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle, 
+//cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle,
 //                               DgDVec2D(gridpt.pt.x, gridpt.pt.y)) << endl;
 
    return DgProjTriCoord(gridpt.triangle, DgDVec2D(gridpt.pt.x, gridpt.pt.y));
 
-} // DgProjTriCoord DgProjFullerFwd::convertTypedAddress 
+} // DgProjTriCoord DgProjFullerFwd::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-/* 
+/*
    The C++ methods above are wrappers for the C functions below.
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -115,9 +132,9 @@ IcosaGridPt fullerFwd (const GeoCoord& ll, DgSphIcosa& sphicosa)
 
    if (gridpt.triangle < 0)
    {
-      // printf("ERROR: point in no triangle:");
-      // printGeoCoord(ll); 
-      // printf("\n");
+      printf("ERROR: point in no triangle:");
+      printGeoCoord(ll);
+      printf("\n");
 
       gridpt.pt.x = M_ZERO;
       gridpt.pt.y = M_ZERO;
@@ -128,7 +145,7 @@ IcosaGridPt fullerFwd (const GeoCoord& ll, DgSphIcosa& sphicosa)
    //gridpt.pt = fllxy(ll, sphicosa, gridpt.triangle);
 
    long double v1[3], v2[3], v3[3];
-   
+
    v1[0] = sphicosa.sphIcosa().icotri[gridpt.triangle][0].lon;
    v1[1] = sphicosa.sphIcosa().icotri[gridpt.triangle][0].lat;
 
@@ -161,7 +178,7 @@ GeoCoord fullerInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
   long double sinlat,sinlon;
   GeoCoord Geovect;
   const PreCompGeo& cent = sphicosa.triCen[icosaPt.triangle];
- 
+
   IcosaGridPt iPt;
   iPt.triangle = icosaPt.triangle;
   iPt.pt.x = icosaPt.pt.x * edgeScale - originXOff;
@@ -172,65 +189,65 @@ GeoCoord fullerInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
 
   ddazh = sphicosa.dazh[icosaPt.triangle];
 
-  if ((fabs(iPt.pt.x) < PRECISION) && (fabs(iPt.pt.y) < PRECISION))
+  if ((fabsl(iPt.pt.x) < PRECISION) && (fabsl(iPt.pt.y) < PRECISION))
   {
     Geovect.lat=cent.pt.lat; Geovect.lon=cent.pt.lon;
   }
   else
-  {  
+  {
     long double azh, theta;
     Geovect = fullerInvOneTri(iPt, M_ONE, &azh, &theta);
 
-    azh = dgM_PI - azh; // 180' - azh
+    azh = M_PI - azh; // 180' - azh
 
     // now reposition to the actual triangle
 
     azh += ddazh;
 
-    while (azh <= -dgM_PI) azh += M_2PI;
-    while (azh > dgM_PI) azh -= M_2PI;
+    while (azh <= -M_PI) azh += M_2PI;
+    while (azh > M_PI) azh -= M_2PI;
 
-    sinlat=cent.sinLat * cos(theta) + cent.cosLat * sin(theta) * cos(azh);
+    sinlat=cent.sinLat * cosl(theta) + cent.cosLat * sinl(theta) * cosl(azh);
     if (sinlat > M_ONE) sinlat = M_ONE;
     if (sinlat < -M_ONE) sinlat = -M_ONE;
-    Geovect.lat = asin(sinlat);
+    Geovect.lat = asinl(sinlat);
 
-    if (fabs(fabs(Geovect.lat) - dgM_PI_2) < M_EPSILON)
+    if (fabsl(fabsl(Geovect.lat) - M_PI_2) < M_EPSILON)
     {
-       Geovect.lat = (Geovect.lat > M_ZERO) ? dgM_PI_2 : -dgM_PI_2;
+       Geovect.lat = (Geovect.lat > M_ZERO) ? M_PI_2 : -M_PI_2;
        Geovect.lon = M_ZERO;
     }
     else
     {
-      sinlon = sin(azh)*sin(theta)/cos(Geovect.lat);
-      long double coslon = (cos(theta) - cent.sinLat * sin(Geovect.lat)) /
-              cent.cosLat/cos(Geovect.lat);
+      sinlon = sinl(azh)*sinl(theta)/cosl(Geovect.lat);
+      long double coslon = (cosl(theta) - cent.sinLat * sinl(Geovect.lat)) /
+              cent.cosLat/cosl(Geovect.lat);
       if (sinlon > M_ONE) sinlon = M_ONE;
       if (sinlon < -M_ONE) sinlon = -M_ONE;
       if (coslon > M_ONE) coslon = M_ONE;
       if (coslon < -M_ONE) coslon =-M_ONE;
-      Geovect.lon = cent.pt.lon+asin(sinlon);
-      Geovect.lon = cent.pt.lon+atan2(sinlon, coslon);
-      if (Geovect.lon <= -dgM_PI) Geovect.lon += M_2PI;
-      if (Geovect.lon >= dgM_PI) Geovect.lon -= M_2PI;
+      Geovect.lon = cent.pt.lon+asinl(sinlon);
+      Geovect.lon = cent.pt.lon+atan2l(sinlon, coslon);
+      if (Geovect.lon <= -M_PI) Geovect.lon += M_2PI;
+      if (Geovect.lon >= M_PI) Geovect.lon -= M_2PI;
     }
   }
   return Geovect;
 
 } /* GeoCoord fullerInv */
 
-void geogtocartesian (long double lon, long double lat, long double R, long double ret[])
+static void geogtocartesian (long double lon, long double lat, long double R, long double ret[])
 {
-   long double inc = dgM_PI_2 - lat;
-   long double azi = lon + dgM_PI;
+   long double inc = M_PI_2 - lat;
+   long double azi = lon + M_PI;
 
-   ret[0] = R * cos(azi) * sin(inc);
-   ret[1] = R * sin(azi) * sin(inc);
-   ret[2] = R * cos(inc);
+   ret[0] = R * cosl(azi) * sinl(inc);
+   ret[1] = R * sinl(azi) * sinl(inc);
+   ret[2] = R * cosl(inc);
 
 } // static void geogtocartesian
 
-long double scalar_triple(long double * x, long double * y, long double * z)
+static long double scalar_triple(long double * x, long double * y, long double * z)
 {
    long double yzcross[3];
 
@@ -244,7 +261,7 @@ long double scalar_triple(long double * x, long double * y, long double * z)
 
 } // static long double scalar_triple
 
-Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1, 
+Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1,
                        long double * v2, long double * v3)
 {
    const long double cosarc = 0.447213595499957939281834733746255L; // cos(atan(2))
@@ -265,10 +282,10 @@ Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1,
    long double v2v3p = scalar_triple(ret3, ret4, ret);
    long double v3v1p = scalar_triple(ret4, ret2, ret);
    long double v3v2p = scalar_triple(ret4, ret3, ret);
-   
-   long double a1 = atan((2.0L*v2v3p*cosarc) / (v2v3p*cosarc-(v2v1p+v1v3p))); 
-   long double a2 = atan((2.0L*v1v2p*cosarc) / (v1v2p*cosarc - (v1v3p + v3v2p)));
-   long double a3 = atan((2.0L*v3v1p*cosarc) / (v3v1p*cosarc - (v3v2p + v2v1p)));
+
+   long double a1 = atanl((2.0L*v2v3p*cosarc) / (v2v3p*cosarc-(v2v1p+v1v3p)));
+   long double a2 = atanl((2.0L*v1v2p*cosarc) / (v1v2p*cosarc - (v1v3p + v3v2p)));
+   long double a3 = atanl((2.0L*v3v1p*cosarc) / (v3v1p*cosarc - (v3v2p + v2v1p)));
 
    long double x = R * (a2-a3)/2.0L;
    long double y = R * (2.0L * a1 - a2 - a3)/(2.0L * M_SQRT3);
@@ -282,7 +299,7 @@ Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1,
 
 } // Vec2D fullerFwdOneTri
 
-GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzimuth, 
+GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzimuth,
                          long double* pTheta)
 {
    long double alpha, el, dve;      /* constants used with Fuller projection*/
@@ -290,23 +307,23 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
    long double x1, y1, z1;          /* 3-D x, y, z coords of template triangle plane*/
    long double x2, y2;              /* initial planar coords*/
    long double a1, a2, a3;          /* arc lengths on plane and sphere*/
-   long double a1p, a2p;            /* arc lengths on template triangle plane*/ 
+   long double a1p, a2p;            /* arc lengths on template triangle plane*/
    long double s;                   /* length from unit sphere origin to plane*/
    long double group1, group2;      /* grouping of constants for use in finding a2*/
    long double inc;                 /* increment to obtain an accurate a2*/
    long double theta, azimuth;      /* conversion angles from x,y,z to lat/lon*/
    long double test, answer;        /* compared values for use in finding a2*/
 
-   //el = M_SQRT8 / sqrt(5.0L + M_SQRT5);
+   //el = M_SQRT8 / sqrtl(5.0L + M_SQRT5);
    el = 1.05146222423826721205133816969575L;
-   //dve = sqrt(3.0L + M_SQRT5) / sqrt(5.0L + M_SQRT5);
+   //dve = sqrtl(3.0L + M_SQRT5) / sqrtl(5.0L + M_SQRT5);
    dve = 0.85065080835203993218154049706301L;
    //alpha = 0.5L * arc;
    alpha = M_ATAN2_2;
-   
+
    x2 = pt.pt.x / R;
    y2 = pt.pt.y / R;
-   
+
    group1 = (M_SQRT3 * y2) - x2 - alpha;
    group2 = (2.0L * x2) + alpha;
    //answer = -el / (2.0L * dve);
@@ -318,21 +335,21 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
 
    long double hi = answer-test;
    long double lastHi = hi;
-   while (std::abs(hi) > PRECISION) 
-   { 
-      test = std::tan (a2 + group1) + std::tan (a2 - alpha) + std::tan (a2 - group2);
+   while (fabsl(hi) > PRECISION)
+   {
+      test = tanl(a2 + group1) + tanl(a2 - alpha) + tanl(a2 - group2);
       inc = inc / 2.0L;
-   
+
       hi = answer - test;
       if (hi == lastHi)
       {
-         // std::cerr<<"ERROR: fullerInvOneTri: iterative step failed.\n";
-         // std::cerr<<"loss of precision: "<<(std::abs(hi) - PRECISION)<<".\n";
+         // fprintf(stderr, "ERROR: fullerInvOneTri: iterative step failed.\n");
+         // fprintf(stderr, "loss of precision: %.20LF.\n", (fabsl(hi) - PRECISION));
          break;
       }
       lastHi = hi;
 
-      if (std::abs(hi) < PRECISION) break;
+      if (fabsl(hi) < PRECISION) break;
 
       if (test > answer)
          a2 = a2 - inc;
@@ -343,46 +360,46 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
    a3 = a2 - (2.0L * x2);
    a1 = (M_SQRT3 * y2) + (M_HALF * a2) + (M_HALF * a3);
 
-   a1p = dve * tan (a1 - alpha) + (el / 2.0L);
-   a2p = dve * tan (a2 - alpha) + (el / 2.0L);
+   a1p = dve * tanl(a1 - alpha) + (el / 2.0L);
+   a2p = dve * tanl(a2 - alpha) + (el / 2.0L);
 
    /* Find x1, y1 and z1 on template planar triangle*/
 
-   //y1 = a1p * sin (60.0L * dgM_PI_180) - (el / (2.0L * M_SQRT3));
+   //y1 = a1p * sinl (60.0L * M_PI_180) - (el / (2.0L * M_SQRT3));
    y1 = a1p * M_SIN60 - 0.30353099910334311154769579070999L;
    //x1 = a2p + (y1 / M_SQRT3) - (el / 3.0L);
    x1 = a2p + (y1 / M_SQRT3) - 0.3504874080794224040171127232319L;
    //z1 = sqrt (5.0L + (2.0L * M_SQRT5)) / M_SQRT15;
    z1 = 0.79465447229176612295553092832759L;
 
-   s = sqrt(x1 * x1 + y1 * y1 + z1 * z1);
+   s = sqrtl(x1 * x1 + y1 * y1 + z1 * z1);
 
    x = x1 / s;
    y = y1 / s;
    z = z1 / s;
-   test = sqrt(x*x + y*y + z*z);
+   test = sqrtl(x*x + y*y + z*z);
 
    //printf("XYZ: %f, %f, %f\n", x, y, z);
 
    /* Convert x, y, z coords to lat/lon*/
 
-   theta = acos (z);
-   azimuth = atan2 (y, x);
-   long double j = dgM_PI / 2.0L;
+   theta = acosl(z);
+   azimuth = atan2l(y, x);
+   long double j = M_PI / 2.0L;
    if (azimuth <= j )
-      azimuth = azimuth + dgM_PI_2;
+      azimuth = azimuth + M_PI_2;
    else
    {
-      //azimuth = azimuth - 3.0L * dgM_PI / 2.0L;
+      //azimuth = azimuth - 3.0L * M_PI / 2.0L;
       azimuth -= 4.712388980384689857693965074919L;
    }
 
    *pTheta = theta;
    *pAzimuth = azimuth;
-   
-   long double lat = (dgM_PI_2 - theta) * M_180_PI;
+
+   long double lat = (M_PI_2 - theta) * M_180_PI;
    long double lon = azimuth;
-   if (fabs (dgM_PI_2 - lat) < PRECISION)
+   if (fabsl(M_PI_2 - lat) < PRECISION)
       lon = M_ZERO;
 
    lon = lon * M_180_PI;
@@ -390,12 +407,10 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
    GeoCoord geo;
    geo.lon = lon;
    geo.lat = lat;
-   
+
    return geo;
 
 } // GeoCoord fullerInvOneTri
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
-

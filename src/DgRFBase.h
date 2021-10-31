@@ -1,23 +1,41 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgRFBase.h: DgRFBase class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGRFBASE_H
 #define DGRFBASE_H
 
+#include <Rcpp.h>
+#undef M_2PI
+
+#include "DgDVec2D.h"
+#include "DgLocBase.h"
+#include "DgRFNetwork.h"
+#include "DgUtil.h"
+
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
-#include <cstdint>
-
-#include "DgRFNetwork.h"
-#include "DgLocBase.h"
-#include "DgDVec2D.h"
-#include "DgUtil.h"
 
 using namespace std;
 
@@ -26,6 +44,7 @@ class DgLocation;
 class DgLocVector;
 class DgDistanceBase;
 class DgAddressBase;
+class NuCell;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgRFBase {
@@ -42,11 +61,11 @@ class DgRFBase {
 
       DgRFNetwork& network (void) const { return *network_; }
 
-      ostream& traceToGround (ostream& stream = cout) const;
+      ostream& traceToGround (ostream& stream = Rcpp::Rcout) const;
 
       const DgRFBase* connectTo   (void) const { return connectTo_; }
       const DgRFBase* connectFrom (void) const { return connectFrom_; }
-      
+
       DgLocation* convert (DgLocation* loc) const; // converts in place
 
       DgLocVector& convert (DgLocVector& vec) const; // converts in place
@@ -54,7 +73,7 @@ class DgRFBase {
       void convert (DgLocBase* loc) const // converts in place
                 { loc->convertTo(*this); }
 
-      virtual DgDistanceBase* distance (const DgLocation& loc1, 
+      virtual DgDistanceBase* distance (const DgLocation& loc1,
                                         const DgLocation& loc2,
                                         bool convert = false) const = 0;
 
@@ -63,11 +82,17 @@ class DgRFBase {
       virtual DgLocation* createLocation (const DgLocation& loc,
                                           bool convert = false) const = 0;
 
+// USE_NUCELL is set in MakeIncludes
+#ifdef USE_NUCELL
+      virtual NuCell* createCell (const NuCell& cell,
+                                          bool convert = false) const = 0;
+#endif
+
       void setName (const string& nameIn) { name_ = nameIn; }
-      
+
       virtual bool operator== (const DgRFBase& frame) const
                { return (id() == frame.id() && network() == frame.network()); }
-              
+
       virtual bool operator!= (const DgRFBase& frame) const
                { return !operator==(frame); }
 
@@ -110,24 +135,26 @@ class DgRFBase {
            connectTo_ (0), connectFrom_ (0), undefLoc_ (0)
            { id_ = network_->generateId(this); setFormatStr(); }
 
-      virtual DgLocation* buildLocation (DgAddressBase* addIn) const; 
+      virtual DgLocation* buildLocation (DgAddressBase* addIn) const;
                              // does not make copy
 
       virtual DgAddressBase* createAddress (void) const = 0;
 
-      virtual DgAddressBase* createAddress 
+      virtual DgAddressBase* createAddress
                                  (const DgAddressBase& addIn) const = 0;
 
-      virtual void copyAddress (const DgAddressBase& from, 
+      virtual void copyAddress (const DgAddressBase& from,
                                       DgAddressBase* to) const = 0;
 
-      virtual bool equalAddress (const DgAddressBase& add1, 
+      virtual bool equalAddress (const DgAddressBase& add1,
                                  const DgAddressBase& add2) const = 0;
 
       void forceRF (DgLocBase* loc) { loc->rf_ = this; }
 
+      void setUndefLoc (DgLocation* undefLoc);
+
    private:
-   
+
       void setFormatStr (void)
             { sprintf(formatStr_, "%%#.%dLF", precision()); }
 
@@ -141,15 +168,15 @@ class DgRFBase {
       virtual string toString (const DgDistanceBase& dist) const = 0;
       virtual long double toDouble (const DgDistanceBase& dist) const = 0;
 
-      virtual std::uint64_t toInt (const DgDistanceBase& dist) const = 0;
+      virtual unsigned long long int toInt (const DgDistanceBase& dist) const = 0;
 
       virtual string toAddressString (const DgLocation& loc)     const = 0;
       virtual string toAddressString (const DgLocVector& locVec) const = 0;
 
       virtual string toString (const DgLocation& loc, char delimiter) const = 0;
-      virtual string toString (const DgLocVector& loc, char delimiter) 
+      virtual string toString (const DgLocVector& loc, char delimiter)
                                                                       const = 0;
-      virtual string toAddressString (const DgLocation& loc, char delimiter) 
+      virtual string toAddressString (const DgLocation& loc, char delimiter)
                                                                       const = 0;
       virtual string toAddressString (const DgLocVector& locVec, char delimiter)
                                                                       const = 0;
@@ -169,7 +196,7 @@ class DgRFBase {
       DgRFBase* connectTo_;
       DgRFBase* connectFrom_;
 
-   protected: 
+   protected:
       DgLocation* undefLoc_;
 
    private:
@@ -180,15 +207,16 @@ class DgRFBase {
    friend class DgConverterBase;
    friend class DgRFNetwork;
    friend class DgIdentityConverter;
+   friend class NuCell;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 inline DgRFBase&
 DgRFBase::operator= (const DgRFBase& frame)
 {
-   network_ = &frame.network(); 
+   network_ = &frame.network();
    name_ = frame.name();
-   id_ = frame.id(); 
+   id_ = frame.id();
 
    return *this;
 

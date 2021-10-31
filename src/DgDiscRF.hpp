@@ -1,6 +1,24 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgDiscRF_template.h: DgDiscRF template class definition.
+// DgDiscRF.hpp: DgDiscRF template class definition.
 //
 // Version 6.1 - Kevin Sahr, 5/23/13
 //
@@ -54,6 +72,26 @@ DgDiscRF<A, B, DB>::setNeighbors (const DgLocation& loc, DgLocVector& vec) const
    }
 
 } // void DgDiscRF::setNeighbors
+
+////////////////////////////////////////////////////////////////////////////////
+template<class A, class B, class DB> void
+DgDiscRF<A, B, DB>::setNeighborsBdry2 (const DgLocation& loc, DgLocVector& vec) const
+{
+   vec.clearAddress(); 
+   this->convert(vec);
+   
+   if (loc.rf() == *this)
+   {
+      setAddNeighborsBdry2(*(this->getAddress(loc)), vec);
+   }
+   else
+   {
+      DgLocation tmpLoc(loc);
+      this->convert(&tmpLoc);
+      setAddNeighborsBdry2(*(this->getAddress(tmpLoc)), vec);
+   }
+
+} // void DgDiscRF::setNeighborsBdry2
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class B, class DB> void

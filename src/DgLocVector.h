@@ -1,19 +1,35 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgLocVector.h: DgLocVector class definitions
-//
-// Version 6.1 - Kevin Sahr, 5/23/13
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGLOCVECTOR_H
 #define DGLOCVECTOR_H
 
+#include "DgLocation.h"
+
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
-
-#include "DgLocation.h"
 
 using namespace std;
 
@@ -31,7 +47,10 @@ class DgLocVector : public DgLocBase {
 
       DgLocVector (const DgRFBase& rfIn, int sizeIn = 0);
 
-     ~DgLocVector (void) { clearAddress(); }
+     ~DgLocVector (void) { 
+         tmpLoc_.address_ = 0;
+         clearAddress(); 
+      }
 
       DgLocVector& operator= (const DgLocVector& vec); // deep copy
 
@@ -77,7 +96,7 @@ class DgLocVector : public DgLocBase {
 
       virtual void clearAddress (void);
 
-      virtual int cardinality (void) const { return size(); } 
+      virtual int cardinality (void) const { return size(); }
 
    protected:
 
@@ -89,10 +108,15 @@ class DgLocVector : public DgLocBase {
 
       vector<DgAddressBase*> vec_;
 
+   template<class A, class D> friend class DgRF;
    friend class DgRFBase;
    friend class DgConverterBase;
    friend class DgPoly;
-   template <class A, class D> friend class DgRF;
+
+// USE_NUCELL is set in MakeIncludes
+#ifdef USE_NUCELL
+   friend class NuCellVector;
+#endif
 
 };
 
@@ -101,27 +125,25 @@ inline ostream& operator<< (ostream& stream, const DgLocVector& vec)
 {
    stream << vec.rf().name() << " {\n";
 
-/* ccw
    for (int i = 0; i < vec.size(); i++) stream << vec[i] << "\n";
-*/
-   for (int i = vec.size() - 1; i >= 0; i--) stream << vec[i] << "\n";
+   //for (int i = vec.size() - 1; i >= 0; i--) stream << vec[i] << "\n";
 
    return stream << "}" << endl;
 
 } // inline ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
-inline DgLocVector& 
+inline DgLocVector&
 DgLocVector::operator= (const DgLocVector& vec)
 {
    if (this != &vec)
    {
       clearAddress();
-      
+
       rf_ = &vec.rf();
       resize(vec.size());
 
-      for (int i = 0; i < size(); i++) 
+      for (int i = 0; i < size(); i++)
       {
          vec_[i] = rf().createAddress(*vec.vec_[i]);
       }

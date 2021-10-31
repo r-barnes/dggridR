@@ -1,15 +1,33 @@
+/*******************************************************************************
+    Copyright (C) 2021 Kevin Sahr
+
+    This file is part of DGGRID.
+
+    DGGRID is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    DGGRID is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // DgBase.cpp: DgBase class implementation
 //
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <cstdlib>
-#include <stdexcept>
+#include <Rcpp.h>
+#undef M_2PI
 
 #include "DgBase.h"
+
+#include <cstdlib>
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -25,7 +43,7 @@ void report (const string& message, DgBase::DgReportLevel level)
 // followed by a newline and flush. If level is Warning, "WARNING" is
 // printed to stderr followed by the message, newline, and flush. If level
 // is Fatal, "FATAL ERROR" is printed to stderr, followed by the message,
-// newline, and flush, and then the program is exited. 
+// newline, and flush, and then the program is exited.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
@@ -34,30 +52,27 @@ void report (const string& message, DgBase::DgReportLevel level)
    switch (level)
    {
       case DgBase::Debug0:
-	 //cout << "DEBUG0: " << message << endl;
+	 Rcpp::Rcout << "DEBUG0: " << message << endl;
 	 break;
 
       case DgBase::Debug1:
-	 //cout << "DEBUG1: " << message << endl;
+	 Rcpp::Rcout << "DEBUG1: " << message << endl;
 	 break;
 
       case DgBase::Info:
 
-         //cout << message << endl;
+         Rcpp::Rcout << message << endl;
          break;
 
       case DgBase::Warning:
 
-         //cout.flush();  // in case stdout and stderr go to the same place
-         //cerr << "WARNING: " << message << endl;
+         Rcpp::Rcerr << "WARNING: " << message << endl;
          break;
 
       case DgBase::Fatal:
 
-         throw std::runtime_error("FATAL ERROR: " + message);
-         // cout.flush();  // in case stdout and stderr go to the same place
-         // cerr << "FATAL ERROR: " << message << endl;
-         //exit(1);
+         Rcpp::Rcerr << "FATAL ERROR: " << message << endl;
+         exit(1);
 
       case DgBase::Silent:
 
@@ -82,7 +97,7 @@ DgBase::testArgEqual (int argc, int expected, const string& message,
       ::report(message, level);
       return false;
    }
-   else 
+   else
    {
       return true;
    }
@@ -92,7 +107,7 @@ DgBase::testArgEqual (int argc, int expected, const string& message,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 bool
-DgBase::testArgEqual (int argc, char* argv[], int expected, 
+DgBase::testArgEqual (int argc, char* argv[], int expected,
                       const string& message)
 {
    if ((argc - 1) != expected)
@@ -105,7 +120,7 @@ DgBase::testArgEqual (int argc, char* argv[], int expected,
 
       return false;
    }
-   else 
+   else
    {
       return true;
    }
@@ -123,7 +138,7 @@ DgBase::testArgMin (int argc, int minExpected, const string& message,
       ::report(message, level);
       return false;
    }
-   else 
+   else
    {
       return true;
    }
@@ -133,7 +148,7 @@ DgBase::testArgMin (int argc, int minExpected, const string& message,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 bool
-DgBase::testArgMin (int argc, char* argv[], int minExpected, 
+DgBase::testArgMin (int argc, char* argv[], int minExpected,
                      const string& message)
 {
    if ((argc - 1) < minExpected)
@@ -146,7 +161,7 @@ DgBase::testArgMin (int argc, char* argv[], int minExpected,
 
       return false;
    }
-   else 
+   else
    {
       return true;
    }
