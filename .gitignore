@@ -19,7 +19,7 @@ vignettes/*.html
 wintest
 dggridR.Rcheck/
 mailinglist
-LICENCE
+LICENSE
 *.so
 doc
 Meta
