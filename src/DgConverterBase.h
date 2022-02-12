@@ -25,9 +25,6 @@
 #ifndef DGCONVERTERBASE_H
 #define DGCONVERTERBASE_H
 
-#include <Rcpp.h>
-#undef M_2PI
-
 #include <vector>
 
 using namespace std;
@@ -44,7 +41,7 @@ class DgConverterBase {
       static bool isTraceOn (void) { return isTraceOn_; }
       static bool setTraceOn (bool traceOnIn)
                      { isTraceOn_ = traceOnIn; return isTraceOn(); }
-      static void setTraceStream (ostream& stream = Rcpp::Rcout)
+      static void setTraceStream (ostream& stream = cout)
                            { traceStream_ = &stream; }
       static ostream& traceStream (void) { return *traceStream_; }
 

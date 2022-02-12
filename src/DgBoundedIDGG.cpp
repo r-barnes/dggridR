@@ -95,8 +95,10 @@ cout  << "quadNum: " << firstAdd().quadNum() << ", offsetPerQuad: " << offsetPer
 */
    if ((tmpSize / 10) != offsetPerQuad())
    {
+/*
        report("DgBoundedIDGG::DgBoundedIDGG() invalid size setting due to "
               "possible overflow", DgBase::Warning);
+*/
        validSize_ = false;
    }
    else validSize_ = true;

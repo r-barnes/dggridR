@@ -36,13 +36,15 @@ class DgGeoSphRF : public DgEllipsoidRF {
 
    public:
 
+      enum DgLonWrapMode { Wrap, UnwrapWest, UnwrapEast, InvalidLonWrapMode };
+      static const string lonWrapModeStrings[];
+
       static const DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
          { return new DgGeoSphRF (networkIn, nameIn, earthRadiusKMin); }
 
       DgGeoSphRF& operator= (const DgGeoSphRF& rf)
-         { DgEllipsoidRF::operator=(rf);
-           return *this; }
+         { DgEllipsoidRF::operator=(rf); return *this; }
 
       // distance between locations in radians
       virtual long double gcDist (const DgLocation& loc1, const DgLocation& loc2) const
@@ -81,6 +83,13 @@ class DgGeoSphRF : public DgEllipsoidRF {
 
       // densify polygon in geodetic coordinates
       static void densify (DgPolygon& p, long double maxDist, bool rads = true);
+
+      // unwrap a point based on longitude wrap mode (assumes the point is 
+      // associated with a cell being wrapped
+      static int lonWrap (DgGeoCoord& g, DgLonWrapMode wrapMode);
+
+      // unwrap any cells in polygon that cross the anti-meridian
+      static int lonWrap (DgPolygon& p, DgLonWrapMode wrapMode);
 
    protected:
 

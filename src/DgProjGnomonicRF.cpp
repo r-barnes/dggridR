@@ -36,11 +36,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 DgProjGnomonicRF::DgProjGnomonicRF(DgRFNetwork& networkIn, const string& nameIn,
-       const DgGeoCoord& proj0In, long double x0In, long double y0In, long double k0In,
+       const DgGeoCoord& proj0In, long double x0In, long double y0In, long double k0In, 
        long double to_meterIn, long double fr_meterIn)
-   : DgGeoProjRF (networkIn, nameIn, proj0In, x0In, y0In, k0In,
+   : DgGeoProjRF (networkIn, nameIn, proj0In, x0In, y0In, k0In, 
                   to_meterIn, fr_meterIn)
-{
+{ 
    if (fabs(fabs(phi0()) - M_PI_2) < EPS10)
       mode_ = phi0() < 0.0L ? S_POLE : N_POLE;
    else if (fabs(phi0()) < EPS10)
@@ -83,10 +83,10 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
       break;
    }
 
-   if (xy.y() <= EPS10)
+   if (xy.y() <= EPS10) 
    {
       ::report(string("DgProjGnomonicRF::projForward() point out of range\n") +
-           string("proj0: ") + string(proj0()) +
+           string("proj0: ") + string(proj0()) + 
            string("\nprojecting point: ") + string(addIn), DgBase::Fatal);
    }
 
@@ -102,7 +102,7 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
       break;
    case N_POLE:
       coslam = - coslam;
-      break;
+      FALLTHROUGH
    case S_POLE:
       xy.setY(xy.y() * cosphi * coslam);
       break;
@@ -116,7 +116,7 @@ DgProjGnomonicRF::projForward (const DgGeoCoord& addIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 DgGeoCoord
-DgProjGnomonicRF::projInverse (const DgDVec2D& addIn,
+DgProjGnomonicRF::projInverse (const DgDVec2D& addIn, 
                                const DgEllipsoidRF& e) const
 //
 // spheroid only; needs to be verified at some point

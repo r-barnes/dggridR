@@ -65,8 +65,10 @@ DgBoundedIDGGS::DgBoundedIDGGS (const DgIDGGS& rf)
 
       if (!g->validSize() || size() < lastSize)
       {
+/*
          report("DgBoundedIDGGS::DgBoundedIDGGS() invalid size setting due to "
                 "possible overflow", DgBase::Warning);
+*/
          validSize_ = false;
       }
    }

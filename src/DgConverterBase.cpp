@@ -22,28 +22,25 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <Rcpp.h>
-#undef M_2PI
-
 #include "DgBase.h"
 #include "DgString.h"
 #include "DgConverterBase.h"
 
 bool DgConverterBase::isTraceOn_ = false;
-ostream* DgConverterBase::traceStream_ = &Rcpp::Rcout;
+ostream* DgConverterBase::traceStream_ = &cout;
 
 ////////////////////////////////////////////////////////////////////////////////
 DgConverterBase::~DgConverterBase (void)
-{
-   // virtual destructor
+{ 
+   // virtual destructor 
 
 } // DgConverterBase::~DgConverterBase
 
 ////////////////////////////////////////////////////////////////////////////////
-DgConverterBase::DgConverterBase (const DgRFBase& fromFrame,
+DgConverterBase::DgConverterBase (const DgRFBase& fromFrame, 
                                   const DgRFBase& toFrame,
                                   bool userGeneratedIn)
-    : fromFrame_ (const_cast<DgRFBase*>(&fromFrame)),
+    : fromFrame_ (const_cast<DgRFBase*>(&fromFrame)), 
       toFrame_ (const_cast<DgRFBase*>(&toFrame)),
       userGenerated_ (userGeneratedIn)
 {
@@ -67,21 +64,21 @@ DgConverterBase::DgConverterBase (const DgRFBase& fromFrame,
       }
 
       // if we're here we're neither a passthrough nor an identity converter
-
+      
       const_cast<DgRFNetwork*>(fromFrame.network_)
                            ->matrix_[fromFrame.id()][toFrame.id()] = this;
 
       // make any connections this gives us; note we are indirectly changing
       // the const frames here
-
+      
       if (fromFrame_->id() != 0 && fromFrame_->connectTo() == 0 &&
-          toFrame_->connectTo())
+          toFrame_->connectTo()) 
       {
-         fromFrame_->connectTo_ = toFrame_;
+         fromFrame_->connectTo_ = toFrame_; 
       }
 
       if (toFrame_->id() != 0 && toFrame_->connectFrom() == 0 &&
-          fromFrame_->connectFrom())
+          fromFrame_->connectFrom()) 
       {
          toFrame_->connectFrom_ = fromFrame_;
       }
@@ -114,7 +111,7 @@ DgConverterBase::forceConnectFrom (bool verify) const
    toFrame_->connectFrom_ = fromFrame_;
 
    const_cast<DgRFNetwork&>(fromFrame_->network()).matrix_
-                                    [fromFrame_->id()][toFrame_->id()]
+                                    [fromFrame_->id()][toFrame_->id()] 
                                           = const_cast<DgConverterBase*>(this);
 
 } // void DgConverterBase::forceConnectFrom
@@ -132,28 +129,28 @@ DgConverterBase::forceConnectTo (bool verify) const
    fromFrame_->connectTo_ = toFrame_;
 
    const_cast<DgRFNetwork&>(fromFrame_->network()).matrix_
-                                    [fromFrame_->id()][toFrame_->id()]
+                                    [fromFrame_->id()][toFrame_->id()] 
                                           = const_cast<DgConverterBase*>(this);
 
 } // void DgConverterBase::forceConnectTo
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation*
+DgLocation* 
 DgConverterBase::convert (DgLocation* loc) const
 {
    // verify grid
 
    if (loc->rf() != fromFrame())
    {
-      report("DgConverter::convert(" + loc->asString() + ") frame " +
-             loc->rf().name() + " does not match fromFrame " +
+      report("DgConverter::convert(" + loc->asString() + ") frame " + 
+             loc->rf().name() + " does not match fromFrame " + 
              fromFrame().name(), DgBase::Fatal);
 
       return loc;
    }
 
    if (isTraceOn()) traceStream() << *loc;
-
+   
    loc->rf_ = &toFrame();
 
    DgAddressBase* tmpAdd = createConvertedAddress(*loc->address());
@@ -161,10 +158,11 @@ DgConverterBase::convert (DgLocation* loc) const
    loc->address_ = tmpAdd;
 
    if (isTraceOn()) traceStream() << "->" << *loc << endl;
-
+  
    return loc;
 
 } // DgLocation* DgConverterBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+

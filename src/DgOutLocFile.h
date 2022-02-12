@@ -38,11 +38,14 @@ class DgLocation;
 class DgCell;
 class DgRFBase;
 class DgDVec2D;
+class DgIDGGBase;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgOutLocFile : public DgBase {
 
    public:
+
+      enum DgOutGdalFileMode { Polygon, Point, Collection, InvalidMode };
 
       const static string defaultKMLColor;
       const static int    defaultKMLWidth;
@@ -54,7 +57,7 @@ class DgOutLocFile : public DgBase {
       // factory method
       static DgOutLocFile* makeOutLocFile (const string& type,
                const string& fileName, const string& gdalDriver, const DgRFBase& rf,
-               bool isPointFile = false, int precision = 7,
+               bool isPointFile = false, int precision = 7, DgOutGdalFileMode mode = Polygon,
                int shapefileIdLen = 11, const string& kmlColor = defaultKMLColor,
                int kmlWidth = defaultKMLWidth,
                const string& kmlName = defaultKMLName, const string& kmlDesc = defaultKMLDescription,
@@ -78,6 +81,12 @@ class DgOutLocFile : public DgBase {
 
       virtual DgOutLocFile& insert (DgCell& cell);
       virtual DgOutLocFile& insert (DgLocList& list);
+
+      // collection output; does nothing by default
+      virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
+                      bool outputPoint, bool outputRegion,
+                      const DgLocVector* neighbors, const DgLocVector* children)
+        { return *this; }
 
       // abstract virtual methods
       virtual DgOutLocFile& insert (DgLocation& loc,

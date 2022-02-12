@@ -135,6 +135,8 @@ class MainParam {
       int precision;     // number of digits after decimal pt to output
       int verbosity;     // debugging info verbosity
       bool megaVerbose;                 //
+      bool pauseOnStart;
+      bool pauseBeforeExit;
       bool useMother;                   // use Mother RNG?
       string metaOutFileNameBase;
       string metaOutFileName;
@@ -168,17 +170,25 @@ class GridGenParam : public MainParam {
       // the parameters
 
       bool wholeEarth;       // generate entire grid?
+      bool regionClip;       // whether user wants to generate using regions
       bool seqToPoly;        // whether user wants polys from seqnum
       bool pointClip;        // whether user wants to generate using points
+      bool cellClip;         // whether user wants to generate using coarse cells
       bool useGDAL;          // use GDAL for either input or output
       bool clipAIGen;        // clip using AIGen files (or Shapefiles)
       bool clipGDAL;         // clip using GDAL files
       bool clipShape;        // clip using Shapefiles
       vector<string> regionFiles;
+      int clipCellRes;       // resolution of the clipping cell indexes
+      set<unsigned long int> clipSeqNums; // coarse clipping cells
+      int nClipCellDensify;  // number of points-per-edge of densification for clipping cells
       int nRandPts;          // # of random pts generated for each hex
       bool clipRandPts;      // clip randpts to polys
       int nDensify;          // number of points-per-edge of densification
-      long double nudge;        // adjustment for quad intersection consistency
+      DgGeoSphRF::DgLonWrapMode lonWrapMode; 
+                  // how to handle outputting cells that straddle the anti-meridian
+      bool unwrapPts;        // unwrap point longitude to match cell boundary
+      long double nudge;     // adjustment for quad intersection consistency
       DgRandom* ptsRand;     // RNG for generating random points
 
       string cellOutType;
@@ -186,6 +196,7 @@ class GridGenParam : public MainParam {
       string pointOutType;
       string gdalPointDriver;
       string randPtsOutType;
+      string gdalCollectDriver;
 
       string neighborsOutType;
       string childrenOutType;
@@ -198,6 +209,8 @@ class GridGenParam : public MainParam {
       string cellOutFileName;
       string ptOutFileNameBase;
       string ptOutFileName;
+      string collectOutFileNameBase;
+      string collectOutFileName;
       string randPtsOutFileNameBase;
       string randPtsOutFileName;
       int    shapefileIdLen;  // global_id string field length
@@ -215,7 +228,7 @@ class GridGenParam : public MainParam {
       unsigned long int clipperFactor; // clipper scaling factor
       long double invClipperFactor; // 1.0L / clipper scaling factor
 
-      DgOutLocFile *cellOut, *ptOut, *randPtsOut;
+      DgOutLocFile *cellOut, *ptOut, *collectOut, *randPtsOut;
       DgOutShapefile *cellOutShp, *ptOutShp;
       DgOutPRCellsFile *prCellOut;
       DgOutPRPtsFile *prPtOut;
@@ -340,7 +353,8 @@ class TransformParam : public MainParam {
       string outAddType;
 
       int nDensify;
-
+      DgGeoSphRF::DgLonWrapMode lonWrapMode; 
+      bool unwrapPts; 
 };
 
 ////////////////////////////////////////////////////////////////////////////////

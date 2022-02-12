@@ -122,8 +122,10 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
 
       if (!g->validSize() || size() < lastSize)
       {
+/*
          report("DgBoundedRFS2D::DgBoundedRFS2D() invalid size setting due to "
                 "possible overflow", DgBase::Warning);
+*/
          validSize_ = false;
       }
    }

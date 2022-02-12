@@ -46,8 +46,10 @@ DgBoundedRF2D::DgBoundedRF2D (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& r
    size_ = numI() * numJ();
    if ((size_ / numI()) != static_cast<unsigned long>(numJ()))
    {
+/*
        report("DgBoundedRF2D::DgBoundedRF2D() invalid size setting due to "
               "possible overflow", DgBase::Warning);
+*/
        validSize_ = false;
    }
    else validSize_ = true;

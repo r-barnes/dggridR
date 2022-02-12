@@ -35,8 +35,6 @@
 #include <nulib/NuCell.h>
 #endif
 
-#include <Rcpp/iostream/Rstreambuf.h>
-
 ////////////////////////////////////////////////////////////////////////////////
 template<class A, class D>
 DgRF<A, D>::~DgRF (void)
@@ -123,7 +121,7 @@ DgRF<A, D>::getAddress (const DgLocation& loc) const
 {
    if (loc.rf() != *this)
    {
-      Rcpp::Rcerr << "ABORTING *this: " << *this << " loc: " << loc << endl;
+      cerr << "ABORTING *this: " << *this << " loc: " << loc << endl;
       report("DgRF<A, D>::getAddress() location not from this rf",
              DgBase::Fatal);
       return 0;

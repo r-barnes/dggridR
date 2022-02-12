@@ -29,9 +29,6 @@
 #include <climits>
 #include <cfloat>
 
-#include <Rcpp.h>
-#undef M_2PI
-
 #include "DgIDGGutil.h"
 #include "DgIDGGBase.h"
 #include "DgUtil.h"
@@ -46,132 +43,132 @@
 #include "DgProjFuller.h"
 #include "DgString.h"
 
-const DgQ2DICoord DgQ2DICoord::undefDgQ2DICoord(-1,
+const DgQ2DICoord DgQ2DICoord::undefDgQ2DICoord(-1, 
                                      DgIVec2D(LLONG_MAX, LLONG_MAX));
-const DgQ2DDCoord DgQ2DDCoord::undefDgQ2DDCoord(-1,
+const DgQ2DDCoord DgQ2DDCoord::undefDgQ2DDCoord(-1, 
                                      DgDVec2D(LDBL_MAX, LDBL_MAX));
 
 ////////////////////////////////////////////////////////////////////////////////
-DgVertTriVals DgVertex2DDRF::vertTable_[12][6] = {
+DgVertTriVals DgVertex2DDRF::vertTable_[12][6] = {  
 
    {  // vert 0
 
-      DgVertTriVals(  2,  1, 0, true,  DgDVec2D(-M_HALF, -M_SIN60),  3 ),
-      DgVertTriVals(  1,  0, 1, true,  DgDVec2D(-M_ONE,   M_ZERO ),  2 ),
-      DgVertTriVals(  5,  4, 2, true,  DgDVec2D(-M_HALF,  M_SIN60),  1 ),
-      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ),
-      DgVertTriVals(  4,  3, 4, true,  DgDVec2D( M_ONE,   M_ZERO ), -1 ),
-      DgVertTriVals(  3,  2, 5, true,  DgDVec2D( M_HALF, -M_SIN60), -2 )
+      DgVertTriVals(  2,  1, 0, true,  DgDVec2D(-M_HALF, -M_SIN60),  3 ), 
+      DgVertTriVals(  1,  0, 1, true,  DgDVec2D(-M_ONE,   M_ZERO ),  2 ), 
+      DgVertTriVals(  5,  4, 2, true,  DgDVec2D(-M_HALF,  M_SIN60),  1 ), 
+      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ), 
+      DgVertTriVals(  4,  3, 4, true,  DgDVec2D( M_ONE,   M_ZERO ), -1 ), 
+      DgVertTriVals(  3,  2, 5, true,  DgDVec2D( M_HALF, -M_SIN60), -2 )  
    },
 
    {  // vert 1
 
-      DgVertTriVals(  1,  0, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  1,  5, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals( 10, 14, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals(  5,  9, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ),
-      DgVertTriVals(  5,  4, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )
+      DgVertTriVals(  1,  0, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  1,  5, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals( 10, 14, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals(  5,  9, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ), 
+      DgVertTriVals(  5,  4, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )  
    },
 
    {  // vert 2
 
-      DgVertTriVals(  2,  1, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  2,  6, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals( 10, 10, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals(  1,  5, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ),
-      DgVertTriVals(  1,  0, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )
+      DgVertTriVals(  2,  1, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  2,  6, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals( 10, 10, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals(  1,  5, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ), 
+      DgVertTriVals(  1,  0, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )  
    },
 
    {  // vert 3
 
-      DgVertTriVals(  3,  2, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  3,  7, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  7, 11, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals(  2,  6, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ),
-      DgVertTriVals(  2,  1, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )
+      DgVertTriVals(  3,  2, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  3,  7, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  7, 11, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals(  2,  6, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ), 
+      DgVertTriVals(  2,  1, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )  
    },
 
    {  // vert 4
 
-      DgVertTriVals(  4,  3, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  4,  8, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  8, 12, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals(  3,  7, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ),
-      DgVertTriVals(  3,  2, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )
+      DgVertTriVals(  4,  3, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  4,  8, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  8, 12, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals(  3,  7, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ), 
+      DgVertTriVals(  3,  2, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )  
    },
 
    {  // vert 5
 
-      DgVertTriVals(  5,  4, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  5,  9, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  9, 13, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ),
-      DgVertTriVals(  4,  8, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ),
-      DgVertTriVals(  4,  3, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )
+      DgVertTriVals(  5,  4, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  5,  9, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  9, 13, 2, true,  DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals( -1, -1, 3, false, DgDVec2D(-M_HALF,  M_SIN60), 1 ), 
+      DgVertTriVals(  4,  8, 4, true,  DgDVec2D( M_ZERO,  M_ZERO),  3 ), 
+      DgVertTriVals(  4,  3, 5, true,  DgDVec2D( M_ONE,   M_ZERO),  0 )  
    },
 
    {  // vert 6
 
-      DgVertTriVals(  6, 10, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ),
-      DgVertTriVals(  6, 15, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ),
-      DgVertTriVals( 10, 19, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1 ),
-      DgVertTriVals( 10, 14, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ),
-      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ),
-      DgVertTriVals(  1,  5, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )
+      DgVertTriVals(  6, 10, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ), 
+      DgVertTriVals(  6, 15, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ), 
+      DgVertTriVals( 10, 19, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1 ), 
+      DgVertTriVals( 10, 14, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ), 
+      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ), 
+      DgVertTriVals(  1,  5, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )  
    },
 
    {  // vert 7
 
-      DgVertTriVals(  7, 11, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ),
-      DgVertTriVals(  7, 16, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ),
-      DgVertTriVals(  6, 15, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1 ),
-      DgVertTriVals(  6, 10, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ),
-      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ),
-      DgVertTriVals(  2,  6, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )
+      DgVertTriVals(  7, 11, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ), 
+      DgVertTriVals(  7, 16, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ), 
+      DgVertTriVals(  6, 15, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1 ), 
+      DgVertTriVals(  6, 10, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ), 
+      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ), 
+      DgVertTriVals(  2,  6, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )  
    },
 
    {  // vert 8
 
-      DgVertTriVals(  8, 12, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ),
-      DgVertTriVals(  8, 17, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ),
-      DgVertTriVals(  7, 16, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1 ),
-      DgVertTriVals(  7, 11, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ),
-      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ),
-      DgVertTriVals(  3,  7, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )
+      DgVertTriVals(  8, 12, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ), 
+      DgVertTriVals(  8, 17, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ), 
+      DgVertTriVals(  7, 16, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1 ), 
+      DgVertTriVals(  7, 11, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ), 
+      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ), 
+      DgVertTriVals(  3,  7, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )  
    },
 
    {  // vert 9
 
-      DgVertTriVals(  9, 13, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ),
-      DgVertTriVals(  9, 18, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ),
-      DgVertTriVals(  8, 17, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1 ),
-      DgVertTriVals(  8, 12, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ),
-      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ),
-      DgVertTriVals(  4,  8, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )
+      DgVertTriVals(  9, 13, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ), 
+      DgVertTriVals(  9, 18, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ), 
+      DgVertTriVals(  8, 17, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1 ), 
+      DgVertTriVals(  8, 12, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ), 
+      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ), 
+      DgVertTriVals(  4,  8, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )  
    },
 
    {  // vert 10
 
-      DgVertTriVals( 10, 14, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ),
-      DgVertTriVals( 10, 19, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ),
-      DgVertTriVals(  9, 18, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1),
-      DgVertTriVals(  9, 13, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ),
-      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ),
-      DgVertTriVals(  5,  9, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )
+      DgVertTriVals( 10, 14, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),   1 ), 
+      DgVertTriVals( 10, 19, 1, true,  DgDVec2D(-M_HALF, -M_SIN60),  4 ), 
+      DgVertTriVals(  9, 18, 2, true,  DgDVec2D( M_ZERO,  M_ZERO),  -1), 
+      DgVertTriVals(  9, 13, 3, true,  DgDVec2D(-M_HALF,  M_SIN60),  2 ), 
+      DgVertTriVals( -1, -1, 4, false, DgDVec2D(-M_HALF,  M_SIN60),  1 ), 
+      DgVertTriVals(  5,  9, 5, true,  DgDVec2D( M_HALF, -M_SIN60),  4 )  
    },
 
-   {  // vert 11
+   {  // vert 11 
 
-      DgVertTriVals(  8, 17, 0, true,  DgDVec2D(-M_HALF, -M_SIN60),  3 ),
-      DgVertTriVals(  9, 18, 1, true,  DgDVec2D(-M_ONE,   M_ZERO),   2 ),
-      DgVertTriVals( 10, 19, 2, true,  DgDVec2D(-M_HALF,  M_SIN60),  1 ),
-      DgVertTriVals(  6, 15, 3, true,  DgDVec2D( M_HALF,  M_SIN60),  0 ),
-      DgVertTriVals( -1, -1, 4, false, DgDVec2D( M_ZERO,  M_ZERO),   0 ),
-      DgVertTriVals(  7, 16, 5, true,  DgDVec2D( M_HALF, -M_SIN60), -2 )
+      DgVertTriVals(  8, 17, 0, true,  DgDVec2D(-M_HALF, -M_SIN60),  3 ), 
+      DgVertTriVals(  9, 18, 1, true,  DgDVec2D(-M_ONE,   M_ZERO),   2 ), 
+      DgVertTriVals( 10, 19, 2, true,  DgDVec2D(-M_HALF,  M_SIN60),  1 ), 
+      DgVertTriVals(  6, 15, 3, true,  DgDVec2D( M_HALF,  M_SIN60),  0 ), 
+      DgVertTriVals( -1, -1, 4, false, DgDVec2D( M_ZERO,  M_ZERO),   0 ), 
+      DgVertTriVals(  7, 16, 5, true,  DgDVec2D( M_HALF, -M_SIN60), -2 )  
    }
 
 };
@@ -179,26 +176,26 @@ DgVertTriVals DgVertex2DDRF::vertTable_[12][6] = {
 ////////////////////////////////////////////////////////////////////////////////
 const DgVertTriVals DgVertex2DDRF::triTable_[20] = {
 
-      DgVertTriVals(  1,  0, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  2,  1, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  3,  2, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  4,  3, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  5,  4, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  1,  5, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  2,  6, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  3,  7, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  4,  8, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  5,  9, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  6, 10, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  7, 11, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  8, 12, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  9, 13, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals( 10, 14, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ),
-      DgVertTriVals(  6, 15, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  7, 16, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  8, 17, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals(  9, 18, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
-      DgVertTriVals( 10, 19, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ),
+      DgVertTriVals(  1,  0, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  2,  1, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  3,  2, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  4,  3, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  5,  4, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  1,  5, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  2,  6, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  3,  7, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  4,  8, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  5,  9, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  6, 10, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  7, 11, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  8, 12, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  9, 13, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals( 10, 14, 0, true,  DgDVec2D( M_ZERO,  M_ZERO),  1 ), 
+      DgVertTriVals(  6, 15, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  7, 16, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  8, 17, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals(  9, 18, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
+      DgVertTriVals( 10, 19, 1, true,  DgDVec2D(-M_HALF, -M_SIN60), 4 ), 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -220,7 +217,7 @@ DgQ2DDRF::str2add (DgQ2DDCoord* add, const char* str, char delimiter) const
    int q;
    if (sscanf(tok, "%d", &q) != 1)
    {
-      ::report("DgQ2DDRF::fromString() invalid value in string " + string(tok),
+      ::report("DgQ2DDRF::fromString() invalid value in string " + string(tok), 
                DgBase::Fatal);
    }
 
@@ -295,7 +292,7 @@ DgVertex2DDRF::str2add (DgVertex2DDCoord* add, const char* str, char delimiter) 
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
-DgInterleaveRF::str2add (DgInterleaveCoord* add, const char* str,
+DgInterleaveRF::str2add (DgInterleaveCoord* add, const char* str, 
                          char delimiter) const
 {
    if (!add) add = new DgInterleaveCoord();
@@ -322,8 +319,8 @@ DgInterleaveRF::str2add (DgInterleaveCoord* add, const char* str,
 DgQ2DDtoIConverter::DgQ2DDtoIConverter (
    const DgRF<DgQ2DDCoord, long double>& from, const DgRF<DgQ2DICoord, long long int>& to)
   : DgConverter<DgQ2DDCoord, long double, DgQ2DICoord, long long int>(from, to),
-    pIDGG_ (0)
-{
+    pIDGG_ (0) 
+{ 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
 
    if (!pIDGG_)
@@ -335,19 +332,19 @@ DgQ2DDtoIConverter::DgQ2DDtoIConverter (
 } // DgQ2DDtoIConverter::DgQ2DDtoIConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DICoord
+DgQ2DICoord 
 DgQ2DDtoIConverter::convertTypedAddress (const DgQ2DDCoord& addIn) const
 {
    DgLocation* loc = IDGG().ccFrame().makeLocation(addIn.coord());
 
 #if DGDEBUG
-Rcpp::Rcout << "DgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
+cout << "DgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
 #endif
 
     IDGG().grid2D().convert(loc);
 
 #if DGDEBUG
-Rcpp::Rcout << " ---> " << *loc << endl;
+cout << " ---> " << *loc << endl;
 #endif
 
    DgIVec2D coord = *IDGG().grid2D().getAddress(*loc);
@@ -384,7 +381,7 @@ Rcpp::Rcout << " ---> " << *loc << endl;
       delete loc;
    }
 
-   if (coord.i() < 0 || coord.j() < 0 ||
+   if (coord.i() < 0 || coord.j() < 0 || 
        coord.i() > edgeI || coord.j() > edgeJ)
    {
       report("DgQ2DDtoIConverter::convertTypedAddress(): "
@@ -436,20 +433,20 @@ Rcpp::Rcout << " ---> " << *loc << endl;
             coord.setJ(0);
          }
       }
-   }
+   } 
 
    DgQ2DICoord result(quadNum, coord);
 
    return result;
 
-} // DgQ2DICoord DgQ2DDtoIConverter::convertTypedAddress
+} // DgQ2DICoord DgQ2DDtoIConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
 DgQ2DItoDConverter::DgQ2DItoDConverter (const DgRF<DgQ2DICoord, long long int>& from,
                                         const DgRF<DgQ2DDCoord, long double>& to)
         : DgConverter<DgQ2DICoord, long long int, DgQ2DDCoord, long double> (from, to),
           pIDGG_ (NULL)
-{
+{ 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
 
    if (!pIDGG_)
@@ -458,10 +455,10 @@ DgQ2DItoDConverter::DgQ2DItoDConverter (const DgRF<DgQ2DICoord, long long int>& 
          " fromFrame not of type DgIDGGBase", DgBase::Fatal);
    }
 
-} // DgQ2DItoDConverter::DgQ2DItoDConverter
+} // DgQ2DItoDConverter::DgQ2DItoDConverter 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DDCoord
+DgQ2DDCoord 
 DgQ2DItoDConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
 {
    DgLocation* loc = IDGG().grid2D().makeLocation(addIn.coord());
@@ -470,18 +467,18 @@ DgQ2DItoDConverter::convertTypedAddress (const DgQ2DICoord& addIn) const
    delete loc;
 
    DgQ2DDCoord result(addIn.quadNum(), coord);
-
+         
    return result;
 
-} // DgQ2DDCoord DgQ2DItoDConverter::convertTypedAddress
+} // DgQ2DDCoord DgQ2DItoDConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter
+DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter 
                 (const DgRF<DgQ2DICoord, long long int>& from,
                  const DgRF<DgInterleaveCoord, long long int>& to)
         : DgConverter<DgQ2DICoord, long long int, DgInterleaveCoord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
-{
+{ 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&fromFrame());
 
    if (!pIDGG_)
@@ -492,7 +489,7 @@ DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter
 
    effRes_ = IDGG().res();       // effective resolution
    effRadix_ = IDGG().radix();   // effective radix
-   if (IDGG().aperture() == 3)
+   if (IDGG().aperture() == 3)    
    {
        effRadix_ = 3;
        effRes_ = (effRes_ + 1) / 2;
@@ -500,21 +497,21 @@ DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter
 
    if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
 
-} // DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter
+} // DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgInterleaveCoord
-DgQ2DItoInterleaveConverter::convertTypedAddress
+DgInterleaveCoord 
+DgQ2DItoInterleaveConverter::convertTypedAddress 
                                                (const DgQ2DICoord& addIn) const
 {
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
 
-Rcpp::Rcout << "** addIn " << addIn << endl;
+cout << "** addIn " << addIn << endl;
    DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
    DgRadixString rs2(effRadix_, (int) addIn.coord().j(), effRes_);
 
-Rcpp::Rcout << "rs1 " << rs1 << endl;
-Rcpp::Rcout << "rs2 " << rs2 << endl;
+cout << "rs1 " << rs1 << endl;
+cout << "rs2 " << rs2 << endl;
 
    string addstr = qstr;
    if (IDGG().aperture() == 3)
@@ -525,23 +522,23 @@ Rcpp::Rcout << "rs2 " << rs2 << endl;
 
    addstr = addstr + DgRadixString::digitInterleave(rs1, rs2);
 
-Rcpp::Rcout << "addstr " << addstr << endl;
+cout << "addstr " << addstr << endl;
 
    DgInterleaveCoord inter;
    inter.setValString(addstr);
-Rcpp::Rcout << "inter " << inter << endl;
+cout << "inter " << inter << endl;
 
    return inter;
 
-} // DgInterleaveCoord DgQ2DItoInterleaveConverter::convertTypedAddress
+} // DgInterleaveCoord DgQ2DItoInterleaveConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgInterleaveToQ2DIConverter::DgInterleaveToQ2DIConverter
+DgInterleaveToQ2DIConverter::DgInterleaveToQ2DIConverter            
                 (const DgRF<DgInterleaveCoord, long long int>& from,
                  const DgRF<DgQ2DICoord, long long int>& to)
         : DgConverter<DgInterleaveCoord, long long int, DgQ2DICoord, long long int> (from, to),
           pIDGG_ (NULL), effRes_ (0), effRadix_ (0)
-{
+{ 
    pIDGG_ = dynamic_cast<const DgIDGGBase*>(&toFrame());
 
    if (!pIDGG_)
@@ -552,7 +549,7 @@ DgInterleaveToQ2DIConverter::DgInterleaveToQ2DIConverter
 
    effRes_ = IDGG().res();       // effective resolution
    effRadix_ = IDGG().radix();   // effective radix
-   if (IDGG().aperture() == 3)
+   if (IDGG().aperture() == 3)    
    {
        effRadix_ = 3;
        effRes_ = (effRes_ + 1) / 2;
@@ -560,14 +557,14 @@ DgInterleaveToQ2DIConverter::DgInterleaveToQ2DIConverter
 
    if (IDGG().gridTopo() == Triangle) effRes_++; // adjust for long double j
 
-} // DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter
+} // DgQ2DItoInterleaveConverter::DgQ2DItoInterleaveConverter 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DICoord
-DgInterleaveToQ2DIConverter::convertTypedAddress
+DgQ2DICoord 
+DgInterleaveToQ2DIConverter::convertTypedAddress 
                                        (const DgInterleaveCoord& addIn) const
 {
-Rcpp::Rcout << " -> " << addIn << endl;
+cout << " -> " << addIn << endl;
    string addstr = addIn.valString();
 
    // first get the quad number
@@ -582,13 +579,13 @@ Rcpp::Rcout << " -> " << addIn << endl;
    if (IDGG().aperture() == 3) {
       // validate the leading character
       if (IDGG().isClassI()) {
-         if (addstr[index] != '0')
-            report(string("invalid interleave index \'") + addstr
-              + string("\'; Class I aperture 3 DGG index must have a leading 0"),
+         if (addstr[index] != '0') 
+            report(string("invalid interleave index \'") + addstr 
+              + string("\'; Class I aperture 3 DGG index must have a leading 0"), 
               DgBase::Fatal);
       } else if (addstr[index] != '1') {
-            report(string("invalid interleave index \'") + addstr
-              + string("\'; Class II aperture 3 DGG index must have a leading 1"),
+            report(string("invalid interleave index \'") + addstr 
+              + string("\'; Class II aperture 3 DGG index must have a leading 1"), 
               DgBase::Fatal);
       }
 
@@ -607,7 +604,7 @@ Rcpp::Rcout << " -> " << addIn << endl;
       int d = digit - '0'; // convert to int
       int c1 = (int) (d / effRadix_);
 
-      int c2 = (d % effRadix_);
+      int c2 = (d % effRadix_); 
 
       radStr1 += dgg::util::to_string(c1);
       radStr2 += dgg::util::to_string(c2);
@@ -616,47 +613,47 @@ Rcpp::Rcout << " -> " << addIn << endl;
    DgRadixString rad1(effRadix_, radStr1);
    DgRadixString rad2(effRadix_, radStr2);
 
-   Rcpp::Rcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
+   cout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
 
    DgQ2DICoord q2di(quadNum, DgIVec2D(rad1.value(), rad2.value()));
-   Rcpp::Rcout << "q2di: " << q2di << endl;
+   cout << "q2di: " << q2di << endl;
 
    return q2di;
 
-} // DgQ2DICoord DgInterleaveToQ2DIConverter::convertTypedAddress
+} // DgQ2DICoord DgInterleaveToQ2DIConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
 DgVertex2DDToQ2DDConverter::DgVertex2DDToQ2DDConverter (
-   const DgRF<DgVertex2DDCoord, long double>& from,
+   const DgRF<DgVertex2DDCoord, long double>& from, 
    const DgRF<DgQ2DDCoord, long double>& to)
   : DgConverter<DgVertex2DDCoord, long double, DgQ2DDCoord, long double>(from, to)
-{
+{ 
 
 } // DgVertex2DDToQ2DDConverter::DgVertex2DDToQ2DDConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DDCoord
-DgVertex2DDToQ2DDConverter::convertTypedAddress
+DgQ2DDCoord 
+DgVertex2DDToQ2DDConverter::convertTypedAddress 
                                       (const DgVertex2DDCoord& addIn) const
 {
    DgQ2DDCoord result(addIn.vertNum(), addIn.coord());
 
    return result;
 
-} // DgQ2DDCoord DgVertex2DDToQ2DDConverter::convertTypedAddress
+} // DgQ2DDCoord DgVertex2DDToQ2DDConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgQ2DDtoVertex2DDConverter::DgQ2DDtoVertex2DDConverter
+DgQ2DDtoVertex2DDConverter::DgQ2DDtoVertex2DDConverter 
           (const DgRF<DgQ2DDCoord, long double>& from,
            const DgRF<DgVertex2DDCoord, long double>& to)
   : DgConverter<DgQ2DDCoord, long double, DgVertex2DDCoord, long double>(from, to)
-{
+{ 
 
-} // DgQ2DDtoVertex2DDConverter::DgQ2DDtoVertex2DDConverter
+} // DgQ2DDtoVertex2DDConverter::DgQ2DDtoVertex2DDConverter 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private helper method to compute subtriangle region:
-int
+int 
 DgQ2DDtoVertex2DDConverter::compute_subtriangle
                     (const long double& x, const long double& y) const
 {
@@ -669,33 +666,33 @@ DgQ2DDtoVertex2DDConverter::compute_subtriangle
 	xpm =	 xs - tol,
 	xmm =	-xs - tol;
 
-   if (y >= xmm && y > xpp)
+   if (y >= xmm && y > xpp) 
    {
 	return 0;
    }
 
    if ((fabsl(y) <= tol && fabsl(x) <= tol)  ||
-       (y <= xpp && y >= (0.0 - tol)))
+       (y <= xpp && y >= (0.0 - tol))) 
    {
       return 1;
    }
 
-   if (y < (0.0 - tol) && y > xmp)
+   if (y < (0.0 - tol) && y > xmp) 
    {
       return 2;
    }
 
-   if (y <= xmp && y < xpm)
+   if (y <= xmp && y < xpm) 
    {
       return 3;
    }
 
-   if (y >= xpm && y < (0.0 - tol))
+   if (y >= xpm && y < (0.0 - tol)) 
    {
       return 4;
    }
 
-   if (y >= (0.0 - tol) && y < xmm)
+   if (y >= (0.0 - tol) && y < xmm) 
    {
       return 5;
    }
@@ -706,7 +703,7 @@ DgQ2DDtoVertex2DDConverter::compute_subtriangle
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-DgVertex2DDCoord
+DgVertex2DDCoord 
 DgQ2DDtoVertex2DDConverter::convertTypedAddress (const DgQ2DDCoord& addIn) const
 {
    int subTri = compute_subtriangle(addIn.coord().x(), addIn.coord().y());
@@ -728,10 +725,10 @@ DgQ2DDtoVertex2DDConverter::convertTypedAddress (const DgQ2DDCoord& addIn) const
 
    return newCoord;
 
-} // DgVertex2DDCoord DgQ2DDtoVertex2DDConverter::convertTypedAddress
+} // DgVertex2DDCoord DgQ2DDtoVertex2DDConverter::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgVertex2DDCoord
+DgVertex2DDCoord 
 DgProjTriToVertex2DD::convertTypedAddress (const DgProjTriCoord& addIn) const
 {
    const DgVertTriVals& triVals = DgVertex2DDRF::triTable(addIn.triNum());
@@ -746,13 +743,13 @@ DgProjTriToVertex2DD::convertTypedAddress (const DgProjTriCoord& addIn) const
 
    return newCoord;
 
-} // DgVertex2DDCoord DgProjTriToVertex2DD::convertTypedAddress
+} // DgVertex2DDCoord DgProjTriToVertex2DD::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgProjTriCoord
+DgProjTriCoord 
 DgVertex2DDtoProjTri::convertTypedAddress (const DgVertex2DDCoord& addIn) const
 {
-   const DgVertTriVals& triVal =
+   const DgVertTriVals& triVal = 
                    DgVertex2DDRF::vertTable(addIn.vertNum(), addIn.triNum());
 
    //const DgVertTriVals& triVals = DgVertex2DDRF::triTable(addIn.triNum());
@@ -772,7 +769,7 @@ DgPlaneTriProj::DgPlaneTriProj (const DgRF<DgProjTriCoord, long double>& from,
                                 const DgRF<DgDVec2D, long double>& to)
          : DgConverter<DgProjTriCoord, long double, DgDVec2D, long double>(from, to),
            pPlaneTriRF_ (0)
-{
+{ 
    pPlaneTriRF_= dynamic_cast<const DgPlaneTriRF*>(&toFrame());
 
    if (!pPlaneTriRF_)
@@ -781,10 +778,10 @@ DgPlaneTriProj::DgPlaneTriProj (const DgRF<DgProjTriCoord, long double>& from,
         " toFrame not of type DgPlaneTriRF", DgBase::Fatal);
    }
 
-} // DgPlaneTriProj::DgPlaneTriProj
+} // DgPlaneTriProj::DgPlaneTriProj 
 
 ////////////////////////////////////////////////////////////////////////////////
-DgDVec2D
+DgDVec2D 
 DgPlaneTriProj::convertTypedAddress (const DgProjTriCoord& addIn) const
 {
    //DgDVec2D scaledPt(addIn.coord().x() / snyedglen,
@@ -794,7 +791,7 @@ DgPlaneTriProj::convertTypedAddress (const DgProjTriCoord& addIn) const
 
    return newPt;
 
-} // DgDVec2D DgPlaneTriProj::convertTypedAddress
+} // DgDVec2D DgPlaneTriProj::convertTypedAddress 
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

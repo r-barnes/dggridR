@@ -25,9 +25,6 @@
 #ifndef DGRFBASE_H
 #define DGRFBASE_H
 
-#include <Rcpp.h>
-#undef M_2PI
-
 #include "DgDVec2D.h"
 #include "DgLocBase.h"
 #include "DgRFNetwork.h"
@@ -61,7 +58,7 @@ class DgRFBase {
 
       DgRFNetwork& network (void) const { return *network_; }
 
-      ostream& traceToGround (ostream& stream = Rcpp::Rcout) const;
+      ostream& traceToGround (ostream& stream = cout) const;
 
       const DgRFBase* connectTo   (void) const { return connectTo_; }
       const DgRFBase* connectFrom (void) const { return connectFrom_; }

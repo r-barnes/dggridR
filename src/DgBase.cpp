@@ -22,9 +22,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <Rcpp.h>
-#undef M_2PI
-
 #include "DgBase.h"
 
 #include <cstdlib>
@@ -49,35 +46,43 @@ void report (const string& message, DgBase::DgReportLevel level)
 {
    if (level < DgBase::minReportLevel()) return;
 
+#ifdef DGGRIDR
+
+// dggridR output
+
+#else
    switch (level)
    {
       case DgBase::Debug0:
-	 Rcpp::Rcout << "DEBUG0: " << message << endl;
+	 cout << "DEBUG0: " << message << endl;
 	 break;
 
       case DgBase::Debug1:
-	 Rcpp::Rcout << "DEBUG1: " << message << endl;
+	 cout << "DEBUG1: " << message << endl;
 	 break;
 
       case DgBase::Info:
 
-         Rcpp::Rcout << message << endl;
+         cout << message << endl;
          break;
 
       case DgBase::Warning:
 
-         Rcpp::Rcerr << "WARNING: " << message << endl;
+         cout.flush();  // in case stdout and stderr go to the same place
+         cerr << "WARNING: " << message << endl;
          break;
 
       case DgBase::Fatal:
 
-         Rcpp::Rcerr << "FATAL ERROR: " << message << endl;
+         cout.flush();  // in case stdout and stderr go to the same place
+         cerr << "FATAL ERROR: " << message << endl;
          exit(1);
 
       case DgBase::Silent:
 
          break;
    }
+#endif
 
 } // void report
 

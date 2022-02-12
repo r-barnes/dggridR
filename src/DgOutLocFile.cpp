@@ -39,6 +39,7 @@
 #include "DgOutPRCellsFile.h"
 #include "DgOutPRPtsFile.h"
 #include "DgGeoSphRF.h"
+#include "DgIDGGBase.h"
 
 const string DgOutLocFile::defaultKMLColor = "ffffffff";
 const int    DgOutLocFile::defaultKMLWidth = 4;
@@ -56,15 +57,16 @@ DgOutLocFile*
 DgOutLocFile::makeOutLocFile (const string& type, const string& fileName, 
                     const string& gdalDriver,
                     const DgRFBase& rf, bool isPointFile, int precision,
-                    int shapefileIdLen, const string& kmlColor, int kmlWidth,
+                    DgOutGdalFileMode mode, int shapefileIdLen, 
+                    const string& kmlColor, int kmlWidth,
                     const string& kmlName, const string& kmlDesc,
                     DgReportLevel failLevelIn)
 {
    DgOutLocFile* file = NULL;
-   if (!type.compare("AIGEN"))
+   if (type == "AIGEN")
       file = new DgOutAIGenFile(rf, fileName, precision, isPointFile, 
                                  failLevelIn);
-   else if (!type.compare("TEXT"))
+   else if (type == "TEXT")
       file = new DgOutPtsText(rf, fileName, precision, failLevelIn);
    else // must be KML, GEOJSON, SHAPEFILE, or GDAL
    {
@@ -72,21 +74,21 @@ DgOutLocFile::makeOutLocFile (const string& type, const string& fileName,
       if (geoRF == NULL)
          ::report("DgOutLocFile::makeOutLoc(): invalid RF type", failLevelIn);
 
-      if (!type.compare("KML"))
+      if (type == "KML")
          file = new DgOutKMLfile(*geoRF, fileName, precision, isPointFile, 
                                  kmlColor, kmlWidth, kmlName, kmlDesc, failLevelIn);
-      else if (!type.compare("GEOJSON"))
+      else if (type == "GEOJSON")
          file = new DgOutGeoJSONFile(*geoRF, fileName, precision, isPointFile,
                                      failLevelIn);
-      else if (!type.compare("SHAPEFILE"))
+      else if (type == "SHAPEFILE")
          file = new DgOutShapefile(*geoRF, fileName, precision, isPointFile, 
                                     shapefileIdLen, failLevelIn);
 // USE_GDAL is set in MakeIncludes
 #ifdef USE_GDAL
-      else if (!type.compare("GDAL"))
-         file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, precision, isPointFile, failLevelIn);
+      else if (type == "GDAL" || type == "GDAL_COLLECTION")
+         file = new DgOutGdalFile(*geoRF, fileName, gdalDriver, mode, precision, isPointFile, failLevelIn);
 #endif
-      else if (type.compare("NONE"))
+      else if (type != "NONE")
          ::report("DgOutLocFile::makeOutLoc(): invalid file type " + type, 
                                  failLevelIn);
    }
@@ -104,30 +106,18 @@ DgOutLocFile::insert (DgLocList& dlist)
 ////////////////////////////////////////////////////////////////////////////////
 {
    list<DgLocBase*>::iterator it;
-   for (it = dlist.begin(); it != dlist.end(); it++)
-   {
-      if (DgLocList* d = dynamic_cast<DgLocList*>(*it))
-      {
+   for (it = dlist.begin(); it != dlist.end(); it++) {
+      if (DgLocList* d = dynamic_cast<DgLocList*>(*it)) {
          this->insert(*d);
-      }
-      else if (DgPolygon* d = dynamic_cast<DgPolygon*>(*it))
-      {
+      } else if (DgPolygon* d = dynamic_cast<DgPolygon*>(*it)) {
          this->insert(*d);
-      }
-      else if (DgCell* d = dynamic_cast<DgCell*>(*it))
-      {
+      } else if (DgCell* d = dynamic_cast<DgCell*>(*it)) {
          this->insert(*d);
-      }
-      else if (DgLocation* d = dynamic_cast<DgLocation*>(*it))
-      {
+      } else if (DgLocation* d = dynamic_cast<DgLocation*>(*it)) {
          this->insert(*d);
-      }
-      else if (DgLocVector* d = dynamic_cast<DgLocVector*>(*it))
-      {
+      } else if (DgLocVector* d = dynamic_cast<DgLocVector*>(*it)) {
          this->insert(*d);
-      }
-      else
-      {
+      } else {
          report("DgOutLocFile::insert() invalid location not inserted", Warning);
       }
    }

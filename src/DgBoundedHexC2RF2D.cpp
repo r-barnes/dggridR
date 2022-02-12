@@ -39,8 +39,10 @@ DgBoundedHexC2RF2D::DgBoundedHexC2RF2D
    size_ = magVec.i() / 3 * magVec.j();
    if (magVec.i() != static_cast<int>((3 * size_ / magVec.j())))
    {
+/*
        report("DgBoundedHexC2RF2D::DgBoundedHexC2RF2D() invalid size setting "
               "due to possible overflow", DgBase::Warning);
+*/
        validSize_ = false;
    }
    else validSize_ = true;
