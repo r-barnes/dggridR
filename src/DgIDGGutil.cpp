@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -338,13 +341,13 @@ DgQ2DDtoIConverter::convertTypedAddress (const DgQ2DDCoord& addIn) const
    DgLocation* loc = IDGG().ccFrame().makeLocation(addIn.coord());
 
 #if DGDEBUG
-cout << "DgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
+dgcout << "DgQ2DDtoIConverter::convertTypedAddress loc: " << *loc << endl;
 #endif
 
     IDGG().grid2D().convert(loc);
 
 #if DGDEBUG
-cout << " ---> " << *loc << endl;
+dgcout << " ---> " << *loc << endl;
 #endif
 
    DgIVec2D coord = *IDGG().grid2D().getAddress(*loc);
@@ -506,12 +509,12 @@ DgQ2DItoInterleaveConverter::convertTypedAddress
 {
    string qstr = dgg::util::to_string(addIn.quadNum(), 2);
 
-cout << "** addIn " << addIn << endl;
+dgcout << "** addIn " << addIn << endl;
    DgRadixString rs1(effRadix_, (int) addIn.coord().i(), effRes_);
    DgRadixString rs2(effRadix_, (int) addIn.coord().j(), effRes_);
 
-cout << "rs1 " << rs1 << endl;
-cout << "rs2 " << rs2 << endl;
+dgcout << "rs1 " << rs1 << endl;
+dgcout << "rs2 " << rs2 << endl;
 
    string addstr = qstr;
    if (IDGG().aperture() == 3)
@@ -522,11 +525,11 @@ cout << "rs2 " << rs2 << endl;
 
    addstr = addstr + DgRadixString::digitInterleave(rs1, rs2);
 
-cout << "addstr " << addstr << endl;
+dgcout << "addstr " << addstr << endl;
 
    DgInterleaveCoord inter;
    inter.setValString(addstr);
-cout << "inter " << inter << endl;
+dgcout << "inter " << inter << endl;
 
    return inter;
 
@@ -564,7 +567,7 @@ DgQ2DICoord
 DgInterleaveToQ2DIConverter::convertTypedAddress 
                                        (const DgInterleaveCoord& addIn) const
 {
-cout << " -> " << addIn << endl;
+dgcout << " -> " << addIn << endl;
    string addstr = addIn.valString();
 
    // first get the quad number
@@ -613,10 +616,10 @@ cout << " -> " << addIn << endl;
    DgRadixString rad1(effRadix_, radStr1);
    DgRadixString rad2(effRadix_, radStr2);
 
-   cout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
+   dgcout << "qstr: " << qstr << " rad1: " << rad1 << " rad2: " << rad2 << endl;
 
    DgQ2DICoord q2di(quadNum, DgIVec2D(rad1.value(), rad2.value()));
-   cout << "q2di: " << q2di << endl;
+   dgcout << "q2di: " << q2di << endl;
 
    return q2di;
 

@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -25,6 +28,7 @@
 #ifndef DGRFBASE_H
 #define DGRFBASE_H
 
+#include "DgBase.h"
 #include "DgDVec2D.h"
 #include "DgLocBase.h"
 #include "DgRFNetwork.h"
@@ -58,7 +62,7 @@ class DgRFBase {
 
       DgRFNetwork& network (void) const { return *network_; }
 
-      ostream& traceToGround (ostream& stream = cout) const;
+      ostream& traceToGround (ostream& stream = dgcout) const;
 
       const DgRFBase* connectTo   (void) const { return connectTo_; }
       const DgRFBase* connectFrom (void) const { return connectFrom_; }

@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2018 Kevin Sahr
 

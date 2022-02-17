@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /* determine latitude from authalic latitude */
 #ifndef lint
 //static const char SCCSID[]="@(#)pj_auth.c	4.3	93/06/12	GIE	REL";

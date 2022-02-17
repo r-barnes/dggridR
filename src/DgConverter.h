@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -62,7 +65,7 @@ public DgConverterBase {
                 //new DgAddress<ATo>(convertTypedAddress(addFrom));
                 new DgAddress<ATo>(convertTypedAddress(
                 static_cast<const DgAddress<AFrom>&>(addIn).address()));
-            cout << " " << addFrom.address() << "->" << addTo->address() << endl;
+            dgcout << " " << addFrom.address() << "->" << addTo->address() << endl;
             return addTo;
           }
 #else

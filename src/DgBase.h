@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -47,6 +50,16 @@ using namespace std;
 #else
 #define FALLTHROUGH
 #endif
+#endif
+
+// allow for R output from dggridR
+#ifdef DGGRIDR
+#include <Rcpp.h>
+#define dgcout Rcpp::Rcout
+#define dgcerr Rcpp::Rcerr
+#else
+#define dgcout std::cout
+#define dgcerr std::cerr
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +135,7 @@ DgBase::debug (const string& message) const
 
 #if DGDEBUG
 
-   cout << "DEBUG: [" << instanceName_ << "] " << message << endl;
+   dgcout << "DEBUG: [" << instanceName_ << "] " << message << endl;
 
 #endif
 

@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -121,7 +124,7 @@ DgRF<A, D>::getAddress (const DgLocation& loc) const
 {
    if (loc.rf() != *this)
    {
-      cerr << "ABORTING *this: " << *this << " loc: " << loc << endl;
+      dgcerr << "ABORTING *this: " << *this << " loc: " << loc << endl;
       report("DgRF<A, D>::getAddress() location not from this rf",
              DgBase::Fatal);
       return 0;

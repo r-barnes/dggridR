@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 
 #ifndef PJ_GNOM_H
 #define PJ_GNOM_H

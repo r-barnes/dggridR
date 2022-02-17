@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -32,11 +35,10 @@ DgProjFullerInv::DgProjFullerInv (const DgRF<DgProjTriCoord, long double>& from,
                        const DgRF<DgGeoCoord, long double>& to)
          : DgConverter<DgProjTriCoord, long double, DgGeoCoord, long double>(from, to),
            pProjTriRF_ (0)
-{ 
+{
    pProjTriRF_ = dynamic_cast<const DgProjTriRF*>(&fromFrame());
 
-   if (!pProjTriRF_)
-   {
+   if (!pProjTriRF_) {
       report("DgProjFullerInv::DgProjFullerInv(): "
         " fromFrame not of type DgProjTriRF", DgBase::Fatal);
    }
@@ -44,7 +46,7 @@ DgProjFullerInv::DgProjFullerInv (const DgRF<DgProjTriCoord, long double>& from,
 } // DgProjFullerInv::DgProjFullerInv
 
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoCoord 
+DgGeoCoord
 DgProjFullerInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 {
 //cout << "***DgProjFullerInv: DgProjTriCoord: " << addIn << endl;
@@ -58,7 +60,7 @@ DgProjFullerInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 
    GeoCoord ll = fullerInv(gridpt, projTriRF().sphIcosa().sphIcosa());
 
-//cout << " ll.lon, ll.lat: " << ll.lon << ", " << 
+//cout << " ll.lon, ll.lat: " << ll.lon << ", " <<
 //ll.lat << endl;
    DgGeoCoord geoPt(ll.lon, ll.lat);
    geoPt.normalize();
@@ -71,8 +73,8 @@ DgProjFullerInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 ////////////////////////////////////////////////////////////////////////////////
 DgProjFullerFwd::DgProjFullerFwd (const DgRF<DgGeoCoord, long double>& from,
                     const DgRF<DgProjTriCoord, long double>& to)
-         : DgConverter<DgGeoCoord, long double, DgProjTriCoord, long double>(from, to) 
-{ 
+         : DgConverter<DgGeoCoord, long double, DgProjTriCoord, long double>(from, to)
+{
    pProjTriRF_= dynamic_cast<const DgProjTriRF*>(&toFrame());
 
    if (!pProjTriRF_)
@@ -81,13 +83,12 @@ DgProjFullerFwd::DgProjFullerFwd (const DgRF<DgGeoCoord, long double>& from,
         " toFrame not of type DgProjTriRF", DgBase::Fatal);
    }
 
-} // DgProjFullerFwd::DgProjFullerFwd 
+} // DgProjFullerFwd::DgProjFullerFwd
 
 ////////////////////////////////////////////////////////////////////////////////
-DgProjTriCoord 
+DgProjTriCoord
 DgProjFullerFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 {
-         
 //cout << "***DgProjFullerFwd: geoPt: " << addIn << endl;
          GeoCoord ll;
 
@@ -100,16 +101,16 @@ DgProjFullerFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 //cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
 //      gridpt.pt.x << ", " << gridpt.pt.y << endl;
 
-//cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle, 
+//cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle,
 //                               DgDVec2D(gridpt.pt.x, gridpt.pt.y)) << endl;
 
    return DgProjTriCoord(gridpt.triangle, DgDVec2D(gridpt.pt.x, gridpt.pt.y));
 
-} // DgProjTriCoord DgProjFullerFwd::convertTypedAddress 
+} // DgProjTriCoord DgProjFullerFwd::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-/* 
+/*
    The C++ methods above are wrappers for the C functions below.
 */
 ////////////////////////////////////////////////////////////////////////////////
@@ -132,9 +133,9 @@ IcosaGridPt fullerFwd (const GeoCoord& ll, DgSphIcosa& sphicosa)
 
    if (gridpt.triangle < 0)
    {
-      printf("ERROR: point in no triangle:");
-      printGeoCoord(ll); 
-      printf("\n");
+      dgcout << "ERROR: point in no triangle:";
+      printGeoCoord(ll);
+      dgcout << "\n";
 
       gridpt.pt.x = M_ZERO;
       gridpt.pt.y = M_ZERO;
@@ -145,7 +146,7 @@ IcosaGridPt fullerFwd (const GeoCoord& ll, DgSphIcosa& sphicosa)
    //gridpt.pt = fllxy(ll, sphicosa, gridpt.triangle);
 
    long double v1[3], v2[3], v3[3];
-   
+
    v1[0] = sphicosa.sphIcosa().icotri[gridpt.triangle][0].lon;
    v1[1] = sphicosa.sphIcosa().icotri[gridpt.triangle][0].lat;
 
@@ -178,7 +179,7 @@ GeoCoord fullerInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
   long double sinlat,sinlon;
   GeoCoord Geovect;
   const PreCompGeo& cent = sphicosa.triCen[icosaPt.triangle];
- 
+
   IcosaGridPt iPt;
   iPt.triangle = icosaPt.triangle;
   iPt.pt.x = icosaPt.pt.x * edgeScale - originXOff;
@@ -194,7 +195,7 @@ GeoCoord fullerInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
     Geovect.lat=cent.pt.lat; Geovect.lon=cent.pt.lon;
   }
   else
-  {  
+  {
     long double azh, theta;
     Geovect = fullerInvOneTri(iPt, M_ONE, &azh, &theta);
 
@@ -261,7 +262,7 @@ static long double scalar_triple(long double * x, long double * y, long double *
 
 } // static long double scalar_triple
 
-Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1, 
+Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1,
                        long double * v2, long double * v3)
 {
    const long double cosarc = 0.447213595499957939281834733746255L; // cos(atan(2))
@@ -282,8 +283,8 @@ Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1,
    long double v2v3p = scalar_triple(ret3, ret4, ret);
    long double v3v1p = scalar_triple(ret4, ret2, ret);
    long double v3v2p = scalar_triple(ret4, ret3, ret);
-   
-   long double a1 = atanl((2.0L*v2v3p*cosarc) / (v2v3p*cosarc-(v2v1p+v1v3p))); 
+
+   long double a1 = atanl((2.0L*v2v3p*cosarc) / (v2v3p*cosarc-(v2v1p+v1v3p)));
    long double a2 = atanl((2.0L*v1v2p*cosarc) / (v1v2p*cosarc - (v1v3p + v3v2p)));
    long double a3 = atanl((2.0L*v3v1p*cosarc) / (v3v1p*cosarc - (v3v2p + v2v1p)));
 
@@ -299,7 +300,7 @@ Vec2D fullerFwdOneTri (const GeoCoord geo, long double R, long double * v1,
 
 } // Vec2D fullerFwdOneTri
 
-GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzimuth, 
+GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzimuth,
                          long double* pTheta)
 {
    long double alpha, el, dve;      /* constants used with Fuller projection*/
@@ -307,7 +308,7 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
    long double x1, y1, z1;          /* 3-D x, y, z coords of template triangle plane*/
    long double x2, y2;              /* initial planar coords*/
    long double a1, a2, a3;          /* arc lengths on plane and sphere*/
-   long double a1p, a2p;            /* arc lengths on template triangle plane*/ 
+   long double a1p, a2p;            /* arc lengths on template triangle plane*/
    long double s;                   /* length from unit sphere origin to plane*/
    long double group1, group2;      /* grouping of constants for use in finding a2*/
    long double inc;                 /* increment to obtain an accurate a2*/
@@ -320,10 +321,10 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
    dve = 0.85065080835203993218154049706301L;
    //alpha = 0.5L * arc;
    alpha = M_ATAN2_2;
-   
+
    x2 = pt.pt.x / R;
    y2 = pt.pt.y / R;
-   
+
    group1 = (M_SQRT3 * y2) - x2 - alpha;
    group2 = (2.0L * x2) + alpha;
    //answer = -el / (2.0L * dve);
@@ -335,16 +336,16 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
 
    long double hi = answer-test;
    long double lastHi = hi;
-   while (fabsl(hi) > PRECISION) 
-   { 
+   while (fabsl(hi) > PRECISION)
+   {
       test = tanl(a2 + group1) + tanl(a2 - alpha) + tanl(a2 - group2);
       inc = inc / 2.0L;
-   
+
       hi = answer - test;
-      if (hi == lastHi)
-      {
-         fprintf(stderr, "ERROR: fullerInvOneTri: iterative step failed.\n");
-         fprintf(stderr, "loss of precision: %.20LF.\n", (fabsl(hi) - PRECISION));
+      if (hi == lastHi) {
+         report("DgProjFullerInv::fullerInvOneTri(): "
+          "ERROR: fullerInvOneTri: iterative step failed.\n"
+          "loss of precision: " + to_string(fabsl(hi) - PRECISION));
          break;
       }
       lastHi = hi;
@@ -396,7 +397,7 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
 
    *pTheta = theta;
    *pAzimuth = azimuth;
-   
+
    long double lat = (M_PI_2 - theta) * M_180_PI;
    long double lon = azimuth;
    if (fabsl(M_PI_2 - lat) < PRECISION)
@@ -407,7 +408,7 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
    GeoCoord geo;
    geo.lon = lon;
    geo.lat = lat;
-   
+
    return geo;
 
 } // GeoCoord fullerInvOneTri

@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -35,10 +38,10 @@ DgSphIcosa::DgSphIcosa (const DgGeoCoord& vert0, long double azimuthDegs)
    ico12verts();
 
 } // DgSphIcosa::DgSphIcosa
-      
+
 ////////////////////////////////////////////////////////////////////////////////
-ostream& operator<< (ostream& str, const DgSphIcosa& dgsi) 
-{ 
+ostream& operator<< (ostream& str, const DgSphIcosa& dgsi)
+{
    const SphIcosa& si = dgsi.sphIcosa_;
 
    DgGeoCoord tmp(si.pt);
@@ -60,7 +63,7 @@ ostream& operator<< (ostream& str, const DgSphIcosa& dgsi)
    {
       str << "  " << i;
       for (int j = 0; j < 3; j++)
-      { 
+      {
          DgGeoCoord tmp(si.icotri[i][j]);
          str << " " << tmp;
       }
@@ -73,11 +76,11 @@ ostream& operator<< (ostream& str, const DgSphIcosa& dgsi)
 } // ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
-GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold, 
+GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,
                     long double lon0)
 /* return the new coordinates of any point in orginal coordinate system.
-   Define a point (newNPold) in orginal coordinate system as the North 
-   Pole in new coordinate system, and the great circle connect the original 
+   Define a point (newNPold) in orginal coordinate system as the North
+   Pole in new coordinate system, and the great circle connect the original
    and new North Pole as the lon0 longitude in new coordinate system, given
    any point in orginal coordinate system, this function return the new
    coordinates. */
@@ -86,15 +89,15 @@ GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,
   long double cosptnewlat, cosptnewlon;
   GeoCoord ptnew;
 
-  cosptnewlat = sinl(newNPold.lat)*sinl(ptold.lat) + 
+  cosptnewlat = sinl(newNPold.lat)*sinl(ptold.lat) +
                 cosl(newNPold.lat)*cosl(ptold.lat)*cosl(newNPold.lon-ptold.lon);
   if (cosptnewlat>1.0L) cosptnewlat=1.0L;
   if (cosptnewlat<-1.0L) cosptnewlat=-1.0L;
   ptnew.lat = acosl(cosptnewlat);
   if (fabsl(ptnew.lat-0.) < PRECISION*100000)
-      ptnew.lon=0.; 
+      ptnew.lon=0.;
   else if (fabsl(ptnew.lat-M_PI) < PRECISION*100000)
-      ptnew.lon=0.; 
+      ptnew.lon=0.;
   else
    {
     cosptnewlon = (sinl(ptold.lat)*cosl(newNPold.lat) - cosl(ptold.lat)*
@@ -113,7 +116,7 @@ GeoCoord coordtrans(const GeoCoord& newNPold, const GeoCoord& ptold,
  }
 
 ////////////////////////////////////////////////////////////////////////////////
-int 
+int
 DgSphIcosa::whichIcosaTri (const GeoCoord& pt)
 /*
    Return the index of the icosahedron triangle in which pt occurs.
@@ -139,9 +142,9 @@ DgSphIcosa::whichIcosaTri (const GeoCoord& pt)
 } /* int DgSphIcosa::whichIcosaTri */
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgSphIcosa::ico12verts (void)
-/* 
+/*
    Fill in the icosahedron particulars given one point and one edge's azimuth.
 */
 {
@@ -175,16 +178,16 @@ DgSphIcosa::ico12verts (void)
 
    newnpold.lat = sphIcosa().pt.lat;
    newnpold.lon = 0.0;
-   for (i = 1; i <= 5; i++) 
+   for (i = 1; i <= 5; i++)
    {
      vertsnew[i].lat = 26.565051177 * M_PI / 180.0;
      vertsnew[i].lon = -sphIcosa().azimuth + 72 * (i - 1) * M_PI / 180.0;
      if (vertsnew[i].lon > M_PI-PRECISION) vertsnew[i].lon -= 2 * M_PI;
      if (vertsnew[i].lon < -(M_PI+PRECISION)) vertsnew[i].lon += 2 * M_PI;
      vertsnew[i+5].lat = -26.565051177 * M_PI / 180;
-     vertsnew[i+5].lon = 
+     vertsnew[i+5].lon =
               -sphIcosa().azimuth + (36.0 + 72.0 * (i - 1)) * M_PI / 180.0;
-     if (vertsnew[i + 5].lon > M_PI - PRECISION) 
+     if (vertsnew[i + 5].lon > M_PI - PRECISION)
      {
         vertsnew[i + 5].lon -= 2 * M_PI;
      }
@@ -199,17 +202,17 @@ DgSphIcosa::ico12verts (void)
 /*
 vertsnew[0].lat = 90.0 * M_PI / 180.0;
 vertsnew[0].lon = 0.0 * M_PI / 180.0;
-for (i = 0; i < 12; i++) 
+for (i = 0; i < 12; i++)
 {
-   sphIcosa().icoverts[i].lat = vertsnew[i].lat; 
-   sphIcosa().icoverts[i].lon = vertsnew[i].lon; 
+   sphIcosa().icoverts[i].lat = vertsnew[i].lat;
+   sphIcosa().icoverts[i].lon = vertsnew[i].lon;
 }
 */
 
 /**********************************/
-   for (i = 1; i < 12; i++) 
+   for (i = 1; i < 12; i++)
    {
-      sphIcosa().icoverts[i] = 
+      sphIcosa().icoverts[i] =
                    coordtrans(newnpold, vertsnew[i], sphIcosa().pt.lon);
    }
 
@@ -219,7 +222,7 @@ for (i = 0; i < 12; i++)
    {
       /* set the vertices */
 
-      for (j = 0; j < 3; j++) 
+      for (j = 0; j < 3; j++)
       {
          sphIcosa().icotri[i][j] = sphIcosa().icoverts[verts[i][j]];
       }
@@ -241,7 +244,7 @@ for (i = 0; i < 12; i++)
                   cosl(t[0].lon - c.pt.lon));
 
 /*
-      sphIcosa().dazh[i] = atan2l(cosl(sphIcosa().icotri[i][0].lat) * 
+      sphIcosa().dazh[i] = atan2l(cosl(sphIcosa().icotri[i][0].lat) *
                   sinl(sphIcosa().icotri[i][0].lon - sphIcosa().triCen[i].pt.lon),
                   sphIcosa().triCen[i].cosLat * sinl(sphIcosa().icotri[i][0].lat) -
                   sphIcosa().triCen[i].sinLat * cosl(sphIcosa().icotri[i][0].lat) *
@@ -279,7 +282,7 @@ for (i = 0; i < 12; i++)
    }
 
 /*
-   for (int i = 0; i < 20; i++) 
+   for (int i = 0; i < 20; i++)
    {
       printf("%d\n", i);
       for (int j = 0; j < 3; j++) printGeoCoord(sphIcosa().icotri[i][j]);
@@ -292,7 +295,7 @@ for (i = 0; i < 12; i++)
 
 ////////////////////////////////////////////////////////////////////////////////
 const char*
-DgProjTriRF::str2add (DgProjTriCoord* add, const char* str, char delimiter) 
+DgProjTriRF::str2add (DgProjTriCoord* add, const char* str, char delimiter)
                                                                           const
 {
    if (!add) add = new DgProjTriCoord();

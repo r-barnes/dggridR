@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -152,7 +155,7 @@ class DgRadixString {
 
             int d = digits()[index] - '0'; // convert digit to int
             val += d * exponent;
-cout << " ==== d: " << d << " exp: " << exponent << " val: " << val << endl;
+dgcout << " ==== d: " << d << " exp: " << exponent << " val: " << val << endl;
             exponent *= base();
          }
 

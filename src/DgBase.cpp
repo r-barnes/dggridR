@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -46,43 +49,39 @@ void report (const string& message, DgBase::DgReportLevel level)
 {
    if (level < DgBase::minReportLevel()) return;
 
-#ifdef DGGRIDR
-
-// dggridR output
-
-#else
    switch (level)
    {
       case DgBase::Debug0:
-	 cout << "DEBUG0: " << message << endl;
+	 dgcout << "DEBUG0: " << message << endl;
 	 break;
 
       case DgBase::Debug1:
-	 cout << "DEBUG1: " << message << endl;
+	 dgcout << "DEBUG1: " << message << endl;
 	 break;
 
       case DgBase::Info:
 
-         cout << message << endl;
+         dgcout << message << endl;
          break;
 
       case DgBase::Warning:
 
-         cout.flush();  // in case stdout and stderr go to the same place
-         cerr << "WARNING: " << message << endl;
+         dgcout.flush();  // in case stdout and stderr go to the same place
+         dgcerr << "WARNING: " << message << endl;
          break;
 
       case DgBase::Fatal:
 
-         cout.flush();  // in case stdout and stderr go to the same place
-         cerr << "FATAL ERROR: " << message << endl;
+         dgcout.flush();  // in case stdout and stderr go to the same place
+         dgcerr << "FATAL ERROR: " << message << endl;
+#ifndef DGGRIDR
          exit(1);
+#endif
 
       case DgBase::Silent:
 
          break;
    }
-#endif
 
 } // void report
 

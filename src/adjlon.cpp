@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /* reduce argument to range +/- PI */
 #ifndef lint
 //static const char SCCSID[]="@(#)adjlon.c	4.3	93/06/12	GIE	REL";

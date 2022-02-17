@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 //
 // this is an adapted version of the projects.h file in Gerald Evenden's 
 // USGS PROJ4 projection system

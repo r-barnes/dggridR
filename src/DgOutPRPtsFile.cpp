@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -35,7 +38,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutPRPtsFile::DgOutPRPtsFile (const DgRFBase& rfIn, 
+DgOutPRPtsFile::DgOutPRPtsFile (const DgRFBase& rfIn,
         const string& fileNameIn, int precision, DgReportLevel failLevel)
    : DgOutLocTextFile (fileNameIn, rfIn, true, "pts", precision, failLevel)
 {
@@ -87,7 +90,7 @@ DgOutPRPtsFile::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (DgLocation& loc, const string& type, 
+DgOutPRPtsFile::insert (DgLocation& loc, const string& type,
                  const string* label)
 //
 // Put the point loc.
@@ -112,7 +115,7 @@ DgOutPRPtsFile::insert (DgLocation& loc, const string& type,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (DgLocVector& vec, const string* label, 
+DgOutPRPtsFile::insert (DgLocVector& vec, const string* label,
                      const DgLocation* cent)
 //
 // Put the polyline vec.
@@ -127,7 +130,7 @@ DgOutPRPtsFile::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRPtsFile::insert (DgPolygon& poly, const string* label, 
+DgOutPRPtsFile::insert (DgPolygon& poly, const string* label,
                      const DgLocation* cent)
 //
 // Put the polygon poly.

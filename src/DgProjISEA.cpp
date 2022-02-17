@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -32,7 +35,7 @@ DgProjISEAInv::DgProjISEAInv (const DgRF<DgProjTriCoord, long double>& from,
                        const DgRF<DgGeoCoord, long double>& to)
          : DgConverter<DgProjTriCoord, long double, DgGeoCoord, long double>(from, to),
            pProjTriRF_ (0)
-{ 
+{
    pProjTriRF_ = dynamic_cast<const DgProjTriRF*>(&fromFrame());
 
    if (!pProjTriRF_)
@@ -44,7 +47,7 @@ DgProjISEAInv::DgProjISEAInv (const DgRF<DgProjTriCoord, long double>& from,
 } // DgProjISEAInv::DgProjISEAInv
 
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoCoord 
+DgGeoCoord
 DgProjISEAInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 {
 //cout << "***DgProjISEAInv: DgProjTriCoord: " << addIn << endl;
@@ -58,7 +61,7 @@ DgProjISEAInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 
    GeoCoord ll = snyderInv(gridpt, projTriRF().sphIcosa().sphIcosa());
 
-//cout << " ll.lon, ll.lat: " << ll.lon << ", " << 
+//cout << " ll.lon, ll.lat: " << ll.lon << ", " <<
 //ll.lat << endl;
    DgGeoCoord geoPt(ll.lon, ll.lat);
    geoPt.normalize();
@@ -71,8 +74,8 @@ DgProjISEAInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 ////////////////////////////////////////////////////////////////////////////////
 DgProjISEAFwd::DgProjISEAFwd (const DgRF<DgGeoCoord, long double>& from,
                     const DgRF<DgProjTriCoord, long double>& to)
-         : DgConverter<DgGeoCoord, long double, DgProjTriCoord, long double>(from, to) 
-{ 
+         : DgConverter<DgGeoCoord, long double, DgProjTriCoord, long double>(from, to)
+{
    pProjTriRF_= dynamic_cast<const DgProjTriRF*>(&toFrame());
 
    if (!pProjTriRF_)
@@ -81,13 +84,13 @@ DgProjISEAFwd::DgProjISEAFwd (const DgRF<DgGeoCoord, long double>& from,
         " toFrame not of type DgProjTriRF", DgBase::Fatal);
    }
 
-} // DgProjISEAFwd::DgProjISEAFwd 
+} // DgProjISEAFwd::DgProjISEAFwd
 
 ////////////////////////////////////////////////////////////////////////////////
-DgProjTriCoord 
+DgProjTriCoord
 DgProjISEAFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 {
-         
+
 //cout << "***DgProjISEAFwd: geoPt: " << addIn << endl;
    GeoCoord ll;
 
@@ -100,16 +103,16 @@ DgProjISEAFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 //cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
 //gridpt.pt.x << ", " << gridpt.pt.y << endl;
 
-//cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle, 
+//cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle,
 //                               DgDVec2D(gridpt.pt.x, gridpt.pt.y)) << endl;
 
    return DgProjTriCoord(gridpt.triangle, DgDVec2D(gridpt.pt.x, gridpt.pt.y));
 
-} // DgProjTriCoord DgProjISEAFwd::convertTypedAddress 
+} // DgProjTriCoord DgProjISEAFwd::convertTypedAddress
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-/* 
+/*
    The C++ methods above are wrappers for the C functions below, which were
    written by Lian Song and Kevin Sahr.
 */
@@ -128,7 +131,7 @@ static const long double cosGH = cosl(GH);
 
 static const long double originXOff = 0.6022955029L;
 static const long double originYOff = 0.3477354707L;
-static const long double icosaEdge = 2.0L * originXOff; 
+static const long double icosaEdge = 2.0L * originXOff;
 
 ////////////////////////////////////////////////////////////////////////////////
 Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
@@ -145,7 +148,7 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
 
    dazh = sphico.dazh[nTri];
 
-   long double tmp = cent.sinLat * sinLat + cent.cosLat * cosLat * 
+   long double tmp = cent.sinLat * sinLat + cent.cosLat * cosLat *
        cosl(geoVect.lon - cent.pt.lon);
    if (tmp > M_ONE) tmp = M_ONE;
    if (tmp < -M_ONE) tmp = -M_ONE;
@@ -153,16 +156,17 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
 
    if (z > DH + 0.00000005L)
    {
-      printf("nTri: %d  z: %Lf  DH+: %Lf  diff: %Lf\n", nTri, z, 
-             DH + 0.00000005L, (DH + 0.00000005L) - z);
-      printf("1: The point: ");
+      dgcout << "nTri: " << nTri << "  z: " << z
+             << "  DH+: " << DH + 0.00000005L << "  diff: "
+             << ((DH + 0.00000005L) - z) << endl;
+      dgcout << "1: The point: ";
       printGeoCoord(geoVect);
-      printf(" is located on another polygon.\n");
-      exit(1);
+      dgcout << " is located on another polygon." << endl;
+      report("Unable to continue.", DgBase::Fatal);
    }
 
-   azh = atan2l(cosLat * sinl(geoVect.lon - cent.pt.lon), 
-         cent.cosLat * sinLat - cent.sinLat * cosLat * cosl(geoVect.lon - 
+   azh = atan2l(cosLat * sinl(geoVect.lon - cent.pt.lon),
+         cent.cosLat * sinLat - cent.sinLat * cosLat * cosl(geoVect.lon -
          cent.pt.lon)) - dazh;
 
    if (azh < 0.0) azh = azh + 2.0 * M_PI;
@@ -175,12 +179,11 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
 
    dz = atan2l(tanDH, cosAzh + cot30 * sinAzh);
 
-   if (z > dz + 0.00000005)
-   {
-      printf("2: The point: ");
+   if (z > dz + 0.00000005) {
+      dgcout << "1: The point: ";
       printGeoCoord(geoVect);
-      printf(" is located on another polygon.\n");
-      exit(1);
+      dgcout << " is located on another polygon." << endl;
+      report("Unable to continue.", DgBase::Fatal);
    }
 
    h = acosl(sinAzh * sinGH * cosDH - cosAzh * cosGH);
@@ -212,9 +215,9 @@ IcosaGridPt snyderFwd (const GeoCoord& ll, DgSphIcosa& sphicosa)
 
    if (gridpt.triangle < 0)
    {
-      printf("ERROR: point in no triangle:");
-      printGeoCoord(ll); 
-      printf("\n");
+      dgcout << "ERROR: point in no triangle:";
+      printGeoCoord(ll);
+      dgcout << endl;
 
       gridpt.pt.x = M_ZERO;
       gridpt.pt.y = M_ZERO;
@@ -242,7 +245,7 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
   long double azh0;
   GeoCoord Geovect;
   const PreCompGeo& cent = sphicosa.triCen[icosaPt.triangle];
- 
+
   Vec2D pt;
   pt.x = icosaPt.pt.x * icosaEdge - originXOff;
   pt.y = icosaPt.pt.y * icosaEdge - originYOff;
@@ -254,7 +257,7 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
     Geovect.lat=cent.pt.lat; Geovect.lon=cent.pt.lon;
   }
   else
-  {  
+  {
     ph=sqrtl(pt.x*pt.x+pt.y*pt.y);
     azh1=atan2l(pt.x,pt.y);
 
@@ -265,25 +268,25 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
 
     azh=azh1;
 
-    if (fabsl(azh1) > PRECISION) 
+    if (fabsl(azh1) > PRECISION)
     {
        long double agh=R1S*tanDH*tanDH/(2.0L*(1.0L/tanl(azh1)+cot30));
 
        //cout << "agh: " << agh << endl;
 
-       dazh=1.0; 
+       dazh=1.0;
        while (fabsl(dazh) > PRECISION)
         {
          h=acosl(sinl(azh)*sinGH*cosDH-cosl(azh)*cosGH);
          fazh=agh-azh-GH-h+M_PI;
-         flazh=((cosl(azh)*sinGH*cosDH+sinl(azh)*cosGH)/sinl(h))-1.0;      
+         flazh=((cosl(azh)*sinGH*cosDH+sinl(azh)*cosGH)/sinl(h))-1.0;
          dazh=-fazh/flazh;
          azh=azh+dazh;
-         //cout << "loop: h: " << h << "  fazh: " << fazh*(180.0/M_PI) << 
+         //cout << "loop: h: " << h << "  fazh: " << fazh*(180.0/M_PI) <<
          //  "  flazh: " << flazh*(180.0/M_PI) <<
-         //  "  dazh: " << dazh*(180.0/M_PI) << 
+         //  "  dazh: " << dazh*(180.0/M_PI) <<
          //  "  azh: " << azh*(180.0/M_PI) << endl;
-        }   
+        }
     }
     else azh = azh1 = 0.0;
 

@@ -13,6 +13,7 @@ cp -f submodules/DGGRID/src/lib/proj4lib/lib/* ./src/
 cp -f submodules/DGGRID/src/lib/shapelib/include/shapelib/* ./src/
 cp -f submodules/DGGRID/src/lib/shapelib/lib/* ./src/
 
+find ./src/ -type f -exec sed -i '1 i\#ifndef DGGRIDR\n#define DGGRIDR\n#endif' {} \;
 find ./src/ -type f -exec sed -i -r 's/#include <dglib\/([^>]+)>/#include "\1"/' {} \;
 find ./src/ -type f -exec sed -i -r 's/#include "..\/lib\//#include "/' {} \;
 find ./src/ -type f -exec sed -i -r 's/#include <shapefil.h>/#include "shapefil.h"/' {} \;

@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -35,7 +38,6 @@ constexpr long double M_EPSILON =   0.00000000000050000000000000000000000000000L
 constexpr long double M_ZERO =      0.00000000000000000000000000000000000000000L;
 constexpr long double M_ONE =       1.00000000000000000000000000000000000000000L;
 constexpr long double M_HALF =      0.50000000000000000000000000000000000000000L;
-constexpr long double M_2PI =       6.28318530717958647692528676655900576839433L;
 constexpr long double M_SQRT3 =     1.7320508075688772935274463415058723669428L;
 constexpr long double M_1_SQRT3 =   0.5773502691896257645091487805019574556476L;
 constexpr long double M_SQRT3_2 =   0.8660254037844386467637231707529361834714L;

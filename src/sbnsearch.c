@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /******************************************************************************
  * $Id: sbnsearch.c,v 1.2 2016-12-05 12:44:05 erouault Exp $
  *
@@ -713,7 +716,7 @@ static int SBNSearchDiskInternal( SearchStruct* psSearch,
                         bMinX > bNodeMaxX || bMinY > bNodeMaxY )
                     {
                         /*printf("shape %d %d %d %d\n", bMinX, bMinY, bMaxX, bMaxY);
-                        printf("node  %d %d %d %d\n", bNodeMinX, bNodeMinY, bNodeMaxX, bNodeMaxY);*/
+                        dgprintf("node  %d %d %d %d\n", bNodeMinX, bNodeMinY, bNodeMaxX, bNodeMaxY);*/
                         hSBN->sHooks.Error(
                             "Invalid shape bounding box in bin" );
                         free(psNode->pabyShapeDesc);

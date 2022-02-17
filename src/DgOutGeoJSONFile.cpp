@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -66,16 +69,16 @@ void DgOutGeoJSONFile::preamble()
 
 void DgOutGeoJSONFile::postamble()
 {
-   DgOutGeoJSONFile& o(*this);   
+   DgOutGeoJSONFile& o(*this);
 
-   // Delete the comma and newline from the last feature 
+   // Delete the comma and newline from the last feature
    long pos = o.tellp();
    o.seekp(pos - 2);
    o << "]}\n";
    o.flush();
 }
 
-DgOutLocFile& 
+DgOutLocFile&
 DgOutGeoJSONFile::insert(const DgDVec2D& pt)
 {
    DgOutGeoJSONFile& o(*this);
@@ -92,7 +95,7 @@ DgOutGeoJSONFile::insert(const DgDVec2D& pt)
    return o;
 }
 
-DgOutLocFile& 
+DgOutLocFile&
 DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
 {
    DgOutGeoJSONFile& o(*this);
@@ -116,11 +119,11 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
    return *this;
 }
 
-DgOutLocFile& 
+DgOutLocFile&
 DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
    const DgLocation* cent)
 {
-   DgOutGeoJSONFile& o(*this);   
+   DgOutGeoJSONFile& o(*this);
 
    rf().convert(vec);
 
@@ -149,11 +152,11 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
    return *this;
 }
 
-DgOutLocFile& 
+DgOutLocFile&
 DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
    const DgLocation* cent)
 {
-   DgOutGeoJSONFile& o(*this);   
+   DgOutGeoJSONFile& o(*this);
 
    rf().convert(poly);
 

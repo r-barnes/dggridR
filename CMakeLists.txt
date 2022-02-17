@@ -4,8 +4,6 @@ project(dggridR
   LANGUAGES C CXX
 )
 
-file(GLOB SRC_FILES src/*.{c,cpp})
-
 add_executable(dggridR
 src/adjlon.cpp
 src/DgAddressBase.cpp
@@ -97,7 +95,6 @@ src/DgTriGrid2D.cpp
 src/DgTriGrid2DS.cpp
 src/DgTriIDGG.cpp
 src/DgUtil.cpp
-src/emess.cpp
 src/pj_auth.cpp
 src/pj_mlfn.cpp
 src/pj_msfn.cpp

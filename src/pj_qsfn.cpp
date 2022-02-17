@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /* determine small q */
 #ifndef lint
 //static const char SCCSID[]="@(#)pj_qsfn.c	4.3	93/06/12	GIE	REL";

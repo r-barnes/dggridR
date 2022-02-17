@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 #ifndef SHAPEFILE_H_INCLUDED
 #define SHAPEFILE_H_INCLUDED
 
@@ -180,6 +183,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+// allow for R output from dggridR
+#ifdef DGGRIDR
+#include <R_ext/Print.h>
+#define dgprintf Rprintf
+#else
+#include <stdio.h>
+#define dgprintf printf
 #endif
 
 /************************************************************************/

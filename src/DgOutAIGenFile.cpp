@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -33,10 +36,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutAIGenFile::DgOutAIGenFile (const DgRFBase& rfIn, const string& fileNameIn, 
+DgOutAIGenFile::DgOutAIGenFile (const DgRFBase& rfIn, const string& fileNameIn,
                           int precision, bool isPointFile,
                           DgReportLevel failLevel)
-   : DgOutLocTextFile (fileNameIn, rfIn, isPointFile, "gen", precision, 
+   : DgOutLocTextFile (fileNameIn, rfIn, isPointFile, "gen", precision,
                        failLevel)
 {
    // test for override of vecAddress
@@ -95,7 +98,7 @@ DgOutAIGenFile::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutAIGenFile::insert (DgLocVector& vec, const string* label, 
+DgOutAIGenFile::insert (DgLocVector& vec, const string* label,
                      const DgLocation* cent)
 //
 // Put the polyline vec.
@@ -120,7 +123,7 @@ DgOutAIGenFile::insert (DgLocVector& vec, const string* label,
 
    // output the vertices
    const vector<DgAddressBase*>& v = vec.addressVec();
-   for (unsigned long i = 0; i < v.size(); i++) 
+   for (unsigned long i = 0; i < v.size(); i++)
       this->insert(rf().getVecAddress(*v[i]));
 
    *this << "END" << endl;
@@ -132,7 +135,7 @@ DgOutAIGenFile::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutAIGenFile::insert (DgPolygon& poly, const string* label, 
+DgOutAIGenFile::insert (DgPolygon& poly, const string* label,
                      const DgLocation* cent)
 //
 // Put the polygon poly.
@@ -157,9 +160,9 @@ DgOutAIGenFile::insert (DgPolygon& poly, const string* label,
 
    // output the vertices in reverse order (clockwise winding)
    const vector<DgAddressBase*>& v = poly.addressVec();
-   for (int i = (int) (v.size() - 1); i >= 0; i--) 
+   for (int i = (int) (v.size() - 1); i >= 0; i--)
       this->insert(rf().getVecAddress(*v[i]));
-   
+ 
    // rewrite the first vertex
    this->insert(rf().getVecAddress(*v[v.size() - 1]));
 

@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -27,7 +30,7 @@
 #include "DgConverterBase.h"
 
 bool DgConverterBase::isTraceOn_ = false;
-ostream* DgConverterBase::traceStream_ = &cout;
+ostream* DgConverterBase::traceStream_ = &dgcout;
 
 ////////////////////////////////////////////////////////////////////////////////
 DgConverterBase::~DgConverterBase (void)

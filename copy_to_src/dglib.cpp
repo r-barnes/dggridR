@@ -13,7 +13,7 @@
 #include "DgProjGnomonicRF.h"
 #include "DgTriGrid2D.h"
 
-#include <Rcpp/iostream/Rstreambuf.h>
+#include <Rcpp.h>
 
 #include <cassert>
 #include <fstream>

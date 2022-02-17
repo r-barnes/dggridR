@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -32,8 +35,8 @@
 #include "DgCell.h"
 #include "DgGeoSphRF.h"
 
-DgOutKMLfile::DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename, 
-    int precision, bool isPointFile, const string& colorIn, int widthIn, 
+DgOutKMLfile::DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename,
+    int precision, bool isPointFile, const string& colorIn, int widthIn,
     const string& nameIn, const string& descIn, DgReportLevel failLevel)
    : DgOutLocTextFile (filename, rf, isPointFile, "kml", precision, failLevel)
 {
@@ -54,7 +57,7 @@ DgOutKMLfile::DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename,
    preamble();
 }
 
-void 
+void
 DgOutKMLfile::setColor (const string& colorIn)
 {
    if (colorIn.length() != 8)
@@ -81,7 +84,7 @@ DgOutKMLfile::setColor (const string& colorIn)
    color_ = colorIn;
 }
 
-void 
+void
 DgOutKMLfile::setWidth (int widthIn)
 {
    if (widthIn < 1)
@@ -91,13 +94,13 @@ DgOutKMLfile::setWidth (int widthIn)
    width_ = widthIn;
 }
 
-void 
+void
 DgOutKMLfile::setName (const string& nameIn)
 {
    name_ = nameIn;
 }
 
-void 
+void
 DgOutKMLfile::setDescription (const string& descIn)
 {
    description_ = descIn;
@@ -141,13 +144,13 @@ void DgOutKMLfile::preamble()
 
 void DgOutKMLfile::postamble()
 {
-   DgOutKMLfile& o(*this);   
+   DgOutKMLfile& o(*this);
 
    o << "</Folder>\n" << "</kml>\n" ;
    o.flush();
 }
 
-DgOutLocFile& 
+DgOutLocFile&
 DgOutKMLfile::insert(const DgDVec2D& pt)
 {
    DgOutKMLfile& o(*this);
@@ -164,7 +167,7 @@ DgOutKMLfile::insert(const DgDVec2D& pt)
    return o;
 }
 
-DgOutLocFile& 
+DgOutLocFile&
 DgOutKMLfile::insert (DgLocation& loc, const string* label)
 {
    DgOutKMLfile& o(*this);
@@ -188,10 +191,10 @@ DgOutKMLfile::insert (DgLocation& loc, const string* label)
    return *this;
 }
 
-DgOutLocFile& 
+DgOutLocFile&
 DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* cent)
 {
-   DgOutKMLfile& o(*this);   
+   DgOutKMLfile& o(*this);
 
    rf().convert(vec);
 
@@ -218,10 +221,10 @@ DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* c
    return *this;
 }
 
-DgOutLocFile& 
+DgOutLocFile&
 DgOutKMLfile::insert (DgPolygon& poly, const string* label, const DgLocation* cent)
 {
-   DgOutKMLfile& o(*this);   
+   DgOutKMLfile& o(*this);
 
    rf().convert(poly);
 

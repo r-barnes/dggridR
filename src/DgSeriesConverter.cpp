@@ -1,3 +1,6 @@
+#ifndef DGGRIDR
+#define DGGRIDR
+#endif
 /*******************************************************************************
     Copyright (C) 2021 Kevin Sahr
 
@@ -232,7 +235,7 @@ DgSeriesConverter::createConvertedAddress (const DgAddressBase& addIn) const
                     << fromFrame().name() << ": " << *pAdd0 << endl;
 
 #if DGDEBUG
-cout << "BEGIN series conversion" << endl;
+dgcout << "BEGIN series conversion" << endl;
 #endif
    for (int i = 1; i < size(); i++)
    {
@@ -245,7 +248,7 @@ cout << "BEGIN series conversion" << endl;
                        << fromFrame().name() << ": " << *pAdd0 << endl;
    }
 #if DGDEBUG
-cout << "END series conversion" << endl;
+dgcout << "END series conversion" << endl;
 #endif
 
    seriesDepth--;
