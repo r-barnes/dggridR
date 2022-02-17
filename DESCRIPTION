@@ -14,7 +14,7 @@ Suggests: ggplot2,
     mapproj,
     R.rsp,
     testthat
-License: MIT + file LICENSE
+License: AGPL (>= 3)
 Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rijard.barnes@gmail.com"),
              person("Kevin",   "Sahr",      role = c("aut", "cph"), email = "sahrk@sou.edu"),
              person("Gerald",  "Evenden",   role = "cph"),
