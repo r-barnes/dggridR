@@ -43,7 +43,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGG::DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture,
               int res, const string& name, unsigned int precision)
-   : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, Hexagon, D6, precision),
+   : DgIDGG (&dggs, aperture, res, name, Hexagon, D6, precision),
 	   scaleFac_ (1.0L), rotRads_ (0.0L)
 { 
    initialize();
@@ -52,7 +52,7 @@ DgHexIDGG::DgHexIDGG (const DgHexIDGGS& dggs, unsigned int aperture,
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGG::DgHexIDGG (const DgHexIDGG& rfIn)
-   : DgIDGGBase (rfIn.dggs(), rfIn.geoRF(), rfIn.aperture(), 
+   : DgIDGG (rfIn.dggs(), rfIn.aperture(), 
                  rfIn.res(), rfIn.name(), rfIn.gridTopo(), rfIn.gridMetric(),
                  rfIn.precision()),
 	scaleFac_ (rfIn.scaleFac()), rotRads_ (rfIn.rotRads())

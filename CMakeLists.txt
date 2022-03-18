@@ -112,7 +112,7 @@ src/util.cpp
 src/test.cpp
 )
 # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
-target_compile_options(dggridR PRIVATE -Wall -Wextra -pedantic -Wno-unused-parameter $<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-copy> -Wstringop-truncation) # -fsanitize=address)
+target_compile_options(dggridR PRIVATE -Wall -Wextra -pedantic -Wno-cast-function-type -Wno-unused-parameter $<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-copy> -Wstringop-truncation) # -fsanitize=address)
 target_include_directories(dggridR
 PRIVATE
   /usr/share/R/include/

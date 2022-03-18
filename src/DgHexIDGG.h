@@ -31,7 +31,7 @@
 #ifndef DGHEXIDGG_H 
 #define DGHEXIDGG_H
 
-#include "DgIDGGBase.h"
+#include "DgIDGG.h"
 
 class DgHexIDGGS;
 
@@ -40,7 +40,7 @@ class DgHexIDGGS;
 //
 //  Icosahedral DGG class.
 //
-class DgHexIDGG : public DgIDGGBase {
+class DgHexIDGG : public DgIDGG {
 
    //using DgDiscRF<DgQ2DICoord, DgGeoCoord, long double>::setVertices;
 
@@ -62,7 +62,7 @@ class DgHexIDGG : public DgIDGGBase {
  
    protected:
 
-      void initialize (void);
+      virtual void initialize (void);
 
    private:
 

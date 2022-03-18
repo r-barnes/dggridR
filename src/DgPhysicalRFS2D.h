@@ -65,6 +65,6 @@ template<class C> class DgPhysicalRFS2D :
 
 };
 
-#include "DgPhysicalRFS2D.hpp"
+#include "DgPhysicalRFS2D_hpp.h"
 
 #endif

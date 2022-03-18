@@ -228,8 +228,7 @@ DgOutShapefile::writeDbf (const string& id)
          int fNum = DBFGetFieldIndex(dbFile_, it->fieldName().c_str());
          bool res = false;
 //cout << "writing " << fNum << " " << it->fieldName() << " ";
-         switch (it->type())
-         {
+         switch (it->type()) {
             case FTString:
 //cout << defStrAttribute() << endl;
                res = DBFWriteStringAttribute(dbFile_, recNum_, fNum, defStrAttribute().c_str());
@@ -248,6 +247,10 @@ DgOutShapefile::writeDbf (const string& id)
                break;
             case FTInvalid:
                ::report("DgOutShapefile::writeDbf() invalid field",
+                   failLevel());
+               break;
+            default:
+               ::report("DgOutShapefile::writeDbf() unexpected field type",
                    failLevel());
                break;
          }

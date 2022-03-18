@@ -56,29 +56,27 @@ class DgIDGG : public DgIDGGBase {
       }
 */
 
-      DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRFIn,
-           const DgGeoCoord& vert0,
-              long double azDegs, unsigned int apertureIn, int resIn,
+      DgIDGG (const DgIDGGSBase* dggs, 
+              unsigned int apertureIn, int resIn,
               const string& nameIn = "IDGG",
               DgGridTopology gridTopoIn = Hexagon,
               DgGridMetric gridMetricIn = D6,
-              const string& projType = string("ISEA"),
+              unsigned int precisionIn = DEFAULT_PRECISION,
               bool isMixedApIn = false, int numAp4 = 0,
               bool isSuperfund = false, int sfRes = 17,
-              bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
-              unsigned int precisionIn = DEFAULT_PRECISION);
+              bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq);
 
       DgIDGG (const DgIDGG& grd);
 
+/*
       virtual const DgGeoSphRF&  geoRF  (void) const { return geoRF_; }
       virtual const DgGeoCoord&  vert0  (void) const { return vert0_; }
       virtual long double        azDegs (void) const { return azDegs_; }
 
-/*
       virtual DgGridTopology   (void) const { return gridTopo_; }
       virtual DgGridMetric     (void) const { return gridMetric_; }
-*/
       virtual const string& projType (void) const { return projType_; }
+*/
 
       bool               isApSeq     (void) const { return isApSeq_; }
       const DgApSeq&     apSeq       (void) const { return apSeq_; }
@@ -91,18 +89,18 @@ class DgIDGG : public DgIDGGBase {
 
    protected:
 
-      void initialize (void);
+      virtual void initialize (void);
 
    private:
 
+/*
       const DgGeoSphRF& geoRF_;
       DgGeoCoord vert0_;
       long double azDegs_;
-/*
       DgGridTopology gridTopo_;
       DgGridMetric gridMetric_;
-*/
       string projType_;
+*/
 
       bool isApSeq_;
       DgApSeq apSeq_;

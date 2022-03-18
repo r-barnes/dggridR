@@ -42,11 +42,11 @@ using namespace std;
 // adapted from stackoverflow user Pierre
 #define WHERE fprintf(stderr,"[LOG]%s:%s#%d\n",__PRETTY_FUNCTION__,__FILE__,__LINE__);
 // macro for intentional switch statement fallthrough
+#if defined(__GNUC__) && __GNUC__ >= 7 || defined(__clang__) && __clang_major__ >= 12
+#define FALLTHROUGH __attribute__ ((fallthrough));
+#else
 #if __has_cpp_attribute(fallthrough)
 #define FALLTHROUGH [[fallthrough]];
-#else
-#if defined(__GNUC__) && __GNUC__ >= 7 || defined(__clang__) && __clang_major__ >= 12
-#define FALLTHROUGH __attribute__ ((fallthrough))
 #else
 #define FALLTHROUGH
 #endif

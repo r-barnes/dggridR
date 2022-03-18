@@ -1406,7 +1406,7 @@ static int DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 {
     int	       	i, j, nRetResult = TRUE;
     unsigned char	*pabyRec;
-    char	szSField[XBASE_FLD_MAX_WIDTH+1], szFormat[20];
+    char	szSField[XBASE_FLD_MAX_WIDTH], szFormat[20];
 
 /* -------------------------------------------------------------------- */
 /*	Is this a valid record?						*/
@@ -1479,7 +1479,7 @@ static int DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
             szSField[psDBF->panFieldSize[iField]] = '\0';
             nRetResult = FALSE;
         }
-        strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]),
+        memcpy((char *)pabyRec+psDBF->panFieldOffset[iField],
             szSField, strlen(szSField) );
         break;
       }
@@ -2078,7 +2078,7 @@ DBFReorderFields( DBFHandle psDBF, int* panMap )
     panFieldSizeNew = (int *) calloc(sizeof(int),  psDBF->nFields);
     panFieldDecimalsNew = (int *) calloc(sizeof(int), psDBF->nFields);
     pachFieldTypeNew = (char *) calloc(sizeof(char), psDBF->nFields);
-    pszHeaderNew = (char*) malloc(sizeof(char) * XBASE_FLDHDR_SZ * 
+    pszHeaderNew = (char*) malloc(sizeof(char) * XBASE_FLDHDR_SZ *
                                   psDBF->nFields);
 
     /* shuffle fields definitions */

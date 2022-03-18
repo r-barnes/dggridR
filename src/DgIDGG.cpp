@@ -38,6 +38,7 @@
 //#include "DgSeriesConverter.h"
 #include "DgRadixString.h"
 #include "DgBoundedIDGG.h"
+#include "DgIDGGSBase.h"
 //#include "DgProjISEA.h"
 //#include "DgProjFuller.h"
 
@@ -45,17 +46,17 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGG::DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF, const DgGeoCoord& vert0,
-       long double azDegs, unsigned int aperture, int res, const string& name,
-       DgGridTopology gridTopo, DgGridMetric gridMetric, const string& projType,
+DgIDGG::DgIDGG (const DgIDGGSBase* dggs, unsigned int aperture, int res, const string& name,
+       DgGridTopology gridTopoIn, DgGridMetric gridMetric, unsigned int precision,
        bool isMixed43, int numAp4, bool isSuperfund, int sfRes, bool isApSeq,
-       const DgApSeq& apSeq, unsigned int precision)
-   : DgIDGGBase (dggs, geoRF, aperture, res, name, gridTopo, gridMetric, precision),
-     geoRF_(geoRF), vert0_(vert0), azDegs_(azDegs),
-     projType_(projType), isApSeq_ (isApSeq), apSeq_ (apSeq), isMixed43_(isMixed43),
+       const DgApSeq& apSeq)
+   : DgIDGGBase (dggs, dggs->geoRF(), aperture, res, name, gridTopoIn, gridMetric, precision),
+     isApSeq_ (isApSeq), apSeq_ (apSeq), isMixed43_(isMixed43),
      numAp4_(numAp4), isSuperfund_(isSuperfund), sfRes_ (sfRes)
 {
-   initialize();
+   // hex grid init takes place in DgHexIDGG constructor
+   if (gridTopoIn != Hexagon)
+      initialize();
 
 } // DgIDGG::DgIDGG
 
@@ -63,14 +64,13 @@ DgIDGG::DgIDGG (const DgIDGGSBase* dggs, const DgGeoSphRF& geoRF, const DgGeoCoo
 DgIDGG::DgIDGG (const DgIDGG& rfIn)
    : DgIDGGBase (NULL, rfIn.geoRF(), rfIn.aperture(), rfIn.res(), rfIn.name(),
                  rfIn.gridTopo(), rfIn.gridMetric(), rfIn.precision()),
-        geoRF_(rfIn.geoRF()), vert0_(rfIn.vert0()),
-        azDegs_(rfIn.azDegs()),
-        projType_ (rfIn.projType()), isApSeq_ (rfIn.isApSeq()),
         apSeq_ (rfIn.apSeq()),
         isMixed43_(rfIn.isMixed43()), numAp4_(rfIn.numAp4()),
         isSuperfund_(rfIn.isSuperfund()), sfRes_(rfIn.sfRes())
 {
-   initialize();
+   // hex grid init takes place in DgHexIDGG constructor
+   if (gridTopo() != Hexagon)
+      initialize();
 
 } // DgIDGG::DgIDGG
 

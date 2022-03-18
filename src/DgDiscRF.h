@@ -267,6 +267,6 @@ template<class A, class B, class DB> ostream& operator<< (ostream& stream,
    return stream;
 }
 
-#include "DgDiscRF.hpp"
+#include "DgDiscRF_hpp.h"
 
 #endif
