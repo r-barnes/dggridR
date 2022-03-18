@@ -13,6 +13,10 @@ cp -f submodules/DGGRID/src/lib/proj4lib/lib/* ./src/
 cp -f submodules/DGGRID/src/lib/shapelib/include/shapelib/* ./src/
 cp -f submodules/DGGRID/src/lib/shapelib/lib/* ./src/
 
+# Fix a header include
+# TODO(r-barnes): Remove when this is fixed upstream https://github.com/sahrk/DGGRID/pull/52
+find ./src/ -type f -exec sed -i -r 's/#include "dglib\/DgBase.h"/#include <dglib\/DgBase.h>/' {} \;
+
 find ./src/ -type f -exec sed -i '1 i\#ifndef DGGRIDR\n#define DGGRIDR\n#endif' {} \;
 find ./src/ -type f -exec sed -i -r 's/#include <dglib\/([^>]+)>/#include "\1"/' {} \;
 find ./src/ -type f -exec sed -i -r 's/#include "..\/lib\//#include "/' {} \;
