@@ -258,7 +258,7 @@ void openfiles() {
 
         if (nShapeType != nShapeTypeAppend)
         {
-            puts( "ERROR: Input and Append shape files are of different types.");
+            dgprintf( "ERROR: Input and Append shape files are of different types.");
 #ifndef DGGRIDR
         exit( 1 );
 #endif
@@ -467,7 +467,7 @@ int selectrec()
     switch(ty)
     {
       case FTString:
-        puts("Invalid Item");
+        dgprintf("Invalid Item\n");
         iselect=FALSE;
 	break;
       case FTInteger:
@@ -482,7 +482,7 @@ int selectrec()
         }
 	break;
       case FTDouble:
-        puts("Invalid Item");
+        dgprintf("Invalid Item\n");
         iselect=FALSE;
         break;
     }
@@ -510,7 +510,7 @@ void check_theme_bnd()
     }
 
     if (nEntities == 0)
-        puts("WARNING: Theme is outside the clip area."); /** SKIP THEME  **/
+        dgprintf("WARNING: Theme is outside the clip area.\n"); /** SKIP THEME  **/
 }
 
 int clip_boundary()
@@ -694,44 +694,44 @@ double findunit(char *unit)
 /* -------------------------------------------------------------------- */
 void error()
 {
-    puts( "The program will append to an existing shape file or it will" );
-    puts( "create a new file if needed." );
-    puts( "Only the items in the first output file will be preserved." );
-    puts( "When an item does not match with the append theme then the item");
-    puts( "might be placed to an existing item at the same position and type." );
-    puts( "  OTHER FUNCTIONS:" );
-    puts( "  - Describe all items in the dbase file (Use ALL for more than 5000 recs.)");
-    puts( "  - Select a group of shapes from a comma separated selection list.");
-    puts( "  - UnSelect a group of shapes from a comma separated selection list.");
-    puts( "  - Clip boundary extent or by theme boundary." );
-    puts( "      Touch writes all the shapes that touch the boundary.");
-    puts( "      Inside writes all the shapes that are completely within the boundary.");
-    puts( "      Boundary clips are only the min and max of a theme boundary." );
-    puts( "  - Erase boundary extent or by theme boundary." );
-    puts( "      Erase is the direct opposite of the Clip function." );
-    puts( "  - Change coordinate value units between meters and feet.");
-    puts( "      There is no way to determine the input unit of a shape file.");
-    puts( "      Skip this function if the shape file is already in the correct unit.");
-    puts( "      Clip and Erase will be done before the unit is changed.");
-    puts( "      A shift will be done after the unit is changed.");
-    puts( "  - Shift X and Y coordinates.\n" );
-    puts( "Finally, There can only be one select or unselect in the command line.");
-    puts( "         There can only be one clip or erase in the command line.");
-    puts( "         There can only be one unit and only one shift in the command line.\n");
-    puts( "Ex: shputils in.shp out.shp   SELECT countycode 3,5,9,13,17,27");
-    puts( "    shputils in.shp out.shp   CLIP   10 10 90 90 Touch   FACTOR Meter Feet");
-    puts( "    shputils in.shp out.shp   FACTOR Meter 3.0");
-    puts( "    shputils in.shp out.shp   CLIP   clip.shp Boundary Touch   SHIFT 40 40");
-    puts( "    shputils in.shp out.shp   SELECT co 112   CLIP clip.shp Boundary Touch\n");
-    puts( "USAGE: shputils  <DescribeShape>   {ALL}");
-    puts( "USAGE: shputils  <InputShape>  <OutShape|AppendShape>" );
-    puts( "   { <FACTOR>       <FEET|MILES|METERS|KM> <FEET|MILES|METERS|KM|factor> }" );
-    puts( "   { <SHIFT>        <xshift> <yshift> }" );
-    puts( "   { <SELECT|UNSEL> <Item> <valuelist> }" );
-    puts( "   { <CLIP|ERASE>   <xmin> <ymin> <xmax> <ymax> <TOUCH|INSIDE|CUT> }" );
-    puts( "   { <CLIP|ERASE>   <theme>      <BOUNDARY>     <TOUCH|INSIDE|CUT> }" );
-    puts( "     Note: CUT is not complete and does not create intersections.");
-    puts( "           For more information read programmer comment.");
+    dgprintf( "The program will append to an existing shape file or it will" );
+    dgprintf( "create a new file if needed." );
+    dgprintf( "Only the items in the first output file will be preserved." );
+    dgprintf( "When an item does not match with the append theme then the item");
+    dgprintf( "might be placed to an existing item at the same position and type." );
+    dgprintf( "  OTHER FUNCTIONS:" );
+    dgprintf( "  - Describe all items in the dbase file (Use ALL for more than 5000 recs.)");
+    dgprintf( "  - Select a group of shapes from a comma separated selection list.");
+    dgprintf( "  - UnSelect a group of shapes from a comma separated selection list.");
+    dgprintf( "  - Clip boundary extent or by theme boundary." );
+    dgprintf( "      Touch writes all the shapes that touch the boundary.");
+    dgprintf( "      Inside writes all the shapes that are completely within the boundary.");
+    dgprintf( "      Boundary clips are only the min and max of a theme boundary." );
+    dgprintf( "  - Erase boundary extent or by theme boundary." );
+    dgprintf( "      Erase is the direct opposite of the Clip function." );
+    dgprintf( "  - Change coordinate value units between meters and feet.");
+    dgprintf( "      There is no way to determine the input unit of a shape file.");
+    dgprintf( "      Skip this function if the shape file is already in the correct unit.");
+    dgprintf( "      Clip and Erase will be done before the unit is changed.");
+    dgprintf( "      A shift will be done after the unit is changed.");
+    dgprintf( "  - Shift X and Y coordinates.\n" );
+    dgprintf( "Finally, There can only be one select or unselect in the command line.");
+    dgprintf( "         There can only be one clip or erase in the command line.");
+    dgprintf( "         There can only be one unit and only one shift in the command line.\n");
+    dgprintf( "Ex: shputils in.shp out.shp   SELECT countycode 3,5,9,13,17,27");
+    dgprintf( "    shputils in.shp out.shp   CLIP   10 10 90 90 Touch   FACTOR Meter Feet");
+    dgprintf( "    shputils in.shp out.shp   FACTOR Meter 3.0");
+    dgprintf( "    shputils in.shp out.shp   CLIP   clip.shp Boundary Touch   SHIFT 40 40");
+    dgprintf( "    shputils in.shp out.shp   SELECT co 112   CLIP clip.shp Boundary Touch\n");
+    dgprintf( "USAGE: shputils  <DescribeShape>   {ALL}");
+    dgprintf( "USAGE: shputils  <InputShape>  <OutShape|AppendShape>" );
+    dgprintf( "   { <FACTOR>       <FEET|MILES|METERS|KM> <FEET|MILES|METERS|KM|factor> }" );
+    dgprintf( "   { <SHIFT>        <xshift> <yshift> }" );
+    dgprintf( "   { <SELECT|UNSEL> <Item> <valuelist> }" );
+    dgprintf( "   { <CLIP|ERASE>   <xmin> <ymin> <xmax> <ymax> <TOUCH|INSIDE|CUT> }" );
+    dgprintf( "   { <CLIP|ERASE>   <theme>      <BOUNDARY>     <TOUCH|INSIDE|CUT> }" );
+    dgprintf( "     Note: CUT is not complete and does not create intersections.");
+    dgprintf( "           For more information read programmer comment.");
 
     /****   Clip functions for Polygon and Cut is not supported
             There are several web pages that describe methods of doing this function.
