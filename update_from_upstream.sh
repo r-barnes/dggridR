@@ -23,6 +23,13 @@ find ./src/ -type f -exec sed -i -r 's/#include "..\/lib\//#include "/' {} \;
 find ./src/ -type f -exec sed -i -r 's/#include <shapefil.h>/#include "shapefil.h"/' {} \;
 find ./src/ -type f -exec sed -i -r 's/#include "shapelib\/shapefil.h"/#include "shapefil.h"/' {} \;
 
+# Drop hpp file extensions because CRAN says "These are unlikely file names for
+# src files" and CRAN would rather crush the souls of volunteer OSS developers
+# than accept that hpp is a common and appropriate file extension for C++
+# headers
+find ./src/ -type f -name "*.hpp" -execdir rename 's/\.hpp/_hpp.h/' '{}' \;
+find ./src/ -type f -exec sed -i -r 's/\.hpp/_hpp.h/' {} \;
+
 rm -rf src/Makefile.noCMake
 
 cp copy_to_src/* ./src/
