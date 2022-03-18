@@ -20,7 +20,6 @@ submodules/
 update_from_upstream.sh
 CONTRIBUTING.md
 copy_to_src/
-build/
 .vscode/
 CMakeLists.txt
 ^LICENSE\.md$
