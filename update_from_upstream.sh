@@ -30,6 +30,9 @@ find ./src/ -type f -exec sed -i -r 's/#include "shapelib\/shapefil.h"/#include 
 find ./src/ -type f -name "*.hpp" -execdir rename 's/\.hpp/_hpp.h/' '{}' \;
 find ./src/ -type f -exec sed -i -r 's/\.hpp/_hpp.h/' {} \;
 
+# M_2PI variable because it's included in R and DGGRID doesn't use namespaces
+find ./src/ -type f -exec sed -i -r 's/constexpr long double M_2PI.*//' {} \;
+
 rm -rf src/Makefile.noCMake
 
 cp copy_to_src/* ./src/
