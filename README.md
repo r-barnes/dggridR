@@ -44,7 +44,7 @@ dggridR is available from CRAN via:
 If you want your code to be as up-to-date as possible, you can install it using:
 
     library(devtools) #Use `install.packages('devtools')` if need be
-    devtools::install_github("r-barnes/dggridR", branch="install_github", vignette=TRUE)
+    devtools::install_github("r-barnes/dggridR", vignette=TRUE)
 
 Show me some code
 -----------------
