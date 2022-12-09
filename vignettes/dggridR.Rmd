@@ -20,7 +20,7 @@ library(ggplot2)
 # Generate grids of various sizes
 hgrids <- lapply(3:5, function(res) dgconstruct(res=res))
 hgrids <- lapply(hgrids, function(dggs) dgearthgrid(dggs))
-hgrids <- lapply(hgrids, function(x) st_wrap_dateline(x, options = c("WRAPDATELINE=YES","DATELINEOFFSET=180"), quiet = TRUE))
+hgrids <- lapply(hgrids, function(x) st_wrap_dateline(x, options = c("WRAPDATELINE=YES","DATELINEOFFSET=10"), quiet = TRUE))
 
 countries <- map_data("world")
 
