@@ -441,10 +441,10 @@ void showitems()
                 dsum = dsum + dtmp;
             }
             mean=dsum/maxrec;
-            sprintf(stmp,"%%.%df to %%.%df \t(%%.%df)",iDecimals,iDecimals,iDecimals);
+            snprintf(stmp, 40, "%%.%df to %%.%df \t(%%.%df)",iDecimals,iDecimals,iDecimals);
             if (dlow < dhigh)       dgprintf(stmp,dlow,dhigh,mean);
             else if (dlow == dhigh) {
-                sprintf(stmp,"= %%.%df",iDecimals);
+                snprintf(stmp, 40, "= %%.%df",iDecimals);
                 dgprintf(stmp,dlow);
             }
             else dgprintf("No Values");

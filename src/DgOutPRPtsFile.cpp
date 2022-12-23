@@ -66,7 +66,7 @@ DgOutPRPtsFile::insert (const DgDVec2D& pt)
    char buff[maxBuffSize];
 
    // want latitude, longitude
-   sprintf(buff, formatStr(), pt.y(), pt.x());
+   snprintf(buff, maxBuffSize, formatStr(), pt.y(), pt.x());
 
    *this << buff;
 

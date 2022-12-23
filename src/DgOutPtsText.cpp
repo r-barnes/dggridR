@@ -63,7 +63,7 @@ DgOutPtsText::insert (const DgDVec2D& pt)
    const int maxBuffSize = 200;
    char buff[maxBuffSize];
 
-   sprintf(buff, formatStr(), pt.x(), pt.y());
+   snprintf(buff, maxBuffSize, formatStr(), pt.x(), pt.y());
 
    *this << buff;
 

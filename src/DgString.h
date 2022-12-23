@@ -251,7 +251,8 @@ inline std::string to_string(long double val, const char *formatStr)
 {
    char buffer[50];
 
-   sprintf(buffer, formatStr, val);
+   // sprintf(buffer, formatStr, val);
+   snprintf(buffer, 50, formatStr, val);
 
    return string(buffer);
 }

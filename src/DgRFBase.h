@@ -157,7 +157,8 @@ class DgRFBase {
    private:
 
       void setFormatStr (void)
-            { sprintf(formatStr_, "%%#.%dLF", precision()); }
+            // { sprintf(formatStr_, "%%#.%dLF", precision()); }
+            { snprintf(formatStr_, 20, "%%#.%dLF", precision()); }
 
       string toString        (const DgLocBase& lb) const;
       string toString        (const DgLocBase& lb, char delimiter) const;
