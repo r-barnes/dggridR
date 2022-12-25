@@ -44,7 +44,7 @@ dggridR is available from CRAN via:
 If you want your code to be as up-to-date as possible, you can install it using:
 
     library(devtools) #Use `install.packages('devtools')` if need be
-    devtools::install_github("r-barnes/dggridR", branch="install_github", vignette=TRUE)
+    devtools::install_github("r-barnes/dggridR", vignette=TRUE)
 
 Show me some code
 -----------------
@@ -64,7 +64,7 @@ dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
 data(dgquakes)
 
 #Get the corresponding grid cells for each earthquake epicenter (lat-long pair)
-dgquakes$cell <- dgGEO_to_SEQNUM(dggs, dgquakes$lat, dgquakes$lon)$seqnum
+dgquakes$cell <- dgGEO_to_SEQNUM(dggs, dgquakes$lon, dgquakes$lat)$seqnum
 
 #Get the number of earthquakes in each equally-sized cell
 quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
