@@ -174,8 +174,9 @@ DgColor::set (float r, float g, float b)
 
    // build a hexadecimal color specification string
 
-   char colStr[8];
-   sprintf(colStr, "#%02x%02x%02x", (int) dgg::util::lrint(r * 255.0), 
+   const unsigned int maxColStr = 8;
+   char colStr[maxColStr];
+   snprintf(colStr, maxColStr, "#%02x%02x%02x", (int) dgg::util::lrint(r * 255.0), 
            (int) dgg::util::lrint(g * 255.0), (int) dgg::util::lrint(b * 255.0));
 
    name_ = colStr;

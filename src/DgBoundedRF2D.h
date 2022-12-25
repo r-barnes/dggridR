@@ -47,7 +47,7 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
       virtual DgIVec2D& incrementAddress (DgIVec2D& add) const;
       virtual DgIVec2D& decrementAddress (DgIVec2D& add) const;
 
-      virtual bool validAddressPattern (const DgIVec2D& add) const
+      virtual bool validAddressPattern (const DgIVec2D& /* add */) const
                      { return true; }
 
       virtual bool validAddress (const DgIVec2D& add) const

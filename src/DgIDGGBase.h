@@ -130,8 +130,8 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       // we'll give dummy definitions for these since some of our IDGG's may
       // not have defined these yet
 
-      virtual long long int dist (const DgQ2DICoord& add1, 
-                                       const DgQ2DICoord& add2) const {
+      virtual long long int dist (const DgQ2DICoord&, const DgQ2DICoord&) const 
+           {
               report(string("DgIDGGBase::dist() this method has not been defined "
                      "for DgIDGGBase ") + this->name(), DgBase::Fatal);
 
@@ -147,10 +147,10 @@ class DgIDGGBase : public DgDiscRF<DgQ2DICoord, DgGeoCoord, long double> {
       // give dummy definitions; these will not be used but will be
       // overridden by series converters
 
-      virtual DgQ2DICoord quantify (const DgGeoCoord& add) const
+      virtual DgQ2DICoord quantify (const DgGeoCoord&) const
                 { DgQ2DICoord v; return v; }
 
-      virtual DgGeoCoord invQuantify (const DgQ2DICoord& add) const
+      virtual DgGeoCoord invQuantify (const DgQ2DICoord&) const
                 { DgGeoCoord g; return g; }
 
       static const DgQuadEdgeCells& edgeTable (int quadNum)

@@ -43,6 +43,7 @@ using namespace std;
 class DgConverterBase;
 class DgLocation;
 class DgLocVector;
+class DgPolygon;
 class DgDistanceBase;
 class DgAddressBase;
 class NuCell;
@@ -51,6 +52,8 @@ class NuCell;
 class DgRFBase {
 
    public:
+
+      static const unsigned int maxFmtStr = 50;
 
       virtual ~DgRFBase (void);
 
@@ -68,6 +71,8 @@ class DgRFBase {
       const DgRFBase* connectFrom (void) const { return connectFrom_; }
 
       DgLocation* convert (DgLocation* loc) const; // converts in place
+
+      DgPolygon& convert (DgPolygon& poly) const; // converts in place
 
       DgLocVector& convert (DgLocVector& vec) const; // converts in place
 
@@ -112,16 +117,16 @@ class DgRFBase {
       // the following routines are "back-doors" included for speed;
       // use with care!
 
-      virtual DgAddressBase* vecAddress (const DgDVec2D& v) const
+      virtual DgAddressBase* vecAddress (const DgDVec2D&) const
                     { return 0; }
 
-      virtual DgLocation* vecLocation (const DgDVec2D& v) const
+      virtual DgLocation* vecLocation (const DgDVec2D&) const
                     { return 0; }
 
-      virtual DgDVec2D getVecAddress (const DgAddressBase& add) const
+      virtual DgDVec2D getVecAddress (const DgAddressBase&) const
                     { return DgDVec2D::undefDgDVec2D; }
 
-      virtual DgDVec2D getVecLocation (const DgLocation& loc) const
+      virtual DgDVec2D getVecLocation (const DgLocation&) const
                     { return DgDVec2D::undefDgDVec2D; }
 
    protected:
@@ -157,7 +162,7 @@ class DgRFBase {
    private:
 
       void setFormatStr (void)
-            { sprintf(formatStr_, "%%#.%dLF", precision()); }
+            { snprintf(formatStr_, DgRFBase::maxFmtStr, "%%#.%dLF", precision()); }
 
       string toString        (const DgLocBase& lb) const;
       string toString        (const DgLocBase& lb, char delimiter) const;
@@ -186,7 +191,7 @@ class DgRFBase {
 
       int id_;
 
-      char formatStr_[20];
+      char formatStr_[maxFmtStr];
 
       DgRFNetwork* network_;
 

@@ -164,8 +164,14 @@ DgGeoSphRF::densify (DgPolygon& p, long double maxDist, bool rads)
       // p2 should get pushed next time
    }
 
-   // now replace the original with the densified version
+   // densify the holes recursively
+   for (unsigned long int h = 0; h < p.holes().size(); h++) {
+      DgPolygon* hole = new DgPolygon(*p.holes()[h]);
+      densify(*hole, maxDist, rads);
+      densVerts.addHole(hole);
+   }
 
+   // now replace the original with the densified version
    p = densVerts;
 
 } // void DgGeoSphRF::densify

@@ -466,8 +466,7 @@ template<class A, class B, class DB> class DgDiscRFS
                                     DgLocVector& vec) const;
 
       // second order boundary children; aperture 7 hex only
-      virtual void setAddBoundary2Children (const DgResAdd<A>& add,
-                                           DgLocVector& vec) const { }
+      virtual void setAddBoundary2Children (const DgResAdd<A>&, DgLocVector&) const { }
 
       // new pure virtual functions
 

@@ -97,7 +97,7 @@ DgTriGrid2DS::~DgTriGrid2DS (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgTriGrid2DS&
-DgTriGrid2DS::operator= (const DgTriGrid2DS& rf)
+DgTriGrid2DS::operator= (const DgTriGrid2DS&)
 {
    report("DgTriGrid2DS::operator=() ", DgBase::Fatal);
 
@@ -186,15 +186,11 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgTriGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>& add, 
-                                        DgLocVector& vec) const
+DgTriGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>&, DgLocVector&) const
 {
-   if (isCongruent())
-   {
+   if (isCongruent()) {
       // no boundary children in this topology; leave vec empty
-   }
-   else
-   {
+   } else {
       report("DgTriGrid2DS::DgTriGrid2DS() only congruent triangle grid "
              "systems implemented", DgBase::Fatal);
    }

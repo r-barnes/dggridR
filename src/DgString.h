@@ -249,9 +249,10 @@ static std::string to_string(const SourceT& source)
 // JFW: We should tidy all of this up later:
 inline std::string to_string(long double val, const char *formatStr)
 {
-   char buffer[50];
+   const unsigned int maxBuffer = 100;
+   char buffer[maxBuffer];
 
-   sprintf(buffer, formatStr, val);
+   snprintf(buffer, maxBuffer, formatStr, val);
 
    return string(buffer);
 }

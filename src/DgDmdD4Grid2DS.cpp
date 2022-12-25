@@ -119,7 +119,7 @@ DgDmdD4Grid2DS::~DgDmdD4Grid2DS (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdD4Grid2DS&
-DgDmdD4Grid2DS::operator= (const DgDmdD4Grid2DS& rf)
+DgDmdD4Grid2DS::operator= (const DgDmdD4Grid2DS&)
 {
    report("DgDmdD4Grid2DS::operator=() ", DgBase::Fatal);
 

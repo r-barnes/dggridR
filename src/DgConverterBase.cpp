@@ -121,7 +121,7 @@ DgConverterBase::forceConnectFrom (bool verify) const
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgConverterBase::forceConnectTo (bool verify) const
+DgConverterBase::forceConnectTo (bool /* verify */) const
 {
    if (!toFrame_->connectTo())
    {

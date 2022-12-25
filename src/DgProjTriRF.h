@@ -118,8 +118,7 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
 
       //virtual DgLocVector& convert (DgLocVector& vec) const;
 
-      virtual long double dist (const DgProjTriCoord& add1,
-                           const DgProjTriCoord& add2) const
+      virtual long double dist (const DgProjTriCoord&, const DgProjTriCoord&) const
                 { return M_ZERO; }
 
       virtual string add2str (const DgProjTriCoord& add) const

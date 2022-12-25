@@ -86,9 +86,13 @@ class DgOutLocFile : public DgBase {
       virtual DgOutLocFile& insert (DgLocList& list);
 
       // collection output; does nothing by default
+/* with parameter names
       virtual DgOutLocFile& insert (const DgIDGGBase& dgg, DgCell& cell,
                       bool outputPoint, bool outputRegion,
                       const DgLocVector* neighbors, const DgLocVector* children)
+*/
+      virtual DgOutLocFile& insert (const DgIDGGBase&, DgCell&, bool, bool,
+                      const DgLocVector*, const DgLocVector*)
         { return *this; }
 
       // abstract virtual methods

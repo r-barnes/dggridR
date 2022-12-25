@@ -194,12 +194,10 @@ class DgDiscRF : public DgRF<A, long long int> {
                { DgLocVector* vec = new DgLocVector(*this);
                  setNeighborsBdry2(loc, *vec);  return vec; }
 
-      virtual void setAddNeighborsBdry2 (const A& add, DgLocVector& vec) const { }
+      virtual void setAddNeighborsBdry2 (const A&, DgLocVector&) const { }
 
-      virtual operator string (void) const
-      {
+      virtual operator string (void) const {
          string s = "*** DgDiscRF " + DgRFBase::name();
-
          return s;
       }
 

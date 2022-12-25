@@ -238,7 +238,7 @@ class DgEllipsoidRF : public DgGeoDatumRF<DgGeoCoord, long double> {
 
       // distance in km; not currently defined (except for DgGeoSphRF)
 
-      virtual long double dist (const DgGeoCoord& add1, const DgGeoCoord& add2) const
+      virtual long double dist (const DgGeoCoord&, const DgGeoCoord&) const
          { return 1.0L; }
 
       virtual string add2str (const DgGeoCoord& add) const

@@ -115,7 +115,7 @@ DgSqrD8Grid2DS::~DgSqrD8Grid2DS (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgSqrD8Grid2DS&
-DgSqrD8Grid2DS::operator= (const DgSqrD8Grid2DS& rf)
+DgSqrD8Grid2DS::operator= (const DgSqrD8Grid2DS&)
 {
    report("DgSqrD8Grid2DS::operator=() ", DgBase::Fatal);
 

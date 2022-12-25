@@ -34,6 +34,7 @@ using namespace std;
 #include "DgLocBase.h"
 #include "DgLocation.h"
 #include "DgLocVector.h"
+#include "DgPolygon.h"
 #include "DgConverterBase.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -83,17 +84,55 @@ DgRFBase::convert (DgLocation* loc) const
 } // DgLocation* DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
+DgPolygon& 
+DgRFBase::convert (DgPolygon& poly) const
+{
+   if (poly.rf_ == 0) {
+      poly.rf_ = this;
+      return poly;
+   }
+   
+   if (network() != poly.rf().network()) {
+      report("DgRFBase::convert() from/to network mismatch",
+             DgBase::Fatal);
+      return poly;
+   }
+
+   if (poly.rf() == *this) return poly;
+
+   if (poly.size() == 0) {
+      poly.rf_ = this;
+      return poly;
+   }
+   
+   // if we're here we need to convert
+
+   const DgConverterBase* conv = network().getConverter(poly.rf(), *this);
+   if (!conv) {
+      report("DgRFBase::convert() getConverter error", DgBase::Fatal);
+      return poly;
+   }
+
+   convert((DgLocVector&) poly);
+   if (poly.hasHoles()) {
+      for (unsigned long i = 0; i < poly.holes().size(); i++)
+         convert(*poly.holes()[i]);
+   }
+
+   return poly;
+
+} // DgPolygon& DgRFBase::convert
+
+////////////////////////////////////////////////////////////////////////////////
 DgLocVector& 
 DgRFBase::convert (DgLocVector& vec) const
 {
-   if (vec.rf_ == 0)
-   {
+   if (vec.rf_ == 0) {
       vec.rf_ = this;
       return vec;
    }
    
-   if (network() != vec.rf().network())
-   {
+   if (network() != vec.rf().network()) {
       report("DgRFBase::convert() from/to network mismatch",
              DgBase::Fatal);
       return vec;
@@ -101,8 +140,7 @@ DgRFBase::convert (DgLocVector& vec) const
 
    if (vec.rf() == *this) return vec;
 
-   if (vec.size() == 0)
-   {
+   if (vec.size() == 0) {
       vec.rf_ = this;
       return vec;
    }
@@ -110,8 +148,7 @@ DgRFBase::convert (DgLocVector& vec) const
    // if we're here we need to convert
 
    const DgConverterBase* conv = network().getConverter(vec.rf(), *this);
-   if (!conv)
-   {
+   if (!conv) {
       report("DgRFBase::convert() getConverter error", DgBase::Fatal);
       return vec;
    }

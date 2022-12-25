@@ -66,7 +66,7 @@ DgOutPRCellsFile::insert (const DgDVec2D& pt)
    char buff[maxBuffSize];
 
    // switch to lat/lon order
-   sprintf(buff, formatStr(), pt.y(), pt.x());
+   snprintf(buff, maxBuffSize, formatStr(), pt.y(), pt.x());
 
    *this << buff;
 
@@ -77,7 +77,7 @@ DgOutPRCellsFile::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgLocation& loc, const string* label)
+DgOutPRCellsFile::insert (DgLocation&, const string*)
 //
 // Put the point loc.
 //
@@ -85,26 +85,13 @@ DgOutPRCellsFile::insert (DgLocation& loc, const string* label)
 {
    DgOutputStream::report("DgOutPRCellsFile::insert(DgLocation): not defined.", DgBase::Fatal);
    return *this;
-/*
-   rf().convert(&loc);
-
-   if (label)
-     *this << *label << " ";
-   else
-     *this << "0 ";
-
-   this->insert(rf().getVecLocation(loc));
-
-   return *this;
-*/
 
 } // DgOutLocFile& DgOutPRCellsFile::insert
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutPRCellsFile::insert (DgLocVector& vec, const string* label,
-                     const DgLocation* cent)
+DgOutPRCellsFile::insert (DgLocVector&, const string*, const DgLocation*)
 //
 // Put the polyline vec.
 //
@@ -119,7 +106,7 @@ DgOutPRCellsFile::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutPRCellsFile::insert (DgPolygon& poly, const string* label,
-                     const DgLocation* cent)
+                     const DgLocation* /* cent */)
 //
 // Put the polygon poly.
 //

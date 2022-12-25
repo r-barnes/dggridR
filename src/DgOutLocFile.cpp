@@ -58,9 +58,16 @@ DgOutLocFile::~DgOutLocFile (void)
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile* 
 DgOutLocFile::makeOutLocFile (const string& type, const string& fileName, 
+#ifdef USE_GDAL
                     const string& gdalDriver,
                     const DgRFBase& rf, bool isPointFile, int precision,
-                    DgOutGdalFileMode mode, int shapefileIdLen, 
+                    DgOutGdalFileMode mode, 
+#else
+                    const string& /* gdalDriver */,
+                    const DgRFBase& rf, bool isPointFile, int precision,
+                    DgOutGdalFileMode /* mode */, 
+#endif
+                    int shapefileIdLen, 
                     const string& kmlColor, int kmlWidth,
                     const string& kmlName, const string& kmlDesc,
                     DgReportLevel failLevelIn)

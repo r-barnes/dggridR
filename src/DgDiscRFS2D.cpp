@@ -45,7 +45,7 @@ const DgDiscRFS2D*
 DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
    int nRes, unsigned int aperture, dgg::topo::DgGridTopology gridTopo,
    dgg::topo::DgGridMetric gridMetric, bool isCongruent, bool isAligned,
-   const string& name, bool isMixed43, int numAp4, bool isSuperfund,
+   const string& /* name */, bool isMixed43, int numAp4, bool isSuperfund,
    bool isApSeq, const DgApSeq& apSeq)
 {
    const DgDiscRFS2D* dg0 = 0;

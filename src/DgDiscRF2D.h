@@ -72,8 +72,7 @@ class DgDiscRF2D : public DgDiscRF<DgIVec2D, DgDVec2D, long double> {
                             { return DgIVec2D::undefDgIVec2D; }
 
       // this one only applies to aperture 7 hex grids
-      virtual void setAddNeighborsBdry2 (const DgIVec2D& add,
-                                    DgLocVector& vec) const { }
+      virtual void setAddNeighborsBdry2 (const DgIVec2D&, DgLocVector&) const { }
 
       // remind users of the pure virtual functions remaining from above
 

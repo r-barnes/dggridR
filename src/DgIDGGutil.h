@@ -344,8 +344,7 @@ class DgVertex2DDRF : public DgRF<DgVertex2DDCoord, long double> {
 
       //virtual DgLocVector& convert (DgLocVector& vec) const;
 
-      virtual long double dist (const DgVertex2DDCoord& add1,
-                           const DgVertex2DDCoord& add2) const
+      virtual long double dist (const DgVertex2DDCoord&, const DgVertex2DDCoord&) const
                 { return M_ZERO; }
 
       virtual string add2str (const DgVertex2DDCoord& add) const
@@ -542,7 +541,7 @@ class DgPlaneTriRF : public DgContCartRF {
 
       static DgPlaneTriRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "PlaneTri",
                     const DgIcosaMap& icosaMapIn = DgIcosaMap::defIcosaMap)
-      { return new DgPlaneTriRF(networkIn, nameIn, DgIcosaMap::defIcosaMap); }
+      { return new DgPlaneTriRF(networkIn, nameIn, icosaMapIn); }
 
       const DgIcosaMap& icosaMap (void) const { return icosaMap_; }
 
@@ -631,15 +630,14 @@ class DgInterleaveRF : public DgRF<DgInterleaveCoord, long long int> {
       static DgInterleaveRF* makeRF (DgRFNetwork& networkIn, const string& nameIn)
          { return new DgInterleaveRF (networkIn, nameIn); }
 
-      virtual long long int dist (const DgInterleaveCoord& add1,
-                        const DgInterleaveCoord& add2) const
+      virtual long long int dist (const DgInterleaveCoord&,
+                                  const DgInterleaveCoord&) const
                        { return 0; }
 
       virtual string add2str (const DgInterleaveCoord& add) const
                        { return string(add); }
 
-      virtual string add2str (const DgInterleaveCoord& add, char delimiter)
-                                                                         const
+      virtual string add2str (const DgInterleaveCoord& add, char /* delimiter */) const
                        { return string(add); }
 
       virtual const char* str2add (DgInterleaveCoord* add, const char* str,

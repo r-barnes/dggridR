@@ -53,7 +53,7 @@ DgIDGGS43H::~DgIDGGS43H (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS43H&
-DgIDGGS43H::operator= (const DgIDGGS43H& rf)
+DgIDGGS43H::operator= (const DgIDGGS43H&)
 {
    report("DgIDGGS43H::operator=() not implemented", DgBase::Fatal);
 
@@ -63,8 +63,8 @@ DgIDGGS43H::operator= (const DgIDGGS43H& rf)
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgIDGGS43H::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
-                             DgLocVector& vec) const
+DgIDGGS43H::setAddParents (const DgResAdd<DgQ2DICoord>& /* add */, 
+             DgLocVector& /* vec */) const
 {
    report("DgIDGGS43H::setAddParents()  not implemented yet", DgBase::Fatal);
 
@@ -72,8 +72,8 @@ DgIDGGS43H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgIDGGS43H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
-                                        DgLocVector& vec) const
+DgIDGGS43H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& /* add */, 
+                                        DgLocVector& /* vec */) const
 {
    report("DgIDGGS43H::setAddInteriorChildren() not implemented yet", 
           DgBase::Fatal);
@@ -82,8 +82,8 @@ DgIDGGS43H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgIDGGS43H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
-                                        DgLocVector& vec) const
+DgIDGGS43H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& /* add */, 
+                                        DgLocVector& /* vec */) const
 {
    report("DgIDGGS43H::setAddBoundaryChildren() not implemented yet", 
           DgBase::Fatal);
@@ -92,8 +92,8 @@ DgIDGGS43H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 
 ////////////////////////////////////////////////////////////////////////////////
 void 
-DgIDGGS43H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
-                                   DgLocVector& vec) const
+DgIDGGS43H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& /* add */, 
+                                   DgLocVector& /* vec */) const
 {
    report("DgIDGGS43H::setAddAllChildren() not implemented yet", DgBase::Fatal);
 

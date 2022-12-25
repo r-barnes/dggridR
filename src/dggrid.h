@@ -230,6 +230,7 @@ class GridGenParam : public MainParam {
       bool doRandPts;                 // generate random points for the cells
       unsigned long int clipperFactor; // clipper scaling factor
       long double invClipperFactor; // 1.0L / clipper scaling factor
+      bool useHoles; // handle holes in clipping polygons
 
       DgOutLocFile *cellOut, *ptOut, *collectOut, *randPtsOut;
       DgOutShapefile *cellOutShp, *ptOutShp;

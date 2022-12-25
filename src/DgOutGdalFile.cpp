@@ -46,7 +46,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 DgOutGdalFile::DgOutGdalFile (const DgGeoSphDegRF& rf,
                     const std::string& filename, const std::string& gdalDriver, 
-                    DgOutGdalFileMode mode, int precision, bool isPointFile, 
+                    DgOutGdalFileMode mode, int /* precision */, bool isPointFile, 
                     DgReportLevel failLevel)
     : DgOutLocFile (filename, rf, isPointFile, failLevel), _mode (mode),
          _gdalDriver(""), _driver(NULL), _dataset(NULL), _oLayer(NULL),  
@@ -155,7 +155,7 @@ DgOutGdalFile::createFeature (const string& label) const
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert(const DgDVec2D& pt)
+DgOutGdalFile::insert(const DgDVec2D&)
 {
    //Probably isn't needed but keep in for safety
    return *this;
@@ -212,18 +212,18 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
    // first check for multi
    if (outputPoint && outputRegion) {
 
-      OGRGeometryCollection collect = createCollection(cell); 
-      feature->SetGeometry(&collect);
+      OGRGeometryCollection* collect = createCollection(cell); 
+      feature->SetGeometry(collect);
 
    } else if (outputPoint) {
 
-      OGRPoint pt = createPoint(cell.node());
-      feature->SetGeometry(&pt);
+      OGRPoint* pt = createPoint(cell.node());
+      feature->SetGeometry(pt);
 
    } else if (outputRegion) {
 
-      OGRPolygon poly = createPolygon(cell.region());
-      feature->SetGeometry(&poly);
+      OGRPolygon* poly = createPolygon(cell.region());
+      feature->SetGeometry(poly);
    } else
       ::report( "No geometry specified for GDAL collection feature.", DgBase::Fatal );
 
@@ -242,21 +242,21 @@ DgOutGdalFile::insert (const DgIDGGBase& dgg, DgCell& cell,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-OGRPoint
+OGRPoint*
 DgOutGdalFile::createPoint (const DgLocation& loc) const
 {
    DgDVec2D pt = rf().getVecLocation(loc);
-   OGRPoint oPt;
+   OGRPoint* oPt = (OGRPoint*) OGRGeometryFactory::createGeometry(wkbPoint);
 
-   oPt.setX(pt.x());
-   oPt.setY(pt.y());
+   oPt->setX(pt.x());
+   oPt->setY(pt.y());
 
    return oPt;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-OGRPolygon
-DgOutGdalFile::createPolygon (const DgPolygon& poly) const
+OGRLinearRing*
+DgOutGdalFile::createLinearRing (const DgPolygon& poly)
 {
    // first create a linearRing
    OGRLinearRing *linearRing;
@@ -264,33 +264,51 @@ DgOutGdalFile::createPolygon (const DgPolygon& poly) const
 
    // fill linearRing with points
    const vector<DgAddressBase *>& v = poly.addressVec();
+   const DgRFBase& rf = poly.rf();
    for (vector<DgAddressBase *>::const_iterator i = v.begin(); v.end() != i; ++i) {
-     DgDVec2D pt = rf().getVecAddress(*(*i));
+     DgDVec2D pt = rf.getVecAddress(*(*i));
      linearRing->addPoint(pt.x(), pt.y());
    }
 
    // add the first point to the end
-   DgDVec2D pt = rf().getVecAddress(*v[0]);
+   DgDVec2D pt = rf.getVecAddress(*v[0]);
    linearRing->addPoint(pt.x(), pt.y());
    
+   return linearRing;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+OGRPolygon*
+DgOutGdalFile::createPolygon (const DgPolygon& poly)
+{
+   // first create a linearRing
+   OGRLinearRing *linearRing = createLinearRing(poly);
+
    // create an OGRPolygon and attach ring to it
-   OGRPolygon polygon;
-   polygon.addRingDirectly(linearRing);
+   OGRPolygon* polygon = (OGRPolygon*) OGRGeometryFactory::createGeometry(wkbPolygon);
+   polygon->addRingDirectly(linearRing);
+
+   // add any holes
+   for (long long int i = 0; i < poly.holes().size(); i++) {
+      OGRLinearRing* hole = createLinearRing(*poly.holes()[i]);
+      polygon->addRingDirectly(hole);
+   }
 
    return polygon;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-OGRGeometryCollection
+OGRGeometryCollection*
 DgOutGdalFile::createCollection (const DgCell& cell) const
 {
-   OGRGeometryCollection collection;
+   OGRGeometryCollection* collection = 
+      (OGRGeometryCollection*) OGRGeometryFactory::createGeometry(wkbGeometryCollection);
 
-   OGRPoint oPt = createPoint(cell.node());
-   collection.addGeometry(&oPt);
+   OGRPoint* oPt = createPoint(cell.node());
+   collection->addGeometry(oPt);
 
-   OGRPolygon poly = createPolygon(cell.region());
-   collection.addGeometry(&poly);
+   OGRPolygon* poly = createPolygon(cell.region());
+   collection->addGeometry(poly);
 
    return collection;
 }
@@ -320,9 +338,8 @@ DgOutGdalFile::insert (DgLocation& loc, const string* label)
    // create the feature
    OGRFeature *feature = createFeature(*label);
    
-   OGRPoint oPt = createPoint(loc);
-
-   feature->SetGeometry(&oPt);
+   OGRPoint* oPt = createPoint(loc);
+   feature->SetGeometry(oPt);
 
    addFeature(feature);
    
@@ -331,8 +348,7 @@ DgOutGdalFile::insert (DgLocation& loc, const string* label)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutGdalFile::insert (DgLocVector& vec, const string* label,
-                          const DgLocation* cent)
+DgOutGdalFile::insert (DgLocVector&, const string*, const DgLocation*)
 {
    ::report( "polyline output not supported for GDAL file output", DgBase::Fatal );
    return *this;
@@ -341,7 +357,7 @@ DgOutGdalFile::insert (DgLocVector& vec, const string* label,
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
 DgOutGdalFile::insert (DgPolygon& poly, const string* label,
-                          const DgLocation* cent)
+                          const DgLocation* /* cent */)
 {
    if (_mode != Polygon)
       ::report( "invalid GDAL output file mode encountered.", DgBase::Fatal );
@@ -349,10 +365,10 @@ DgOutGdalFile::insert (DgPolygon& poly, const string* label,
    if (!_oLayer)
       init(false, true);
 
-   OGRPolygon polygon = createPolygon(poly);
+   OGRPolygon* polygon = createPolygon(poly);
 
    OGRFeature *feature = createFeature(*label);
-   feature->SetGeometry(&polygon);
+   feature->SetGeometry(polygon);
 
    addFeature(feature);
 

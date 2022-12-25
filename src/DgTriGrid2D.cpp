@@ -126,7 +126,7 @@ DgTriGrid2D::invQuantify (const DgIVec2D& add) const
 
 ////////////////////////////////////////////////////////////////////////////////
 long long int
-DgTriGrid2D::dist (const DgIVec2D& add1, const DgIVec2D& add2) const
+DgTriGrid2D::dist (const DgIVec2D&, const DgIVec2D&) const
 {
    return 0;
 }

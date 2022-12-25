@@ -84,7 +84,7 @@ DgIDGGS4D::~DgIDGGS4D (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIDGGS4D&
-DgIDGGS4D::operator= (const DgIDGGS4D& rf)
+DgIDGGS4D::operator= (const DgIDGGS4D&)
 {
    report("DgIDGGS4D::operator=() not implemented", DgBase::Fatal);
 
@@ -187,8 +187,8 @@ DgIDGGS4D::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
-                                        DgLocVector& vec) const
+DgIDGGS4D::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& /* add */,
+                                        DgLocVector& /* vec */) const
 {
    if (isCongruent()) {
       // no boundary children in this topology; leave vec empty

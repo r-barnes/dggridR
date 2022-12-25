@@ -78,7 +78,7 @@ DgInGDALFile::~DgInGDALFile (void)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgInLocFile&
-DgInGDALFile::extract (DgLocVector& vec)
+DgInGDALFile::extract (DgLocVector&)
 //
 // Get the next polyline from me and put it in vec.
 //
@@ -87,6 +87,67 @@ DgInGDALFile::extract (DgLocVector& vec)
     report("DgInGDALFile::extract(DgLocVector) not yet implemented.", DgBase::Fatal);
     return *this;
 } // DgInGDALFile& DgInGDALFile::extract
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void
+DgInGDALFile::ogrLinearRingToDg (OGRLinearRing* oLinearRing, DgPolygon& poly)
+{
+   int numPoints = oLinearRing->getNumPoints();
+   long double x, y;
+   OGRPoint oPoint;
+   for (int i = 0; i < numPoints; i++) {
+      oLinearRing->getPoint(i, &oPoint);
+      x = oPoint.getX();
+      y = oPoint.getY();
+      DgAddressBase* add = rf().vecAddress(DgDVec2D(x, y));
+      poly.addressVec().push_back(add);
+   }
+
+   // remove the duplicate first/last vertex
+   DgAddressBase* lastPt = *(poly.addressVec().end() - 1);
+   poly.addressVec().erase(poly.addressVec().end() - 1);
+   delete lastPt;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void
+DgInGDALFile::ogrPolyToDg (OGRPolygon* oPolygon, DgPolygon& poly)
+{
+   OGRLinearRing* oLinearRing = oPolygon->getExteriorRing();
+   ogrLinearRingToDg(oLinearRing, poly);
+   for (int i = 0; i < oPolygon->getNumInteriorRings(); i++) {
+      oLinearRing = oPolygon->getInteriorRing(i);
+
+      DgPolygon* hole = new DgPolygon(rf());
+      ogrLinearRingToDg(oLinearRing, *hole);
+      // poly takes ownership of the hole memory
+      poly.addHole(hole);
+   }
+
+/*
+//OGRPolygon polygon;
+OGRPolygon* polygon = (OGRPolygon*) OGRGeometryFactory::createGeometry(wkbPolygon);
+polygon->addRingDirectly(oLinearRing);
+
+cout << "HOLES?" << endl;
+    // first one is the outer ring and, all the next ones are the 
+    // inner rings/holes
+    //oPolygon = (OGRPolygon*) oGeometry;
+    for (int i = 0; i < oPolygon->getNumInteriorRings(); i++) {
+
+   OGRLinearRing* oLinearRing = oPolygon->getInteriorRing(i);
+OGRPolygon* hole = (OGRPolygon*) OGRGeometryFactory::createGeometry(wkbPolygon);
+hole->addRingDirectly(oLinearRing);
+
+      cout << "hole i: " << i << endl;
+cout << " contained? " << polygon->Contains(hole) << " " <<
+     hole->Contains(polygon) << endl;
+    }
+*/
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -101,6 +162,7 @@ DgInGDALFile::extract (DgPolygon& poly)
     rf().convert(poly);
 
     OGRPolygon* oPolygon = NULL;
+    OGRGeometry* oGeometry = NULL;
     if (!insideMultiPoly_) {
 
        if (gdalDataset_->GetLayerCount() != 1) {
@@ -108,14 +170,6 @@ DgInGDALFile::extract (DgPolygon& poly)
        }
 
        OGRLayer* oLayer = gdalDataset_->GetLayer(0);
-/*
-       if (curLayer_ < gdalDataset_->GetLayerCount()) {
-           oLayer = gdalDataset_->GetLayer(curLayer_++);
-       } else {
-           setstate(ios_base::eofbit);
-           return *this;
-       }
-*/
        if (oFeature_) OGRFeature::DestroyFeature(oFeature_);
 
        if ((oFeature_ = oLayer->GetNextFeature()) == NULL) {
@@ -124,7 +178,8 @@ DgInGDALFile::extract (DgPolygon& poly)
        }
 
        // Get the polygon stored in Geometry, with special handling for MultiPolygon
-       OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
+       //OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
+       oGeometry = oFeature_->GetGeometryRef();
        OGRwkbGeometryType geomType = wkbFlatten((oGeometry->getGeometryType()));
        if (oGeometry != NULL && geomType == wkbPolygon) {
            oPolygon = (OGRPolygon*) oGeometry;
@@ -141,7 +196,8 @@ DgInGDALFile::extract (DgPolygon& poly)
 
     // now we either have a polygon or we are inside a multi-polygon
     if (insideMultiPoly_) {
-       OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
+       //OGRGeometry* oGeometry = oFeature_->GetGeometryRef();
+       oGeometry = oFeature_->GetGeometryRef();
        OGRMultiPolygon* oMultiPolygon = (OGRMultiPolygon*) oGeometry;
        oPolygon = (OGRPolygon*) oMultiPolygon->getGeometryRef(multiPolyIndex_);
        multiPolyIndex_++;
@@ -153,29 +209,9 @@ DgInGDALFile::extract (DgPolygon& poly)
        }
     }
 
-    // Now we get the points out of the Polygon
-    // You can't iterate over the points of an OGRPolygon
-    // We need to cast it to an OGRLinearRing
-    OGRLinearRing* oLinearRing = oPolygon->getExteriorRing();
-    int numPoints = oLinearRing->getNumPoints();
-    long double x, y;
-    OGRPoint oPoint;
-    for (int i = 0; i < numPoints; i++) {
-        oLinearRing->getPoint(i, &oPoint);
-        x = oPoint.getX();
-        y = oPoint.getY();
-        DgAddressBase* add = rf().vecAddress(DgDVec2D(x, y));
-        poly.addressVec().push_back(add);
-    }
-
-    // remove the duplicate first/last vertex
-    DgAddressBase* lastPt = *(poly.addressVec().end() - 1);
-    poly.addressVec().erase(poly.addressVec().end() - 1);
-    delete lastPt;
-/*
-    // remove the duplicate first/last vertex
-    poly.addressVec().erase(poly.addressVec().end() - 1);
-    */
+    // convert the exterior ring to a DgPolygon
+    ogrPolyToDg(oPolygon, poly);
+//cout << "=====\n" << poly << endl;
 
     return *this;
 
@@ -184,7 +220,7 @@ DgInGDALFile::extract (DgPolygon& poly)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgInLocFile&
-DgInGDALFile::extract (DgCell& cell)
+DgInGDALFile::extract (DgCell&)
 //
 // Get the next cell from me and put it in cell.
 //
@@ -197,7 +233,7 @@ DgInGDALFile::extract (DgCell& cell)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgInLocFile&
-DgInGDALFile::extract (DgLocList& list)
+DgInGDALFile::extract (DgLocList&)
 //
 // Determine whether the file is a point or polygon/polyline file. If it's
 // a point file, read-in the points. If not, get the sets which constitute
@@ -213,7 +249,7 @@ DgInGDALFile::extract (DgLocList& list)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgInLocFile&
-DgInGDALFile::extract (DgLocation& loc)
+DgInGDALFile::extract (DgLocation&)
 //
 // Get the next DgLocation. For speed will mistake file corruption for the "END"
 // at the end of the gen file.
