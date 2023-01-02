@@ -221,7 +221,7 @@ dgverify <- function(dggs){
 
 #' @name dginfo
 #'
-#' @title Print a buncha info about a dggs object to the screen
+#' @title Print info about a dggs object to the screen
 #'
 #' @description
 #'          dggs objects have many settings. This returns all of them, along
@@ -580,7 +580,7 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #'          entire Earth
 #'
 #' @description     Note: If you have a high-resolution grid this may take a
-#'                  loooooong time to execute.
+#'                  very long time to execute.
 #'
 #' @param dggs      A dggs object from dgconstruct()
 #'

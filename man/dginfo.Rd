@@ -2,7 +2,7 @@
 % Please edit documentation in R/dggridR.R
 \name{dginfo}
 \alias{dginfo}
-\title{Print a buncha info about a dggs object to the screen}
+\title{Print info about a dggs object to the screen}
 \usage{
 dginfo(dggs)
 }

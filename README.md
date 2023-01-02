@@ -121,7 +121,7 @@ The code in the 'src' directory is based off of
 However, Richard Barnes has made some significant alterations. These include:
 
 * Replacement of gpclib with clipper, thus making DGGRID into FLOSS software
-  available for both commerical and non-commerical use without restriction
+  available for both commercial and non-commercial use without restriction
 * Restructuring and simplifying all of the makefiles to enable compilation in R
 * Direct inclusion of the shapelib library
 * Addition of the SEQTOPOLY option under the GENERATE_GRID faculty

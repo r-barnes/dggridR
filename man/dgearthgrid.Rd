@@ -21,7 +21,7 @@ Returns an sf object.
 }
 \description{
 Note: If you have a high-resolution grid this may take a
-                 loooooong time to execute.
+                 very long time to execute.
 }
 \examples{
 \donttest{
