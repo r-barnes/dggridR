@@ -87,11 +87,11 @@ The following grids are available:
  * ISEA43H:   Icosahedral Snyder Equal Area Mixed Aperture 4,3 Hexagonal Grid
  * ISEA4T:    Icosahedral Snyder Equal Area Aperture 4 Triangular Grid
  * ISEA4D:    Icosahedral Snyder Equal Area Aperture 4 Diamond Grid
- * FULLER3H:  Fuller Aperature 3 Hexagonal Grid
- * FULLER4H:  Fuller Aperature 4 Hexagonal Grid
- * FULLER43H: Fuller Mixed Aperature 4,3 Hexagonal Grid
- * FULLER4T:  Fuller Aperature 4 Triganular Grid
- * FULLER4D:  Fuller Aperature 4 Diamond Grid
+ * FULLER3H:  Fuller Aperture 3 Hexagonal Grid
+ * FULLER4H:  Fuller Aperture 4 Hexagonal Grid
+ * FULLER43H: Fuller Mixed Aperture 4,3 Hexagonal Grid
+ * FULLER4T:  Fuller Aperture 4 Triganular Grid
+ * FULLER4D:  Fuller Aperture 4 Diamond Grid
 
 Unless you are using cells with very large areas (significant fractions of
 Earth's hemispheres), I recommend the ISEA3H be your default grid.
