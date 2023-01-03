@@ -1,9 +1,10 @@
-dggridR v3.0.0  (Release date: 2022-03-17)
+dggridR v3.0.0  (Release date: 2023-01-02)
 ===============
 * Fixes memory leaks in DGGRID
 * Switches to using sf package from rgdal
 * Removed `dgtransform`, which was previously deprecated. Use `dgGEO_to_SEQNUM` instead.
 * Many changes to satisfy CRAN's capricious demands.
+* Incorporates fixes from Edzer Pebesma (thanks!)
 
 dggridR v2.0.8  (Release date: 2020-11-25)
 ===============
