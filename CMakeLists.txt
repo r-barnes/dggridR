@@ -101,8 +101,6 @@ src/pj_msfn.cpp
 src/pj_phi2.cpp
 src/pj_qsfn.cpp
 src/pj_tsfn.cpp
-# src/RcppExports.cpp
-# src/Rwrapper.cpp
 src/dbfopen.c
 src/safileio.c
 src/sbnsearch.c
@@ -111,10 +109,18 @@ src/shptree.c
 src/util.cpp
 src/test.cpp
 )
+# src/RcppExports.cpp
+# src/Rwrapper.cpp
+
 # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
-target_compile_options(dggridR PRIVATE -Wall -Wextra -pedantic -Wno-cast-function-type -Wno-unused-parameter $<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-copy> -Wstringop-truncation) # -fsanitize=address)
+target_compile_options(dggridR PRIVATE -Werror -Wall -Wextra -pedantic -Wno-cast-function-type -Wno-unused-parameter $<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-copy> -Wstringop-truncation) # -fsanitize=address)
 target_include_directories(dggridR
 PRIVATE
   /usr/share/R/include/
-  /home/rick/R/x86_64-pc-linux-gnu-library/4.1/Rcpp/include
+  /home/rick/miniconda3/envs/dggridR/lib/R/library/Rcpp/include/
+)
+target_link_directories(dggridR PRIVATE /home/rick/miniconda3/envs/dggridR/lib/R/library/Rcpp/libs/)
+target_link_libraries(dggridR
+PRIVATE
+  Rcpp
 )
