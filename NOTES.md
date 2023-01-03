@@ -1,13 +1,50 @@
-Checking
-====================
+Generating an environment
+=========================
+
+Install anaconda or miniconda. Run:
+```
+conda create --name dggridR
+conda activate dggridR
+conda install -c conda-forge r-base r-essentials
+```
+Check that R's libraries are getting installed where you want:
+```
+.libPaths()
+```
+
+Check that dggridR is good to submit
+====================================
 
 Clean:
-
+```
 find . -iname "*.so" | xargs rm -f
 find . -iname "*.o" | xargs rm -f
 find . -iname "*.a" | xargs rm -f
 rm -f src/apps/appex/appex
 rm -f src/apps/dggrid/dggrid
+```
+
+Set stack size, maybe:
+```
+ulimit -s 32768
+```
+
+Local testing:
+```
+devtools::check()
+```
+
+Submit to Rhub for testing
+```
+devtools::check_rhub()
+```
+
+Upload to CRAN:
+```
+devtools::release()
+```
+
+
 
 R CMD check --as-cran src
 
@@ -35,7 +72,7 @@ Build package with vignettes:
 TODO
 ====================
 dggridR.rmd citation info
-Next time too: Is there some reference about the method you can add in the Description field in the form Authors (year) <doi:.....>? 
+Next time too: Is there some reference about the method you can add in the Description field in the form Authors (year) <doi:.....>?
 Update Vignette to use new GEO_to_SEQNUM commands
 
 
