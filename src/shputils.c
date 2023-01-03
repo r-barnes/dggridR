@@ -400,8 +400,8 @@ void showitems()
             for( iRecord = 0; iRecord < maxrec; iRecord++ ) {
                 strncpy(stmp,DBFReadStringAttribute( hDBF, iRecord, i ),39);
                 if (strcmp(stmp,"!!") > 0) {
-                    if (strncasecmp2(stmp,slow,0)  < 0) strncpy(slow, stmp,39);
-                    if (strncasecmp2(stmp,shigh,0) > 0) strncpy(shigh,stmp,39);
+                    if (strncasecmp2(stmp,slow,0)  < 0) memcpy(slow, stmp,39);
+                    if (strncasecmp2(stmp,shigh,0) > 0) memcpy(shigh,stmp,39);
                 }
             }
             pt=slow+strlen(slow)-1;

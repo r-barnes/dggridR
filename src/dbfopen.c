@@ -1479,7 +1479,7 @@ static int DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
             szSField[psDBF->panFieldSize[iField]] = '\0';
             nRetResult = FALSE;
         }
-        strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]),
+        memcpy((char *) (pabyRec+psDBF->panFieldOffset[iField]),
             szSField, strlen(szSField) );
         break;
       }
