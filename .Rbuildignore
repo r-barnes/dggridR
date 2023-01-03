@@ -23,3 +23,5 @@ copy_to_src/
 .vscode/
 CMakeLists.txt
 ^LICENSE\.md$
+^CRAN-SUBMISSION$
+^cran-comments\.md$
