@@ -116,7 +116,7 @@ Credits
 -------
 
 The code in the 'src' directory is based off of
-[DGGRIDv6.2b](https://www.discreteglobalgrids.org/) by Kevin Sahr.
+[DGGRIDv6.2b](https://discreteglobal.wpengine.com/) by Kevin Sahr.
 
 However, Richard Barnes has made some significant alterations. These include:
 
