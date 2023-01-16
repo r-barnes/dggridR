@@ -136,7 +136,7 @@ inline ostream& operator<< (ostream& stream, const DgColor& color)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class DgColorEq : public unary_function<DgColor*, bool> {
+class DgColorEq {
 
    public:
 
