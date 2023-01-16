@@ -2,7 +2,7 @@ Package: dggridR
 Type: Package
 Title: Discrete Global Grids
 Version: 3.0.0
-Date: 2023-01-02
+Date: 2023-01-16
 Author: Richard Barnes [aut, cre], Kevin Sahr [aut, cph], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph], Even Rouault [cph], Lian Song [ctb]
 Maintainer: Richard Barnes <rijard.barnes@gmail.com>
 NeedsCompilation: yes
