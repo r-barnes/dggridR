@@ -34,5 +34,4 @@ RcppModules: dgfuncs, gridgens, gridstats
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 VignetteBuilder: knitr, R.rsp
-SystemRequirements: C++11
 Language: en-US
