@@ -1,10 +1,42 @@
-#' @import     dplyr
-#' @import     sf
-#' @import     sp
-#' @importFrom methods as
-#' @importFrom rlang .data
-#' @importFrom utils read.csv read.table tail write.table
+#' @importFrom sf st_bbox st_as_sf write_sf st_read
+#' @importFrom s2 s2_geog_point s2_convex_hull_agg
+#' @importFrom collapse qDF alloc fgroup_by fsummarise fmutate funique
+#' @importFrom tools file_path_sans_ext
 #' @useDynLib  dggridR
+#' 
+
+# Convert sf::st_bbox to sp::bbox
+st_bbox_to_sp <- function(x) {
+  if(length(x) != 4L) stop("invalid bbox, needs to be a vector from st_bbox(), with exactly 4 elements")
+  matrix(x, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))
+}
+
+# Copied from sp to get rid of it as a dependency
+makegrid <- function(bb, n = 10000, nsig = 2, cellsize, offset = rep(0.5, nrow(bb)), pretty = TRUE) {
+  # if (is(x, "Spatial")) 
+  #   bb = bbox(x)
+  # else bb = x
+  if (missing(cellsize)) {
+    pw = 1/nrow(bb)
+    cellsize = signif((prod(apply(bb, 1, diff))/n)^pw, nsig)
+  }
+  if (length(cellsize) == 1) cellsize = rep(cellsize, nrow(bb))
+  min.coords = bb[, 1] + offset * cellsize
+  if (pretty) min.coords = signif(min.coords, max(ceiling(log10(abs(bb[1, ])/cellsize))))
+  sel = min.coords - offset * cellsize > bb[, 1]
+  if (any(sel)) min.coords[sel] = min.coords[sel] - cellsize[sel]
+  expand.grid.arglist = vector("list", nrow(bb))
+  for (i in 1:nrow(bb)) {
+    name = paste("x", i, sep = "")
+    from = min.coords[i]
+    by = cellsize[i]
+    length.out = round(1 + (bb[i, 2] - from)/by)
+    expand.grid.arglist[[name]] = seq(from, by = by, length.out = length.out)
+  }
+  xy = do.call(expand.grid, expand.grid.arglist)
+  attr(xy, "cellsize") = cellsize
+  return(xy)
+}
 
 
 #' @name dg_env
@@ -504,14 +536,22 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #'
 #' @return Returns an sf object.
 #'
-dg_process_polydata <- function(polydata){
-  polydata <- as.data.frame(polydata)
-
-  polydata %>%
-    sf::st_as_sf(coords=c("x", "y"), crs=4326) %>%
-    group_by(.data$seqnum) %>%
-    summarise(geometry = sf::st_combine(geometry)) %>%
-    sf::st_cast("POLYGON")
+dg_process_polydata <- function(polydata) {
+  
+  # Using s2 directly: faster !!
+  qDF(polydata) |>
+    fmutate(geometry = s2_geog_point(x, y)) |>
+    fgroup_by(seqnum, sort = TRUE) |>
+    fsummarise(geometry = s2_convex_hull_agg(geometry)) |> 
+    st_as_sf(crs = 4326)
+  
+  # sf solution: also much faster than with dplyr, but 3x slower than s2
+  # qDF(polydata) |>
+  #   st_as_sf(coords = c("x", "y"), crs = 4326) |>
+  #   fgroup_by(seqnum, sort = TRUE) |>
+  #   fsummarise(geometry = st_combine(geometry)) |> 
+  #   fmutate(geometry = `oldClass<-`(geometry, c("sfc_MULTIPOINT", "sfc"))) |> 
+  #   st_cast("POLYGON")
 }
 
 
@@ -559,17 +599,15 @@ dg_process_polydata <- function(polydata){
 dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1,savegrid=NA){ #TODO: Densify?
   dgverify(dggs)
 
-  coords <- matrix(c(minlon, minlat, maxlon, minlat, maxlon, maxlat, maxlon, minlat, minlon, minlat), ncol = 2, byrow = TRUE)
-  regbox <- Polygon(coords)
-  regbox <- SpatialPolygons(list(Polygons(list(regbox), ID = "a")), proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+  bbox_coords <- matrix(c(minlon, minlat, maxlon, maxlat), ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))
 
   #Generate a dense grid of points
-  samp_points <- sp::makegrid(regbox, cellsize = cellsize)
+  samp_points <- makegrid(bbox_coords, cellsize = cellsize)
 
   #Convert the points to SEQNUM ids for dggs
-  samp_points <- dgGEO_to_SEQNUM(dggs,samp_points$x1, samp_points$x2)$seqnum
+  samp_points <- dgGEO_to_SEQNUM(dggs, samp_points$x1, samp_points$x2)$seqnum
 
-  dgcellstogrid(dggs, samp_points, savegrid=savegrid)
+  dgcellstogrid(dggs, samp_points, savegrid = savegrid)
 }
 
 
@@ -652,7 +690,7 @@ dgcellstogrid <- function(dggs, cells, savegrid=NA){ #TODO: Densify?
   #dggrid also eliminates duplicate cells, but doing so here saves disk space
   #and likely wall time, given the costs of IO, not that it matters unless the
   #data set is huge
-  cells <- unique(cells)
+  cells <- funique(cells)
 
   if(max(cells)>dgmaxcell(dggs))
     stop("'cells' contained cell ids which were larger than the maximum id!")
@@ -679,7 +717,7 @@ dgcellstogrid <- function(dggs, cells, savegrid=NA){ #TODO: Densify?
 #'
 #' @return          The filename the grid was saved to
 dgsavegrid <- function(grid,shpfname) {
-  sf::write_sf(grid, shpfname, driver='ESRI Shapefile', layer='dggrid')
+  write_sf(grid, shpfname, driver='ESRI Shapefile', layer='dggrid')
   shpfname
 }
 
@@ -710,7 +748,7 @@ dgsavegrid <- function(grid,shpfname) {
 #'
 #' @param dggs      A dggs object from dgconstruct()
 #'
-#' @param shpfname  File name of the shapefile. Filename should end with '.shp'
+#' @param shpfname  Either a sf data frame or the file name of the shapefile. Filename should end with '.shp'
 #'
 #' @param cellsize  Distance, in degrees, between the sample points used to
 #'                  generate the grid. Small values yield long generation times
@@ -732,23 +770,27 @@ dgsavegrid <- function(grid,shpfname) {
 #' @export
 dgshptogrid <- function(dggs,shpfname,cellsize=0.1,savegrid=NA){ #TODO: Densify?
   dgverify(dggs)
+  
+  if(!(is.data.frame(shpfname) && inherits(shpfname, "sf"))) {
 
-  shpfname <- trimws(shpfname)
-
-  if(!grepl('\\.shp$',shpfname))
-    stop("Shapefile name does to end with '.shp'!")
-  if(!file.exists(shpfname))
-    stop('Shapefile does not exist!')
-
-  dsn   <- dirname(shpfname)
-  layer <- tools::file_path_sans_ext(basename(shpfname))
-  poly  <- sf::st_read(dsn, layer=layer)
+    shpfname <- trimws(shpfname)
+  
+    if(!grepl('\\.shp$',shpfname))
+      stop("Shapefile name does to end with '.shp'!")
+    if(!file.exists(shpfname))
+      stop('Shapefile does not exist!')
+  
+    dsn   <- dirname(shpfname)
+    layer <- file_path_sans_ext(basename(shpfname))
+    bb  <- st_bbox_to_sp(st_bbox(st_read(dsn, layer=layer)))
+    
+  } else bb <- st_bbox_to_sp(st_bbox(shpfname))
 
   #Generate a dense grid of points
-  samp_points <- sp::makegrid(sf::as_Spatial(poly), cellsize = cellsize)
+  samp_points <- makegrid(bb, cellsize = cellsize)
 
   #Convert the points to SEQNUM ids for dggs
-  samp_points <- dgGEO_to_SEQNUM(dggs,samp_points$x1, samp_points$x2)$seqnum
+  samp_points <- dgGEO_to_SEQNUM(dggs, samp_points$x1, samp_points$x2)$seqnum
 
-  dgcellstogrid(dggs, samp_points, savegrid=savegrid)
+  dgcellstogrid(dggs, samp_points, savegrid = savegrid)
 }

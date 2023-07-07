@@ -192,7 +192,7 @@ example demonstrates how to get the center coordinates of the cells.
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
-library(dplyr)
+library(collapse)
 
 #Construct a global grid with cells approximately 1000 miles across
 dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
@@ -207,7 +207,7 @@ dgquakes$cell <- dgGEO_to_SEQNUM(dggs,dgquakes$lon,dgquakes$lat)$seqnum
 cellcenters   <- dgSEQNUM_to_GEO(dggs,dgquakes$cell)
 
 #Get the number of earthquakes in each cell
-quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
+quakecounts   <- dgquakes %>% fcount(cell)
 
 #Get the grid cell boundaries for cells which had quakes
 grid          <- dgcellstogrid(dggs,quakecounts$cell)
@@ -218,8 +218,8 @@ grid          <- merge(grid,quakecounts,by.x="seqnum",by.y="cell")
 
 #Make adjustments so the output is more visually interesting
 grid$count    <- log(grid$count)
-cutoff        <- quantile(grid$count,0.9)
-grid          <- grid %>% mutate(count=ifelse(count>cutoff,cutoff,count))
+cutoff        <- fquantile(grid$count, 0.9)
+grid          <- grid %>% fmutate(count = ifelse(count>cutoff,cutoff,count))
 
 #Get polygons for each country of the world
 countries <- map_data("world")
@@ -297,7 +297,6 @@ their associated grid cells:
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
-library(dplyr)
 
 N <- 100    #How many cells to sample
 
@@ -367,7 +366,6 @@ and generate a grid accordingly.
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
-library(dplyr)
 
 N <- 100    #How many cells to sample
 

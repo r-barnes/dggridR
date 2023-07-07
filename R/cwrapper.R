@@ -27,8 +27,8 @@ dgGEO_to_GEO <- function(dggs, in_lon_deg, in_lat_deg){
   dgverify(dggs)
 
   N <- length(in_lon_deg)
-  out_lon_deg <- rep(0,N)
-  out_lat_deg <- rep(0,N)
+  out_lon_deg <- alloc(0,N)
+  out_lat_deg <- alloc(0,N)
 
   GEO_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_lon_deg, out_lat_deg)
 
@@ -66,9 +66,9 @@ dgGEO_to_PROJTRI <- function(dggs, in_lon_deg, in_lat_deg){
   dgverify(dggs)
 
   N <- length(in_lon_deg)
-  out_tnum <- rep(0,N)
-  out_tx <- rep(0,N)
-  out_ty <- rep(0,N)
+  out_tnum <- alloc(0,N)
+  out_tx <- alloc(0,N)
+  out_ty <- alloc(0,N)
 
   GEO_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_tnum, out_tx, out_ty)
 
@@ -107,9 +107,9 @@ dgGEO_to_Q2DD <- function(dggs, in_lon_deg, in_lat_deg){
   dgverify(dggs)
 
   N <- length(in_lon_deg)
-  out_quad <- rep(0,N)
-  out_qx <- rep(0,N)
-  out_qy <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_qx <- alloc(0,N)
+  out_qy <- alloc(0,N)
 
   GEO_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_quad, out_qx, out_qy)
 
@@ -148,9 +148,9 @@ dgGEO_to_Q2DI <- function(dggs, in_lon_deg, in_lat_deg){
   dgverify(dggs)
 
   N <- length(in_lon_deg)
-  out_quad <- rep(0,N)
-  out_i <- rep(0,N)
-  out_j <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_i <- alloc(0,N)
+  out_j <- alloc(0,N)
 
   GEO_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_quad, out_i, out_j)
 
@@ -189,7 +189,7 @@ dgGEO_to_SEQNUM <- function(dggs, in_lon_deg, in_lat_deg){
   dgverify(dggs)
 
   N <- length(in_lon_deg)
-  out_seqnum <- rep(0,N)
+  out_seqnum <- alloc(0,N)
 
   GEO_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_seqnum)
 
@@ -226,8 +226,8 @@ dgGEO_to_PLANE <- function(dggs, in_lon_deg, in_lat_deg){
   dgverify(dggs)
 
   N <- length(in_lon_deg)
-  out_px <- rep(0,N)
-  out_py <- rep(0,N)
+  out_px <- alloc(0,N)
+  out_py <- alloc(0,N)
 
   GEO_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_lon_deg, in_lat_deg, out_px, out_py)
 
@@ -266,8 +266,8 @@ dgPROJTRI_to_GEO <- function(dggs, in_tnum, in_tx, in_ty){
   dgverify(dggs)
 
   N <- length(in_tnum)
-  out_lon_deg <- rep(0,N)
-  out_lat_deg <- rep(0,N)
+  out_lon_deg <- alloc(0,N)
+  out_lat_deg <- alloc(0,N)
 
   PROJTRI_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_lon_deg, out_lat_deg)
 
@@ -306,9 +306,9 @@ dgPROJTRI_to_PROJTRI <- function(dggs, in_tnum, in_tx, in_ty){
   dgverify(dggs)
 
   N <- length(in_tnum)
-  out_tnum <- rep(0,N)
-  out_tx <- rep(0,N)
-  out_ty <- rep(0,N)
+  out_tnum <- alloc(0,N)
+  out_tx <- alloc(0,N)
+  out_ty <- alloc(0,N)
 
   PROJTRI_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_tnum, out_tx, out_ty)
 
@@ -348,9 +348,9 @@ dgPROJTRI_to_Q2DD <- function(dggs, in_tnum, in_tx, in_ty){
   dgverify(dggs)
 
   N <- length(in_tnum)
-  out_quad <- rep(0,N)
-  out_qx <- rep(0,N)
-  out_qy <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_qx <- alloc(0,N)
+  out_qy <- alloc(0,N)
 
   PROJTRI_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_quad, out_qx, out_qy)
 
@@ -390,9 +390,9 @@ dgPROJTRI_to_Q2DI <- function(dggs, in_tnum, in_tx, in_ty){
   dgverify(dggs)
 
   N <- length(in_tnum)
-  out_quad <- rep(0,N)
-  out_i <- rep(0,N)
-  out_j <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_i <- alloc(0,N)
+  out_j <- alloc(0,N)
 
   PROJTRI_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_quad, out_i, out_j)
 
@@ -432,7 +432,7 @@ dgPROJTRI_to_SEQNUM <- function(dggs, in_tnum, in_tx, in_ty){
   dgverify(dggs)
 
   N <- length(in_tnum)
-  out_seqnum <- rep(0,N)
+  out_seqnum <- alloc(0,N)
 
   PROJTRI_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_seqnum)
 
@@ -470,8 +470,8 @@ dgPROJTRI_to_PLANE <- function(dggs, in_tnum, in_tx, in_ty){
   dgverify(dggs)
 
   N <- length(in_tnum)
-  out_px <- rep(0,N)
-  out_py <- rep(0,N)
+  out_px <- alloc(0,N)
+  out_py <- alloc(0,N)
 
   PROJTRI_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_tnum, in_tx, in_ty, out_px, out_py)
 
@@ -510,8 +510,8 @@ dgQ2DD_to_GEO <- function(dggs, in_quad, in_qx, in_qy){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_lon_deg <- rep(0,N)
-  out_lat_deg <- rep(0,N)
+  out_lon_deg <- alloc(0,N)
+  out_lat_deg <- alloc(0,N)
 
   Q2DD_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_lon_deg, out_lat_deg)
 
@@ -550,9 +550,9 @@ dgQ2DD_to_PROJTRI <- function(dggs, in_quad, in_qx, in_qy){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_tnum <- rep(0,N)
-  out_tx <- rep(0,N)
-  out_ty <- rep(0,N)
+  out_tnum <- alloc(0,N)
+  out_tx <- alloc(0,N)
+  out_ty <- alloc(0,N)
 
   Q2DD_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_tnum, out_tx, out_ty)
 
@@ -592,9 +592,9 @@ dgQ2DD_to_Q2DD <- function(dggs, in_quad, in_qx, in_qy){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_quad <- rep(0,N)
-  out_qx <- rep(0,N)
-  out_qy <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_qx <- alloc(0,N)
+  out_qy <- alloc(0,N)
 
   Q2DD_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_quad, out_qx, out_qy)
 
@@ -634,9 +634,9 @@ dgQ2DD_to_Q2DI <- function(dggs, in_quad, in_qx, in_qy){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_quad <- rep(0,N)
-  out_i <- rep(0,N)
-  out_j <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_i <- alloc(0,N)
+  out_j <- alloc(0,N)
 
   Q2DD_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_quad, out_i, out_j)
 
@@ -676,7 +676,7 @@ dgQ2DD_to_SEQNUM <- function(dggs, in_quad, in_qx, in_qy){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_seqnum <- rep(0,N)
+  out_seqnum <- alloc(0,N)
 
   Q2DD_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_seqnum)
 
@@ -714,8 +714,8 @@ dgQ2DD_to_PLANE <- function(dggs, in_quad, in_qx, in_qy){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_px <- rep(0,N)
-  out_py <- rep(0,N)
+  out_px <- alloc(0,N)
+  out_py <- alloc(0,N)
 
   Q2DD_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_qx, in_qy, out_px, out_py)
 
@@ -754,8 +754,8 @@ dgQ2DI_to_GEO <- function(dggs, in_quad, in_i, in_j){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_lon_deg <- rep(0,N)
-  out_lat_deg <- rep(0,N)
+  out_lon_deg <- alloc(0,N)
+  out_lat_deg <- alloc(0,N)
 
   Q2DI_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_lon_deg, out_lat_deg)
 
@@ -794,9 +794,9 @@ dgQ2DI_to_PROJTRI <- function(dggs, in_quad, in_i, in_j){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_tnum <- rep(0,N)
-  out_tx <- rep(0,N)
-  out_ty <- rep(0,N)
+  out_tnum <- alloc(0,N)
+  out_tx <- alloc(0,N)
+  out_ty <- alloc(0,N)
 
   Q2DI_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_tnum, out_tx, out_ty)
 
@@ -836,9 +836,9 @@ dgQ2DI_to_Q2DD <- function(dggs, in_quad, in_i, in_j){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_quad <- rep(0,N)
-  out_qx <- rep(0,N)
-  out_qy <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_qx <- alloc(0,N)
+  out_qy <- alloc(0,N)
 
   Q2DI_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_quad, out_qx, out_qy)
 
@@ -878,9 +878,9 @@ dgQ2DI_to_Q2DI <- function(dggs, in_quad, in_i, in_j){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_quad <- rep(0,N)
-  out_i <- rep(0,N)
-  out_j <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_i <- alloc(0,N)
+  out_j <- alloc(0,N)
 
   Q2DI_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_quad, out_i, out_j)
 
@@ -920,7 +920,7 @@ dgQ2DI_to_SEQNUM <- function(dggs, in_quad, in_i, in_j){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_seqnum <- rep(0,N)
+  out_seqnum <- alloc(0,N)
 
   Q2DI_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_seqnum)
 
@@ -958,8 +958,8 @@ dgQ2DI_to_PLANE <- function(dggs, in_quad, in_i, in_j){
   dgverify(dggs)
 
   N <- length(in_quad)
-  out_px <- rep(0,N)
-  out_py <- rep(0,N)
+  out_px <- alloc(0,N)
+  out_py <- alloc(0,N)
 
   Q2DI_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_quad, in_i, in_j, out_px, out_py)
 
@@ -996,8 +996,8 @@ dgSEQNUM_to_GEO <- function(dggs, in_seqnum){
   dgverify(dggs)
 
   N <- length(in_seqnum)
-  out_lon_deg <- rep(0,N)
-  out_lat_deg <- rep(0,N)
+  out_lon_deg <- alloc(0,N)
+  out_lat_deg <- alloc(0,N)
 
   SEQNUM_to_GEO(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_lon_deg, out_lat_deg)
 
@@ -1034,9 +1034,9 @@ dgSEQNUM_to_PROJTRI <- function(dggs, in_seqnum){
   dgverify(dggs)
 
   N <- length(in_seqnum)
-  out_tnum <- rep(0,N)
-  out_tx <- rep(0,N)
-  out_ty <- rep(0,N)
+  out_tnum <- alloc(0,N)
+  out_tx <- alloc(0,N)
+  out_ty <- alloc(0,N)
 
   SEQNUM_to_PROJTRI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_tnum, out_tx, out_ty)
 
@@ -1074,9 +1074,9 @@ dgSEQNUM_to_Q2DD <- function(dggs, in_seqnum){
   dgverify(dggs)
 
   N <- length(in_seqnum)
-  out_quad <- rep(0,N)
-  out_qx <- rep(0,N)
-  out_qy <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_qx <- alloc(0,N)
+  out_qy <- alloc(0,N)
 
   SEQNUM_to_Q2DD(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_quad, out_qx, out_qy)
 
@@ -1114,9 +1114,9 @@ dgSEQNUM_to_Q2DI <- function(dggs, in_seqnum){
   dgverify(dggs)
 
   N <- length(in_seqnum)
-  out_quad <- rep(0,N)
-  out_i <- rep(0,N)
-  out_j <- rep(0,N)
+  out_quad <- alloc(0,N)
+  out_i <- alloc(0,N)
+  out_j <- alloc(0,N)
 
   SEQNUM_to_Q2DI(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_quad, out_i, out_j)
 
@@ -1154,7 +1154,7 @@ dgSEQNUM_to_SEQNUM <- function(dggs, in_seqnum){
   dgverify(dggs)
 
   N <- length(in_seqnum)
-  out_seqnum <- rep(0,N)
+  out_seqnum <- alloc(0,N)
 
   SEQNUM_to_SEQNUM(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_seqnum)
 
@@ -1190,8 +1190,8 @@ dgSEQNUM_to_PLANE <- function(dggs, in_seqnum){
   dgverify(dggs)
 
   N <- length(in_seqnum)
-  out_px <- rep(0,N)
-  out_py <- rep(0,N)
+  out_px <- alloc(0,N)
+  out_py <- alloc(0,N)
 
   SEQNUM_to_PLANE(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], N, in_seqnum, out_px, out_py)
 

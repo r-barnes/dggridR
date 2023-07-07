@@ -55,7 +55,7 @@ Your analysis could be as easy as this:
 
 ```R
 library(dggridR)
-library(dplyr)
+library(collapse)
 
 #Construct a global grid with cells approximately 1000 miles across
 dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
@@ -67,7 +67,7 @@ data(dgquakes)
 dgquakes$cell <- dgGEO_to_SEQNUM(dggs, dgquakes$lon, dgquakes$lat)$seqnum
 
 #Get the number of earthquakes in each equally-sized cell
-quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
+quakecounts   <- dgquakes %>% fcount(cell)
 ```
 
 Show me more examples!

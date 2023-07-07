@@ -10,7 +10,7 @@ dgshptogrid(dggs, shpfname, cellsize = 0.1, savegrid = NA)
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
 
-\item{shpfname}{File name of the shapefile. Filename should end with '.shp'}
+\item{shpfname}{Either a sf data frame or the file name of the shapefile. Filename should end with '.shp'}
 
 \item{cellsize}{Distance, in degrees, between the sample points used to
 generate the grid. Small values yield long generation times
