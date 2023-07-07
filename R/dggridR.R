@@ -25,7 +25,7 @@ makegrid <- function(bb, n = 10000, nsig = 2, cellsize, offset = rep(0.5, nrow(b
   if (pretty) min.coords = signif(min.coords, max(ceiling(log10(abs(bb[1, ])/cellsize))))
   sel = min.coords - offset * cellsize > bb[, 1]
   if (any(sel)) min.coords[sel] = min.coords[sel] - cellsize[sel]
-  expand.grid.arglist = vector("list", nrow(bb))
+  expand.grid.arglist = list()
   for (i in 1:nrow(bb)) {
     name = paste("x", i, sep = "")
     from = min.coords[i]
