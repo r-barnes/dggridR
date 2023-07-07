@@ -1,10 +1,42 @@
-#' @import     dplyr
-#' @import     sf
-#' @import     sp
-#' @importFrom methods as
-#' @importFrom rlang .data
-#' @importFrom utils read.csv read.table tail write.table
+#' @importFrom sf st_bbox st_as_sf write_sf st_read
+#' @importFrom s2 s2_geog_point s2_convex_hull_agg
+#' @importFrom collapse qDF fgroup_by fsummarise fmutate funique
+#' @importFrom tools file_path_sans_ext
 #' @useDynLib  dggridR
+#'
+
+# Convert sf::st_bbox to sp::bbox
+st_bbox_to_sp <- function(x) {
+  if(length(x) != 4L) stop("invalid bbox, needs to be a vector from st_bbox(), with exactly 4 elements")
+  matrix(x, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))
+}
+
+# Copied from sp to get rid of it as a dependency
+makegrid <- function(bb, n = 10000, nsig = 2, cellsize, offset = rep(0.5, nrow(bb)), pretty = TRUE) {
+  # if (is(x, "Spatial"))
+  #   bb = bbox(x)
+  # else bb = x
+  if (missing(cellsize)) {
+    pw = 1/nrow(bb)
+    cellsize = signif((prod(apply(bb, 1, diff))/n)^pw, nsig)
+  }
+  if (length(cellsize) == 1) cellsize = rep(cellsize, nrow(bb))
+  min.coords = bb[, 1] + offset * cellsize
+  if (pretty) min.coords = signif(min.coords, max(ceiling(log10(abs(bb[1, ])/cellsize))))
+  sel = min.coords - offset * cellsize > bb[, 1]
+  if (any(sel)) min.coords[sel] = min.coords[sel] - cellsize[sel]
+  expand.grid.arglist = list()
+  for (i in 1:nrow(bb)) {
+    name = paste("x", i, sep = "")
+    from = min.coords[i]
+    by = cellsize[i]
+    length.out = round(1 + (bb[i, 2] - from)/by)
+    expand.grid.arglist[[name]] = seq(from, by = by, length.out = length.out)
+  }
+  xy = do.call(expand.grid, expand.grid.arglist)
+  attr(xy, "cellsize") = cellsize
+  return(xy)
+}
 
 
 #' @name dg_env
@@ -504,14 +536,24 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #'
 #' @return Returns an sf object.
 #'
-dg_process_polydata <- function(polydata){
-  polydata <- as.data.frame(polydata)
+dg_process_polydata <- function(polydata) {
 
-  polydata %>%
-    sf::st_as_sf(coords=c("x", "y"), crs=4326) %>%
-    group_by(.data$seqnum) %>%
-    summarise(geometry = sf::st_combine(geometry)) %>%
-    sf::st_cast("POLYGON")
+  x <- y <- seqnum <- geometry <- NULL # For R CMD Check: no visible binding for global variables
+
+  # Using s2 directly: faster !!
+  qDF(polydata) |>
+    fmutate(geometry = s2_geog_point(x, y)) |>
+    fgroup_by(seqnum, sort = TRUE) |>
+    fsummarise(geometry = s2_convex_hull_agg(geometry)) |>
+    st_as_sf(crs = 4326)
+
+  # sf solution: also much faster than with dplyr, but 3x slower than s2
+  # qDF(polydata) |>
+  #   st_as_sf(coords = c("x", "y"), crs = 4326) |>
+  #   fgroup_by(seqnum, sort = TRUE) |>
+  #   fsummarise(geometry = st_combine(geometry)) |>
+  #   fmutate(geometry = `oldClass<-`(geometry, c("sfc_MULTIPOINT", "sfc"))) |>
+  #   st_cast("POLYGON")
 }
 
 
@@ -539,10 +581,7 @@ dg_process_polydata <- function(polydata){
 #'                  generate the grid. Small values yield long generation times
 #'                  while large values may omit cells.
 #'
-#' @param savegrid  If savegrid is set to a file path, then a shapefile
-#'                  containing the grid is written to that path and the filename
-#'                  is returned. No other manipulations are done.
-#'                  Default: NA (do not save grid, return it)
+#' @param \dots Further arguments passed to \code{\link{dgcellstogrid}}.
 #'
 #' @return Returns an sf object.
 #'         If \code{!is.na(savegrid)}, returns a filename.
@@ -556,20 +595,18 @@ dg_process_polydata <- function(polydata){
 #'                minlat=24.7433195, minlon=-124.7844079,
 #'                maxlat=49.3457868, maxlon=-66.9513812)
 #' @export
-dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1,savegrid=NA){ #TODO: Densify?
+dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1, ...){ #TODO: Densify?
   dgverify(dggs)
 
-  coords <- matrix(c(minlon, minlat, maxlon, minlat, maxlon, maxlat, maxlon, minlat, minlon, minlat), ncol = 2, byrow = TRUE)
-  regbox <- Polygon(coords)
-  regbox <- SpatialPolygons(list(Polygons(list(regbox), ID = "a")), proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+  bbox_coords <- matrix(c(minlon, minlat, maxlon, maxlat), ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))
 
   #Generate a dense grid of points
-  samp_points <- sp::makegrid(regbox, cellsize = cellsize)
+  samp_points <- makegrid(bbox_coords, cellsize = cellsize)
 
   #Convert the points to SEQNUM ids for dggs
-  samp_points <- dgGEO_to_SEQNUM(dggs,samp_points$x1, samp_points$x2)$seqnum
+  samp_points <- dgGEO_to_SEQNUM(dggs, samp_points$x1, samp_points$x2)$seqnum
 
-  dgcellstogrid(dggs, samp_points, savegrid=savegrid)
+  dgcellstogrid(dggs, samp_points, ...)
 }
 
 
@@ -582,12 +619,10 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #' @description     Note: If you have a high-resolution grid this may take a
 #'                  very long time to execute.
 #'
-#' @param dggs      A dggs object from dgconstruct()
 #'
-#' @param savegrid  If savegrid is set to a file path, then a shapefile
-#'                  containing the grid is written to that path and the filename
-#'                  is returned. No other manipulations are done.
-#'                  Default: NA (do not save grid, return it)
+#' @param dggs      A dggs object from dgconstruct().
+#' @inheritParams dgcellstogrid
+#'
 #'
 #' @return Returns an sf object.
 #'         If \code{!is.na(savegrid)}, returns a filename.
@@ -601,11 +636,12 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #' gridfilename <- dgearthgrid(dggs,savegrid=tempfile(fileext=".shp")) #Save directly to a file
 #' }
 #' @export
-dgearthgrid <- function(dggs,savegrid=NA){ #TODO: Densify?
+dgearthgrid <- function(dggs, savegrid = NA, return_sf = TRUE) { #TODO: Densify?
   dgverify(dggs)
 
   grid <- GlobalGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]])
-  if(is.na(savegrid)){
+  if(is.na(savegrid)) {
+    if(!return_sf) return(qDF(grid))
     dg_process_polydata(grid)
   } else {
     grid <- dg_process_polydata(grid)
@@ -632,6 +668,8 @@ dgearthgrid <- function(dggs,savegrid=NA){ #TODO: Densify?
 #'                  is returned. No other manipulations are done.
 #'                  Default: NA (do not save grid, return it)
 #'
+#' @param return_sf logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.
+#'
 #' @return Returns an sf object.
 #'         If \code{!is.na(savegrid)}, returns a filename.
 #'
@@ -646,19 +684,20 @@ dgearthgrid <- function(dggs,savegrid=NA){ #TODO: Densify?
 #' #Get grid cells for the earthquakes identified
 #' grid          <- dgcellstogrid(dggs, dgquakes$cell)
 #' @export
-dgcellstogrid <- function(dggs, cells, savegrid=NA){ #TODO: Densify?
+dgcellstogrid <- function(dggs, cells, savegrid=NA, return_sf = TRUE){ #TODO: Densify?
   dgverify(dggs)
 
   #dggrid also eliminates duplicate cells, but doing so here saves disk space
   #and likely wall time, given the costs of IO, not that it matters unless the
   #data set is huge
-  cells <- unique(cells)
+  cells <- funique(cells)
 
-  if(max(cells)>dgmaxcell(dggs))
+  if(max(cells) > dgmaxcell(dggs))
     stop("'cells' contained cell ids which were larger than the maximum id!")
 
   grid <- SeqNumGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], cells)
   if(is.na(savegrid)){
+    if(!return_sf) return(qDF(grid))
     dg_process_polydata(grid)
   } else {
     grid <- dg_process_polydata(grid)
@@ -679,7 +718,7 @@ dgcellstogrid <- function(dggs, cells, savegrid=NA){ #TODO: Densify?
 #'
 #' @return          The filename the grid was saved to
 dgsavegrid <- function(grid,shpfname) {
-  sf::write_sf(grid, shpfname, driver='ESRI Shapefile', layer='dggrid')
+  write_sf(grid, shpfname, driver='ESRI Shapefile', layer='dggrid')
   shpfname
 }
 
@@ -710,16 +749,13 @@ dgsavegrid <- function(grid,shpfname) {
 #'
 #' @param dggs      A dggs object from dgconstruct()
 #'
-#' @param shpfname  File name of the shapefile. Filename should end with '.shp'
+#' @param shpfname  Either a sf data frame or the file name of the shapefile. Filename should end with '.shp'.
 #'
 #' @param cellsize  Distance, in degrees, between the sample points used to
 #'                  generate the grid. Small values yield long generation times
 #'                  while large values may omit cells.
 #'
-#' @param savegrid  If savegrid is set to a file path, then a shapefile
-#'                  containing the grid is written to that path and the filename
-#'                  is returned. No other manipulations are done.
-#'                  Default: NA (do not save grid, return it)
+#' @param \dots Further arguments passed to \code{\link{dgcellstogrid}}.
 #'
 #' @return Returns an sf object.
 #'         If \code{!is.na(savegrid)}, returns a filename.
@@ -730,25 +766,31 @@ dgsavegrid <- function(grid,shpfname) {
 #' dggs <- dgconstruct(spacing=25, metric=FALSE, resround='nearest')
 #' south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa())
 #' @export
-dgshptogrid <- function(dggs,shpfname,cellsize=0.1,savegrid=NA){ #TODO: Densify?
+dgshptogrid <- function(dggs, shpfname, cellsize = 0.1, ...) { #TODO: Densify?
   dgverify(dggs)
 
-  shpfname <- trimws(shpfname)
+  if(!(is.data.frame(shpfname) && inherits(shpfname, "sf"))) {
 
-  if(!grepl('\\.shp$',shpfname))
-    stop("Shapefile name does to end with '.shp'!")
-  if(!file.exists(shpfname))
-    stop('Shapefile does not exist!')
+    shpfname <- trimws(shpfname)
 
-  dsn   <- dirname(shpfname)
-  layer <- tools::file_path_sans_ext(basename(shpfname))
-  poly  <- sf::st_read(dsn, layer=layer)
+    if(!grepl('\\.shp$',shpfname))
+      stop("Shapefile name does to end with '.shp'!")
+    if(!file.exists(shpfname))
+      stop('Shapefile does not exist!')
+
+    dsn   <- dirname(shpfname)
+    layer <- file_path_sans_ext(basename(shpfname))
+    bb  <- st_bbox_to_sp(st_bbox(st_read(dsn, layer=layer)))
+
+  } else {
+    bb <- st_bbox_to_sp(st_bbox(shpfname))
+  }
 
   #Generate a dense grid of points
-  samp_points <- sp::makegrid(sf::as_Spatial(poly), cellsize = cellsize)
+  samp_points <- makegrid(bb, cellsize = cellsize)
 
   #Convert the points to SEQNUM ids for dggs
-  samp_points <- dgGEO_to_SEQNUM(dggs,samp_points$x1, samp_points$x2)$seqnum
+  samp_points <- dgGEO_to_SEQNUM(dggs, samp_points$x1, samp_points$x2)$seqnum
 
-  dgcellstogrid(dggs, samp_points, savegrid=savegrid)
+  dgcellstogrid(dggs, samp_points, ...)
 }

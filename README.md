@@ -2,6 +2,19 @@
 
 dggridR: Discrete Global Grids for R
 ====================================
+***
+*Note*: This fork implements vital fixes to *dggridR*, and performance improvements. The upstream project is currently unmaintained. This fork can be installed using either of:
+
+```r
+remotes::install_github("r-barnes/dggridR")
+
+install.packages("dggridR",
+                 repos = c(ropensci = 'https://fastverse.r-universe.dev',
+                           CRAN = 'https://cloud.r-project.org'))
+```
+
+
+***
 
 _Spatial Analysis Done Right_
 
@@ -55,7 +68,7 @@ Your analysis could be as easy as this:
 
 ```R
 library(dggridR)
-library(dplyr)
+library(collapse)
 
 #Construct a global grid with cells approximately 1000 miles across
 dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
@@ -67,7 +80,7 @@ data(dgquakes)
 dgquakes$cell <- dgGEO_to_SEQNUM(dggs, dgquakes$lon, dgquakes$lat)$seqnum
 
 #Get the number of earthquakes in each equally-sized cell
-quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
+quakecounts   <- dgquakes %>% fcount(cell)
 ```
 
 Show me more examples!

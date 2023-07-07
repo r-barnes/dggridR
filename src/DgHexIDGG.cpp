@@ -166,8 +166,8 @@ DgHexIDGG::initialize (void)
 
       if (isClassIII())
          factor *= M_SQRT7;
-
-      maxD_ = factor - 1.0;
+      // Adding small number (1e-6) to prevent rounding down in conversion to integer (fixes issue #63 experienced on Apple ARM computers)
+      maxD_ = factor+1e-6 - 1.0;
 
       //cout << res() << " " << aperture();
       //cout << " f: " << factor << " maxD: " << maxD_ << endl;

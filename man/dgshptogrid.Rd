@@ -5,21 +5,18 @@
 \title{Return boundary coordinates for cells intersecting a
                  shapefile}
 \usage{
-dgshptogrid(dggs, shpfname, cellsize = 0.1, savegrid = NA)
+dgshptogrid(dggs, shpfname, cellsize = 0.1, ...)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
 
-\item{shpfname}{File name of the shapefile. Filename should end with '.shp'}
+\item{shpfname}{Either a sf data frame or the file name of the shapefile. Filename should end with '.shp'.}
 
 \item{cellsize}{Distance, in degrees, between the sample points used to
 generate the grid. Small values yield long generation times
 while large values may omit cells.}
 
-\item{savegrid}{If savegrid is set to a file path, then a shapefile
-containing the grid is written to that path and the filename
-is returned. No other manipulations are done.
-Default: NA (do not save grid, return it)}
+\item{\dots}{Further arguments passed to \code{\link{dgcellstogrid}}.}
 }
 \value{
 Returns an sf object.

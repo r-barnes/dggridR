@@ -15,6 +15,7 @@ vignette: >
 ```{r, fig.width=5, fig.height=5, results='hide', warning=FALSE, error=FALSE, message=FALSE, echo=FALSE, fig.align='center'}
 # Generate cover picture
 library(dggridR)
+library(sf)
 library(ggplot2)
 
 # Generate grids of various sizes
@@ -26,11 +27,11 @@ countries <- map_data("world")
 
 # Crop generate dgrids to areas of interest
 bounds = st_bbox(c(xmin = -90, xmax = 75, ymin = -90, ymax = 90), crs = st_crs(4326))
-hgrids[[1]] = hgrids[[1]] %>% st_make_valid() %>% st_filter(st_as_sfc(bounds), .predicate=st_within)
+hgrids[[1]] = hgrids[[1]] |> st_make_valid() |> st_filter(st_as_sfc(bounds), .predicate=st_within)
 bounds = st_bbox(c(xmin = 20, xmax = 145, ymin = -90, ymax = 90), crs = st_crs(4326))
-hgrids[[2]] = hgrids[[2]] %>% st_make_valid() %>% st_filter(st_as_sfc(bounds), .predicate=st_within)
+hgrids[[2]] = hgrids[[2]] |> st_make_valid() |> st_filter(st_as_sfc(bounds), .predicate=st_within)
 bounds = st_bbox(c(xmin = 90, xmax = 215, ymin = -90, ymax = 90), crs = st_crs(4326))
-hgrids[[3]] = hgrids[[3]] %>% st_make_valid() %>% st_filter(st_as_sfc(bounds), .predicate=st_within)
+hgrids[[3]] = hgrids[[3]] |> st_make_valid() |> st_filter(st_as_sfc(bounds), .predicate=st_within)
 
 ggplot() +
     geom_polygon(data=countries,  aes(x=long, y=lat, group=group), fill=NA, color="black")   +
@@ -192,7 +193,7 @@ example demonstrates how to get the center coordinates of the cells.
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
-library(dplyr)
+library(collapse)
 
 #Construct a global grid with cells approximately 1000 miles across
 dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
@@ -207,7 +208,7 @@ dgquakes$cell <- dgGEO_to_SEQNUM(dggs,dgquakes$lon,dgquakes$lat)$seqnum
 cellcenters   <- dgSEQNUM_to_GEO(dggs,dgquakes$cell)
 
 #Get the number of earthquakes in each cell
-quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
+quakecounts   <- dgquakes |> fcount(cell, name = "count")
 
 #Get the grid cell boundaries for cells which had quakes
 grid          <- dgcellstogrid(dggs,quakecounts$cell)
@@ -218,8 +219,8 @@ grid          <- merge(grid,quakecounts,by.x="seqnum",by.y="cell")
 
 #Make adjustments so the output is more visually interesting
 grid$count    <- log(grid$count)
-cutoff        <- quantile(grid$count,0.9)
-grid          <- grid %>% mutate(count=ifelse(count>cutoff,cutoff,count))
+cutoff        <- fquantile(grid$count, 0.9)
+grid          <- grid |> fmutate(count = ifelse(count>cutoff,cutoff,count))
 
 #Get polygons for each country of the world
 countries <- map_data("world")
@@ -297,7 +298,6 @@ their associated grid cells:
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
-library(dplyr)
 
 N <- 100    #How many cells to sample
 
@@ -367,7 +367,6 @@ and generate a grid accordingly.
 ```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
 #Include libraries
 library(dggridR)
-library(dplyr)
 
 N <- 100    #How many cells to sample
 
