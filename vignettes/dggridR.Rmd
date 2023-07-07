@@ -15,6 +15,7 @@ vignette: >
 ```{r, fig.width=5, fig.height=5, results='hide', warning=FALSE, error=FALSE, message=FALSE, echo=FALSE, fig.align='center'}
 # Generate cover picture
 library(dggridR)
+library(sf)
 library(ggplot2)
 
 # Generate grids of various sizes
@@ -207,7 +208,7 @@ dgquakes$cell <- dgGEO_to_SEQNUM(dggs,dgquakes$lon,dgquakes$lat)$seqnum
 cellcenters   <- dgSEQNUM_to_GEO(dggs,dgquakes$cell)
 
 #Get the number of earthquakes in each cell
-quakecounts   <- dgquakes %>% fcount(cell)
+quakecounts   <- dgquakes %>% fcount(cell, name = "count")
 
 #Get the grid cell boundaries for cells which had quakes
 grid          <- dgcellstogrid(dggs,quakecounts$cell)
