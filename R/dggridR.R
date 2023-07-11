@@ -1,6 +1,6 @@
 #' @importFrom sf st_bbox st_as_sf write_sf st_read
 #' @importFrom s2 s2_geog_point s2_convex_hull_agg
-#' @importFrom collapse qDF alloc fgroup_by fsummarise fmutate funique
+#' @importFrom collapse qDF fgroup_by fsummarise fmutate funique
 #' @importFrom tools file_path_sans_ext
 #' @useDynLib  dggridR
 #' 
