@@ -1,3 +1,13 @@
+dggridR v3.1.0 
+===============
+* Removed dplyr, rlang and sp as dependencies to make the package more 
+  lightweight and up to date (sp is depreciated)
+* Added collapse and s2 as dependencies (incurring 0 additional dependencies) 
+  yielding significant performance gains, especially in grid materialization
+* Function dgshptogrid now also allows passing an sf data frame in memory, 
+  in addition to a shapefile saved to disc
+* These changes were made by Sebastian Krantz
+
 dggridR v3.0.0  (Release date: 2023-01-02)
 ===============
 * Fixes memory leaks in DGGRID
