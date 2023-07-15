@@ -167,7 +167,7 @@ DgHexIDGG::initialize (void)
       if (isClassIII())
          factor *= M_SQRT7;
 
-      maxD_ = factor - 1.0;
+      maxD_ = factor+0.000001 - 1.0;
 
       //cout << res() << " " << aperture();
       //cout << " f: " << factor << " maxD: " << maxD_ << endl;

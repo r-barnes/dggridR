@@ -117,7 +117,7 @@ DgTriIDGG::initialize (void)
       double factor = parentScaleFac * 2.0L; // aperture 4
 
       scaleFac_ = factor;
-      maxD_ = factor - 1.0L;
+      maxD_ = factor+0.000001 - 1.0L;
 
       //cout << res() << " " << aperture();
       //cout << " f: " << factor << " maxD: " << maxD_ << endl;

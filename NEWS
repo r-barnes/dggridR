@@ -6,6 +6,7 @@ dggridR v3.1.0
   yielding significant performance gains, especially in grid materialization
 * Function dgshptogrid now also allows passing an sf data frame in memory, 
   in addition to a shapefile saved to disc
+* Fixed a numeric precision issue on Apple silicon computers (#63)
 * These changes were made by Sebastian Krantz
 
 dggridR v3.0.0  (Release date: 2023-01-02)
