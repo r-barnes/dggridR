@@ -444,7 +444,7 @@ void showitems(void)
             snprintf(stmp, sizeof(stmp), "%%.%df to %%.%df \t(%%.%df)",iDecimals,iDecimals,iDecimals);
             if (dlow < dhigh)       dgprintf(stmp,dlow,dhigh,mean);
             else if (dlow == dhigh) {
-                snprintf(stmp, sizeof(stmp), "= %%.%df",iDecimals);
+                dgprintf(stmp, "= %%.%df",iDecimals);
                 dgprintf(stmp,dlow);
             }
             else dgprintf("No Values");
