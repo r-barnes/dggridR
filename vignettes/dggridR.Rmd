@@ -492,7 +492,7 @@ time, Sahr's dggrid is the best option I've found.
 This R package was developed by Richard Barnes (https://rbarnes.org/).
 
 The dggrid conversion software was developed predominantly by Kevin Sahr
-(https://www.discreteglobalgrids.org/), with contributions from a few others.
+(https://discreteglobal.wpengine.com/), with contributions from a few others.
 
 Large portions of the above documentation are drawn from the DGGRID version 6.2b
 User Documentation, which is available in its entirety
