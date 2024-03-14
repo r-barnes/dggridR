@@ -10,7 +10,7 @@ Depends: R (>= 3.4.0)
 Imports: Rcpp (>= 0.12.12), collapse (>= 1.8.0), sf (>= 1.0), s2 (>= 1.1)
 LinkingTo: Rcpp
 RcppModules: dgfuncs, gridgens, gridstats
-Suggests: ggplot2, knitr, rmarkdown, maps, mapproj, R.rsp, testthat
+Suggests: ggplot2, dplyr, knitr, rmarkdown, maps, mapproj, R.rsp, testthat
 License: AGPL (>= 3)
 Authors@R: c(person("Richard", "Barnes",    role = c("aut", "cre"), email = "rijard.barnes@gmail.com"),
              person("Kevin",   "Sahr",      role = c("aut", "cph"), email = "sahrk@sou.edu"),
