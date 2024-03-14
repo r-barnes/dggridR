@@ -27,11 +27,11 @@ countries <- map_data("world")
 
 # Crop generate dgrids to areas of interest
 bounds = st_bbox(c(xmin = -90, xmax = 75, ymin = -90, ymax = 90), crs = st_crs(4326))
-hgrids[[1]] = hgrids[[1]] %>% st_make_valid() %>% st_filter(st_as_sfc(bounds), .predicate=st_within)
+hgrids[[1]] = hgrids[[1]] |> st_make_valid() |> st_filter(st_as_sfc(bounds), .predicate=st_within)
 bounds = st_bbox(c(xmin = 20, xmax = 145, ymin = -90, ymax = 90), crs = st_crs(4326))
-hgrids[[2]] = hgrids[[2]] %>% st_make_valid() %>% st_filter(st_as_sfc(bounds), .predicate=st_within)
+hgrids[[2]] = hgrids[[2]] |> st_make_valid() |> st_filter(st_as_sfc(bounds), .predicate=st_within)
 bounds = st_bbox(c(xmin = 90, xmax = 215, ymin = -90, ymax = 90), crs = st_crs(4326))
-hgrids[[3]] = hgrids[[3]] %>% st_make_valid() %>% st_filter(st_as_sfc(bounds), .predicate=st_within)
+hgrids[[3]] = hgrids[[3]] |> st_make_valid() |> st_filter(st_as_sfc(bounds), .predicate=st_within)
 
 ggplot() +
     geom_polygon(data=countries,  aes(x=long, y=lat, group=group), fill=NA, color="black")   +
@@ -208,7 +208,7 @@ dgquakes$cell <- dgGEO_to_SEQNUM(dggs,dgquakes$lon,dgquakes$lat)$seqnum
 cellcenters   <- dgSEQNUM_to_GEO(dggs,dgquakes$cell)
 
 #Get the number of earthquakes in each cell
-quakecounts   <- dgquakes %>% fcount(cell, name = "count")
+quakecounts   <- dgquakes |> fcount(cell, name = "count")
 
 #Get the grid cell boundaries for cells which had quakes
 grid          <- dgcellstogrid(dggs,quakecounts$cell)
@@ -220,7 +220,7 @@ grid          <- merge(grid,quakecounts,by.x="seqnum",by.y="cell")
 #Make adjustments so the output is more visually interesting
 grid$count    <- log(grid$count)
 cutoff        <- fquantile(grid$count, 0.9)
-grid          <- grid %>% fmutate(count = ifelse(count>cutoff,cutoff,count))
+grid          <- grid |> fmutate(count = ifelse(count>cutoff,cutoff,count))
 
 #Get polygons for each country of the world
 countries <- map_data("world")
