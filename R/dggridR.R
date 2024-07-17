@@ -537,7 +537,7 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #' @return Returns an sf object.
 #'
 dg_process_polydata <- function(polydata) {
-  
+
   x <- y <- seqnum <- geometry <- NULL # For R CMD Check: no visible binding for global variables
   
   # Using s2 directly: faster !!
@@ -623,7 +623,6 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #' @param dggs      A dggs object from dgconstruct().
 #' @inheritParams dgcellstogrid
 #'
-#'
 #' @return Returns an sf object.
 #'         If \code{!is.na(savegrid)}, returns a filename.
 #'
@@ -669,6 +668,8 @@ dgearthgrid <- function(dggs, savegrid = NA, return_sf = TRUE) { #TODO: Densify?
 #'                  Default: NA (do not save grid, return it)
 #'                  
 #' @param return_sf logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.                   
+#'
+#' @param return_sf logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.
 #'
 #' @return Returns an sf object.
 #'         If \code{!is.na(savegrid)}, returns a filename.
@@ -772,17 +773,19 @@ dgshptogrid <- function(dggs, shpfname, cellsize = 0.1, ...) { #TODO: Densify?
   if(!(is.data.frame(shpfname) && inherits(shpfname, "sf"))) {
 
     shpfname <- trimws(shpfname)
-  
+
     if(!grepl('\\.shp$',shpfname))
       stop("Shapefile name does to end with '.shp'!")
     if(!file.exists(shpfname))
       stop('Shapefile does not exist!')
-  
+
     dsn   <- dirname(shpfname)
     layer <- file_path_sans_ext(basename(shpfname))
     bb  <- st_bbox_to_sp(st_bbox(st_read(dsn, layer=layer)))
-    
-  } else bb <- st_bbox_to_sp(st_bbox(shpfname))
+
+  } else {
+    bb <- st_bbox_to_sp(st_bbox(shpfname))
+  }
 
   #Generate a dense grid of points
   samp_points <- makegrid(bb, cellsize = cellsize)
