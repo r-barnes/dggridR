@@ -3,7 +3,7 @@
 #' @importFrom collapse qDF fgroup_by fsummarise fmutate funique
 #' @importFrom tools file_path_sans_ext
 #' @useDynLib  dggridR
-#'
+#' 
 
 # Convert sf::st_bbox to sp::bbox
 st_bbox_to_sp <- function(x) {
@@ -13,7 +13,7 @@ st_bbox_to_sp <- function(x) {
 
 # Copied from sp to get rid of it as a dependency
 makegrid <- function(bb, n = 10000, nsig = 2, cellsize, offset = rep(0.5, nrow(bb)), pretty = TRUE) {
-  # if (is(x, "Spatial"))
+  # if (is(x, "Spatial")) 
   #   bb = bbox(x)
   # else bb = x
   if (missing(cellsize)) {
@@ -539,20 +539,20 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 dg_process_polydata <- function(polydata) {
 
   x <- y <- seqnum <- geometry <- NULL # For R CMD Check: no visible binding for global variables
-
+  
   # Using s2 directly: faster !!
   qDF(polydata) |>
     fmutate(geometry = s2_geog_point(x, y)) |>
     fgroup_by(seqnum, sort = TRUE) |>
-    fsummarise(geometry = s2_convex_hull_agg(geometry)) |>
+    fsummarise(geometry = s2_convex_hull_agg(geometry)) |> 
     st_as_sf(crs = 4326)
-
+  
   # sf solution: also much faster than with dplyr, but 3x slower than s2
   # qDF(polydata) |>
   #   st_as_sf(coords = c("x", "y"), crs = 4326) |>
   #   fgroup_by(seqnum, sort = TRUE) |>
-  #   fsummarise(geometry = st_combine(geometry)) |>
-  #   fmutate(geometry = `oldClass<-`(geometry, c("sfc_MULTIPOINT", "sfc"))) |>
+  #   fsummarise(geometry = st_combine(geometry)) |> 
+  #   fmutate(geometry = `oldClass<-`(geometry, c("sfc_MULTIPOINT", "sfc"))) |> 
   #   st_cast("POLYGON")
 }
 
@@ -618,11 +618,10 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #'
 #' @description     Note: If you have a high-resolution grid this may take a
 #'                  very long time to execute.
-#'
-#'
+#' 
+#' 
 #' @param dggs      A dggs object from dgconstruct().
 #' @inheritParams dgcellstogrid
-#'
 #'
 #' @return Returns an sf object.
 #'         If \code{!is.na(savegrid)}, returns a filename.
@@ -667,6 +666,8 @@ dgearthgrid <- function(dggs, savegrid = NA, return_sf = TRUE) { #TODO: Densify?
 #'                  containing the grid is written to that path and the filename
 #'                  is returned. No other manipulations are done.
 #'                  Default: NA (do not save grid, return it)
+#'                  
+#' @param return_sf logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.                   
 #'
 #' @param return_sf logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.
 #'
@@ -768,7 +769,7 @@ dgsavegrid <- function(grid,shpfname) {
 #' @export
 dgshptogrid <- function(dggs, shpfname, cellsize = 0.1, ...) { #TODO: Densify?
   dgverify(dggs)
-
+  
   if(!(is.data.frame(shpfname) && inherits(shpfname, "sf"))) {
 
     shpfname <- trimws(shpfname)

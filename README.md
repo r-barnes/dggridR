@@ -2,6 +2,19 @@
 
 dggridR: Discrete Global Grids for R
 ====================================
+***
+*Note*: This fork implements vital fixes to *dggridR*, and performance improvements. The upstream project is currently unmaintained. This fork can be installed using either of: 
+
+```r
+remotes::install_github("SebKrantz/dggridR")
+
+install.packages("dggridR", 
+                 repos = c(ropensci = 'https://fastverse.r-universe.dev',
+                           CRAN = 'https://cloud.r-project.org'))
+```
+
+
+***
 
 _Spatial Analysis Done Right_
 
