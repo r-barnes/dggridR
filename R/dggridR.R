@@ -669,8 +669,6 @@ dgearthgrid <- function(dggs, savegrid = NA, return_sf = TRUE) { #TODO: Densify?
 #'                  
 #' @param return_sf logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.                   
 #'
-#' @param return_sf logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.
-#'
 #' @return Returns an sf object.
 #'         If \code{!is.na(savegrid)}, returns a filename.
 #'
