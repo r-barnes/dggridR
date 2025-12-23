@@ -12,7 +12,7 @@ dgrectgrid(
   maxlat = -1,
   maxlon = -1,
   cellsize = 0.1,
-  savegrid = NA
+  ...
 )
 }
 \arguments{
@@ -30,10 +30,7 @@ dgrectgrid(
 generate the grid. Small values yield long generation times
 while large values may omit cells.}
 
-\item{savegrid}{If savegrid is set to a file path, then a shapefile
-containing the grid is written to that path and the filename
-is returned. No other manipulations are done.
-Default: NA (do not save grid, return it)}
+\item{\dots}{Further arguments passed to \code{\link{dgcellstogrid}}.}
 }
 \value{
 Returns an sf object.

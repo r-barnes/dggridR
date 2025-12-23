@@ -41,10 +41,10 @@ template<class A, class B, class DB> class DgBoundedRF
 
    public:
 
-      DgBoundedRF<A, B, DB> (const DgDiscRF<A, B, DB>& rfIn,
-                             const A& firstAddIn,
-                             const A& lastAddIn, const A& endAddIn,
-                             bool zBasedIn = true);
+      DgBoundedRF(const DgDiscRF<A, B, DB>& rfIn,
+                  const A& firstAddIn,
+                  const A& lastAddIn, const A& endAddIn,
+                  bool zBasedIn = true);
 
       const DgDiscRF<A, B, DB>& discRF (void) const { return discRF_; }
 

@@ -4,7 +4,7 @@
 \alias{dgcellstogrid}
 \title{Return boundary coordinates for specified cells}
 \usage{
-dgcellstogrid(dggs, cells, savegrid = NA)
+dgcellstogrid(dggs, cells, savegrid = NA, return_sf = TRUE)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
@@ -15,6 +15,8 @@ dgcellstogrid(dggs, cells, savegrid = NA)
 containing the grid is written to that path and the filename
 is returned. No other manipulations are done.
 Default: NA (do not save grid, return it)}
+
+\item{return_sf}{logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.}
 }
 \value{
 Returns an sf object.

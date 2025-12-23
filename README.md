@@ -1,3 +1,9 @@
+[![dggridR status badge](https://fastverse.r-universe.dev/badges/dggridR)](https://fastverse.r-universe.dev/dggridR)
+[![CRAN status](https://www.r-pkg.org/badges/version/dggridR)](https://cran.r-project.org/package=dggridR) 
+[![cran checks](https://badges.cranchecks.info/worst/dggridR.svg)](https://cran.r-project.org/web/checks/check_results_dggridR.html)
+![downloads per month](https://cranlogs.r-pkg.org/badges/dggridR) <!-- ?color=blue -->
+![downloads](https://cranlogs.r-pkg.org/badges/grand-total/dggridR) <!-- ?color=blue -->
+[![dependencies](https://tinyverse.netlify.app/badge/dggridR)](https://CRAN.R-project.org/package=dggridR)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1322866.svg)](https://doi.org/10.5281/zenodo.1322866)
 
 dggridR: Discrete Global Grids for R
@@ -43,8 +49,7 @@ dggridR is available from CRAN via:
 
 If you want your code to be as up-to-date as possible, you can install it using:
 
-    library(devtools) #Use `install.packages('devtools')` if need be
-    devtools::install_github("r-barnes/dggridR", vignette=TRUE)
+    install.packages('dggridR', repos = 'https://fastverse.r-universe.dev')
 
 Show me some code
 -----------------
@@ -55,7 +60,7 @@ Your analysis could be as easy as this:
 
 ```R
 library(dggridR)
-library(dplyr)
+library(collapse)
 
 #Construct a global grid with cells approximately 1000 miles across
 dggs          <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
@@ -67,7 +72,7 @@ data(dgquakes)
 dgquakes$cell <- dgGEO_to_SEQNUM(dggs, dgquakes$lon, dgquakes$lat)$seqnum
 
 #Get the number of earthquakes in each equally-sized cell
-quakecounts   <- dgquakes %>% group_by(cell) %>% summarise(count=n())
+quakecounts   <- dgquakes |> fcount(cell)
 ```
 
 Show me more examples!
@@ -116,7 +121,7 @@ Credits
 -------
 
 The code in the 'src' directory is based off of
-[DGGRIDv6.2b](https://www.discreteglobalgrids.org/) by Kevin Sahr.
+[DGGRIDv6.2b](https://discreteglobal.wpengine.com/) by Kevin Sahr.
 
 However, Richard Barnes has made some significant alterations. These include:
 
