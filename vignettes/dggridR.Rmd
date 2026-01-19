@@ -478,12 +478,14 @@ p
 * Method to convert between grid cell ids at different resolutions
 
 * In the future, I plan to switch the package from using Kevin Sahr's dggrid
-software to the discrete global grid system standards currently being developed
-by OpenGeospatial. Those standards are being developed by a [software working
+software to the [discrete global grid system standards currently being developed
+by OpenGeospatial](https://docs.ogc.org/is/21-038r1/21-038r1.html). 
+
+<!-- Those standards are being developed by a [software working
 group](https://www.ogc.org/projects/groups/dggsswg/) right now, but
 will one day be released. At that point, I expect that GDAL/OGR/PROJ4 will
 incorporate the new standards making wider interoperability possible. Until that
-time, Sahr's dggrid is the best option I've found.
+time, Sahr's dggrid is the best option I've found. -->
 
 
 
