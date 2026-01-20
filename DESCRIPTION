@@ -19,6 +19,7 @@ Authors@R: c(person("Richard", "Barnes",    role = "aut", email = "rijard.barnes
              person("Frank",   "Warmerdam", role = "cph"),
              person("Even",    "Rouault",   role = "cph"),
              person("Lian",    "Song",      role = "ctb"),
+             person("Edzer",   "Pebesma",   role = "ctb"),
              person("Sebastian", "Krantz",  role = c("ctb", "cre"), email = "sebastian.krantz@graduateinstitute.ch")
              )
 Description: Spatial analyses involving binning require that every bin have the same area, but this is impossible using a rectangular grid laid over the Earth or over any projection of the Earth. Discrete global grids use hexagons, triangles, and diamonds to overcome this issue, overlaying the Earth with equally-sized bins. This package provides utilities for working with discrete global grids, along with utilities to aid in plotting such data.
