@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -26,52 +26,104 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DgInLocTextFile.h"
+#include "DgLocation.h"
+#include "DgLocList.h"
+#include "DgPolygon.h"
+#include "DgLocation.h"
+#include "DgCell.h"
+#include "DgContCartRF.h"
+#include "DgEllipsoidRF.h"
+#include "DgGeoSphRF.h"
+#include "DgDataList.h"
+#include "DgDataField.h"
+
+#include <sstream>
 
 ////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn, 
-              const string* fileNameIn, bool isPointFileIn,
-              DgReportLevel failLevel)
-         : DgInLocFile (rfIn, fileNameIn, isPointFileIn, failLevel)
+DgInLocTextFile::DgInLocTextFile (const DgRFBase& rfIn, const std::string* fileNameIn,
+                              DgReportLevel failLevel)
+    : DgInLocStreamFile (rfIn, fileNameIn, false, failLevel),
+      forcePolyLine_ (false), forceCells_ (false)
 {
-   if (fileNameIn)
-      if (!open(NULL, DgBase::Silent))
-         report("DgInLocTextFile::DgInLocTextFile() unable to open file " +
-                fileName_, failLevel);
+   // create lat/lon rf (may be NULL)
+   degRF_ = dynamic_cast<const DgGeoSphDegRF*>(&rfIn);
 
 } // DgInLocTextFile::DgInLocTextFile
 
 ////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-bool 
-DgInLocTextFile::open (const string *fileNameIn, DgReportLevel failLevel)
-//
-// Open fileName as an input file. Report with a report level of failLevel
-// if the open is unsuccessful.
-//
-// Returns true if successful and false if unsuccessful.
-//
+DgInLocTextFile::~DgInLocTextFile (void)
 {
-   // make sure we are not already open
 
-   if ((rdbuf())->is_open()) close();
-   
-   if (fileNameIn)
-      fileName_ = *fileNameIn;
+} // DgInLocTextFile::~DgInLocTextFile
 
-   ifstream::open(fileName_.c_str(), ios::in);
-   if (good())
-   {
-      debug("DgInLocTextFile::open() opened file " + fileName_);
-      return true;
-   }
-   else
-   {
-      report("DgInLocTextFile::open() unable to open file " + fileName_, 
-             failLevel);
-      return false;
-   }
-   
-} // DgInLocTextFile::open
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+DgInLocFile&
+DgInLocTextFile::extract (DgCell& cell)
+//
+// Get the next cell from me and put it in cell.
+//
+////////////////////////////////////////////////////////////////////////////////
+{
+   // cell label and region will be empty
+   // need to check for name field below and use for label
+   cell.setLabel("");
+   cell.setRegion(nullptr);
+
+   // get the cell node
+   DgLocation point;
+   //extractPointGeometry(point); // should set oFeature_
+   cell.setNode(point);
+
+   // get any other data fields
+   DgDataList* data = nullptr;
+
+      // need to grab the data fields
+      data = new DgDataList();
+/*
+          if (cellFld)
+             data->list_.push_back(cellFld);
+*/
+   cell.setDataList(data);
+
+   return *this;
+
+} // DgInLocTextFile& DgInLocTextFile::extract
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+DgInLocFile&
+DgInLocTextFile::extractPointGeometry (DgLocation& point) {
+
+    return *this;
+
+} // DgInLocFile& DgInLocTextFile::extractPointGeometry
+
+////////////////////////////////////////////////////////////////////////////////
+DgInLocFile&
+DgInLocTextFile::extract (DgLocation& point)
+//
+// Get the next point DgLocation. The input location must be a lat/lon coordinate.
+//
+////////////////////////////////////////////////////////////////////////////////
+{
+   extractPointGeometry(point);
+   return *this;
+
+} // DgInLocFile& DgInLocTextFile::extract
+
+////////////////////////////////////////////////////////////////////////////////
+DgInLocFile&
+DgInLocTextFile::extract (DgLocationData& point)
+//
+// Get the next point DgLocation with possible data fields. The input location
+// must be a lat/lon coordinate.
+//
+////////////////////////////////////////////////////////////////////////////////
+{
+   extractPointGeometry(point);
+   return *this;
+
+} // DgInLocFile& DgInLocTextFile::extract
 
 ////////////////////////////////////////////////////////////////////////////////

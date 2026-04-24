@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -63,18 +63,18 @@ class DgPolygon : public DgLocVector {
 
       void addHole (DgPolygon* hole); // does not make copy
 
-      const vector<DgPolygon*>& holes (void) const { return holes_; }
+      const std::vector<DgPolygon*>& holes (void) const { return holes_; }
 
    protected:
 
       // takes ownership of holes' memory
-      vector<DgPolygon*> holes_;
+      std::vector<DgPolygon*> holes_;
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgPolygon& poly)
+inline std::ostream& operator<< (std::ostream& stream, const DgPolygon& poly)
 {
    stream << poly.rf().name() << " {\n";
 
@@ -85,13 +85,13 @@ inline ostream& operator<< (ostream& stream, const DgPolygon& poly)
 
    if (poly.hasHoles()) {
       stream << "][\n";
-      for (unsigned long i = 0; i < poly.holes().size(); i++) 
+      for (unsigned long i = 0; i < poly.holes().size(); i++)
          stream << *poly.holes()[i];
       stream << "]\n";
    }
 
-   return stream << "}" << endl;
+   return stream << "}" << std::endl;
 
-} // inline ostream& operator<<
+} // inline std::ostream& operator<<
 
 #endif

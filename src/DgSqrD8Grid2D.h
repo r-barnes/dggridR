@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -39,7 +39,7 @@ class DgSqrD8Grid2D : public DgSqrD4Grid2D {
 
       static const DgSqrD8Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
-                     const string& nameIn = "Sqr2D")
+                     const std::string& nameIn = "Sqr2D")
          { return new DgSqrD8Grid2D (networkIn, contCartFrameIn, nameIn); }
 
       virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
@@ -51,7 +51,7 @@ class DgSqrD8Grid2D : public DgSqrD4Grid2D {
 
       DgSqrD8Grid2D (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
-                     const string& nameIn = "Sqr2D")
+                     const std::string& nameIn = "Sqr2D")
          : DgSqrD4Grid2D (networkIn, contCartFrameIn, nameIn)
               { setGridMetric(D8); }
 

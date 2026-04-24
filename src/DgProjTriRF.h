@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -38,8 +38,6 @@
 #include <climits>
 #include <iostream>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 class DgSphIcosa {
 
@@ -61,11 +59,11 @@ class DgSphIcosa {
 
       SphIcosa sphIcosa_;
 
-      friend ostream& operator<< (ostream& stream, const DgSphIcosa& dgsi);
+      friend std::ostream& operator<< (std::ostream& stream, const DgSphIcosa& dgsi);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-ostream& operator<< (ostream& str, const DgSphIcosa& dgsi);
+std::ostream& operator<< (std::ostream& str, const DgSphIcosa& dgsi);
 
 ////////////////////////////////////////////////////////////////////////////////
 /* transformation between two different pole, (lat,lon) system */
@@ -87,9 +85,9 @@ class DgProjTriCoord {
       void setTriNum  (int triNumIn) { triNum_ = triNumIn; }
       void setCoord   (const DgDVec2D& coordIn) { coord_ = coordIn; }
 
-      operator string (void) const
-          { return string("{ triNum: " + dgg::util::to_string(triNum())
-                      + ", coord: " + string(coord())) + " }"; }
+      operator std::string (void) const
+          { return std::string("{ triNum: " + dgg::util::to_string(triNum())
+                      + ", coord: " + std::string(coord())) + " }"; }
 
       bool operator== (const DgProjTriCoord& tpc) const
           { return triNum() == tpc.triNum() && coord() == tpc.coord(); }
@@ -102,16 +100,16 @@ class DgProjTriCoord {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& str, const DgProjTriCoord& coord)
-{ return str << string(coord); }
+inline std::ostream&
+operator<< (std::ostream& str, const DgProjTriCoord& coord)
+{ return str << std::string(coord); }
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
 
    public:
 
-      static const DgProjTriRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "ProjTriRF",
+      static const DgProjTriRF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn = "ProjTriRF",
                    DgSphIcosa* sphIcosaIn = 0)
                       //DgSphIcosa(DgGeoCoord(11.25L, 58.28252559L, false), M_ZERO))
          { return new DgProjTriRF(networkIn, nameIn, sphIcosaIn); }
@@ -121,10 +119,10 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
       virtual long double dist (const DgProjTriCoord&, const DgProjTriCoord&) const
                 { return M_ZERO; }
 
-      virtual string add2str (const DgProjTriCoord& add) const
-                       { return string(add); }
+      virtual std::string add2str (const DgProjTriCoord& add) const
+                       { return std::string(add); }
 
-      virtual string add2str (const DgProjTriCoord& add, char delimiter) const
+      virtual std::string add2str (const DgProjTriCoord& add, char delimiter) const
           { return dgg::util::to_string(add.triNum()) + delimiter +
                    dgg::util::to_string(add.coord().x(), formatStr()) + delimiter +
                    dgg::util::to_string(add.coord().y(), formatStr()); }
@@ -135,7 +133,7 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
       virtual const DgProjTriCoord& undefAddress (void) const
                 { static DgProjTriCoord undef; return undef; }
 
-      virtual string dist2str (const long double& dist) const
+      virtual std::string dist2str (const long double& dist) const
                        { return dgg::util::to_string(dist, formatStr()); }
 
       virtual long double dist2dbl (const long double& dist) const
@@ -148,7 +146,7 @@ class DgProjTriRF : public DgRF<DgProjTriCoord, long double> {
 
    protected:
 
-      DgProjTriRF (DgRFNetwork& networkIn, const string& nameIn = "ProjTriRF",
+      DgProjTriRF (DgRFNetwork& networkIn, const std::string& nameIn = "ProjTriRF",
                    DgSphIcosa* sphIcosaIn = 0)
                       //DgSphIcosa(DgGeoCoord(11.25L, 58.28252559L, false), M_ZERO))
          : DgRF<DgProjTriCoord, long double> (networkIn, nameIn),

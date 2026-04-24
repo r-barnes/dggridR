@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -21,27 +21,43 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// util.cpp: util class implementation
+// DgZ3StringRF.h: DgZ3StringRF header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util.h"
+#ifndef DGZ3STRINGRF_H
+#define DGZ3STRINGRF_H
 
+#include <climits>
 #include <iostream>
 
-namespace dgg { namespace util {
+#include "DgHierNdxStringRF.h"
 
-void ssplit(const std::string& src, std::vector<std::string>& dest, const char *delim)
-{
- for(char *name = strtok(const_cast<char *>(src.c_str()), delim); 0 != name; name = strtok(0, delim))
-  dest.push_back(name);
-}
+class DgZ3System;
 
-void ssplit(const char *src, std::vector<std::string>& dest, const char *delim)
-{
- std::string s(src);
- return ssplit(s, dest, delim);
-}
+////////////////////////////////////////////////////////////////////////////////
+class DgZ3StringRF : public DgHierNdxStringRF {
 
+   public:
 
-}} // namespace dgg::util
+      // abstract method from above
+      // virtual const char* str2add (DgHierNdxStringCoord* add, const char* str,
+      //                            char delimiter) const;
+
+      // these have dummy definitions from the superclass
+      virtual DgHierNdxStringCoord quantify (const DgQ2DICoord& point) const;
+      virtual DgQ2DICoord invQuantify (const DgHierNdxStringCoord& add) const;
+
+   protected:
+
+    DgZ3StringRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn);
+
+    unsigned long long int unitScaleClassIres_;
+
+    friend DgZ3System;
+    template<class TINT, class TSTR> friend class DgHierNdxSystemRF;
+
+};
+
+////////////////////////////////////////////////////////////////////////////////
+#endif

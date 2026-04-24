@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -31,14 +31,14 @@
 #include <cmath>
 
 #include "DgContCartRF.h"
-#include "DgDiscRF.h"
+#include "DgDiscTopoRF.h"
 #include "DgHexC1Grid2D.h"
 #include "DgHexC2Grid2D.h"
 #include "DgIDGGS3H.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGGS3H::DgIDGGS3H (const DgIDGGS3H& rf) 
+DgIDGGS3H::DgIDGGS3H (const DgIDGGS3H& rf)
   : DgHexIDGGS (rf)
 {
    report("DgIDGGS3H::operator=() not implemented yet", DgBase::Fatal);
@@ -62,13 +62,13 @@ DgIDGGS3H::operator= (const DgIDGGS3H&)
 } // DgIDGGS3H& DgIDGGS3H::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                              DgLocVector& vec) const
 {
    DgPolygon verts;
    DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
-   grids()[add.res()]->setVertices(*tmpLoc, verts);
+   topoRF(add.res()).setVertices(*tmpLoc, verts);
    delete tmpLoc;
 
    // vertices lie in parents
@@ -95,8 +95,8 @@ DgIDGGS3H::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS3H::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgLocVector verts;
@@ -109,13 +109,13 @@ DgIDGGS3H::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS3H::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    DgPolygon verts;
    DgLocation* tmpLoc = grids()[add.res()]->makeLocation(add.address());
-   grids()[add.res()]->setVertices(*tmpLoc, verts);
+   topoRF(add.res()).setVertices(*tmpLoc, verts);
    delete tmpLoc;
 
    // vertices lie in children
@@ -142,8 +142,8 @@ DgIDGGS3H::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgIDGGS3H::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgIDGGS3H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgIDGGS3H::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

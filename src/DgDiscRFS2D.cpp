@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -45,7 +45,7 @@ const DgDiscRFS2D*
 DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
    int nRes, unsigned int aperture, dgg::topo::DgGridTopology gridTopo,
    dgg::topo::DgGridMetric gridMetric, bool isCongruent, bool isAligned,
-   const string& /* name */, bool isMixed43, int numAp4, bool isSuperfund,
+   const std::string& /* name */, bool isMixed43, int numAp4, bool isSuperfund,
    bool isApSeq, const DgApSeq& apSeq)
 {
    const DgDiscRFS2D* dg0 = 0;
@@ -86,7 +86,7 @@ DgDiscRFS2D::makeRF (DgRFNetwork& net, const DgRF<DgDVec2D, long double>& cc0,
 void
 DgDiscRFS2D::createSubConverters (void) const {
 
-   vector<const DgConverterBase*> sc;
+   std::vector<const DgConverterBase*> sc;
    for (int i = 0; i < nRes(); i++)
    {
       // create converter grids[i] -> backFrame

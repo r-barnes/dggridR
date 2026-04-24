@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -50,23 +50,23 @@ DgProjISEAInv::DgProjISEAInv (const DgRF<DgProjTriCoord, long double>& from,
 DgGeoCoord
 DgProjISEAInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 {
-//cout << "***DgProjISEAInv: DgProjTriCoord: " << addIn << endl;
+//cout << "***DgProjISEAInv: DgProjTriCoord: " << addIn << std::endl;
    IcosaGridPt gridpt;
    gridpt.pt.x = addIn.coord().x();
    gridpt.pt.y = addIn.coord().y();
    gridpt.triangle = addIn.triNum();
 
 //cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
-//      gridpt.pt.x << ", " << gridpt.pt.y << endl;
+//      gridpt.pt.x << ", " << gridpt.pt.y << std::endl;
 
    GeoCoord ll = snyderInv(gridpt, projTriRF().sphIcosa().sphIcosa());
 
 //cout << " ll.lon, ll.lat: " << ll.lon << ", " <<
-//ll.lat << endl;
+//ll.lat << std::endl;
    DgGeoCoord geoPt(ll.lon, ll.lat);
    geoPt.normalize();
 
-//cout << "    geoPt: " << geoPt << endl;
+//cout << "    geoPt: " << geoPt << std::endl;
    return geoPt;
 
 } // DgGeoCoord DgProjISEAInv::convertTypedAddress
@@ -91,20 +91,20 @@ DgProjTriCoord
 DgProjISEAFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 {
 
-//cout << "***DgProjISEAFwd: geoPt: " << addIn << endl;
+//cout << "***DgProjISEAFwd: geoPt: " << addIn << std::endl;
    GeoCoord ll;
 
    ll.lon = addIn.lon();
    ll.lat = addIn.lat();
 
-//cout << "   ll.lon, ll.lat: " << ll.lon << ", " << ll.lat << endl;
+//cout << "   ll.lon, ll.lat: " << ll.lon << ", " << ll.lat << std::endl;
 
    IcosaGridPt gridpt = snyderFwd(ll, projTriRF().sphIcosa());
 //cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
-//gridpt.pt.x << ", " << gridpt.pt.y << endl;
+//gridpt.pt.x << ", " << gridpt.pt.y << std::endl;
 
 //cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle,
-//                               DgDVec2D(gridpt.pt.x, gridpt.pt.y)) << endl;
+//                               DgDVec2D(gridpt.pt.x, gridpt.pt.y)) << std::endl;
 
    return DgProjTriCoord(gridpt.triangle, DgDVec2D(gridpt.pt.x, gridpt.pt.y));
 
@@ -158,10 +158,10 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
    {
       dgcout << "nTri: " << nTri << "  z: " << z
              << "  DH+: " << DH + 0.00000005L << "  diff: "
-             << ((DH + 0.00000005L) - z) << endl;
+             << ((DH + 0.00000005L) - z) << std::endl;
       dgcout << "1: The point: ";
       printGeoCoord(geoVect);
-      dgcout << " is located on another polygon." << endl;
+      dgcout << " is located on another polygon." << std::endl;
       report("Unable to continue.", DgBase::Fatal);
    }
 
@@ -182,7 +182,7 @@ Vec2D sllxy (const GeoCoord& geoVect, SphIcosa& sphico, int nTri)
    if (z > dz + 0.00000005) {
       dgcout << "1: The point: ";
       printGeoCoord(geoVect);
-      dgcout << " is located on another polygon." << endl;
+      dgcout << " is located on another polygon." << std::endl;
       report("Unable to continue.", DgBase::Fatal);
    }
 
@@ -217,7 +217,7 @@ IcosaGridPt snyderFwd (const GeoCoord& ll, DgSphIcosa& sphicosa)
    {
       dgcout << "ERROR: point in no triangle:";
       printGeoCoord(ll);
-      dgcout << endl;
+      dgcout << std::endl;
 
       gridpt.pt.x = M_ZERO;
       gridpt.pt.y = M_ZERO;
@@ -272,7 +272,7 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
     {
        long double agh=R1S*tanDH*tanDH/(2.0L*(1.0L/tanl(azh1)+cot30));
 
-       //cout << "agh: " << agh << endl;
+       //cout << "agh: " << agh << std::endl;
 
        dazh=1.0;
        while (fabsl(dazh) > PRECISION)
@@ -285,7 +285,7 @@ GeoCoord snyderInv (const IcosaGridPt& icosaPt, SphIcosa& sphicosa)
          //cout << "loop: h: " << h << "  fazh: " << fazh*(180.0/M_PI) <<
          //  "  flazh: " << flazh*(180.0/M_PI) <<
          //  "  dazh: " << dazh*(180.0/M_PI) <<
-         //  "  azh: " << azh*(180.0/M_PI) << endl;
+         //  "  azh: " << azh*(180.0/M_PI) << std::endl;
         }
     }
     else azh = azh1 = 0.0;

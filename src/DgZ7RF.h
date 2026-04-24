@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -21,23 +21,37 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// util.h: util class definitions
+// DgZ7RF.h: DgZ7RF header file
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DGG_UTIL_HPP
- #define __DGG_UTIL_HPP
+#ifndef DGZ7RF_H
+#define DGZ7RF_H
 
-#include <string>
-#include <vector>
-#include <cstring>
+#include "DgHierNdxIntRF.h"
 
-namespace dgg { namespace util {
+class DgZ7System;
 
-void ssplit(const char *& src, std::vector<std::string>& dest, const char *delim = " ");
-void ssplit(const std::string& src, std::vector<std::string>& dest, const char *delim = " ");
+////////////////////////////////////////////////////////////////////////////////
+class DgZ7RF : public DgHierNdxIntRF {
 
-}} // namespace dgg::util
+   public:
 
+      // abstract method from above
+      virtual const char* str2add (DgHierNdxIntCoord* c, const char* str,
+                   char delimiter) const;
+
+      // these have dummy definitions from the superclass
+      virtual DgHierNdxIntCoord quantify (const DgQ2DICoord& point) const;
+      virtual DgQ2DICoord invQuantify (const DgHierNdxIntCoord& add) const;
+
+   protected:
+
+    DgZ7RF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn);
+
+    friend DgZ7System;
+    template<class TINT, class TSTR> friend class DgHierNdxSystemRF;
+};
+
+////////////////////////////////////////////////////////////////////////////////
 #endif
-

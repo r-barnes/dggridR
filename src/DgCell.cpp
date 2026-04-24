@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -25,7 +25,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-//  The DgCell class defines an object with a point node, a region, and a 
+//  The DgCell class defines an object with a point node, a region, and a
 //  label.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,35 +36,35 @@
 #include "DgPolygon.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgCell::convertTo (const DgRFBase& rfIn) 
-{ 
+void
+DgCell::convertTo (const DgRFBase& rfIn)
+{
    if (!rf_ || rf() != rfIn)
    {
       rf_ = &rfIn;
-      rfIn.convert(&node_); 
+      rfIn.convert(&node_);
       if (hasRegion()) rfIn.convert(*region_);
    }
 
 } // DgCell::convertTo
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+std::string
 DgCell::asString (void) const
-{ 
-   string tmp = "[" + node().asString();
+{
+   std::string tmp = "[" + node().asString();
    if (hasRegion()) tmp += ":" + region().asString();
-   tmp += "]"; 
+   tmp += "]";
 
    return tmp;
 
 } // DgCell::asString
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+std::string
 DgCell::asString (char delimiter) const
-{ 
-   string tmp = node().asString(delimiter);
+{
+   std::string tmp = node().asString(delimiter);
    if (hasRegion()) tmp += delimiter + region().asString(delimiter);
 
    return tmp;
@@ -72,22 +72,22 @@ DgCell::asString (char delimiter) const
 } // DgCell::asString
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+std::string
 DgCell::asAddressString (void) const
-{ 
-   string tmp = "[" + node().asAddressString();
+{
+   std::string tmp = "[" + node().asAddressString();
    if (hasRegion()) tmp += ":" + region().asAddressString();
-   tmp += "]"; 
+   tmp += "]";
 
    return tmp;
 
 } // DgCell::asAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-string 
+std::string
 DgCell::asAddressString (char delimiter) const
-{ 
-   string tmp = node().asAddressString(delimiter);
+{
+   std::string tmp = node().asAddressString(delimiter);
    if (hasRegion()) tmp += delimiter + region().asAddressString(delimiter);
 
    return tmp;

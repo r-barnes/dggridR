@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -40,9 +40,9 @@ class DgGeoSphRF : public DgEllipsoidRF {
    public:
 
       enum DgLonWrapMode { Wrap, UnwrapWest, UnwrapEast, InvalidLonWrapMode };
-      static const string lonWrapModeStrings[];
+      static const std::string lonWrapModeStrings[];
 
-      static const DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
+      static const DgGeoSphRF* makeRF (DgRFNetwork& networkIn, const std::string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
          { return new DgGeoSphRF (networkIn, nameIn, earthRadiusKMin); }
 
@@ -87,7 +87,7 @@ class DgGeoSphRF : public DgEllipsoidRF {
       // densify polygon in geodetic coordinates
       static void densify (DgPolygon& p, long double maxDist, bool rads = true);
 
-      // unwrap a point based on longitude wrap mode (assumes the point is 
+      // unwrap a point based on longitude wrap mode (assumes the point is
       // associated with a cell being wrapped
       static int lonWrap (DgGeoCoord& g, DgLonWrapMode wrapMode);
 
@@ -96,7 +96,7 @@ class DgGeoSphRF : public DgEllipsoidRF {
 
    protected:
 
-      DgGeoSphRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph",
+      DgGeoSphRF (DgRFNetwork& networkIn, const std::string& nameIn = "GeodeticSph",
                   long double earthRadiusKMin = DEFAULT_RADIUS_KM)
          : DgEllipsoidRF (networkIn, nameIn, earthRadiusKMin * 1000L,
                 earthRadiusKMin * 1000L)
@@ -127,7 +127,7 @@ class DgGeoSphDegRF : public DgContCartRF {
    public:
 
       static const DgGeoSphDegRF* makeRF(const DgGeoSphRF& geoRFin,
-                     const string& nameIn = "GeodeticSphDeg")
+                     const std::string& nameIn = "GeodeticSphDeg")
          { return new DgGeoSphDegRF(geoRFin, nameIn); }
 
       const DgGeoSphRF& geoRF (void) const { return geoRF_; }
@@ -135,7 +135,7 @@ class DgGeoSphDegRF : public DgContCartRF {
    protected:
 
       DgGeoSphDegRF (const DgGeoSphRF& geoRFin,
-                     const string& nameIn = "GeodeticSphDeg");
+                     const std::string& nameIn = "GeodeticSphDeg");
 
       const DgGeoSphRF& geoRF_;
 };

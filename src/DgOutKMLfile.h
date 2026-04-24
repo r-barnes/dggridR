@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -46,29 +46,36 @@ class DgOutKMLfile : public DgOutLocTextFile
 
       DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename = "",
                int precision = 7, bool isPointFile = false,
-               const string& colorIn = defaultKMLColor, int widthIn = defaultKMLWidth,
-               const string& nameIn = defaultKMLName, const string& descIn = defaultKMLDescription,
+               const std::string& colorIn = defaultKMLColor, int widthIn = defaultKMLWidth,
+               const std::string& nameIn = defaultKMLName, const std::string& descIn = defaultKMLDescription,
                DgReportLevel failLevel = DgBase::Fatal);
 
       ~DgOutKMLfile();
 
-      void setColor(const string& colorIn);
+      void setColor(const std::string& colorIn);
       void setWidth(int widthIn);
-      void setName(const string& nameIn);
-      void setDescription(const string& descIn);
+      void setName(const std::string& nameIn);
+      void setDescription(const std::string& descIn);
 
-      const string& color(void) const { return color_; }
-      int           width(void) const { return width_; }
-      const string& name (void) const { return name_; }
-      const string& description (void) const { return description_; }
+      const std::string& color (void) const { return color_; }
+      int                width (void) const { return width_; }
+      const std::string& name  (void)  const { return name_; }
 
-      virtual void close(void) { ofstream::close(); }
+      const std::string& description (void) const { return description_; }
 
-      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = NULL);
-      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = NULL,
-                                const DgLocation* cent = NULL);
-      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = NULL,
-                                const DgLocation* cent = NULL);
+      virtual void close(void) { std::ofstream::close(); }
+
+      virtual DgOutLocFile& insert (DgLocation& loc, const std::string* label = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      virtual DgOutLocFile& insert (DgLocVector& vec, const std::string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
+
 
    protected:
 
@@ -76,17 +83,18 @@ class DgOutKMLfile : public DgOutLocTextFile
 
       virtual void setFormatStr(void)
       {
-          ostringstream os;
+          std::ostringstream os;
           os << "%#." << getPrecision() << "LF,"
-             << "%#." << getPrecision() << "LF,0.0\n";
+             << "%#." << getPrecision() << "LF\n";
+             //<< "%#." << getPrecision() << "LF,0.0\n"; // with altitude
 
           formatStr_ = os.str();
       }
 
-      string color_;
+      std::string color_;
       int width_;
-      string name_;
-      string description_;
+      std::string name_;
+      std::string description_;
 
    private:
 
@@ -96,7 +104,7 @@ class DgOutKMLfile : public DgOutLocTextFile
 
       /* take a string that contains a colour in RRGGBB format, and convert this
          to the BBGGRR format used by KML */
-      string RGBtoBGR(string colour)
+      std::string RGBtoBGR(std::string colour)
       {
 	     return colour.substr(4,2) + colour.substr(2,2) + colour.substr(0,2);
       }

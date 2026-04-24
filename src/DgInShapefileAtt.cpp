@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -37,8 +37,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 DgInShapefileAtt::DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
-            const string* fileNameIn, DgReportLevel failLevelIn)
-   : DgInShapefile (geoRFIn, fileNameIn, failLevelIn), 
+            const std::string* fileNameIn, DgReportLevel failLevelIn)
+   : DgInShapefile (geoRFIn, fileNameIn, failLevelIn),
       dbfFile_ (NULL), numFields_ (0)
 {
    if (fileNameIn)
@@ -49,8 +49,8 @@ DgInShapefileAtt::DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
 } // DgInShapefileAtt::DgInShapefileAtt
 
 ////////////////////////////////////////////////////////////////////////////////
-bool 
-DgInShapefileAtt::open (const string* fileNameIn, DgReportLevel failLevelIn)
+bool
+DgInShapefileAtt::open (const std::string* fileNameIn, DgReportLevel failLevelIn)
 {
    if (!DgInShapefile::open(fileNameIn, failLevelIn))
       return false;
@@ -72,8 +72,8 @@ DgInShapefileAtt::open (const string* fileNameIn, DgReportLevel failLevelIn)
       type = DBFGetFieldInfo(dbfFile_, i, fName, &w, &p);
       if (type == FTInvalid)
       {
-         report("DgInShapefileAtt::open() invalid field #" + 
-                dgg::util::to_string(i) + " in dbf file " + 
+         report("DgInShapefileAtt::open() invalid field #" +
+                dgg::util::to_string(i) + " in dbf file " +
                 fileName_, failLevelIn);
          return false;
       }
@@ -86,9 +86,9 @@ DgInShapefileAtt::open (const string* fileNameIn, DgReportLevel failLevelIn)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgInShapefileAtt::close (void) 
-{ 
+void
+DgInShapefileAtt::close (void)
+{
    if (dbfFile_)
    {
       DBFClose(dbfFile_);
@@ -106,10 +106,10 @@ void
 DgInShapefileAtt::getNextEntity (void)
 {
    DgInShapefile::getNextEntity();
-   
+
    curObjFields_.clear();
 
-   for (set<DgDBFfield>::iterator it = fields_.begin(); it != fields_.end(); it++)
+   for (std::set<DgDBFfield>::iterator it = fields_.begin(); it != fields_.end(); it++)
    {
       if (!DBFIsAttributeNULL(dbfFile_, curRecNum_, it->fieldNum()))
          curObjFields_.insert(*it);

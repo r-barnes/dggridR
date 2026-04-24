@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -32,8 +32,6 @@
 #include "DgConverter.h"
 #include "DgGeoSphRF.h"
 #include "DgProjTriRF.h"
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgIcosaProj : public Dg2WayConverter {

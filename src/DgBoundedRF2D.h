@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -41,9 +41,9 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
 
    public:
 
-      DgBoundedRF2D (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf, 
+      DgBoundedRF2D (const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& rf,
                      const DgIVec2D& lowerLeft, const DgIVec2D& upperRight);
-                    
+
       virtual DgIVec2D& incrementAddress (DgIVec2D& add) const;
       virtual DgIVec2D& decrementAddress (DgIVec2D& add) const;
 
@@ -60,35 +60,35 @@ class DgBoundedRF2D : public DgBoundedRF<DgIVec2D, DgDVec2D, long double> {
 
       long long int numI (void) const { return numI_; }
       long long int numJ (void) const { return numJ_; }
-      
-      const DgIVec2D& invalidAdd (void) const 
+
+      const DgIVec2D& invalidAdd (void) const
                          { return discRF().undefAddress(); }
 
-      const DgDiscRF<DgIVec2D, DgDVec2D, long double>& discRF (void) const 
+      const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& discRF (void) const
                { return discRF_; }
 
       virtual unsigned long long int seqNumAddress (const DgIVec2D& add) const;
 
       virtual DgIVec2D addFromSeqNum (unsigned long long int sNum) const;
 
-      virtual operator string (void) const
+      virtual operator std::string (void) const
       {
-         string s = "=== DgBoundedRF2D: " + DgBoundedRF::operator string();
-         s += "\n lowerLeft: " + string(lowerLeft());
-         s += "\n upperRight: " + string(upperRight());
+         std::string s = "=== DgBoundedRF2D: " + DgBoundedRF::operator std::string();
+         s += "\n lowerLeft: " + std::string(lowerLeft());
+         s += "\n upperRight: " + std::string(upperRight());
          s += "\n numI: " + dgg::util::to_string(numI());
          s += "\n numJ: " + dgg::util::to_string(numJ());
-         s += "\n firstAdd: " + string(firstAdd());
-         s += "\n lastAdd: " + string(lastAdd());
-         s += "\n endAdd: " + string(endAdd());
+         s += "\n firstAdd: " + std::string(firstAdd());
+         s += "\n lastAdd: " + std::string(lastAdd());
+         s += "\n endAdd: " + std::string(endAdd());
 
          return s;
       }
 
    private:
 
-      const DgDiscRF<DgIVec2D, DgDVec2D, long double>& discRF_;
-      
+      const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& discRF_;
+
       DgIVec2D lowerLeft_;
       DgIVec2D upperRight_;
       long long int numI_, numJ_;

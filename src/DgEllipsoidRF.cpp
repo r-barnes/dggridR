@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -135,15 +135,15 @@ DgGeoCoord::geoTriArea (const DgGeoCoord& g1, const DgGeoCoord& g2,
    long double E = bigA + bigB + bigC - M_PI;
 
 /*
-   cout << "geoTriArea: " << g1 << " " << g2 << " " << g3 << endl
+   std::cout << "geoTriArea: " << g1 << " " << g2 << " " << g3 << std::endl
         << " a: " << a
         << " b: " << b
-        << " c: " << c << endl
+        << " c: " << c << std::endl
         << " A: " << bigA
         << " B: " << bigB
-        << " C: " << bigC << endl
+        << " C: " << bigC << std::endl
         << " E: " << E << " "
-        << E / (4.0L * M_PI) << endl;
+        << E / (4.0L * M_PI) << std::endl;
 */
 
    return E;

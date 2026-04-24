@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -87,6 +87,7 @@ DgOutGeoJSONFile::insert(const DgDVec2D& pt)
    char buff[maxBuffSize];
 
    snprintf(buff, maxBuffSize, formatStr(), pt.x(), pt.y());
+//printf("FORMATSTR: \"%s\" buff: \"%s\"\n", formatStr(), buff);
 
    o << buff;
 
@@ -96,7 +97,8 @@ DgOutGeoJSONFile::insert(const DgDVec2D& pt)
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
+DgOutGeoJSONFile::insert (DgLocation& loc, const std::string* label,
+                  const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
 
@@ -105,7 +107,7 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
    o << "{\"type\":\"Feature\",";
    o << "\"properties\":{";
    if (label)
-      o << "\"name\":" << *label;
+      o << "\"name\": \"" << *label << "\"";
    o << "},";
    o << "\"geometry\":{";
    o << "\"type\":\"Point\",";
@@ -120,8 +122,9 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const string* label)
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
-   const DgLocation* /* cent */)
+DgOutGeoJSONFile::insert (DgLocVector& vec, const std::string* label,
+   const DgLocation* /* cent */,
+                  const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
 
@@ -130,14 +133,14 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
    o << "{\"type\":\"Feature\",";
    o << "\"properties\":{";
    if (label)
-      o << "\"name\":" << *label;
+      o << "\"name\": \"" << *label << "\"";
    o << "},";
    o << "\"geometry\":{";
    o << "\"type\":\"Polygon\",";
    o << "\"coordinates\":[[";
 
-   vector<DgAddressBase *>& v = vec.addressVec();
-   for(vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
+   std::vector<DgAddressBase *>& v = vec.addressVec();
+   for(std::vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
    {
          o.insert(rf().getVecAddress(*(*i)));
          o << ",";
@@ -153,8 +156,9 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
 }
 
 DgOutLocFile&
-DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
-   const DgLocation* /* cent */)
+DgOutGeoJSONFile::insert (DgPolygon& poly, const std::string* label,
+   const DgLocation* /* cent */,
+   const DgDataList* /* dataList */)
 {
    DgOutGeoJSONFile& o(*this);
 
@@ -163,14 +167,14 @@ DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
    o << "{\"type\":\"Feature\",";
    o << "\"properties\":{";
    if (label)
-      o << "\"name\":" << *label;
+      o << "\"name\": \"" << *label << "\"";
    o << "},";
    o << "\"geometry\":{";
    o << "\"type\":\"Polygon\",";
    o << "\"coordinates\":[[";
 
-   vector<DgAddressBase *>& v = poly.addressVec();
-   for(vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
+   std::vector<DgAddressBase *>& v = poly.addressVec();
+   for(std::vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
    {
          o.insert(rf().getVecAddress(*(*i)));
          o << ",";

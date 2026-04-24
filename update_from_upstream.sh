@@ -1,38 +1,68 @@
 #!/bin/bash
 
+# Path to SebKrantz/DGGRID clone.
+# Override via: DGGRID_PATH=/path/to/DGGRID bash update_from_upstream.sh
+DGGRID_PATH=${DGGRID_PATH:-/Users/sebastiankrantz/Documents/R/DGGRID}
+
+if [ ! -d "$DGGRID_PATH" ]; then
+  echo "Error: DGGRID not found at $DGGRID_PATH" >&2
+  echo "Set DGGRID_PATH env var to point to SebKrantz/DGGRID clone." >&2
+  exit 1
+fi
+
 rm -rf src/*
 
-cp -f submodules/DGGRID/src/apps/dggrid/{dggrid,util}.h ./src/
-cp -f submodules/DGGRID/src/apps/dggrid/util.cpp ./src/
+# Core discrete global grid library
+cp -f "$DGGRID_PATH"/src/lib/dglib/include/dglib/* ./src/
+cp -f "$DGGRID_PATH"/src/lib/dglib/lib/* ./src/
 
-cp -f submodules/DGGRID/src/lib/dglib/include/dglib/* ./src/
-cp -f submodules/DGGRID/src/lib/dglib/lib/* ./src/
-cp -f submodules/DGGRID/src/lib/proj4lib/include/* ./src/
-cp -f submodules/DGGRID/src/lib/proj4lib/lib/* ./src/
+# Map projection library (libproj4)
+cp -f "$DGGRID_PATH"/src/lib/proj4lib/include/* ./src/
+cp -f "$DGGRID_PATH"/src/lib/proj4lib/lib/* ./src/
 
-cp -f submodules/DGGRID/src/lib/shapelib/include/shapelib/* ./src/
-cp -f submodules/DGGRID/src/lib/shapelib/lib/* ./src/
+# Shapefile I/O library
+cp -f "$DGGRID_PATH"/src/lib/shapelib/include/shapelib/* ./src/
+cp -f "$DGGRID_PATH"/src/lib/shapelib/lib/* ./src/
 
-# Fix a header include
-# TODO(r-barnes): Remove when this is fixed upstream https://github.com/sahrk/DGGRID/pull/52
-find ./src/ -type f -exec sed -i -r 's/#include "dglib\/DgBase.h"/#include <dglib\/DgBase.h>/' {} \;
+# Flatten <dglib/XXX.h> angle-bracket includes (all DGGRID sources use this form)
+find ./src/ -type f -exec perl -pi -e 's{#include <dglib/([^>]+)>}{#include "$1"}g' {} \;
 
-find ./src/ -type f -exec sed -i '1 i\#ifndef DGGRIDR\n#define DGGRIDR\n#endif' {} \;
-find ./src/ -type f -exec sed -i -r 's/#include <dglib\/([^>]+)>/#include "\1"/' {} \;
-find ./src/ -type f -exec sed -i -r 's/#include "..\/lib\//#include "/' {} \;
-find ./src/ -type f -exec sed -i -r 's/#include <shapefil.h>/#include "shapefil.h"/' {} \;
-find ./src/ -type f -exec sed -i -r 's/#include "shapelib\/shapefil.h"/#include "shapefil.h"/' {} \;
+# Flatten "../lib/DgXXX.hpp" relative includes (template implementation files)
+find ./src/ -type f -exec perl -pi -e 's{#include "\.\./lib/}{#include "}g' {} \;
 
-# Drop hpp file extensions because CRAN says "These are unlikely file names for
-# src files" and CRAN would rather crush the souls of volunteer OSS developers
-# than accept that hpp is a common and appropriate file extension for C++
-# headers
-find ./src/ -type f -name "*.hpp" -execdir rename 's/\.hpp/_hpp.h/' '{}' \;
-find ./src/ -type f -exec sed -i -r 's/\.hpp/_hpp.h/' {} \;
+# Fix shapefil.h include paths
+find ./src/ -type f -exec perl -pi -e \
+  's{#include <shapefil\.h>}{#include "shapefil.h"}g;
+   s{#include "shapelib/shapefil\.h"}{#include "shapefil.h"}g' {} \;
 
-# M_2PI variable because it's included in R and DGGRID doesn't use namespaces
-find ./src/ -type f -exec sed -i -r 's/constexpr long double M_2PI.*//' {} \;
+# Insert DGGRIDR compile-time marker at top of every source file
+find ./src/ -type f -exec perl -pi -e \
+  'print "#ifndef DGGRIDR\n#define DGGRIDR\n#endif\n" if $. == 1' {} \;
 
-rm -rf src/Makefile.noCMake
+# CRAN rejects .hpp extensions — rename to _hpp.h
+find ./src/ -type f -name "*.hpp" | while IFS= read -r f; do
+  mv "$f" "${f%.hpp}_hpp.h"
+done
+# Update all in-file references to the renamed headers
+find ./src/ -type f -exec perl -pi -e 's/\.hpp/_hpp\.h/g' {} \;
 
+# Remove M_2PI constant definition (conflicts with macOS system headers)
+find ./src/ -type f -exec perl -pi -e 's/constexpr long double M_2PI.*\n?//g' {} \;
+
+# Remove non-R build artifacts
+rm -f src/Makefile.noCMake
+
+# CRAN compliance: replace std::cerr debug prints with nothing (developer leftovers)
+find ./src/ -type f \( -name "*.cpp" -o -name "*.h" \) -exec \
+  perl -pi -e 's/.*std::cerr.*\n//' {} \;
+
+# CRAN compliance: replace puts() with dgprintf() in shapelib sources
+find ./src/ -type f -name "*.c" -exec \
+  perl -pi -e 's/\bputs\(\s*(".*?")\s*\)/dgprintf("%s\n", $1)/g' {} \;
+
+# CRAN compliance: replace sprintf(buf,...) with snprintf(buf, sizeof(buf),...) in shapelib sources
+find ./src/ -type f -name "*.c" -exec \
+  perl -pi -e 's/\bsprintf\s*\(\s*stmp\s*,/snprintf(stmp, sizeof(stmp),/g' {} \;
+
+# Copy the Rcpp bridge layer (dggridR-specific, not from DGGRID upstream)
 cp copy_to_src/* ./src/

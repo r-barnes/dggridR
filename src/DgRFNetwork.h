@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -31,8 +31,6 @@
 #include "DgUtil.h"
 
 #include <vector>
-
-using namespace std;
 
 class DgLocation;
 class DgRFBase;
@@ -86,9 +84,9 @@ class DgRFNetwork {
 
       int chunkSize_;
 
-      vector< DgRFBase* > frames_;
+      std::vector< DgRFBase* > frames_;
 
-      vector< vector<DgConverterBase*> > matrix_;
+      std::vector< std::vector<DgConverterBase*> > matrix_;
 
       int generateId (DgRFBase* frame);
 

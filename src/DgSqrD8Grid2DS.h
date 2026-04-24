@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -43,7 +43,7 @@ class DgSqrD8Grid2DS : public DgDiscRFS2D {
                  const DgRF<DgDVec2D, long double>& backFrameIn,
                  int nRes = 1, unsigned int apertureIn = 4,
                  bool isCongruentIn = true, bool isAlignedIn = false,
-                 const string& nameIn = "8S4")
+                 const std::string& nameIn = "8S4")
          { return new DgSqrD8Grid2DS (networkIn, backFrameIn, nRes, apertureIn,
                  isCongruentIn, isAlignedIn, nameIn); }
 
@@ -59,7 +59,7 @@ class DgSqrD8Grid2DS : public DgDiscRFS2D {
                  const DgRF<DgDVec2D, long double>& backFrameIn,
                  int nRes = 1, unsigned int apertureIn = 4,
                  bool isCongruentIn = true, bool isAlignedIn = false,
-                 const string& nameIn = "8S4");
+                 const std::string& nameIn = "8S4");
 
       DgSqrD8Grid2DS (const DgSqrD8Grid2DS& rf);
 

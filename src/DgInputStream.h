@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -36,39 +36,36 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
-
-
 ////////////////////////////////////////////////////////////////////////////////
-class DgInputStream : public ifstream, public DgBase {
+class DgInputStream : public std::ifstream, public DgBase {
 
    public:
 
       DgInputStream (void) : DgBase ("DgInputStream") {}
 
-      DgInputStream (const string& fileNameIn,
-                     const string& suffixIn  = string(""),
+      DgInputStream (const std::string& fileNameIn,
+                     const std::string& suffixIn  = std::string(""),
                      DgReportLevel failLevel = DgBase::Fatal);
 
-      bool open (string fileName, DgReportLevel failLevel = DgBase::Fatal);
+      bool open (std::string fileName, DgReportLevel failLevel = DgBase::Fatal);
 
-      static void setDefaultDir (const string& defaultDirIn)
+      static void setDefaultDir (const std::string& defaultDirIn)
                      { defaultDirectory_ = defaultDirIn; }
 
-      void setSuffix (const string& suffixIn) { suffix_ = suffixIn; }
+      void setSuffix (const std::string& suffixIn) { suffix_ = suffixIn; }
 
-      const string& defaultDir (void) const { return defaultDirectory_; }
-      const string& fileName   (void) const { return fileName_; }
-      const string& suffix     (void) const { return suffix_; }
+      const std::string& defaultDir (void) const { return defaultDirectory_; }
+      const std::string& fileName   (void) const { return fileName_; }
+      const std::string& suffix     (void) const { return suffix_; }
 
       void rewind (void) { seekg(std::streampos(0)); clear(); }
 
    private:
 
-      static string defaultDirectory_;
+      static std::string defaultDirectory_;
 
-      string fileName_;
-      string suffix_;
+      std::string fileName_;
+      std::string suffix_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

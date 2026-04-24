@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -36,38 +36,44 @@
 
 #include <ogrsf_frmts.h>
 
-#include "DgInLocTextFile.h"
+#include "DgInLocStreamFile.h"
 
 class DgPolygon;
+class DgGeoSphRF;
+class DgLocationData;
+class DgDataList;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgInGDALFile : public DgInLocTextFile
+class DgInGdalFile : public DgInLocStreamFile
 {
 public:
 
-    DgInGDALFile (const DgRFBase& rfIn, const string* fileNameIn = NULL,
+    DgInGdalFile (const DgRFBase& rfIn, const std::string* fileNameIn = NULL,
                    DgReportLevel failLevel = DgBase::Fatal);
 
-   ~DgInGDALFile (void);
+   ~DgInGdalFile (void);
 
     bool forcePolyLine (void) const { return forcePolyLine_; }
     bool forceCells    (void) const { return forceCells_; }
 
-    void setForcePolyLine (bool forcePolyLine = false) 
+    void setForcePolyLine (bool forcePolyLine = false)
                            { forcePolyLine_ = forcePolyLine; }
 
     void setForceCells (bool forceCells = false) { forceCells_ = forceCells; }
 
-    virtual DgInLocFile& extract (DgLocList& list);
-    virtual DgInLocFile& extract (DgLocVector& vec);
-    virtual DgInLocFile& extract (DgPolygon& poly);
-    virtual DgInLocFile& extract (DgLocation& loc);
-    virtual DgInLocFile& extract (DgCell& cell);
+    virtual DgInLocFile& extract (DgPolygon&      poly);
+    virtual DgInLocFile& extract (DgCell&         cell);
+    virtual DgInLocFile& extract (DgLocation&     loc);
+    virtual DgInLocFile& extract (DgLocationData& loc);
 
 protected:
 
     void ogrLinearRingToDg (OGRLinearRing* oLinearRing, DgPolygon& poly);
     void ogrPolyToDg (OGRPolygon* oPolygon, DgPolygon& poly);
+    void ogrPointToDg (const OGRPoint& oPolygon, DgLocation& point);
+
+    DgInLocFile& extractPointGeometry(DgLocation& point);
+    DgDataList*  extractDataFields (void);
 
 private:
 
@@ -79,8 +85,20 @@ private:
     bool insideMultiPoly_;
     int multiPolyIndex_;
     int numMultiPolyGeometries_;
-
 };
+
+////////////////////////////////////////////////////////////////////////////////
+inline DgInLocFile& operator>> (DgInGdalFile& input, DgPolygon& poly)
+              { return input.extract(poly); }
+
+inline DgInLocFile& operator>> (DgInGdalFile& input, DgLocation& loc)
+              { return input.extract(loc); }
+
+inline DgInLocFile& operator>> (DgInGdalFile& input, DgLocationData& loc)
+              { return input.extract(loc); }
+
+inline DgInLocFile& operator>> (DgInGdalFile& input, DgCell& cell)
+              { return input.extract(cell); }
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -35,8 +35,6 @@
 #include "DgEllipsoidRF.h"
 
 #include <iostream>
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgRandom {
@@ -107,12 +105,12 @@ class DgRandom {
 }; // class DgRandom
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgRandom& obj)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgRandom& obj)
 {
    return stream << obj.status();
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

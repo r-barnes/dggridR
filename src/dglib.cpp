@@ -5,11 +5,9 @@
 #include "DgCell.h"
 #include "DgGeoProjConverter.h"
 #include "DgGeoSphRF.h"
-#include "dggrid.h"
 #include "DgIDGG.h"
 #include "DgIDGGS.h"
 #include "DgIVec2D.h"
-#include "DgParamList.h"
 #include "DgProjGnomonicRF.h"
 #include "DgTriGrid2D.h"
 
@@ -29,18 +27,20 @@ namespace dglib {
       idggs(DgIDGGSBase::makeRF(
         net0,
         *geoRF,
-        DgGeoCoord(dp.pole_lon_deg,dp.pole_lat_deg,false),        //vert0:
+        DgGeoCoord(dp.pole_lon_deg,dp.pole_lat_deg,false),
         dp.azimuth_deg,
         dp.aperture,
         dp.res + 1,
-        stringToGridTopology(dp.topology),
+        dgg::topo::stringToGridTopology(dp.topology),
         dgg::topo::D6,
         "DDG",
         dp.projection,
+        false, //isApSeq
+        DgApSeq::defaultApSeq,
         false, //isMixed43
-        0, //number of leading aperture 4 resolutions
-        false, //is superfund
-        false //isApSeq
+        0,     //numAp4
+        false, //isSuperfund
+        dgg::addtype::InvalidHierNdxSysType
       )),
       dgg(idggs->idggBase(dp.res)),
       deg(DgGeoSphDegRF::makeRF(*geoRF, geoRF->name() + "Deg"))
@@ -72,14 +72,16 @@ namespace dglib {
         azimuth_deg,
         aperture,
         res + 1,
-        stringToGridTopology(topology),
+        dgg::topo::stringToGridTopology(topology),
         dgg::topo::D6,
         "DDG",
         projection,
+        false, //isApSeq
+        DgApSeq::defaultApSeq,
         false, //isMixed43
-        0, //number of leading aperture 4 resolutions
-        false, //is superfund
-        false //isApSeq
+        0,     //numAp4
+        false, //isSuperfund
+        dgg::addtype::InvalidHierNdxSysType
       )),
       dgg(idggs->idggBase(res)),
       deg(DgGeoSphDegRF::makeRF(*geoRF, geoRF->name() + "Deg"))
@@ -263,7 +265,7 @@ namespace dglib {
     std::vector<long double> &y
   ){
     std::uint64_t sn = dgg.bndRF().seqNum(add2D);
-    string label = dgg::util::to_string(sn);
+    std::string label = dgg::util::to_string(sn);
 
     std::unique_ptr<DgLocation> tmpLoc(new DgLocation(add2D));
     DgCell cell(dgg.geoRF(), label, *tmpLoc, new DgPolygon(verts));

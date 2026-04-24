@@ -25,3 +25,7 @@ CMakeLists.txt
 ^LICENSE\.md$
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
+^CLAUDE\.md$
+^UPDATE_DGGRID\.md$

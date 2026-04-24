@@ -122,7 +122,7 @@ Credits
 -------
 
 The code in the 'src' directory is based off of
-[DGGRIDv6.2b](https://discreteglobal.wpengine.com/) by Kevin Sahr.
+[DGGRIDv9.0b](https://github.com/sahrk/DGGRID) by Kevin Sahr.
 
 However, Richard Barnes has made some significant alterations. These include:
 
@@ -182,4 +182,4 @@ Citing this Package
 
 Please cite this package as:
 
- > Richard Barnes and Kevin Sahr (2017). dggridR: Discrete Global Grids for R. R package version 2.0.4. "https://github.com/r-barnes/dggridR/" doi:10.5281/zenodo.1322866
+ > Richard Barnes, Kevin Sahr, and Sebastian Krantz (2026). dggridR: Discrete Global Grids for R. R package version 4.0.0. "https://github.com/r-barnes/dggridR/" doi:10.5281/zenodo.1322866

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -35,8 +35,6 @@
 #include <set>
 #include <string>
 
-using namespace std;
-
 class DgLocList;
 class DgLocVector;
 class DgPolygon;
@@ -49,13 +47,13 @@ class DgDBFfield {
 
    public:
 
-      DgDBFfield (const string& fieldNameIn, DBFFieldType typeIn,
+      DgDBFfield (const std::string& fieldNameIn, DBFFieldType typeIn,
                  int fieldNumIn, int widthIn, int precisionIn)
          : fieldName_(fieldNameIn), type_(typeIn), fieldNum_(fieldNumIn),
            width_(widthIn), precision_(precisionIn)
       { }
 
-      const string& fieldName (void) const { return fieldName_; }
+      const std::string& fieldName (void) const { return fieldName_; }
       DBFFieldType  type      (void) const { return type_; }
       int           fieldNum  (void) const { return fieldNum_; }
       int           width     (void) const { return width_; }
@@ -68,11 +66,11 @@ class DgDBFfield {
       friend bool operator>  (const DgDBFfield& f1, const DgDBFfield& f2);
       friend bool operator>= (const DgDBFfield& f1, const DgDBFfield& f2);
 
-      friend ostream& operator<< (ostream& stream, const DgDBFfield& pt);
+      friend std::ostream& operator<< (std::ostream& stream, const DgDBFfield& pt);
 
    protected:
 
-      string fieldName_;
+      std::string fieldName_;
       DBFFieldType type_;
       int fieldNum_;
       int width_;
@@ -85,19 +83,19 @@ class DgInShapefileAtt : public DgInShapefile {
    public:
 
       DgInShapefileAtt (const DgGeoSphRF& geoRFIn,
-                     const string* fileNameIn = NULL,
+                     const std::string* fileNameIn = NULL,
                      DgReportLevel failLevel = DgBase::Fatal);
 
-      virtual bool open (const string* fileName = NULL,
+      virtual bool open (const std::string* fileName = NULL,
                  DgReportLevel failLevel = DgBase::Fatal);
 
       virtual void close (void);
 
-      const set<DgDBFfield>& fields (void) const { return fields_; }
+      const std::set<DgDBFfield>& fields (void) const { return fields_; }
 
       int numFields (void) const { return numFields_; }
 
-      const set<DgDBFfield>& curObjFields (void) const
+      const std::set<DgDBFfield>& curObjFields (void) const
                                              { return curObjFields_; }
 
    protected:
@@ -106,8 +104,8 @@ class DgInShapefileAtt : public DgInShapefile {
 
       DBFHandle dbfFile_;
       int numFields_;
-      set<DgDBFfield> fields_;
-      set<DgDBFfield> curObjFields_; // non-null fields in the curShpObj_
+      std::set<DgDBFfield> fields_;
+      std::set<DgDBFfield> curObjFields_; // non-null fields in the curShpObj_
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -160,8 +158,8 @@ operator<= (const DgDBFfield& f1, const DgDBFfield& f2)
 } // bool operator<=
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgDBFfield& f)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgDBFfield& f)
 {
    stream << "field: " << f.fieldName();
 
@@ -178,7 +176,7 @@ operator<< (ostream& stream, const DgDBFfield& f)
    return stream << " type: " << type << " #" << f.fieldNum()
                  << " (" << f.width() << "/" << f.precision() << ")";
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

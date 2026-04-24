@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -37,11 +37,11 @@
 #include "DgGeoSphRF.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-DgInShapefile::DgInShapefile (const DgGeoSphRF& geoRFIn, 
-                   const string* fileNameIn, DgReportLevel failLevelIn)
-   : DgInLocFile (geoRFIn, fileNameIn, false, failLevelIn), 
-     geoRF_ (geoRFIn), shpFile_ (NULL), numEntities_ (0), nextRecNum_ (0), 
-     curShpObj_ (NULL), curRecNum_ (0), curPart_ (0), nextPart_ (0), 
+DgInShapefile::DgInShapefile (const DgGeoSphRF& geoRFIn,
+                   const std::string* fileNameIn, DgReportLevel failLevelIn)
+   : DgInLocFile (geoRFIn, fileNameIn, false, failLevelIn),
+     geoRF_ (geoRFIn), shpFile_ (NULL), numEntities_ (0), nextRecNum_ (0),
+     curShpObj_ (NULL), curRecNum_ (0), curPart_ (0), nextPart_ (0),
      isEOF_ (false)
 {
    if (fileNameIn)
@@ -52,8 +52,8 @@ DgInShapefile::DgInShapefile (const DgGeoSphRF& geoRFIn,
 } // DgInShapefile::DgInShapefile
 
 ////////////////////////////////////////////////////////////////////////////////
-bool 
-DgInShapefile::open (const string* fileNameIn, DgReportLevel failLevelIn)
+bool
+DgInShapefile::open (const std::string* fileNameIn, DgReportLevel failLevelIn)
 {
    if (fileNameIn)
       fileName_ = *fileNameIn;
@@ -89,10 +89,10 @@ DgInShapefile::open (const string* fileNameIn, DgReportLevel failLevelIn)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgInShapefile::close (void) 
-{ 
-   if (shpFile_) 
+void
+DgInShapefile::close (void)
+{
+   if (shpFile_)
    {
       SHPClose(shpFile_);
       shpFile_ = NULL;
@@ -106,9 +106,9 @@ DgInShapefile::close (void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgInShapefile::rewind (void) 
-{ 
+void
+DgInShapefile::rewind (void)
+{
    close();
    open();
 }
@@ -150,9 +150,8 @@ DgInShapefile::extract (DgLocVector& vec)
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
-   if (!isPointFile())
-   {
-      report("DgInShapefile::extract() not implemented for polylines.", 
+   if (!isPointFile()) {
+      report("DgInShapefile::extract() not implemented for polylines.",
           failLevel());
 
       return *this;
@@ -222,28 +221,13 @@ DgInShapefile::extract (DgPolygon& poly)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgInLocFile&
-DgInShapefile::extract (DgCell&)
-//
-// Get the next cell from me and put it in cell.
-//
-////////////////////////////////////////////////////////////////////////////////
-{
-   report("DgInShapefile::extract() not implemented for cells.", failLevel());
-
-   return *this;
-
-} // DgInShapefile& DgInShapefile::extract
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-DgInLocFile&
 DgInShapefile::extract (DgLocList& list)
 //
 // Determine whether the file is a point or polygon/polyline file. If it's
-// a point file, read-in the points. 
+// a point file, read-in the points.
 //
-// If not, get the sets which constitute 
-// me. If the last point in a set is the same as the first, assume it's a 
+// If not, get the sets which constitute
+// me. If the last point in a set is the same as the first, assume it's a
 // polygon. Otherwise, make it a polyline.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -284,7 +268,7 @@ DgInShapefile::extract (DgLocList& list)
       {
          DgPolygon* poly = new DgPolygon();
          extract(*poly);
-         if (isEOF()) 
+         if (isEOF())
          {
             delete poly;
             break;
@@ -303,7 +287,7 @@ DgInShapefile::extract (DgLocList& list)
 DgInLocFile&
 DgInShapefile::extract (DgLocation& loc)
 //
-// Get the next DgLocation. 
+// Get the next DgLocation.
 //
 ////////////////////////////////////////////////////////////////////////////////
 {
