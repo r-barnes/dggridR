@@ -122,7 +122,6 @@ DgHexGrid2DS::DgHexGrid2DS (DgRFNetwork& networkIn,
           isMixed43_ (isMixed43In), numAp4_ (numAp4In), isSuperfund_ (isSuperfundIn),
           isApSeq_ (isApSeqIn)
 {
-std::cerr << "KEVIN: DEPRECATED DgHexGrid2DS" << std::endl;
    if (isApSeq())
       report("DgHexGrid2DS::DgHexGrid2DS() isApSeq should be false in this constructor",
        DgBase::Fatal);

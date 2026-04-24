@@ -63,7 +63,7 @@ assign("dg_debug", FALSE, envir=dg_env)
 #'
 #' @export
 dg_shpfname_south_africa <- function(){
-  file.path(find.package('dggridR'), "extdata", "ZAF_adm0.shp")
+  system.file("extdata", "ZAF_adm0.shp", package = "dggridR")
 }
 
 

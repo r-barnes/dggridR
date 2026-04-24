@@ -52,5 +52,17 @@ find ./src/ -type f -exec perl -pi -e 's/constexpr long double M_2PI.*\n?//g' {}
 # Remove non-R build artifacts
 rm -f src/Makefile.noCMake
 
+# CRAN compliance: replace std::cerr debug prints with nothing (developer leftovers)
+find ./src/ -type f \( -name "*.cpp" -o -name "*.h" \) -exec \
+  perl -pi -e 's/.*std::cerr.*\n//' {} \;
+
+# CRAN compliance: replace puts() with dgprintf() in shapelib sources
+find ./src/ -type f -name "*.c" -exec \
+  perl -pi -e 's/\bputs\(\s*(".*?")\s*\)/dgprintf("%s\n", $1)/g' {} \;
+
+# CRAN compliance: replace sprintf(buf,...) with snprintf(buf, sizeof(buf),...) in shapelib sources
+find ./src/ -type f -name "*.c" -exec \
+  perl -pi -e 's/\bsprintf\s*\(\s*stmp\s*,/snprintf(stmp, sizeof(stmp),/g' {} \;
+
 # Copy the Rcpp bridge layer (dggridR-specific, not from DGGRID upstream)
 cp copy_to_src/* ./src/
