@@ -182,4 +182,4 @@ Citing this Package
 
 Please cite this package as:
 
- > Sebastian Krantz, Richard Barnes, and Kevin Sahr (2026). dggridR: Discrete Global Grids for R. R package version 4.0.0. "https://github.com/r-barnes/dggridR/" doi:10.5281/zenodo.1322866
+ > Richard Barnes, Kevin Sahr, and Sebastian Krantz (2026). dggridR: Discrete Global Grids for R. R package version 4.0.0. "https://github.com/r-barnes/dggridR/" doi:10.5281/zenodo.1322866
