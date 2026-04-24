@@ -5,7 +5,7 @@
 ![downloads](https://cranlogs.r-pkg.org/badges/grand-total/dggridR) <!-- ?color=blue -->
 [![dependencies](https://tinyverse.netlify.app/badge/dggridR)](https://CRAN.R-project.org/package=dggridR)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1322866.svg)](https://doi.org/10.5281/zenodo.1322866)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/r-barnes/dggridR)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/SebKrantz/dggridR)
 
 dggridR: Discrete Global Grids for R
 ====================================
@@ -122,7 +122,7 @@ Credits
 -------
 
 The code in the 'src' directory is based off of
-[DGGRIDv6.2b](https://discreteglobal.wpengine.com/) by Kevin Sahr.
+[DGGRIDv9.0b](https://github.com/sahrk/DGGRID) by Kevin Sahr.
 
 However, Richard Barnes has made some significant alterations. These include:
 
@@ -182,4 +182,4 @@ Citing this Package
 
 Please cite this package as:
 
- > Richard Barnes and Kevin Sahr (2017). dggridR: Discrete Global Grids for R. R package version 2.0.4. "https://github.com/r-barnes/dggridR/" doi:10.5281/zenodo.1322866
+ > Sebastian Krantz, Richard Barnes, and Kevin Sahr (2026). dggridR: Discrete Global Grids for R. R package version 4.0.0. "https://github.com/SebKrantz/dggridR/" doi:10.5281/zenodo.1322866

@@ -491,14 +491,13 @@ time, Sahr's dggrid is the best option I've found. -->
 
 # Credits
 
-This R package was developed by Richard Barnes (https://rbarnes.org/).
+This R package was originally developed by Richard Barnes (https://rbarnes.org/) and is currently maintained by Sebastian Krantz.
 
 The dggrid conversion software was developed predominantly by Kevin Sahr
-(https://discreteglobal.wpengine.com/), with contributions from a few others.
+(https://github.com/sahrk/DGGRID), with contributions from a few others.
 
-Large portions of the above documentation are drawn from the DGGRID version 6.2b
-User Documentation, which is available in its entirety
-[here](dggrid_v62_manual.pdf).
+Large portions of the above documentation are drawn from the DGGRID version 9.0b
+User Documentation, which is available at the DGGRID repository.
 
 
 
@@ -516,7 +515,7 @@ enhancements, we want to hear about them.
 
 Please cite this package as:
 
- > Richard Barnes and Kevin Sahr (2017). dggridR: Discrete Global Grids for R. R package version 2.0.4. "https://github.com/r-barnes/dggridR/" \doi{10.5281/zenodo.1322866}
+ > Sebastian Krantz, Richard Barnes, and Kevin Sahr (2026). dggridR: Discrete Global Grids for R. R package version 4.0.0. "https://github.com/SebKrantz/dggridR/" \doi{10.5281/zenodo.1322866}
 
 
 
