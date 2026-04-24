@@ -1,11 +1,11 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1322866.svg)](https://doi.org/10.5281/zenodo.1322866)
-<!-- [![R-CMD-check](https://github.com/r-barnes/dggridR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-barnes/dggridR/actions/workflows/R-CMD-check.yaml) -->
 [![dggridR status badge](https://fastverse.r-universe.dev/badges/dggridR)](https://fastverse.r-universe.dev/dggridR)
 [![CRAN status](https://www.r-pkg.org/badges/version/dggridR)](https://cran.r-project.org/package=dggridR) 
 [![cran checks](https://badges.cranchecks.info/worst/dggridR.svg)](https://cran.r-project.org/web/checks/check_results_dggridR.html)
 ![downloads per month](https://cranlogs.r-pkg.org/badges/dggridR) <!-- ?color=blue -->
 ![downloads](https://cranlogs.r-pkg.org/badges/grand-total/dggridR) <!-- ?color=blue -->
 [![dependencies](https://tinyverse.netlify.app/badge/dggridR)](https://CRAN.R-project.org/package=dggridR)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1322866.svg)](https://doi.org/10.5281/zenodo.1322866)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/r-barnes/dggridR)
 
 dggridR: Discrete Global Grids for R
 ====================================
@@ -73,7 +73,7 @@ data(dgquakes)
 dgquakes$cell <- dgGEO_to_SEQNUM(dggs, dgquakes$lon, dgquakes$lat)$seqnum
 
 #Get the number of earthquakes in each equally-sized cell
-quakecounts   <- dgquakes %>% fcount(cell)
+quakecounts   <- dgquakes |> fcount(cell)
 ```
 
 Show me more examples!

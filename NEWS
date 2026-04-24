@@ -1,3 +1,7 @@
+dggridR v3.1.1 
+===============
+* Bumped R dependency to 4.1.0 to fix CRAN issues. Thanks Edzer.
+
 dggridR v3.1.0 
 ===============
 * Fixed a numeric precision issue on Apple silicon computers (#63)
