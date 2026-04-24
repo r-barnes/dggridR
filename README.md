@@ -5,6 +5,7 @@
 ![downloads](https://cranlogs.r-pkg.org/badges/grand-total/dggridR) <!-- ?color=blue -->
 [![dependencies](https://tinyverse.netlify.app/badge/dggridR)](https://CRAN.R-project.org/package=dggridR)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1322866.svg)](https://doi.org/10.5281/zenodo.1322866)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/r-barnes/dggridR)
 
 dggridR: Discrete Global Grids for R
 ====================================
