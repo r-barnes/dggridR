@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -49,23 +49,23 @@ DgProjFullerInv::DgProjFullerInv (const DgRF<DgProjTriCoord, long double>& from,
 DgGeoCoord
 DgProjFullerInv::convertTypedAddress (const DgProjTriCoord& addIn) const
 {
-//cout << "***DgProjFullerInv: DgProjTriCoord: " << addIn << endl;
+//cout << "***DgProjFullerInv: DgProjTriCoord: " << addIn << std::endl;
    IcosaGridPt gridpt;
    gridpt.pt.x = addIn.coord().x();
    gridpt.pt.y = addIn.coord().y();
    gridpt.triangle = addIn.triNum();
 
 //cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
-//      gridpt.pt.x << ", " << gridpt.pt.y << endl;
+//      gridpt.pt.x << ", " << gridpt.pt.y << std::endl;
 
    GeoCoord ll = fullerInv(gridpt, projTriRF().sphIcosa().sphIcosa());
 
 //cout << " ll.lon, ll.lat: " << ll.lon << ", " <<
-//ll.lat << endl;
+//ll.lat << std::endl;
    DgGeoCoord geoPt(ll.lon, ll.lat);
    geoPt.normalize();
 
-//cout << "    geoPt: " << geoPt << endl;
+//cout << "    geoPt: " << geoPt << std::endl;
    return geoPt;
 
 } // DgGeoCoord DgProjFullerInv::convertTypedAddress
@@ -89,20 +89,20 @@ DgProjFullerFwd::DgProjFullerFwd (const DgRF<DgGeoCoord, long double>& from,
 DgProjTriCoord
 DgProjFullerFwd::convertTypedAddress (const DgGeoCoord& addIn) const
 {
-//cout << "***DgProjFullerFwd: geoPt: " << addIn << endl;
+//cout << "***DgProjFullerFwd: geoPt: " << addIn << std::endl;
          GeoCoord ll;
 
    ll.lon = addIn.lon();
    ll.lat = addIn.lat();
 
-//cout << "   ll.lon, ll.lat: " << ll.lon << ", " << ll.lat << endl;
+//cout << "   ll.lon, ll.lat: " << ll.lon << ", " << ll.lat << std::endl;
 
    IcosaGridPt gridpt = fullerFwd(ll, projTriRF().sphIcosa());
 //cout << "    gridpt.triangle .x .y: " << gridpt.triangle << ", " <<
-//      gridpt.pt.x << ", " << gridpt.pt.y << endl;
+//      gridpt.pt.x << ", " << gridpt.pt.y << std::endl;
 
 //cout << "DgProjTriCoord: " << DgProjTriCoord(gridpt.triangle,
-//                               DgDVec2D(gridpt.pt.x, gridpt.pt.y)) << endl;
+//                               DgDVec2D(gridpt.pt.x, gridpt.pt.y)) << std::endl;
 
    return DgProjTriCoord(gridpt.triangle, DgDVec2D(gridpt.pt.x, gridpt.pt.y));
 
@@ -345,7 +345,7 @@ GeoCoord fullerInvOneTri(const IcosaGridPt pt, long double R, long double* pAzim
       if (hi == lastHi) {
          report("DgProjFullerInv::fullerInvOneTri(): "
           "ERROR: fullerInvOneTri: iterative step failed.\n"
-          "loss of precision: " + to_string(fabsl(hi) - PRECISION));
+          "loss of precision: " + std::to_string(fabsl(hi) - PRECISION));
          break;
       }
       lastHi = hi;

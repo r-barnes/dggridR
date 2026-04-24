@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -37,7 +37,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutRandPtsText::DgOutRandPtsText (const DgRFBase& rfIn,
-        const string& fileNameIn, int precision, DgReportLevel failLevel)
+        const std::string& fileNameIn, int precision, DgReportLevel failLevel)
    : DgOutLocTextFile (fileNameIn, rfIn, true, "txt", precision, failLevel)
 {
    // test for override of vecAddress
@@ -74,7 +74,8 @@ DgOutRandPtsText::insert (const DgDVec2D& pt)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgLocation& loc, const string* label)
+DgOutRandPtsText::insert (DgLocation& loc, const std::string* label,
+                  const DgDataList* /* dataList */)
 //
 // Put the point loc.
 //
@@ -96,7 +97,8 @@ DgOutRandPtsText::insert (DgLocation& loc, const string* label)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgLocVector&, const string*, const DgLocation*)
+DgOutRandPtsText::insert (DgLocVector&, const std::string*, const DgLocation*,
+          const DgDataList*)
 //
 // Put the polyline vec.
 //
@@ -110,7 +112,8 @@ DgOutRandPtsText::insert (DgLocVector&, const string*, const DgLocation*)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgOutLocFile&
-DgOutRandPtsText::insert (DgPolygon&, const string*, const DgLocation*)
+DgOutRandPtsText::insert (DgPolygon&, const std::string*, const DgLocation*,
+          const DgDataList*)
 //
 // Put the polygon poly.
 //

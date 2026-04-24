@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -68,7 +68,7 @@ static short mStart=1;
 
 /* Mother **************************************************************
 |	George Marsaglia's The mother of all random number generators
-|		producing uniformly distributed pseudo random 32 bit values 
+|		producing uniformly distributed pseudo random 32 bit values
 with
 |		period about 2^250.
 |	The text of Marsaglia's posting is appended at the end of the function.
@@ -78,7 +78,7 @@ with
 |		These random numbers are moved to elements 2 to 9 and a new
 |		carry and number are generated and placed in elements 0 and 1.
 |	The arrays mother1 and mother2 are filled with random 16 bit values
-|		on first call of Mother by another generator.  mStart is the 
+|		on first call of Mother by another generator.  mStart is the
 switch.
 |
 |	Returns:
@@ -105,7 +105,7 @@ static double Mother(unsigned long *pSeed)
 
 		p=mother1;
 		for (n=18;n--;) {
-			number=30903*sNumber+(number>>16);   /* One line 
+			number=30903*sNumber+(number>>16);   /* One line
 multiply-with-cary */
 			*p++=sNumber=number&m16Mask;
 			if (n==9)

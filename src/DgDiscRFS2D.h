@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -23,16 +23,13 @@
 //
 // DgDiscRFS2D.h: DgDiscRFS2D class definitions
 //
-// Version 7.0 - Kevin Sahr, 12/14/14
-// Version 6.1 - Kevin Sahr, 5/23/13
-//
 ////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGDISCRFS2D_H
 #define DGDISCRFS2D_H
 
 #include "DgApSeq.h"
-#include "DgDiscRFS.h"
+#include "DgDiscTopoRFS.h"
 #include "DgDVec2D.h"
 #include "DgIVec2D.h"
 
@@ -41,7 +38,7 @@
 using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
+class DgDiscRFS2D : public DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double> {
 
    public:
 
@@ -51,24 +48,23 @@ class DgDiscRFS2D : public DgDiscRFS<DgIVec2D, DgDVec2D, long double> {
                    DgGridTopology gridTopo = Hexagon,
                    DgGridMetric gridMetric = D6,
                    bool isCongruent = true, bool isAligned = false,
-                   const string& name = "DiscRFS2D",
+                   const std::string& name = "DiscRFS2D",
                    bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
                    bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq);
 
       DgDiscRFS2D (DgRFNetwork& network,
                    const DgRF<DgDVec2D, long double>& backFrame,
-                   int nRes = 1, unsigned int aperture = 4,
-                   DgGridTopology gridTopo = Hexagon,
-                   DgGridMetric gridMetric = D6,
+                   int nRes = 1, DgGridTopology gridTopo = Hexagon,
+                   DgGridMetric gridMetric = D6, unsigned int aperture = 4,
                    bool isCongruent = true, bool isAligned = false,
-                   const string& name = "DiscRFS2D")
-        : DgDiscRFS<DgIVec2D, DgDVec2D, long double>
-              (network, backFrame, nRes, aperture, gridTopo, gridMetric,
-                               isCongruent, isAligned, name)
+                   const std::string& name = "DiscRFS2D")
+        : DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double>
+              (network, backFrame, nRes, gridTopo, gridMetric, aperture,
+               isCongruent, isAligned, name)
            { setUndefLoc(makeLocation(undefAddress())); }
 
       DgDiscRFS2D (const DgDiscRFS2D& grd)
-        : DgDiscRFS<DgIVec2D, DgDVec2D, long double> (grd)
+        : DgDiscTopoRFS<DgIVec2D, DgDVec2D, long double> (grd)
            { setUndefLoc(makeLocation(undefAddress())); }
       virtual const DgResAdd<DgIVec2D>& undefAddress (void) const
            { static DgResAdd<DgIVec2D> undef(DgIVec2D::undefDgIVec2D, -1);

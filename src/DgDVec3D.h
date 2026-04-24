@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -33,8 +33,6 @@
 
 #include <cmath>
 #include <iostream>
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgDVec3D {
@@ -77,7 +75,7 @@ class DgDVec3D {
       //inline DgDVec3D& rotate (long double degrees);
 
       //inline operator XPoint   (void) const;
-      inline operator string (void) const;
+      inline operator std::string (void) const;
 
       inline DgDVec3D& operator=  (const DgDVec3D& pt);
       inline DgDVec3D& operator=  (const DgDVec2D& pt);
@@ -99,7 +97,7 @@ class DgDVec3D {
       friend bool operator>  (const DgDVec3D& pt1, const DgDVec3D& pt2);
       friend bool operator>= (const DgDVec3D& pt1, const DgDVec3D& pt2);
 
-      friend ostream& operator<< (ostream& stream, const DgDVec3D& pt);
+      friend std::ostream& operator<< (std::ostream& stream, const DgDVec3D& pt);
 
    private:
 
@@ -156,11 +154,11 @@ DgDVec3D::rotate (long double degrees)
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-inline DgDVec3D::operator string (void) const
+inline DgDVec3D::operator std::string (void) const
 {
    return "(" + dgg::util::to_string(x_) + ", " + dgg::util::to_string(y_) + ", " + dgg::util::to_string(z_) + ")";
 
-} // DgDVec3D::operator string
+} // DgDVec3D::operator std::string
 
 ////////////////////////////////////////////////////////////////////////////////
 inline DgDVec3D&
@@ -327,12 +325,12 @@ operator- (const DgDVec3D& pt1, const DgDVec3D& pt2)
 } // DgDVec3D operator-
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgDVec3D& pt)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgDVec3D& pt)
 {
-   return stream << string(pt);
+   return stream << std::string(pt);
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

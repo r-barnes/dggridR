@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -39,7 +39,7 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
    public:
 
       static const DgContCartRF* makeRF (DgRFNetwork& networkIn,
-                const string& nameIn = "ContCart")
+                const std::string& nameIn = "ContCart")
       { return new DgContCartRF(networkIn, nameIn); }
 
       DgContCartRF& operator= (const DgContCartRF& rf)
@@ -48,10 +48,10 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
       virtual long double dist (const DgDVec2D& add1, const DgDVec2D& add2) const
                        { return add1.distance(add2); }
 
-      virtual string add2str (const DgDVec2D& add) const
-                       { return string(add); }
+      virtual std::string add2str (const DgDVec2D& add) const
+                       { return std::string(add); }
 
-      virtual string add2str (const DgDVec2D& add, char delimiter) const
+      virtual std::string add2str (const DgDVec2D& add, char delimiter) const
                   { return dgg::util::to_string(add.x(), formatStr()) + delimiter +
 			   dgg::util::to_string(add.y(), formatStr()); }
 
@@ -60,7 +60,7 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
                   {    if (!add) add = new DgDVec2D();
                        return add->fromString(str, delimiter); }
 
-      virtual string dist2str (const long double& dist) const
+      virtual std::string dist2str (const long double& dist) const
                        { return dgg::util::to_string(dist, formatStr()); }
 
       virtual long double dist2dbl (const long double& dist) const
@@ -89,7 +89,7 @@ class DgContCartRF : public DgRF<DgDVec2D, long double> {
 
    protected:
 
-      DgContCartRF (DgRFNetwork& networkIn, const string& nameIn = "ContCart")
+      DgContCartRF (DgRFNetwork& networkIn, const std::string& nameIn = "ContCart")
          : DgRF<DgDVec2D, long double> (networkIn, nameIn)
            { setUndefLoc(makeLocation(undefAddress())); }
 

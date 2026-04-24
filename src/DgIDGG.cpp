@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -46,7 +46,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgIDGG::DgIDGG (const DgIDGGSBase* dggs, unsigned int aperture, int res, const string& name,
+DgIDGG::DgIDGG (const DgIDGGSBase* dggs, unsigned int aperture, int res, const std::string& name,
        DgGridTopology gridTopoIn, DgGridMetric gridMetric, unsigned int precision,
        bool isMixed43, int numAp4, bool isSuperfund, int sfRes, bool isApSeq,
        const DgApSeq& apSeq)
@@ -83,8 +83,8 @@ DgIDGG::initialize (void)
 
    // verify parameter validity
 
-   string apErrStr = string("DgIDGG::initialize(): invalid aperture " +
-            dgg::util::to_string(aperture()) + string(" for grid topo ") +
+   std::string apErrStr = std::string("DgIDGG::initialize(): invalid aperture " +
+            dgg::util::to_string(aperture()) + std::string(" for grid topo ") +
             to_string(gridTopo()));
 
    if (gridTopo() == Hexagon) {
@@ -112,53 +112,6 @@ DgIDGG::initialize (void)
 
    if (gridTopo() == Hexagon) {
       report("DgIDGG::initialize(): HEXAGON grid should use DgHexIDGG", DgBase::Fatal);
-/*
-      isAligned_ = true;
-      isCongruent_ = false;
-
-      if (!isMixed43())
-      {
-         if (aperture() == 4)
-         {
-            isClassI_ = true;
-            maxD_ = (long long int) pow(2.0L, res()) - 1;
-         }
-         else if (aperture() == 3)
-         {
-            isClassI_ = !(res() % 2);
-            if (!isClassI()) allocRes_ = res() + 1;
-            maxD_ = (long long int) pow(3.0L, (allocRes() / 2)) - 1;
-         }
-         else // aperture 7
-         {
-            isClassI_ = true;
-            //if (!isClassI()) allocRes_ = res() + 1;
-            //maxD_ = (long long int) pow(3.0L, (allocRes() / 2)) - 1;
-         }
-      }
-      else // mixed43
-      {
-         if (res() <= numAp4())
-         {
-            isClassI_ = true;
-            maxD_ = (long long int) pow(2.0L, res()) - 1;
-         }
-         else
-         {
-            isClassI_ = !((res() - numAp4()) % 2);
-            if (!isClassI()) allocRes_ = res() + 1;
-
-            maxD_ = (long long int) (pow(2.0L, numAp4()) *
-                      pow(3.0L, ((allocRes() - numAp4()) / 2))) - 1;
-         }
-         // cout << "MAXD: " << maxD_ << endl;
-      }
-      maxI_ = maxD();
-      maxJ_ = maxD();
-      mag_ = maxD() + 1;
-      firstAdd_ = DgQ2DICoord(0, DgIVec2D(0, 0));
-      lastAdd_ = DgQ2DICoord(11, DgIVec2D(0, 0));
-*/
    } else {
       maxD_ = (long long int) pow((long double) radix(), res()) - 1;
       maxI_ = maxD();

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -44,7 +44,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DgDmdIDGG::DgDmdIDGG (const DgIDGGS4D& dggs, unsigned int aperture,
-              int res, const string& name, DgGridMetric gridMetric,
+              int res, const std::string& name, DgGridMetric gridMetric,
               unsigned int precision)
    : DgIDGGBase (&dggs, dggs.geoRF(), aperture, res, name, Diamond, gridMetric,
                  precision),
@@ -78,8 +78,8 @@ DgDmdIDGG::initialize (void)
 {
    // verify parameter validity
 
-   string apErrStr = string("DgDmdIDGG::initialize(): invalid aperture " +
-             dgg::util::to_string(aperture()) + string(" for grid topo ") +
+   std::string apErrStr = std::string("DgDmdIDGG::initialize(): invalid aperture " +
+             dgg::util::to_string(aperture()) + std::string(" for grid topo ") +
              to_string(gridTopo()));
 
    if (gridTopo() != Diamond)
@@ -111,10 +111,10 @@ DgDmdIDGG::initialize (void)
    // length is 1.0
    ccFrame_ = DgContCartRF::makeRF(locNet_, name() + "CC1");
    if (gridMetric() == D4)
-      grid2DS_ = DgDmdD4Grid2DS::makeRF(locNet_, ccFrame(), res() + 1, 4, true, false, name() + string("D4H2DS"));
+      grid2DS_ = DgDmdD4Grid2DS::makeRF(locNet_, ccFrame(), res() + 1, 4, true, false, name() + std::string("D4H2DS"));
    else // must be D8
-      grid2DS_ = DgDmdD8Grid2DS::makeRF(locNet_, ccFrame(), res() + 1, 4, true, false, name() + string("D8H2DS"));
-   //cout << "== NEW GRID2DS:" << endl;
+      grid2DS_ = DgDmdD8Grid2DS::makeRF(locNet_, ccFrame(), res() + 1, 4, true, false, name() + std::string("D8H2DS"));
+   //cout << "== NEW GRID2DS:" << std::endl;
    //cout << *grid2DS_;
 
    if (res() == 0)
@@ -123,11 +123,10 @@ DgDmdIDGG::initialize (void)
       double factor = parentScaleFac * 2.0L; // aperture 4
 
       scaleFac_ = factor;
-      // Adding small number (1e-6) to prevent rounding down in conversion to integer (fixes issue #63 experienced on Apple ARM computers)
-      maxD_ = factor+1e-6 - 1.0L;
+      maxD_ = factor+0.000001 - 1.0L;
 
       //cout << res() << " " << aperture();
-      //cout << " f: " << factor << " maxD: " << maxD_ << endl;
+      //cout << " f: " << factor << " maxD: " << maxD_ << std::endl;
    }
 
    maxI_ = maxD();

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -42,7 +42,7 @@
 #include <list>
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgLocList : public DgLocBase, public list<DgLocBase*> {
+class DgLocList : public DgLocBase, public std::list<DgLocBase*> {
 
    public:
 
@@ -71,11 +71,11 @@ class DgLocList : public DgLocBase, public list<DgLocBase*> {
       //bool operator!= (const DgLocList& list) const
       //     { return !operator==(list); }
 
-      virtual string asString (void) const;
-      virtual string asAddressString (void) const;
+      virtual std::string asString (void) const;
+      virtual std::string asAddressString (void) const;
 
-      virtual string asString (char delimiter) const;
-      virtual string asAddressString (char delimiter) const;
+      virtual std::string asString (char delimiter) const;
+      virtual std::string asAddressString (char delimiter) const;
 
       virtual const char* fromString (const char* str, char delimiter);
 
@@ -92,7 +92,7 @@ class DgLocList : public DgLocBase, public list<DgLocBase*> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-ostream& operator<< (ostream& stream, const DgLocList& list);
+std::ostream& operator<< (std::ostream& stream, const DgLocList& list);
 
 ////////////////////////////////////////////////////////////////////////////////
 

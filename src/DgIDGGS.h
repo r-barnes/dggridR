@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -33,6 +33,8 @@
 
 #include "DgIDGGSBase.h"
 #include "DgIDGG.h"
+#include "DgAddressType.h"
+using namespace dgg::addtype;
 
 #include <cmath>
 
@@ -48,10 +50,10 @@ class DgIDGGS : public DgIDGGSBase {
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
                DgGridTopology gridTopo = Hexagon,
                DgGridMetric gridMetric = D6,
-               const string& name = "IDGGS", const string& projType = "ISEA",
-               bool isMixed43 = false, int numAp4 = 0,
-               bool isSuperfund = false, bool isApSeq = false,
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq);
+               const std::string& name = "IDGGS", const std::string& projType = "ISEA",
+               bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
+               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
+               const DgHierNdxSysType hierNdxSysType = InvalidHierNdxSysType);
 
       // copy constructor and operator= not implemented
 
@@ -73,11 +75,12 @@ class DgIDGGS : public DgIDGGSBase {
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
                DgGridTopology gridTopo = Hexagon,
                DgGridMetric gridMetric = D6,
-               const string& name = "IDGGS",
-               const string& projType = "ISEA",
+               const std::string& name = "IDGGS",
+               const std::string& projType = "ISEA",
+               bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
                bool isMixed43 = false, int numAp4 = 0,
-               bool isSuperfund = false, bool isApSeq = false,
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq);
+               bool isSuperfund = false,
+               const DgHierNdxSysType hierNdxSysType = InvalidHierNdxSysType);
 
       // remind sub-classes of the pure virtual functions remaining from above
 

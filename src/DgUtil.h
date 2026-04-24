@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -30,6 +30,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <string>
 
 // make sure we have the necessary C99 support in our gcc version
 
@@ -108,6 +109,12 @@ inline long lrint(const long double& x)
  return llrintl(x);
 #endif
 }
+
+void ssplit(const char *& src, std::vector<std::string>& dest, const char *delim = " ");
+void ssplit(const std::string& src, std::vector<std::string>& dest, const char *delim = " ");
+std::string stripQuotes (const std::string& str, char quote = '"');
+std::string baseName (const std::string& path);
+std::string toUpper (const std::string& str);
 
 }} // namespace dgg::util
 

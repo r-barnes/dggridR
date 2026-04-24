@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -35,8 +35,6 @@
 #include <cfloat>
 #include <cmath>
 #include <iostream>
-
-using namespace std;
 
 class DgDVec3D;
 
@@ -85,7 +83,7 @@ class DgDVec2D {
       inline DgDVec2D& rotate (long double degrees);
 
       //inline operator XPoint   (void) const;
-      inline operator string (void) const;
+      inline operator std::string (void) const;
 
       inline DgDVec2D& operator=  (const DgDVec2D& pt);
       DgDVec2D& operator=  (const DgDVec3D& pt);
@@ -107,7 +105,7 @@ class DgDVec2D {
       friend bool operator>  (const DgDVec2D& pt1, const DgDVec2D& pt2);
       friend bool operator>= (const DgDVec2D& pt1, const DgDVec2D& pt2);
 
-      friend ostream& operator<< (ostream& stream, const DgDVec2D& pt);
+      friend std::ostream& operator<< (std::ostream& stream, const DgDVec2D& pt);
 
    private:
 
@@ -161,13 +159,13 @@ DgDVec2D::rotate (long double degrees)
 } // void DgDVec2D::rotate
 
 ////////////////////////////////////////////////////////////////////////////////
-inline DgDVec2D::operator string (void) const
+inline DgDVec2D::operator std::string (void) const
 {
    const char* fmtStr = "%.9LF";
    return "(" + dgg::util::to_string(x_, fmtStr) + ", "
           + dgg::util::to_string(y_, fmtStr) + ")";
 
-} // DgDVec2D::operator string
+} // DgDVec2D::operator std::string
 
 ////////////////////////////////////////////////////////////////////////////////
 inline DgDVec2D&
@@ -318,12 +316,12 @@ operator- (const DgDVec2D& pt1, const DgDVec2D& pt2)
 } // DgDVec2D operator-
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgDVec2D& pt)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgDVec2D& pt)
 {
-   return stream << string(pt);
+   return stream << std::string(pt);
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

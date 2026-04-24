@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -23,67 +23,50 @@
 //
 // DgInLocTextFile.h: DgInLocTextFile class definitions
 //
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 #ifndef DGINLOCTEXTFILE_H
 #define DGINLOCTEXTFILE_H
 
-#include "DgInLocFile.h"
+#include "DgInLocStreamFile.h"
 
-#include <fstream>
-#include <string>
-
-using namespace std;
-
-class DgLocList;
-class DgLocVector;
 class DgPolygon;
-class DgLocation;
-class DgCell;
-class DgRFBase;
+class DgGeoSphRF;
+class DgLocationData;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgInLocTextFile : public ifstream, public DgInLocFile {
+class DgInLocTextFile : public DgInLocStreamFile
+{
+public:
 
-   public:
+    DgInLocTextFile (const DgRFBase& rfIn,
+                     const std::string* fileNameIn = nullptr,
+                     DgReportLevel failLevel = DgBase::Fatal);
 
-      DgInLocTextFile (const DgRFBase& rfIn,
-                       const string* fileNameIn = NULL,
-                       bool isPointFileIn = false,
-                       DgReportLevel failLevel = DgBase::Fatal);
+   ~DgInLocTextFile (void);
 
-      void rewind (void) { seekg(std::streampos(0)); clear(); }
+    bool forcePolyLine (void) const { return forcePolyLine_; }
+    bool forceCells    (void) const { return forceCells_; }
 
-      virtual bool open (const string* fileName = NULL,
-                 DgReportLevel failLevel = DgBase::Fatal);
+    void setForcePolyLine (bool forcePolyLine = false)
+                           { forcePolyLine_ = forcePolyLine; }
 
-      virtual void close (void) { ifstream::close(); }
+    void setForceCells (bool forceCells = false) { forceCells_ = forceCells; }
 
-      virtual bool isEOF (void) { return eof(); }
+    //virtual DgInLocFile& extract (DgPolygon&      poly);
+    virtual DgInLocFile& extract (DgCell&         cell);
+    virtual DgInLocFile& extract (DgLocation&     loc);
+    virtual DgInLocFile& extract (DgLocationData& loc);
 
-      // pure virtual methods
-      virtual DgInLocFile& extract (DgLocList&   list) = 0;
-      virtual DgInLocFile& extract (DgLocVector& vec)  = 0;
-      virtual DgInLocFile& extract (DgPolygon&   poly) = 0;
-      virtual DgInLocFile& extract (DgLocation&  loc)  = 0;
-      virtual DgInLocFile& extract (DgCell&      cell) = 0;
+protected:
 
+    DgInLocFile& extractPointGeometry(DgLocation& point);
+
+private:
+
+    bool forcePolyLine_;
+    bool forceCells_;
 };
-
-inline DgInLocFile& operator>> (DgInLocTextFile& input, DgLocList& list)
-              { return input.extract(list); }
-
-inline DgInLocFile& operator>> (DgInLocTextFile& input, DgLocVector& vec)
-              { return input.extract(vec); }
-
-inline DgInLocFile& operator>> (DgInLocTextFile& input, DgPolygon& poly)
-              { return input.extract(poly); }
-
-inline DgInLocFile& operator>> (DgInLocTextFile& input, DgLocation& loc)
-              { return input.extract(loc); }
-
-inline DgInLocFile& operator>> (DgInLocTextFile& input, DgCell& cell)
-              { return input.extract(cell); }
 
 ////////////////////////////////////////////////////////////////////////////////
 

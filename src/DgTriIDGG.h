@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -27,7 +27,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGTRIIDGG_H 
+#ifndef DGTRIIDGG_H
 #define DGTRIIDGG_H
 
 #include "DgIDGGBase.h"
@@ -44,7 +44,7 @@ class DgTriIDGG : public DgIDGGBase {
    public:
 
       DgTriIDGG (const DgIDGGS4T& dggs, unsigned int aperture = 4,
-              int res = 0, const string& name = "TriIDGG", 
+              int res = 0, const std::string& name = "TriIDGG",
               unsigned int precision = DEFAULT_PRECISION);
 
       DgTriIDGG (const DgTriIDGG& grd);
@@ -54,7 +54,7 @@ class DgTriIDGG : public DgIDGGBase {
       const DgIDGGS4T& triDggs (void) const;
 
       long double scaleFac (void) const { return scaleFac_; }
- 
+
    protected:
 
       void initialize (void);

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -26,6 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cfloat>
+#include <string.h>
 
 #include "DgBase.h"
 #include "DgDVec2D.h"
@@ -50,7 +51,7 @@ DgDVec2D::operator= (const DgDVec3D& pt)
 } // DgDVec2D& DgDVec2D::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-const char* 
+const char*
 DgDVec2D::fromString (const char* str, char delimiter)
 {
    char delimStr[2];
@@ -65,20 +66,19 @@ DgDVec2D::fromString (const char* str, char delimiter)
    // get the x
 
    tok = strtok(tmpStr, delimStr);
-   long double xIn;
-   if (sscanf(tok, "%LF", &xIn) != 1)
+   long double xIn = 0.0;
+   if (!tok || sscanf(tok, "%LF", &xIn) != 1)
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + string(tok), 
+       ::report("DgDVec2D::fromString() invalid value in string " + ((tok) ? std::string(tok) : std::string("\"\"")),
                DgBase::Fatal);
    }
 
    // get the y
-
    tok = strtok(NULL, delimStr);
-   long double yIn;
-   if (sscanf(tok, "%LF", &yIn) != 1)
+   long double yIn = 0.0;
+   if (!tok || sscanf(tok, "%LF", &yIn) != 1)
    {
-      ::report("DgDVec2D::fromString() invalid value in string " + string(tok), 
+      ::report("DgDVec2D::fromString() invalid value in string " + ((tok) ? std::string(tok) : std::string("\"\"")),
                DgBase::Fatal);
    }
 
@@ -87,9 +87,9 @@ DgDVec2D::fromString (const char* str, char delimiter)
 
    unsigned long offset = (tok - tmpStr) + strlen(tok) + 1;
    delete [] tmpStr;
-   if (offset >= strlen(str)) 
+   if (offset >= strlen(str))
     return 0;
-   else 
+   else
     return &str[offset];
 } // const char* DgDVec2D::fromString
 

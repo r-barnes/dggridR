@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -69,7 +69,7 @@ DgBoundedHexC3C2RF2D::seqNumAddress (const DgIVec2D& add) const
    sNum = sNum / 3;
 
    return sNum;
-} 
+}
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 

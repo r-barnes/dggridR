@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -38,10 +38,10 @@ long double DgGeoSphRF::earthRadiusKM_ = DEFAULT_RADIUS_KM;
 long double DgGeoSphRF::icosaEdgeRads_ = M_ATAN2;
 long double DgGeoSphRF::icosaEdgeDegs_ = icosaEdgeRads_ * M_180_PI;
 long double DgGeoSphRF::icosaEdgeKM_ = icosaEdgeRads_ * earthRadiusKM_;
-long double DgGeoSphRF::totalAreaKM_ = 
+long double DgGeoSphRF::totalAreaKM_ =
                       4.0L * M_PI * earthRadiusKM_ * earthRadiusKM_;
 
-const string DgGeoSphRF::lonWrapModeStrings[] = 
+const std::string DgGeoSphRF::lonWrapModeStrings[] =
              { "Wrap", "UnwrapWest", "UnwrapEast", "InvalidLonWrapMode" };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,8 +71,8 @@ DgGeoSphRF::lonWrap (DgGeoCoord& g, DgLonWrapMode wrapMode)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 // Assumes that p is a polygon with less than 120' in longitude range (which
-// should include all DGGS cell boundaries) and that all vertices in p are 
-// currently normalized (which means p would wrap if it crosses the 
+// should include all DGGS cell boundaries) and that all vertices in p are
+// currently normalized (which means p would wrap if it crosses the
 // anti-meridian).
 //
 // Returns true if wrap occurred, false otherwise.
@@ -80,14 +80,14 @@ DgGeoSphRF::lonWrap (DgGeoCoord& g, DgLonWrapMode wrapMode)
 int
 DgGeoSphRF::lonWrap (DgPolygon& p, DgLonWrapMode wrapMode)
 {
-   // assumes p starts out wrapped (which would be the result of invoking 
+   // assumes p starts out wrapped (which would be the result of invoking
    // normalize on all the vertices in p)
    if (wrapMode == Wrap) return false;
 
    const DgGeoSphRF* gs = dynamic_cast<const DgGeoSphRF*>(&p.rf());
    if (gs == 0) report("DgGeoSphRF::lonWrap() with non-CCRF", DgBase::Fatal);
 
-   vector<DgAddressBase*>& v = p.addressVec();
+   std::vector<DgAddressBase*>& v = p.addressVec();
 
    // first determine the range of longitude values
    long double minLon = 360.0L;
@@ -101,13 +101,13 @@ DgGeoSphRF::lonWrap (DgPolygon& p, DgLonWrapMode wrapMode)
 
    // check for wrap
    long double deltaLon = maxLon - minLon;
-//cout << "DELTALON: " << deltaLon << endl;
-   if (deltaLon < 120) // no wrap 
+//cout << "DELTALON: " << deltaLon << std::endl;
+   if (deltaLon < 120) // no wrap
       return false;
 
    // perform the wrap, putting the new vertices in unwrappedVerts
    DgPolygon unwrappedVerts(*gs);
-   vector<DgAddressBase*>& v2 = unwrappedVerts.addressVec();
+   std::vector<DgAddressBase*>& v2 = unwrappedVerts.addressVec();
    int wrapped = false; // has wrap occurred?
    for (unsigned long i = 0; i < v.size(); i++) {
 
@@ -139,8 +139,8 @@ DgGeoSphRF::densify (DgPolygon& p, long double maxDist, bool rads)
 
    DgPolygon densVerts(*gs);
 
-   vector<DgAddressBase*>& v0 = p.addressVec();
-   vector<DgAddressBase*>& v1 = densVerts.addressVec();
+   std::vector<DgAddressBase*>& v0 = p.addressVec();
+   std::vector<DgAddressBase*>& v1 = densVerts.addressVec();
 
    // for each edge
    for (unsigned long i = 0; i < v0.size(); i++)
@@ -178,7 +178,7 @@ DgGeoSphRF::densify (DgPolygon& p, long double maxDist, bool rads)
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoCoord 
+DgGeoCoord
 DgGeoSphRF::midPoint (const DgGeoCoord& p1, const DgGeoCoord& p2)
 /*
    Return midpoint of great circle connecting two points.
@@ -193,15 +193,15 @@ DgGeoSphRF::midPoint (const DgGeoCoord& p1, const DgGeoCoord& p2)
    pp2.lat = p2.lat();
 
    GeoCoord ans = GCmidpoint(pp1, pp2);
-   
+
    return DgGeoCoord(ans.lon, ans.lat);
 
 } // DgGeoCoord DgGeoSphRF::midPoint
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-long double 
-DgGeoSphRF::azimuth (const DgGeoCoord& p1, const DgGeoCoord& p2, 
+long double
+DgGeoSphRF::azimuth (const DgGeoCoord& p1, const DgGeoCoord& p2,
                      bool returnRads)
 /*
    Return azimuth from p1 to p2.
@@ -216,7 +216,7 @@ DgGeoSphRF::azimuth (const DgGeoCoord& p1, const DgGeoCoord& p2,
    pp2.lat = p2.lat();
 
    long double ans = Azimuth(pp1, pp2);
-   
+
    if (!returnRads) ans *= M_180_PI;
    return ans;
 
@@ -224,11 +224,11 @@ DgGeoSphRF::azimuth (const DgGeoCoord& p1, const DgGeoCoord& p2,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoCoord 
+DgGeoCoord
 DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double azimuth,
                       bool inputRads)
 /*
-   Return point that is distance from p0 along azimuth. 
+   Return point that is distance from p0 along azimuth.
 
    Works by calling Lian Song's routine Azimuth.
 */
@@ -244,13 +244,13 @@ DgGeoSphRF::travelGC (const DgGeoCoord& p0, long double distance, long double az
    }
 
    GeoCoord ans = GCdaz(pp0, distance, azimuth);
-   
+
    return DgGeoCoord(ans.lon, ans.lat);
 
 } // long double DgGeoSphRF::azimuth
 
 ////////////////////////////////////////////////////////////////////////////////
-DgGeoSphDegRF::DgGeoSphDegRF (const DgGeoSphRF& geoRFin, const string& nameIn)
+DgGeoSphDegRF::DgGeoSphDegRF (const DgGeoSphRF& geoRFin, const std::string& nameIn)
          : DgContCartRF (geoRFin.network(), nameIn), geoRF_ (geoRFin)
 {
    DgDegRadConverter (geoRFin, *this);

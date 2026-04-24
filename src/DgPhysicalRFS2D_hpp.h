@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -27,11 +27,11 @@
 
 template<class C>
 DgPhysicalRFS2D<C>::DgPhysicalRFS2D (const DgBoundedRFS2D& rfIn, bool allocate)
-   : DgPhysicalRF<DgResAdd<DgIVec2D>, C> (rfIn), boundedRFS2D_ (rfIn) 
+   : DgPhysicalRF<DgResAdd<DgIVec2D>, C> (rfIn), boundedRFS2D_ (rfIn)
 {
    int nRes = rfIn.grids().size();
 
-   grids_ = new vector<DgPhysicalRF2D<C>*>(nRes);
+   grids_ = new std::vector<DgPhysicalRF2D<C>*>(nRes);
 
    for (int i = 0; i < nRes; i++)
    {
@@ -48,7 +48,7 @@ DgPhysicalRFS2D<C>::replaceAddContents (const DgResAdd<DgIVec2D>& add, C* cont)
 {
    if (!boundedRFS2D().validAddress(add))
    {
-      report("DgPhysicalRFS2D<C>::replaceAddContents() invalid address", 
+      report("DgPhysicalRFS2D<C>::replaceAddContents() invalid address",
       DgBase::Fatal);
    }
 
@@ -58,12 +58,12 @@ DgPhysicalRFS2D<C>::replaceAddContents (const DgResAdd<DgIVec2D>& add, C* cont)
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class C> void
-DgPhysicalRFS2D<C>::setAddContents (const DgResAdd<DgIVec2D>& add, 
+DgPhysicalRFS2D<C>::setAddContents (const DgResAdd<DgIVec2D>& add,
                                     const C& cont)
 {
    if (!boundedRFS2D().validAddress(add))
    {
-      report("DgPhysicalRFS2D<C>::setAddContents() invalid address", 
+      report("DgPhysicalRFS2D<C>::setAddContents() invalid address",
       DgBase::Fatal);
    }
 
@@ -77,7 +77,7 @@ DgPhysicalRFS2D<C>::getAddContents (const DgResAdd<DgIVec2D>& add, bool allocate
 {
    if (!boundedRFS2D().validAddress(add))
    {
-      report("DgPhysicalRFS2D<C>::getAddContents() invalid address", 
+      report("DgPhysicalRFS2D<C>::getAddContents() invalid address",
       DgBase::Fatal);
    }
 

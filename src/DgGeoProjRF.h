@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -35,8 +35,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 class DgGeoCoord;
 class DgEllipsoidRF;
 
@@ -46,7 +44,7 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
 
    public:
 
-      DgGeoProjRF (DgRFNetwork& networkIn, const string& nameIn,
+      DgGeoProjRF (DgRFNetwork& networkIn, const std::string& nameIn,
                    const DgGeoCoord& proj0In = DgGeoCoord(M_ZERO, M_ZERO),
                    long double x0In = M_ZERO, long double y0In = M_ZERO,
                    long double k0In = M_ONE, long double to_meterIn = M_ONE,
@@ -101,10 +99,10 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
       virtual long double dist (const DgDVec2D& add1, const DgDVec2D& add2) const
          { return add1.distance(add2); }
 
-      virtual string add2str (const DgDVec2D& add) const
-                       { return string(add); }
+      virtual std::string add2str (const DgDVec2D& add) const
+                       { return std::string(add); }
 
-      virtual string add2str (const DgDVec2D& add, char delimiter) const
+      virtual std::string add2str (const DgDVec2D& add, char delimiter) const
                   { return dgg::util::to_string(add.x(), formatStr()) + delimiter +
                            dgg::util::to_string(add.y(), formatStr()); }
 
@@ -113,7 +111,7 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
                   {    if (!add) add = new DgDVec2D();
                        return add->fromString(str, delimiter); }
 
-      virtual string dist2str (const long double& dist) const
+      virtual std::string dist2str (const long double& dist) const
                        { return dgg::util::to_string(dist, formatStr()); }
 
       virtual long double dist2dbl (const long double& dist) const
@@ -155,13 +153,13 @@ class DgGeoProjRF : public DgGeoDatumRF<DgDVec2D, long double> {
 }; // class DgGeoProjRF
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgGeoProjRF& obj)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgGeoProjRF& obj)
 {
    return stream << obj.name() << ": " << obj.proj0()
                  << " " << obj.x0() << " " << obj.y0() << " " << obj.k0();
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

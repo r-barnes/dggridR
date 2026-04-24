@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -28,19 +28,19 @@
 #include <climits>
 
 #include "DgBoundedRF2D.h"
-#include "DgDiscRF.h"
+#include "DgDiscTopoRF.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgBoundedRF2D::DgBoundedRF2D (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf, 
-                              const DgIVec2D& lowerLeftIn, 
+DgBoundedRF2D::DgBoundedRF2D (const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& rf,
+                              const DgIVec2D& lowerLeftIn,
                               const DgIVec2D& upperRightIn)
-   : DgBoundedRF<DgIVec2D, DgDVec2D, long double> 
+   : DgBoundedRF<DgIVec2D, DgDVec2D, long double>
                     (rf, lowerLeftIn, upperRightIn, rf.undefAddress()),
-     discRF_ (rf), lowerLeft_ (lowerLeftIn), upperRight_ (upperRightIn), 
-     numI_ (upperRightIn.i() - lowerLeftIn.i() + 1), 
+     discRF_ (rf), lowerLeft_ (lowerLeftIn), upperRight_ (upperRightIn),
+     numI_ (upperRightIn.i() - lowerLeftIn.i() + 1),
      numJ_ (upperRightIn.j() - lowerLeftIn.j() + 1)
-{ 
+{
    if (numI() <= 0 || numJ() <= 0)
    {
       report("DgBoundedRF2D::DgBoundedRF2D() invalid bounds", DgBase::Fatal);
@@ -56,7 +56,7 @@ DgBoundedRF2D::DgBoundedRF2D (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& r
        validSize_ = false;
    }
    else validSize_ = true;
-   
+
 } // DgBoundedRF2D::DgBoundedRF2D
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -106,19 +106,19 @@ DgBoundedRF2D::seqNumAddress (const DgIVec2D& add) const
 
    long long int sNum = tVec.i() * numJ() + tVec.j();
 
-   if (!zeroBased()) 
+   if (!zeroBased())
     sNum++;
 
    return sNum;
 } // unsigned long long int DgBoundedRF2D::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-DgIVec2D 
+DgIVec2D
 DgBoundedRF2D::addFromSeqNum (unsigned long long int sNum) const
 {
    DgIVec2D res;
 
-   if (!zeroBased()) 
+   if (!zeroBased())
     sNum--;
 
    res.setI(sNum / numJ());

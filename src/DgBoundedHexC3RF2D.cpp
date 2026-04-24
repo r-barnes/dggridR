@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -30,23 +30,22 @@
 #include <climits>
 
 #include "DgBoundedHexC3RF2D.h"
-#include "DgDiscRF.h"
+#include "DgDiscTopoRF.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgBoundedHexC3RF2D::DgBoundedHexC3RF2D 
-           (const DgDiscRF<DgIVec2D, DgDVec2D, long double>& rf, 
+DgBoundedHexC3RF2D::DgBoundedHexC3RF2D
+           (const DgDiscTopoRF<DgIVec2D, DgDVec2D, long double>& rf,
             const DgIVec2D& lowerLeft, const DgIVec2D& upperRightIn,
             unsigned long long int sizeIn)
-   : DgBoundedRF2D (rf, lowerLeft, upperRightIn) 
-{ 
-   if (!sizeIn)
-   {
-       report("DgBoundedHexC3RF2D::DgBoundedHexC3RF2D() size not specified", 
+   : DgBoundedRF2D (rf, lowerLeft, upperRightIn)
+{
+   if (!sizeIn) {
+       report("DgBoundedHexC3RF2D::DgBoundedHexC3RF2D() size not specified",
               DgBase::Fatal);
        validSize_ = false;
    }
-  
+
    size_ = sizeIn;
    //setLastAdd(addFromSeqNum(size() - 1));
 
@@ -69,12 +68,9 @@ DgBoundedHexC3RF2D::incrementAddress (DgIVec2D& add) const
 
    do {
 
-      if (add.j() == upperRight().j())
-      {
+      if (add.j() == upperRight().j()) {
          add = DgIVec2D(add.i() + 1, lowerLeft().j());
-      }
-      else
-      {
+      } else {
          add.setJ(add.j() + 1);
       }
    } while (!validAddress(add) && add != upperRight());
@@ -89,17 +85,14 @@ DgBoundedHexC3RF2D::incrementAddress (DgIVec2D& add) const
 DgIVec2D&
 DgBoundedHexC3RF2D::decrementAddress (DgIVec2D& add) const
 {
-   if (add == invalidAdd() || add == lowerLeft()) 
+   if (add == invalidAdd() || add == lowerLeft())
       return add = invalidAdd();
-   
+
    do {
 
-      if (add.j() == lowerLeft().j())
-      {
+      if (add.j() == lowerLeft().j()) {
          add = DgIVec2D(add.i() - 1, upperRight().j());
-      }
-      else
-      {
+      } else {
          add.setJ(add.j() - 1);
       }
 
@@ -145,49 +138,40 @@ DgBoundedHexC3RF2D::seqNumAddress (const DgIVec2D& add) const
    if (!zeroBased()) sNum++;
 
    return sNum;
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 DgIVec2D
 DgBoundedHexC3RF2D::addFromSeqNum (unsigned long long int sNum) const
 {
-/*  USE THIS AS BASIS?
-////////////////////////////////////////////////////////////////////////////////
-DgIVec2D
-DgBoundedRF2D::addFromSeqNum (unsigned long long int sNum) const
-{
-   DgIVec2D res;
+   //report("DgBoundedHexC3RF2D::addFromSeqNum() NOT IMPLEMENTED YET", DgBase::Fatal);
 
    if (!zeroBased())
-    sNum--;
-
-   res.setI(sNum / numJ());
-   res.setJ(sNum % numJ());
-
-   res += lowerLeft();
-
-   return res;
-
-} // DgIVec2D DgBoundedRF2D::addFromSeqNum
-*/
-   report("DgBoundedHexC3RF2D::addFromSeqNum() NOT IMPLEMENTED YET", DgBase::Fatal);
+      sNum--;
 
    DgIVec2D res;
+   res.setI((sNum * 7) / numI());
+   res.setJ((sNum * 7) % numI());
 
-   if (!zeroBased()) 
-    sNum--;
-
-   res.setI((sNum * 3) / numI());
-   res.setJ((sNum * 3) % numI());
-
-   switch (res.i() % 3)
-   {
+   switch (res.i() % 7) {
       case 0: break;
 
-      case 1: res.setJ(res.j() + 2);
+      case 1: res.setJ(res.j() + 5);
               break;
 
-      case 2: res.setJ(res.j() + 1);
+      case 2: res.setJ(res.j() + 3);
+              break;
+
+      case 3: res.setJ(res.j() + 1);
+              break;
+
+      case 4: res.setJ(res.j() + 6);
+              break;
+
+      case 5: res.setJ(res.j() + 4);
+              break;
+
+      case 6: res.setJ(res.j() + 2);
               break;
    }
 

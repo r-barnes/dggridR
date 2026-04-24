@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -38,8 +38,8 @@ class DgIcosaTri {
 
    public:
 
-      DgIcosaTri (bool mapped = false, int rot60 = 0, 
-                   const DgDVec2D& offset = DgDVec2D(M_ZERO, M_ZERO)) 
+      DgIcosaTri (bool mapped = false, int rot60 = 0,
+                   const DgDVec2D& offset = DgDVec2D(M_ZERO, M_ZERO))
          : rot60_ (rot60), offset_ (offset), mapped_ (mapped) { }
 
       static const DgDVec2D origin_;

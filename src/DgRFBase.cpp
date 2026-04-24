@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -27,8 +27,6 @@
 
 #include <list>
 
-using namespace std;
-
 #include "DgBase.h"
 #include "DgRFBase.h"
 #include "DgLocBase.h"
@@ -46,7 +44,7 @@ DgRFBase::~DgRFBase (void)
 } // DgRFBase::~DgRFBase
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation* 
+DgLocation*
 DgRFBase::convert (DgLocation* loc) const
 {
    if (loc->rf_ == 0)
@@ -54,7 +52,7 @@ DgRFBase::convert (DgLocation* loc) const
       loc->rf_ = this;
       return loc;
    }
-   
+
    if (network() != loc->rf().network())
    {
       report("DgRFBase::convert() from/to network mismatch",
@@ -69,7 +67,7 @@ DgRFBase::convert (DgLocation* loc) const
       loc->rf_ = this;
       return loc;
    }
-   
+
    // if we're here we need to convert
 
    const DgConverterBase* conv = network().getConverter(loc->rf(), *this);
@@ -84,14 +82,14 @@ DgRFBase::convert (DgLocation* loc) const
 } // DgLocation* DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
-DgPolygon& 
+DgPolygon&
 DgRFBase::convert (DgPolygon& poly) const
 {
    if (poly.rf_ == 0) {
       poly.rf_ = this;
       return poly;
    }
-   
+
    if (network() != poly.rf().network()) {
       report("DgRFBase::convert() from/to network mismatch",
              DgBase::Fatal);
@@ -104,7 +102,7 @@ DgRFBase::convert (DgPolygon& poly) const
       poly.rf_ = this;
       return poly;
    }
-   
+
    // if we're here we need to convert
 
    const DgConverterBase* conv = network().getConverter(poly.rf(), *this);
@@ -124,14 +122,14 @@ DgRFBase::convert (DgPolygon& poly) const
 } // DgPolygon& DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocVector& 
+DgLocVector&
 DgRFBase::convert (DgLocVector& vec) const
 {
    if (vec.rf_ == 0) {
       vec.rf_ = this;
       return vec;
    }
-   
+
    if (network() != vec.rf().network()) {
       report("DgRFBase::convert() from/to network mismatch",
              DgBase::Fatal);
@@ -144,7 +142,7 @@ DgRFBase::convert (DgLocVector& vec) const
       vec.rf_ = this;
       return vec;
    }
-   
+
    // if we're here we need to convert
 
    const DgConverterBase* conv = network().getConverter(vec.rf(), *this);
@@ -153,9 +151,9 @@ DgRFBase::convert (DgLocVector& vec) const
       return vec;
    }
 
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
    for (unsigned long i = 0; i < v.size(); i++) {
-      if (v[i]) { 
+      if (v[i]) {
          DgAddressBase* addIn = v[i];
          DgAddressBase* newAdd = conv->createConvertedAddress(*addIn);
          v[i] = newAdd;
@@ -171,7 +169,7 @@ DgRFBase::convert (DgLocVector& vec) const
 } // DgLocVector& DgRFBase::convert
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation* 
+DgLocation*
 DgRFBase::createLocation (void) const
 {
    return new DgLocation(*this, 0);
@@ -179,7 +177,7 @@ DgRFBase::createLocation (void) const
 } // DgLocation* DgRFBase::createLocation
 
 ////////////////////////////////////////////////////////////////////////////////
-DgLocation* 
+DgLocation*
 DgRFBase::buildLocation (DgAddressBase* addIn) const
 {
    return new DgLocation(*this, addIn);
@@ -187,21 +185,21 @@ DgRFBase::buildLocation (DgAddressBase* addIn) const
 } // DgLocation* DgRFBase::buildLocation
 
 ////////////////////////////////////////////////////////////////////////////////
-ostream&
-DgRFBase::traceToGround (ostream& stream) const
+std::ostream&
+DgRFBase::traceToGround (std::ostream& stream) const
 {
    stream << "tracing " << name() << " {";
 
-   if (id() == 0) return stream << " at ground }" << endl;
+   if (id() == 0) return stream << " at ground }" << std::endl;
 
-   if (!connectTo()) return stream << " => NULL }" << endl;
+   if (!connectTo()) return stream << " => NULL }" << std::endl;
 
    stream << "\n";
 
    const DgRFBase* to = connectTo();
    while (true)
    {
-      if (!to) return stream << "  => NULL }" << endl;
+      if (!to) return stream << "  => NULL }" << std::endl;
 
       // at ground?
 
@@ -219,11 +217,11 @@ DgRFBase::traceToGround (ostream& stream) const
 
    // now go back from ground
 
-   list<const DgRFBase*> rev;
+   std::list<const DgRFBase*> rev;
    const DgRFBase* from = connectFrom();
    while (true)
    {
-      if (!from) return stream << "  => NULL }" << endl;
+      if (!from) return stream << "  => NULL }" << std::endl;
 
       // at ground?
 
@@ -235,15 +233,15 @@ DgRFBase::traceToGround (ostream& stream) const
       from = from->connectFrom();
    }
 
-   list<const DgRFBase*>::iterator it = rev.begin();
+   std::list<const DgRFBase*>::iterator it = rev.begin();
    for (; it != rev.end(); it++) stream << "  => " << (*it)->name() << "\n";
 
-   return stream << " => " << name() << " }" << endl;  
+   return stream << " => " << name() << " }" << std::endl;
 
 } // void DgRFBase::traceToGround
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgRFBase::toString (const DgLocBase& lb) const
 {
    return lb.asString();
@@ -251,7 +249,7 @@ DgRFBase::toString (const DgLocBase& lb) const
 } // string DgRFBase::toString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgRFBase::toAddressString (const DgLocBase& lb) const
 {
    return lb.asAddressString();
@@ -259,7 +257,7 @@ DgRFBase::toAddressString (const DgLocBase& lb) const
 } // string DgRFBase::toAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgRFBase::toString (const DgLocBase& lb, char delimiter) const
 {
    return lb.asString(delimiter);
@@ -267,7 +265,7 @@ DgRFBase::toString (const DgLocBase& lb, char delimiter) const
 } // string DgRFBase::toString
 
 ////////////////////////////////////////////////////////////////////////////////
-string
+std::string
 DgRFBase::toAddressString (const DgLocBase& lb, char delimiter) const
 {
    return lb.asAddressString(delimiter);
@@ -275,8 +273,8 @@ DgRFBase::toAddressString (const DgLocBase& lb, char delimiter) const
 } // string DgRFBase::toAddressString
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgRFBase::setUndefLoc (DgLocation* undefLoc) 
+void
+DgRFBase::setUndefLoc (DgLocation* undefLoc)
 {
    if (undefLoc_) delete undefLoc_;
    undefLoc_ = undefLoc;

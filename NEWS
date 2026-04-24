@@ -1,4 +1,13 @@
-dggridR v3.1.1 
+dggridR v4.0.0
+===============
+* Updated bundled DGGRID C++ engine to v9.0b (upstream SebKrantz/DGGRID)
+* Re-architected DgIDGGSBase::makeRF call for new parameter order (isApSeq,
+  DgApSeq, hierNdxSysType)
+* update_from_upstream.sh rewritten for macOS compatibility (Perl-based
+  text transforms, bash rename loop) and updated to SebKrantz/DGGRID
+* These changes were made by Sebastian Krantz
+
+dggridR v3.1.1
 ===============
 * Bumped R dependency to 4.1.0 to fix CRAN issues. Thanks Edzer.
 

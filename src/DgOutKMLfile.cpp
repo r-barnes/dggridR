@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -36,8 +36,8 @@
 #include "DgGeoSphRF.h"
 
 DgOutKMLfile::DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename,
-    int precision, bool isPointFile, const string& colorIn, int widthIn,
-    const string& nameIn, const string& descIn, DgReportLevel failLevel)
+    int precision, bool isPointFile, const std::string& colorIn, int widthIn,
+    const std::string& nameIn, const std::string& descIn, DgReportLevel failLevel)
    : DgOutLocTextFile (filename, rf, isPointFile, "kml", precision, failLevel)
 {
    // test for override of vecAddress
@@ -58,7 +58,7 @@ DgOutKMLfile::DgOutKMLfile(const DgGeoSphDegRF& rf, const std::string& filename,
 }
 
 void
-DgOutKMLfile::setColor (const string& colorIn)
+DgOutKMLfile::setColor (const std::string& colorIn)
 {
    if (colorIn.length() != 8)
       DgOutputStream::report("DgOutKMLfile::setColor(): invalid KML color " + colorIn,
@@ -95,13 +95,13 @@ DgOutKMLfile::setWidth (int widthIn)
 }
 
 void
-DgOutKMLfile::setName (const string& nameIn)
+DgOutKMLfile::setName (const std::string& nameIn)
 {
    name_ = nameIn;
 }
 
 void
-DgOutKMLfile::setDescription (const string& descIn)
+DgOutKMLfile::setDescription (const std::string& descIn)
 {
    description_ = descIn;
 }
@@ -168,7 +168,8 @@ DgOutKMLfile::insert(const DgDVec2D& pt)
 }
 
 DgOutLocFile&
-DgOutKMLfile::insert (DgLocation& loc, const string* label)
+DgOutKMLfile::insert (DgLocation& loc, const std::string* label,
+                  const DgDataList* /* dataList */)
 {
    DgOutKMLfile& o(*this);
 
@@ -192,7 +193,8 @@ DgOutKMLfile::insert (DgLocation& loc, const string* label)
 }
 
 DgOutLocFile&
-DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* /* cent */)
+DgOutKMLfile::insert (DgLocVector& vec, const std::string* label, const DgLocation* /* cent */,
+                  const DgDataList* /* dataList */)
 {
    DgOutKMLfile& o(*this);
 
@@ -208,8 +210,8 @@ DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* /
    o << "         <tessellate>1</tessellate>\n";
    o << "         <coordinates>\n";
 
-   vector<DgAddressBase *>& v = vec.addressVec();
-   for(vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
+   std::vector<DgAddressBase *>& v = vec.addressVec();
+   for(std::vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
          o.insert(rf().getVecAddress(*(*i)));
 
    o << "         </coordinates>\n";
@@ -222,7 +224,8 @@ DgOutKMLfile::insert (DgLocVector& vec, const string* label, const DgLocation* /
 }
 
 DgOutLocFile&
-DgOutKMLfile::insert (DgPolygon& poly, const string* label, const DgLocation* /* cent */)
+DgOutKMLfile::insert (DgPolygon& poly, const std::string* label, const DgLocation* /* cent */,
+                         const DgDataList* /* dataList */)
 {
    DgOutKMLfile& o(*this);
 
@@ -238,8 +241,8 @@ DgOutKMLfile::insert (DgPolygon& poly, const string* label, const DgLocation* /*
    o << "         <tessellate>1</tessellate>\n";
    o << "         <coordinates>\n";
 
-   vector<DgAddressBase *>& v = poly.addressVec();
-   for(vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
+   std::vector<DgAddressBase *>& v = poly.addressVec();
+   for(std::vector<DgAddressBase *>::iterator i = v.begin(); v.end() != i; ++i)
          o.insert(rf().getVecAddress(*(*i)));
 
    // rewrite first vertex:

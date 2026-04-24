@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -81,7 +81,7 @@ DgIcosaTri::translate (DgDVec2D* pt) const
 
    //*pt += origin_;
 
-   // first rotate 
+   // first rotate
 
    long double x0 = pt->x();
    long double y0 = pt->y();
@@ -106,7 +106,7 @@ DgIcosaTri::untranslate (DgDVec2D* pt, bool shiftOrigin) const
 
    *pt -= offset_;
 
-   // rotate 
+   // rotate
 
    long double x0 = pt->x();
    long double y0 = pt->y();
@@ -154,7 +154,7 @@ DgIcosaMap::maxOffset (void)
    {
       if (!icosaTri_[i].mapped_) continue;
 
-      // find the max X and Y offsets for this triangle in edge-length units 
+      // find the max X and Y offsets for this triangle in edge-length units
 
       long double offX = icosaTri_[i].offset_.x();
       long double offY = icosaTri_[i].offset_.y() / M_SIN60;
@@ -186,7 +186,7 @@ DgIcosaMap::maxOffset (void)
 
       if (offX > maxOff.x()) maxOff.setX(offX);
       if (offY > maxOff.y()) maxOff.setY(offY);
-      
+
    }
 
    return maxOff;

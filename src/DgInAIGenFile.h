@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -28,16 +28,16 @@
 #ifndef DGINAIGENFILE_H
 #define DGINAIGENFILE_H
 
-#include "DgInLocTextFile.h"
+#include "DgInLocStreamFile.h"
 
 class DgPolygon;
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgInAIGenFile : public DgInLocTextFile {
+class DgInAIGenFile : public DgInLocStreamFile {
 
    public:
 
-      DgInAIGenFile (const DgRFBase& rfIn, const string* fileNameIn = NULL,
+      DgInAIGenFile (const DgRFBase& rfIn, const std::string* fileNameIn = NULL,
                         DgReportLevel failLevel = DgBase::Fatal);
 
       bool forcePolyLine (void) const { return forcePolyLine_; }
@@ -56,7 +56,7 @@ class DgInAIGenFile : public DgInLocTextFile {
       virtual DgInLocFile& extract (DgCell& cell);
 
    private:
-      
+
       bool forcePolyLine_;
       bool forceCells_;
 

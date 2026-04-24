@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -36,6 +36,8 @@
 #include "DgApSeq.h"
 #include "DgHexIDGG.h"
 #include "DgIDGGS.h"
+#include "DgAddressType.h"
+using namespace dgg::addtype;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgHexIDGGS : public DgIDGGS {
@@ -44,11 +46,10 @@ class DgHexIDGGS : public DgIDGGS {
 
       static const DgHexIDGGS* makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
                const DgGeoCoord& vert0, long double azDegs, unsigned int aperture = 4,
-               int nRes = 1, const string& name = "IDGGS", const string& projType = "ISEA",
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq, bool isApSeq = false,
-               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false)
-         { return new DgHexIDGGS(network, backFrame, vert0, azDegs, aperture, nRes, name,
-               projType, apSeq, isApSeq, isMixed43, numAp4, isSuperfund); }
+               int nRes = 1, const std::string& name = "IDGGS", const std::string& projType = "ISEA",
+               bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
+               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
+               const DgHierNdxSysType hierNdxSysType = InvalidHierNdxSysType);
 
       // copy constructor and operator= not implemented
 
@@ -61,9 +62,10 @@ class DgHexIDGGS : public DgIDGGS {
 
       DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame, const DgGeoCoord& vert0,
                long double azDegs, unsigned int aperture = 4, int nRes = 1,
-               const string& name = "IDGGS", const string& projType = "ISEA",
-               const DgApSeq& apSeq = DgApSeq::defaultApSeq, bool isApSeq = false,
-               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false);
+               const std::string& name = "IDGGS", const std::string& projType = "ISEA",
+               bool isApSeq = false, const DgApSeq& apSeq = DgApSeq::defaultApSeq,
+               bool isMixed43 = false, int numAp4 = 0, bool isSuperfund = false,
+               DgHierNdxSysType hierNdxSysType = InvalidHierNdxSysType);
 
       // pure virtual functions remaining from above
 
@@ -87,19 +89,19 @@ class DgHexIDGGS : public DgIDGGS {
 
       DgApSeq apSeq_;
 
-   friend ostream& operator<< (ostream& stream, const DgHexIDGGS& dgg);
+   friend std::ostream& operator<< (std::ostream& stream, const DgHexIDGGS& dgg);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgHexIDGGS& dggs)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgHexIDGGS& dggs)
 {
-   stream << ">>> DgHexIDGGS: " << (const DgIDGGSBase&) dggs << endl;
-   stream << "ApSeq: " << dggs.apSeq() << endl;
+   stream << ">>> DgHexIDGGS: " << (const DgIDGGSBase&) dggs << std::endl;
+   stream << "ApSeq: " << dggs.apSeq() << std::endl;
    for (int r = 0; r < dggs.nRes(); r++)
    {
-      stream << ">>>>> res " << r << ": '" << endl;
-      stream << dggs.hexIdgg(r) << endl;
+      stream << ">>>>> res " << r << ": '" << std::endl;
+      stream << dggs.hexIdgg(r) << std::endl;
    }
 
    return stream;

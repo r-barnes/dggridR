@@ -2,7 +2,6 @@
 #define _dglib_hpp_
 
 #include "DgConstants.h"
-#include "dggrid.h"
 //#include "DgProjGnomonicRF.h"
 //#include "DgGeoProjConverter.h"
 

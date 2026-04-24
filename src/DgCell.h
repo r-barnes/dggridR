@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -33,36 +33,44 @@
 #include "DgLocation.h"
 #include "DgLocBase.h"
 #include "DgPolygon.h"
+#include "DgDataList.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgCell : public DgLocBase {
 
    public:
 
-      DgCell (void) : region_ (0) {}
+      DgCell (void) : region_ (nullptr), dataList_ (nullptr) {}
 
-      DgCell (const DgRFBase& rfIn, const string& labelIn,
-              const DgLocation& nodeIn, DgPolygon* regionIn = 0)
+      DgCell (const DgRFBase& rfIn, const std::string& labelIn,
+              const DgLocation& nodeIn, DgPolygon* regionIn = nullptr,
+              DgDataList* dataListIn = nullptr, bool ownDataIn = true)
          : DgLocBase(rfIn), label_ (labelIn), node_ (nodeIn),
-           region_ (regionIn)
+           region_ (regionIn), dataList_ (dataListIn), ownData_ (ownDataIn)
       { rf().convert(&node_); if (hasRegion()) rf().convert(region_); }
 
-     ~DgCell (void) { delete region_; }
+     ~DgCell (void) { delete region_; if (ownData_) delete dataList_; }
 
-      const string&     label  (void) const { return label_; }
-      const DgLocation& node   (void) const { return node_; }
-      const DgPolygon&  region (void) const { return *region_; }
+      const std::string& label  (void) const { return label_; }
+      const DgLocation&  node   (void) const { return node_; }
+      const DgPolygon&   region (void) const { return *region_; }
 
-      string&     label  (void) { return label_; }
+      std::string&       label  (void) { return label_; }
       DgLocation& node   (void) { return node_; }
       DgPolygon&  region (void) { return *region_; }
 
+      DgDataList* dataList (void) { return dataList_; }
+      const DgDataList* dataList (void) const { return dataList_; }
+
+      void setDataList (DgDataList* _dataList, bool _ownData = true)
+              { dataList_ = _dataList;  ownData_ = _ownData; }
+
       bool hasRegion (void) const { return (region_ != 0); }
 
-      void setLabel (const string& labelIn) { label_ = labelIn; }
+      void setLabel (const std::string& labelIn) { label_ = labelIn; }
 
       virtual void setNode (const DgLocation& nodeIn)
-           { node_ = nodeIn; if (node_.rf() != rf()) rf().convert(&node_); }
+           { node_ = nodeIn; if (rf_ && node_.rf() != rf()) rf().convert(&node_); }
 
       void setRegion (DgPolygon* regionIn)
            {
@@ -97,10 +105,10 @@ class DgCell : public DgLocBase {
       bool operator!= (const DgCell& cell) const
            { return !operator==(cell); }
 
-      virtual string asString (void) const;
-      virtual string asString (char delimiter) const;
-      virtual string asAddressString (void) const;
-      virtual string asAddressString (char delimiter) const;
+      virtual std::string asString (void) const;
+      virtual std::string asString (char delimiter) const;
+      virtual std::string asAddressString (void) const;
+      virtual std::string asAddressString (char delimiter) const;
 
       virtual const char* fromString (const char* str, char delimiter);
 
@@ -116,20 +124,23 @@ class DgCell : public DgLocBase {
 
    private:
 
-      string label_;
+      std::string label_;
       DgLocation node_;
       DgPolygon* region_;
+      DgDataList* dataList_;
+      bool ownData_; // is this cell responsible for deleting dataList_?
 
    friend class DgInArcGen;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgCell& cell)
-            {
-              stream << "[" << cell.label() << ":" << cell.node();
-              if (cell.hasRegion()) stream << ":" << cell.region();
-              return stream << endl;
-            }
+inline std::ostream& operator<< (std::ostream& stream, const DgCell& cell)
+{
+   stream << "[" << cell.label() << ":" << cell.node();
+   if (cell.hasRegion()) stream << ":" << cell.region();
+   if (cell.dataList()) stream << ":" << *cell.dataList();
+   return stream << "]" << std::endl;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 

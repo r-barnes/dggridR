@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -21,10 +21,10 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// DgOutputStream.C: DgOutputStream class implementation
+// DgOutputStream.cpp: DgOutputStream class implementation
 //
 //   This class provides wrappers around some basic output stream functionality
-//   to increase ease of use. 
+//   to increase ease of use.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +32,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutputStream::DgOutputStream (const string& fileName, const string& suffix,
+DgOutputStream::DgOutputStream (const std::string& fileName, const std::string& suffix,
                                 DgReportLevel failLevel)
    : DgBase ("DgOutputStream:" + fileName), suffix_ (suffix)
 {
@@ -46,8 +46,8 @@ DgOutputStream::DgOutputStream (const string& fileName, const string& suffix,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-bool 
-DgOutputStream::open (string fileName, DgReportLevel failLevel)
+bool
+DgOutputStream::open (std::string fileName, DgReportLevel failLevel)
 //
 // Open fileName as an output file. Report with a report level of failLevel
 // if the open is unsuccessful.
@@ -58,17 +58,17 @@ DgOutputStream::open (string fileName, DgReportLevel failLevel)
    // make sure we are not already open
 
    if ((rdbuf())->is_open()) close();
-   
+
    // get all the possible name variations
 
-   fileName_ 
-      = (suffix() == string("")) ? fileName : 
-                                     fileName + string(".") + suffix();
+   fileName_
+      = (suffix() == std::string("")) ? fileName :
+                                     fileName + std::string(".") + suffix();
 
-   ofstream::open(fileName_.c_str(), ios::out);
-   if (!good()) 
+    std::ofstream::open(fileName_.c_str(), std::ios::out);
+   if (!good())
    {
-      report("DgOutputStream::open() unable to open file " + fileName_, 
+      report("DgOutputStream::open() unable to open file " + fileName_,
              failLevel);
       return false;
    }
@@ -77,7 +77,7 @@ DgOutputStream::open (string fileName, DgReportLevel failLevel)
       debug("DgOutputStream::open() opened file " + fileName_);
       return true;
    }
-   
+
 } // DgOutputStream::open
 
 ////////////////////////////////////////////////////////////////////////////////

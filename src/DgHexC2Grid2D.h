@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -28,7 +28,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGHEXC2GRID2D_H 
+#ifndef DGHEXC2GRID2D_H
 #define DGHEXC2GRID2D_H
 
 #include <cmath>
@@ -38,7 +38,7 @@
 #include "DgIVec2D.h"
 
 class DgPolygon;
-  
+
 using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,9 +46,9 @@ class DgHexC2Grid2D : public DgDiscRF2D {
 
    public:
 
-      static const DgHexC2Grid2D* makeRF (DgRFNetwork& networkIn, 
+      static const DgHexC2Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
-                     const string& nameIn = "HexC2D")
+                     const std::string& nameIn = "HexC2D")
          { return new DgHexC2Grid2D (networkIn, ccFrameIn, nameIn); }
 
       DgHexC2Grid2D& operator= (const DgHexC2Grid2D& grd)
@@ -59,20 +59,20 @@ class DgHexC2Grid2D : public DgDiscRF2D {
       const DgDiscRF2D& surrogate (void) const { return *surrogate_; }
       const DgDiscRF2D& substrate (void) const { return *substrate_; }
 
-      virtual operator string (void) const
+      virtual operator std::string (void) const
         {
-           string s = DgDiscRF::operator string() + ": DgHexC2Grid2D\n";
-           s += "   -- surrogate: " + string(*surrogate_);
-           s += "\n   -- substrate: " + string(*substrate_);
-           
+           std::string s = DgDiscTopoRF::operator std::string() + ": DgHexC2Grid2D\n";
+           s += "   -- surrogate: " + std::string(*surrogate_);
+           s += "\n   -- substrate: " + std::string(*substrate_);
+
            return s;
-        }  
+        }
 
    protected:
 
-      DgHexC2Grid2D (DgRFNetwork& networkIn, 
+      DgHexC2Grid2D (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
-                     const string& nameIn = "HexC2D");
+                     const std::string& nameIn = "HexC2D");
 
       DgHexC2Grid2D (const DgHexC2Grid2D& grd) : DgDiscRF2D (grd) {}
 
@@ -83,9 +83,9 @@ class DgHexC2Grid2D : public DgDiscRF2D {
 
       virtual void setAddVertices (const DgIVec2D& add, DgPolygon& vec) const;
 
-      virtual void setAddNeighbors 
+      virtual void setAddNeighbors
                                   (const DgIVec2D& add, DgLocVector& vec) const;
-      virtual void setAddNeighborsBdry2 
+      virtual void setAddNeighborsBdry2
                                   (const DgIVec2D& add, DgLocVector& vec) const;
 
       virtual DgIVec2D quantify (const DgDVec2D& point) const;

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -38,14 +38,14 @@ void
 DgHexC1Grid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 {
 
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    // find the center
 
 #if DGDEBUG
 dgcout << setprecision(20) << "^^^^^^^^^^^^^^^^^\nDgHexC1Grid2D::setAddVertices"
-       << endl; 
-dgcout << "^^ input: " << add << endl;
+       << std::endl;
+dgcout << "^^ input: " << add << std::endl;
 dgcout.flush();
 #endif
 
@@ -68,7 +68,7 @@ dgcout.flush();
 void
 DgHexC1Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    // ccw starting at (1, 0)
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 1,     add.j())));
@@ -84,7 +84,7 @@ DgHexC1Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 void
 DgHexC1Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    // ccw starting at (1, 0)
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() + 2, add.j() + 1)));
@@ -97,7 +97,7 @@ DgHexC1Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) cons
 } // void DgHexC1Grid2D::setAddNeighbors
 
 ////////////////////////////////////////////////////////////////////////////////
-DgIVec2D 
+DgIVec2D
 DgHexC1Grid2D::quantify (const DgDVec2D& point) const
 {
    long double a1, a2;
@@ -215,7 +215,7 @@ DgHexC1Grid2D::quantify (const DgDVec2D& point) const
       }
    }
 
-   if (point.y() < 0.0L) 
+   if (point.y() < 0.0L)
    {
       add.setI(add.i() - (2 * add.j() + 1) / 2);
       add.setJ(-1 * add.j());
