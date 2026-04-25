@@ -5,6 +5,7 @@ dggridR v4.0.0
   DgApSeq, hierNdxSysType)
 * update_from_upstream.sh rewritten for macOS compatibility (Perl-based
   text transforms, bash rename loop) and updated to SebKrantz/DGGRID
+* New DeepWiki AI documentation available at https://deepwiki.com/r-barnes/dggridR
 * These changes were made by Sebastian Krantz
 
 dggridR v3.1.1
