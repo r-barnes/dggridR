@@ -52,6 +52,13 @@ find ./src/ -type f -exec perl -pi -e 's/constexpr long double M_2PI.*\n?//g' {}
 # Remove non-R build artifacts
 rm -f src/Makefile.noCMake
 
+# Windows/modern-GCC: replace obsolete <tr1/> block with standard C++11 headers in DgUtil.h
+# (-0 slurps the whole file so the multiline /s match works)
+find ./src/ -type f -name "DgUtil.h" -exec perl -0pi -e \
+  's{// make sure we have the necessary C99 support.*?^#endif\n}{// C++11 provides all the math/integer headers we need in the standard locations\n#include <cfloat>\n#include <climits>\n#include <cmath>\n#include <cstdint>\n}ms' {} \;
+find ./src/ -type f -name "DgUtil.h" -exec perl -0pi -e \
+  's{#if DGGS_GCC_VERSION >= 40401.*?#endif\n}{ return std::lrintl(x);\n}s' {} \;
+
 # CRAN compliance: replace std::cerr debug prints with nothing (developer leftovers)
 find ./src/ -type f \( -name "*.cpp" -o -name "*.h" \) -exec \
   perl -pi -e 's/.*std::cerr.*\n//' {} \;
