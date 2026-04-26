@@ -960,19 +960,19 @@ dgbin_points <- function(dggs, lon, lat, values = NULL,
     stop('dgbin_points(): values must have the same length as lon/lat', call.=FALSE)
 
   seqnums <- dgGEO_to_SEQNUM(dggs, lon, lat)$seqnum
-  val     <- if(is.null(values)) NA_real_ else as.numeric(values)
+  val     <- if(is.null(values)) rep(NA_real_, length(seqnums)) else as.numeric(values)
   df      <- qDF(list(seqnum = seqnums, value = val))
   grp     <- fgroup_by(df, seqnum)
+  tmp     <- fsummarise(grp, count = fnobs(seqnum), mean = fmean(value), total = fsum(value))
 
-  parts <- list()
-  if(output_count) parts[["count"]] <- fnobs(grp$value)
-  if(output_mean  && !is.null(values)) parts[["mean"]]  <- fmean(grp$value)
-  if(output_total && !is.null(values)) parts[["total"]] <- fsum(grp$value)
+  result  <- tmp["seqnum"]
+  if(output_count) result$count <- tmp$count
+  if(!is.null(values) && output_mean)  result$mean  <- tmp$mean
+  if(!is.null(values) && output_total) result$total <- tmp$total
 
-  if(length(parts) == 0L)
+  if(ncol(result) == 1L)
     stop('dgbin_points(): at least one of output_count, output_mean, output_total must be TRUE', call.=FALSE)
 
-  result <- qDF(c(list(seqnum = funique(seqnums, sort = TRUE)), parts))
   result
 }
 
