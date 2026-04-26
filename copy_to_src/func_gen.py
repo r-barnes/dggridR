@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 
 proj_arg = [
-  ("long double", "pole_lon_deg", ""),
-  ("long double", "pole_lat_deg"),
-  ("long double", "azimuth_deg"),
-  ("unsigned int", "aperture"),
-  ("int", "res"),
-  ("std::string", "topology"),
-  ("std::string", "projection")
+  ("long double",  "pole_lon_deg", None),
+  ("long double",  "pole_lat_deg", None),
+  ("long double",  "azimuth_deg",  None),
+  ("unsigned int", "aperture",     None),
+  ("int",          "res",          None),
+  ("std::string",  "topology",     None),
+  ("std::string",  "projection",   None),
+  ("bool",         "isMixed43",    "FALSE"),
+  ("int",          "numAp4",       "0L"),
 ]
+
+def _r_access(t):
+    name, default = t[1], t[2]
+    if default is not None:
+        return '(if(is.null(dggs[["{0}"]]))({1})else dggs[["{0}"]])'.format(name, default)
+    return 'dggs[["{0}"]]'.format(name)
 
 in_arg = [
   ("GEO",     (("long double", "lon_deg", "Vector of longitude, in degrees"), ("long double", "lat_deg", "Vector of latitude, in degrees"))),
@@ -86,7 +94,7 @@ dg{intype}_to_{outtype} <- function(dggs, {Rin}){{
 codes = [
   ('../cgen_head.h',sig),
   ('../cgen_body.h',ftemplate),
-  ('../../R/cwrapper.R',rcode)
+  ('../R/cwrapper.R',rcode)
 ]
 
 for c in codes:
@@ -98,7 +106,7 @@ for c in codes:
         outtype         = o[0],
         typed_proj_args = ', '.join(['const {0} {1}'.format(*i) for i in proj_arg]),
         proj_args       = ', '.join(['{1}'.format(*i) for i in proj_arg]),
-        dgproj_args     = ', '.join(['dggs[["{1}"]]'.format(*i) for i in proj_arg]),
+        dgproj_args     = ', '.join([_r_access(i) for i in proj_arg]),
         translatein     = '\n'.join(['    const {0} tin_{1} = in_{1}[i];'.format(ia[0],ia[1]) for ia in i[1]]),
         translateout    = '\n'.join(['    {0} tout_{1} = out_{1}[i];'.format(oa[0],oa[1]) for oa in o[1]]),
         backtranslate   = '\n'.join(['    out_{1}[i] = tout_{1};'.format(oa[0],oa[1]) for oa in o[1]]),

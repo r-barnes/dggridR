@@ -1,9 +1,11 @@
 #' @importFrom sf st_bbox st_as_sf write_sf st_read
 #' @importFrom s2 s2_geog_point s2_convex_hull_agg
-#' @importFrom collapse qDF fgroup_by fsummarise fmutate funique
+#' @importFrom collapse qDF fgroup_by fsummarise fmutate funique fmean fsum fnobs
 #' @importFrom tools file_path_sans_ext
 #' @useDynLib  dggridR
 #'
+
+utils::globalVariables("seqnum")
 
 # Convert sf::st_bbox to sp::bbox
 st_bbox_to_sp <- function(x) {
@@ -82,9 +84,16 @@ dg_shpfname_south_africa <- function(){
 #'                   Default: HEXAGON
 #'
 #' @param aperture   How finely subsequent resolution levels divide the grid.
-#'                   Options are: 3, 4. Not all options work with all
-#'                   projections and topologies.
-#'                   Default: 3
+#'                   Options are: 3, 4, 7 (HEXAGON only). Not all options work
+#'                   with all projections and topologies. Default: 3
+#'
+#' @param aperture_type  Aperture sequence type. Options are: \code{"PURE"} (single
+#'                       aperture value), \code{"MIXED43"} (alternating aperture-4
+#'                       and aperture-3, HEXAGON only). Default: \code{"PURE"}.
+#'
+#' @param num_aperture_4_res  For \code{aperture_type = "MIXED43"}: number of
+#'                            aperture-4 resolutions before switching to aperture-3.
+#'                            Must be in [0, res]. Default: 0.
 #'
 #' @param res  Resolution. Must be in the range [0,30]. Larger values represent
 #'             finer resolutions. Appropriate resolutions can be found with
@@ -112,6 +121,11 @@ dg_shpfname_south_africa <- function(){
 #' @param metric    Whether input and output should be in metric (TRUE) or
 #'                  imperial (FALSE)
 #'
+#' @param orient    Grid orientation. Options are: \code{"SPECIFIED"} (use explicit
+#'                  pole and azimuth values) or \code{"RANDOM"} (random uniform
+#'                  orientation; use \code{set.seed()} before for reproducibility).
+#'                  Default: \code{"SPECIFIED"}.
+#'
 #' @param azimuth_deg   Rotation in degrees of grid about its pole, value in [0,360].
 #'                      Default=0.
 #'
@@ -129,36 +143,62 @@ dg_shpfname_south_africa <- function(){
 #' dggs <- dgconstruct(res=20)
 #'
 #' dggs <- dgconstruct(area=5,metric=FALSE)
+#'
+#' # Aperture-7 hexagonal grid (ISEA7H)
+#' dggs7 <- dgconstruct(aperture=7, res=3)
+#'
+#' # Mixed aperture grid (ISEA43H)
+#' dggsM <- dgconstruct(aperture_type='MIXED43', num_aperture_4_res=2, res=5)
+#'
+#' # Random orientation (reproducible with set.seed)
+#' set.seed(42)
+#' dggs_r <- dgconstruct(res=4, orient='RANDOM')
 #' @export
 dgconstruct <- function(
-  projection   = 'ISEA',
-  aperture     = 3,
-  topology     = 'HEXAGON',
-  res          = NA,
-  precision    = 7,
-  area         = NA,
-  spacing      = NA,
-  cls          = NA,
-  resround     = 'nearest',
-  metric       = TRUE,
-  show_info    = TRUE,
-  azimuth_deg  = 0,
-  pole_lat_deg = 58.28252559,
-  pole_lon_deg = 11.25
+  projection        = 'ISEA',
+  aperture          = 3,
+  topology          = 'HEXAGON',
+  aperture_type     = 'PURE',
+  num_aperture_4_res = 0L,
+  res               = NA,
+  precision         = 7,
+  area              = NA,
+  spacing           = NA,
+  cls               = NA,
+  resround          = 'nearest',
+  metric            = TRUE,
+  show_info         = TRUE,
+  orient            = 'SPECIFIED',
+  azimuth_deg       = 0,
+  pole_lat_deg      = 58.28252559,
+  pole_lon_deg      = 11.25
 ){
   if(sum(!is.na(c(res,area,spacing,cls)))!=1)
     stop('dgconstruct(): Only one of res, area, length, or cls can have a value!')
 
+  if(!(orient %in% c('SPECIFIED', 'RANDOM')))
+    stop("dgconstruct(): orient must be 'SPECIFIED' or 'RANDOM'", call.=FALSE)
+
+  if(orient == 'RANDOM') {
+    pole_lat_deg <- asin(stats::runif(1, -1, 1)) * 180 / pi
+    pole_lon_deg <- stats::runif(1, -180, 180)
+    azimuth_deg  <- stats::runif(1, 0, 360)
+  }
+
   #Use a dummy resolution, we'll fix it in a moment
   dggs <- list(
-    pole_lon_deg = pole_lon_deg,
-    pole_lat_deg = pole_lat_deg,
-    azimuth_deg  = azimuth_deg,
-    aperture     = aperture,
-    res          = 1,
-    topology     = topology,
-    projection   = projection,
-    precision    = precision
+    pole_lon_deg       = pole_lon_deg,
+    pole_lat_deg       = pole_lat_deg,
+    azimuth_deg        = azimuth_deg,
+    aperture           = aperture,
+    aperture_type      = aperture_type,
+    num_aperture_4_res = as.integer(num_aperture_4_res),
+    isMixed43          = (aperture_type == 'MIXED43'),
+    numAp4             = as.integer(num_aperture_4_res),
+    res                = 1L,
+    topology           = topology,
+    projection         = projection,
+    precision          = precision
   )
 
   if(!is.na(res))
@@ -228,13 +268,31 @@ dgsetres <- function(dggs,res){
 #' dgverify(dggs)
 #' @export
 dgverify <- function(dggs){
-  #See page 21 of documentation for further bounds
   if(!(dggs[['projection']] %in% c('ISEA','FULLER')))
-    stop('Unrecognised dggs projection', call.=FALSE) #TODO: Where can they get valid types?
+    stop('Unrecognised dggs projection', call.=FALSE)
   if(!(dggs[['topology']] %in% c('HEXAGON','DIAMOND','TRIANGLE')))
-    stop('Unrecognised dggs topology', call.=FALSE) #TODO: Where can they get valid types?
-  if(!(dggs[['aperture']] %in% c(3,4)))
-    stop('Unrecognised dggs aperture', call.=FALSE) #TODO: Where can they get valid types?
+    stop('Unrecognised dggs topology', call.=FALSE)
+
+  aperture_type <- dggs[['aperture_type']]
+  if(is.null(aperture_type)) aperture_type <- 'PURE'
+
+  if(!(aperture_type %in% c('PURE', 'MIXED43')))
+    stop("Unrecognised dggs aperture_type: must be 'PURE' or 'MIXED43'", call.=FALSE)
+
+  if(aperture_type == 'MIXED43') {
+    if(dggs[['topology']] != 'HEXAGON')
+      stop("aperture_type 'MIXED43' requires topology 'HEXAGON'", call.=FALSE)
+    n4 <- dggs[['num_aperture_4_res']]
+    if(is.null(n4)) n4 <- 0L
+    if(!is.numeric(n4) || n4 < 0 || n4 > dggs[['res']])
+      stop('num_aperture_4_res must be an integer in [0, res]', call.=FALSE)
+  } else {
+    if(!(dggs[['aperture']] %in% c(3,4,7)))
+      stop('Unrecognised dggs aperture: must be 3, 4, or 7', call.=FALSE)
+    if(dggs[['aperture']] == 7 && dggs[['topology']] != 'HEXAGON')
+      stop("aperture 7 requires topology 'HEXAGON'", call.=FALSE)
+  }
+
   if(dggs[['res']]<0)
     stop('dggs resolution must be >=0', call.=FALSE)
   if(dggs[['res']]>30)
@@ -621,6 +679,9 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #'
 #'
 #' @param dggs      A dggs object from dgconstruct().
+#' @param densify   Integer. Number of extra vertices to add along each cell
+#'                  edge (0 = none). Larger values produce smoother boundaries
+#'                  for coarse-resolution cells. Default: 0.
 #' @inheritParams dgcellstogrid
 #'
 #'
@@ -636,10 +697,12 @@ dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1
 #' gridfilename <- dgearthgrid(dggs,savegrid=tempfile(fileext=".shp")) #Save directly to a file
 #' }
 #' @export
-dgearthgrid <- function(dggs, savegrid = NA, return_sf = TRUE) { #TODO: Densify?
+dgearthgrid <- function(dggs, savegrid = NA, return_sf = TRUE, densify = 0L) {
   dgverify(dggs)
+  isMixed43 <- isTRUE(dggs[["isMixed43"]])
+  numAp4    <- if(is.null(dggs[["numAp4"]])) 0L else dggs[["numAp4"]]
 
-  grid <- GlobalGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]])
+  grid <- GlobalGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], isMixed43, numAp4, as.integer(densify))
   if(is.na(savegrid)) {
     if(!return_sf) return(qDF(grid))
     dg_process_polydata(grid)
@@ -670,6 +733,10 @@ dgearthgrid <- function(dggs, savegrid = NA, return_sf = TRUE) { #TODO: Densify?
 #'
 #' @param return_sf logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.
 #'
+#' @param densify   Integer. Number of extra vertices to add along each cell
+#'                  edge (0 = none). Larger values produce smoother boundaries
+#'                  for coarse-resolution cells. Default: 0.
+#'
 #' @return Returns an sf object.
 #'         If \code{!is.na(savegrid)}, returns a filename.
 #'
@@ -684,8 +751,10 @@ dgearthgrid <- function(dggs, savegrid = NA, return_sf = TRUE) { #TODO: Densify?
 #' #Get grid cells for the earthquakes identified
 #' grid          <- dgcellstogrid(dggs, dgquakes$cell)
 #' @export
-dgcellstogrid <- function(dggs, cells, savegrid=NA, return_sf = TRUE){ #TODO: Densify?
+dgcellstogrid <- function(dggs, cells, savegrid=NA, return_sf = TRUE, densify = 0L) {
   dgverify(dggs)
+  isMixed43 <- isTRUE(dggs[["isMixed43"]])
+  numAp4    <- if(is.null(dggs[["numAp4"]])) 0L else dggs[["numAp4"]]
 
   #dggrid also eliminates duplicate cells, but doing so here saves disk space
   #and likely wall time, given the costs of IO, not that it matters unless the
@@ -695,7 +764,7 @@ dgcellstogrid <- function(dggs, cells, savegrid=NA, return_sf = TRUE){ #TODO: De
   if(max(cells) > dgmaxcell(dggs))
     stop("'cells' contained cell ids which were larger than the maximum id!")
 
-  grid <- SeqNumGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], cells)
+  grid <- SeqNumGrid(dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]], dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]], cells, isMixed43, numAp4, as.integer(densify))
   if(is.na(savegrid)){
     if(!return_sf) return(qDF(grid))
     dg_process_polydata(grid)
@@ -793,4 +862,223 @@ dgshptogrid <- function(dggs, shpfname, cellsize = 0.1, ...) { #TODO: Densify?
   samp_points <- dgGEO_to_SEQNUM(dggs, samp_points$x1, samp_points$x2)$seqnum
 
   dgcellstogrid(dggs, samp_points, ...)
+}
+
+
+
+#' @name dgpoints_to_cells
+#'
+#' @title Return grid cells containing input points
+#'
+#' @description
+#'   Finds the grid cells that contain each of the supplied lon/lat points
+#'   and returns their boundaries as an sf data frame (equivalent to DGGRID's
+#'   \code{GENERATE_GRID_FROM_POINTS} operation). Duplicate points in the same
+#'   cell are deduplicated; only cells with at least one point are returned.
+#'
+#' @param dggs        A dggs object from \code{\link{dgconstruct}}.
+#' @param lon         Numeric vector of longitudes (decimal degrees).
+#' @param lat         Numeric vector of latitudes (decimal degrees).
+#' @param return_count Logical. If \code{TRUE}, add a \code{count} column with
+#'                    the number of input points in each cell. Default: \code{FALSE}.
+#' @param \dots       Further arguments passed to \code{\link{dgcellstogrid}}.
+#'
+#' @return An sf data frame of cell boundaries. If \code{return_count=TRUE},
+#'         includes a \code{count} integer column.
+#'
+#' @examples
+#' library(dggridR)
+#' data(dgquakes)
+#' dggs <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
+#' grid <- dgpoints_to_cells(dggs, dgquakes$lon, dgquakes$lat, return_count=TRUE)
+#' @export
+dgpoints_to_cells <- function(dggs, lon, lat, return_count = FALSE, ...) {
+  dgverify(dggs)
+  seqnums <- dgGEO_to_SEQNUM(dggs, lon, lat)$seqnum
+  grid    <- dgcellstogrid(dggs, funique(seqnums), ...)
+  if(return_count) {
+    grid$count <- as.integer(tabulate(match(seqnums, grid$seqnum)))
+  }
+  grid
+}
+
+
+
+#' @name dgbin_points
+#'
+#' @title Aggregate point data into grid cells
+#'
+#' @description
+#'   Bins a set of lon/lat points — optionally with associated numeric values
+#'   — into the cells of a discrete global grid. Returns a data frame (no
+#'   geometry) with per-cell statistics (equivalent to DGGRID's
+#'   \code{BIN_POINT_VALS} / \code{BIN_POINT_PRESENCE} operations).
+#'
+#' @param dggs         A dggs object from \code{\link{dgconstruct}}.
+#' @param lon          Numeric vector of longitudes (decimal degrees).
+#' @param lat          Numeric vector of latitudes (decimal degrees).
+#' @param values       Optional numeric vector of values to aggregate (same
+#'                     length as \code{lon}/\code{lat}). If \code{NULL}, only
+#'                     point counts are computed.
+#' @param output_count Logical. Return count of points per cell.
+#'                     Default: \code{TRUE} when \code{values} is \code{NULL},
+#'                     \code{FALSE} otherwise.
+#' @param output_mean  Logical. Return mean of values per cell. Only meaningful
+#'                     when \code{values} is supplied. Default: \code{TRUE} when
+#'                     \code{values} is not \code{NULL}.
+#' @param output_total Logical. Return total (sum) of values per cell. Only
+#'                     meaningful when \code{values} is supplied.
+#'                     Default: \code{FALSE}.
+#'
+#' @return A data frame with a \code{seqnum} column (cell ID) plus whichever
+#'         of \code{count}, \code{mean}, \code{total} were requested.
+#'
+#' @examples
+#' library(dggridR)
+#' data(dgquakes)
+#' dggs <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
+#'
+#' # Count earthquakes per cell
+#' dgbin_points(dggs, dgquakes$lon, dgquakes$lat)
+#'
+#' # Aggregate magnitude per cell
+#' dgbin_points(dggs, dgquakes$lon, dgquakes$lat, values=dgquakes$mag,
+#'              output_count=TRUE, output_total=TRUE)
+#' @export
+dgbin_points <- function(dggs, lon, lat, values = NULL,
+                         output_count = is.null(values),
+                         output_mean  = !is.null(values),
+                         output_total = FALSE) {
+  dgverify(dggs)
+  if(!is.null(values) && length(values) != length(lon))
+    stop('dgbin_points(): values must have the same length as lon/lat', call.=FALSE)
+
+  seqnums <- dgGEO_to_SEQNUM(dggs, lon, lat)$seqnum
+  val     <- if(is.null(values)) NA_real_ else as.numeric(values)
+  df      <- qDF(list(seqnum = seqnums, value = val))
+  grp     <- fgroup_by(df, seqnum)
+
+  parts <- list()
+  if(output_count) parts[["count"]] <- fnobs(grp$value)
+  if(output_mean  && !is.null(values)) parts[["mean"]]  <- fmean(grp$value)
+  if(output_total && !is.null(values)) parts[["total"]] <- fsum(grp$value)
+
+  if(length(parts) == 0L)
+    stop('dgbin_points(): at least one of output_count, output_mean, output_total must be TRUE', call.=FALSE)
+
+  result <- qDF(c(list(seqnum = funique(seqnums, sort = TRUE)), parts))
+  result
+}
+
+
+
+#' @name dgneighbors
+#'
+#' @title           Return neighboring cell IDs for each input cell
+#'
+#' @description     For each cell ID in \code{cells}, returns the IDs of all
+#'                  adjacent cells. Triangle grids are not supported.
+#'
+#' @param dggs      A dggs object from \code{\link{dgconstruct}()}
+#' @param cells     Integer vector of cell sequence numbers (SEQNUM)
+#'
+#' @return A data frame with columns \code{seqnum} (the input cell) and
+#'         \code{neighbor} (each adjacent cell ID).
+#'
+#' @examples
+#' library(dggridR)
+#' dggs <- dgconstruct(res=3)
+#' nbrs <- dgneighbors(dggs, c(1, 2, 3))
+#'
+#' @export
+dgneighbors <- function(dggs, cells) {
+  dgverify(dggs)
+  if(dggs[['topology']] == 'TRIANGLE')
+    stop('dgneighbors() is not supported for TRIANGLE grids', call.=FALSE)
+  isMixed43 <- isTRUE(dggs[["isMixed43"]])
+  numAp4    <- if(is.null(dggs[["numAp4"]])) 0L else dggs[["numAp4"]]
+  result <- GetNeighbors(
+    dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]],
+    dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]],
+    cells, isMixed43, numAp4
+  )
+  qDF(result)
+}
+
+
+
+#' @name dgchildren
+#'
+#' @title           Return immediate child cell IDs for each input cell
+#'
+#' @description     For each cell ID in \code{cells} at the current grid
+#'                  resolution, returns the IDs of its child cells at resolution
+#'                  \code{dggs\$res + 1}. Only hexagonal grids are supported.
+#'
+#' @param dggs      A dggs object from \code{\link{dgconstruct}()}.
+#'                  The child cells will be at \code{dggs\$res + 1}.
+#' @param cells     Integer vector of cell sequence numbers (SEQNUM)
+#'
+#' @return A data frame with columns \code{seqnum} (the input cell) and
+#'         \code{child} (each child cell ID at resolution + 1).
+#'
+#' @examples
+#' library(dggridR)
+#' dggs <- dgconstruct(res=3)
+#' chld <- dgchildren(dggs, c(1, 2))
+#'
+#' @export
+dgchildren <- function(dggs, cells) {
+  dgverify(dggs)
+  if(dggs[['topology']] != 'HEXAGON')
+    stop('dgchildren() is only supported for HEXAGON grids', call.=FALSE)
+  if(dggs[['res']] < 1L)
+    stop('dgchildren() requires res >= 1', call.=FALSE)
+  isMixed43 <- isTRUE(dggs[["isMixed43"]])
+  numAp4    <- if(is.null(dggs[["numAp4"]])) 0L else dggs[["numAp4"]]
+  result <- GetChildren(
+    dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]],
+    dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]],
+    cells, isMixed43, numAp4
+  )
+  qDF(result)
+}
+
+
+
+#' @name dgparent
+#'
+#' @title           Return parent cell ID for each input cell
+#'
+#' @description     For each cell ID in \code{cells} at the current grid
+#'                  resolution, returns the ID of its parent cell at resolution
+#'                  \code{dggs\$res - 1}. Only hexagonal grids are supported.
+#'
+#' @param dggs      A dggs object from \code{\link{dgconstruct}()}.
+#'                  The parent cells will be at \code{dggs\$res - 1}.
+#' @param cells     Integer vector of cell sequence numbers (SEQNUM)
+#'
+#' @return A data frame with columns \code{seqnum} (the input cell) and
+#'         \code{parent} (the parent cell ID at resolution - 1).
+#'
+#' @examples
+#' library(dggridR)
+#' dggs <- dgconstruct(res=4)
+#' prnt <- dgparent(dggs, c(1, 2))
+#'
+#' @export
+dgparent <- function(dggs, cells) {
+  dgverify(dggs)
+  if(dggs[['topology']] != 'HEXAGON')
+    stop('dgparent() is only supported for HEXAGON grids', call.=FALSE)
+  if(dggs[['res']] < 1L)
+    stop('dgparent() requires res >= 1 (no parent exists at res 0)', call.=FALSE)
+  isMixed43 <- isTRUE(dggs[["isMixed43"]])
+  numAp4    <- if(is.null(dggs[["numAp4"]])) 0L else dggs[["numAp4"]]
+  result <- GetParent(
+    dggs[["pole_lon_deg"]], dggs[["pole_lat_deg"]], dggs[["azimuth_deg"]],
+    dggs[["aperture"]], dggs[["res"]], dggs[["topology"]], dggs[["projection"]],
+    cells, isMixed43, numAp4
+  )
+  qDF(result)
 }

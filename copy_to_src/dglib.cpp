@@ -6,8 +6,10 @@
 #include "DgGeoProjConverter.h"
 #include "DgGeoSphRF.h"
 #include "DgIDGG.h"
+#include "DgIDGGBase.h"
 #include "DgIDGGS.h"
 #include "DgIVec2D.h"
+#include "DgLocVector.h"
 #include "DgProjGnomonicRF.h"
 #include "DgTriGrid2D.h"
 
@@ -35,24 +37,16 @@ namespace dglib {
         dgg::topo::D6,
         "DDG",
         dp.projection,
-        false, //isApSeq
+        false,          //isApSeq
         DgApSeq::defaultApSeq,
-        false, //isMixed43
-        0,     //numAp4
-        false, //isSuperfund
+        dp.isMixed43,   //isMixed43
+        dp.numAp4,      //numAp4
+        false,          //isSuperfund
         dgg::addtype::InvalidHierNdxSysType
       )),
       dgg(idggs->idggBase(dp.res)),
       deg(DgGeoSphDegRF::makeRF(*geoRF, geoRF->name() + "Deg"))
    {
-    //DgGeoSphRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph", long double earthRadiusKMin = DEFAULT_RADIUS_KM)
-    //DgGeoSphRF geoRF(net0, dp.datum, dp.earthRadius);
-    //DgGeoCoord (long double lon, long double lat, bool rads = true)
-    //DgIDGG(const DgGeoSphRF& geoRF, const DgGeoCoord& vert0, long double azDegs, unsigned int aperture, int res, const string& name, const string& gridTopo, const string& projType, bool isMixed43, int numAp4, bool isSuperfund, int sfRes, unsigned int precision)
-    // set-up to convert to degrees
-    //deg = DgGeoSphDegRF(geoRF, geoRF.name() + "Deg");
-    //cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
-    // init(dp.pole_lon_deg,dp.pole_lat_deg,dp.azimuth_deg,dp.aperture,dp.res,dp.topology,dp.projection);
   }
 
   GridThing::GridThing (
@@ -61,8 +55,10 @@ namespace dglib {
     long double  azimuth_deg,
     unsigned int aperture,
     int          res,
-    std::string  topology,   //"HEXAGON", "TRIANGLE", "SQUARE", "DIAMOND", "INVALID"
-    std::string  projection  //ISEA/FULLER
+    std::string  topology,    //"HEXAGON", "TRIANGLE", "SQUARE", "DIAMOND", "INVALID"
+    std::string  projection,  //ISEA/FULLER
+    bool         isMixed43,
+    int          numAp4
   ) : myres(res),
       geoRF(DgGeoSphRF::makeRF(net0)),
       idggs(DgIDGGSBase::makeRF(
@@ -76,24 +72,16 @@ namespace dglib {
         dgg::topo::D6,
         "DDG",
         projection,
-        false, //isApSeq
+        false,     //isApSeq
         DgApSeq::defaultApSeq,
-        false, //isMixed43
-        0,     //numAp4
-        false, //isSuperfund
+        isMixed43, //isMixed43
+        numAp4,    //numAp4
+        false,     //isSuperfund
         dgg::addtype::InvalidHierNdxSysType
       )),
       dgg(idggs->idggBase(res)),
       deg(DgGeoSphDegRF::makeRF(*geoRF, geoRF->name() + "Deg"))
    {
-    //DgGeoSphRF (DgRFNetwork& networkIn, const string& nameIn = "GeodeticSph", long double earthRadiusKMin = DEFAULT_RADIUS_KM)
-    //DgGeoSphRF geoRF(net0, dp.datum, dp.earthRadius);
-    //DgGeoCoord (long double lon, long double lat, bool rads = true)
-    //DgIDGG(const DgGeoSphRF& geoRF, const DgGeoCoord& vert0, long double azDegs, unsigned int aperture, int res, const string& name, const string& gridTopo, const string& projType, bool isMixed43, int numAp4, bool isSuperfund, int sfRes, unsigned int precision)
-    // set-up to convert to degrees
-    //deg = DgGeoSphDegRF(geoRF, geoRF.name() + "Deg");
-    //cout << "Res " << dgg.outputRes() << " " << dgg.gridStats() << endl;
-    // init(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection);
   }
 
   // void GridThing::init (
@@ -146,9 +134,11 @@ namespace dglib {
     long double  azimuth_deg,
     unsigned int aperture,
     int          res,
-    std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
-    std::string  projection  //ISEA/FULLER
-  ) : GridThing(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection) {}
+    std::string  topology,    //"HEXAGON", "DIAMOND", "TRIANGLE"
+    std::string  projection,  //ISEA/FULLER
+    bool         isMixed43,
+    int          numAp4
+  ) : GridThing(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection,isMixed43,numAp4) {}
 
   std::shared_ptr<DgLocation> Transformer::inGEO    (long double lon_deg, long double lat_deg){
     const DgGeoCoord dgc(lon_deg,lat_deg,false); //DgGeoCoord (long double lon, long double lat, bool rads = true)
@@ -232,6 +222,64 @@ namespace dglib {
 
 
 
+  std::vector<uint64_t> GridThing::getNeighbors(uint64_t seqnum) const {
+    // locate cell, convert to Q2DI frame (same pattern as outQ2DI in Transformer)
+    std::unique_ptr<DgLocation> loc(static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(seqnum));
+    dgg.convert(loc.get());
+    const DgRFBase* pRF = &dgg;
+    const DgQ2DICoord* qa = static_cast<const DgRF<DgQ2DICoord, long double>*>(pRF)->getAddress(*loc);
+
+    DgLocVector neighborVec(static_cast<const DgRFBase&>(dgg));
+    dgg.setAddNeighbors(*qa, neighborVec);
+
+    const DgIDGG& idgg = static_cast<const DgIDGG&>(dgg);
+    std::vector<uint64_t> result;
+    result.reserve(neighborVec.size());
+    for (int i = 0; i < neighborVec.size(); ++i)
+      result.push_back(idgg.bndRF().seqNum(neighborVec[i]));
+    return result;
+  }
+
+  std::vector<uint64_t> GridThing::getChildrenAt(uint64_t seqnum, int parentRes) const {
+    // idggs must have nRes >= parentRes + 2
+    // (ensured by constructing GridThing with res = parentRes + 1)
+    const DgIDGGBase& parentDgg = idggs->idggBase(parentRes);
+    std::unique_ptr<DgLocation> parentLoc(
+        static_cast<const DgIDGG&>(parentDgg).bndRF().locFromSeqNum(seqnum));
+
+    DgLocVector childVec;
+    idggs->setAllChildren(parentRes, *parentLoc, childVec);
+
+    const DgIDGGBase& childDgg = idggs->idggBase(parentRes + 1);
+    std::vector<uint64_t> result;
+    result.reserve(childVec.size());
+    for (int i = 0; i < childVec.size(); ++i) {
+      DgLocation tmpLoc(childVec[i]);
+      childDgg.convert(&tmpLoc);
+      result.push_back(static_cast<const DgIDGG&>(childDgg).bndRF().seqNum(tmpLoc));
+    }
+    return result;
+  }
+
+  uint64_t GridThing::getParentAt(uint64_t seqnum, int childRes) const {
+    const DgIDGGBase& childDgg = idggs->idggBase(childRes);
+    std::unique_ptr<DgLocation> childLoc(
+        static_cast<const DgIDGG&>(childDgg).bndRF().locFromSeqNum(seqnum));
+
+    DgLocVector parentVec;
+    idggs->setParents(childRes, *childLoc, parentVec);
+
+    if (parentVec.size() == 0)
+      throw std::runtime_error("getParentAt: no parent found for seqnum");
+
+    const DgIDGGBase& parentDgg = idggs->idggBase(childRes - 1);
+    DgLocation tmpLoc(parentVec[0]);
+    parentDgg.convert(&tmpLoc);
+    return static_cast<const DgIDGG&>(parentDgg).bndRF().seqNum(tmpLoc);
+  }
+
+
+
 
 
 
@@ -301,7 +349,7 @@ namespace dglib {
     // }
   }
 
-  GlobalGridGenerator::GlobalGridGenerator (const DgParams &dp) : GridThing(dp) {
+  GlobalGridGenerator::GlobalGridGenerator (const DgParams &dp) : GridThing(dp), densify(dp.densify) {
     init();
   }
 
@@ -311,9 +359,11 @@ namespace dglib {
     long double  azimuth_deg,
     unsigned int aperture,
     int          res,
-    std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
-    std::string  projection  //ISEA/FULLER
-  ) : GridThing(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection) {
+    std::string  topology,    //"HEXAGON", "DIAMOND", "TRIANGLE"
+    std::string  projection,  //ISEA/FULLER
+    bool         isMixed43,
+    int          numAp4
+  ) : GridThing(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection,isMixed43,numAp4) {
     init();
   }
 
@@ -332,7 +382,7 @@ namespace dglib {
     const auto sn = dgg.bndRF().seqNum(*add_loc);
 
     DgPolygon verts(dgg);
-    dgg.setVertices(*add_loc, verts, 0); //dp.npDensify
+    dgg.setVertices(*add_loc, verts, densify);
 
     outputCellAdd2D(*idggs, dgg, *add_loc, verts, *deg, x, y);
 
@@ -346,7 +396,7 @@ namespace dglib {
   SeqNumGridGenerator::SeqNumGridGenerator (
     const DgParams &dp,
     const std::vector<uint64_t> &seqnums0
-  ) : GridThing(dp) {
+  ) : GridThing(dp), densify(dp.densify) {
     init(seqnums0);
   }
 
@@ -356,10 +406,12 @@ namespace dglib {
     long double  azimuth_deg,
     unsigned int aperture,
     int          res,
-    std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
+    std::string  topology,    //"HEXAGON", "DIAMOND", "TRIANGLE"
     std::string  projection,  //ISEA/FULLER
-    const std::vector<uint64_t> &seqnums0
-  ) : GridThing(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection) {
+    const std::vector<uint64_t> &seqnums0,
+    bool         isMixed43,
+    int          numAp4
+  ) : GridThing(pole_lon_deg,pole_lat_deg,azimuth_deg,aperture,res,topology,projection,isMixed43,numAp4) {
     init(seqnums0);
   }
 
@@ -384,7 +436,7 @@ namespace dglib {
     }
 
     DgPolygon verts(dgg);
-    dgg.setVertices(*loc, verts, 0); //dp.npDensify
+    dgg.setVertices(*loc, verts, densify);
 
     outputCellAdd2D(*idggs, dgg, *loc, verts, *deg, x, y);
 

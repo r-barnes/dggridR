@@ -13,6 +13,7 @@ src/clean$
 src/Makefile
 src/misc
 src/func_gen.py
+vignettes/legacy
 mailinglist
 ^doc$
 ^Meta$
@@ -29,4 +30,5 @@ CMakeLists.txt
 ^\.Rproj\.user$
 ^CLAUDE\.md$
 ^UPDATE_DGGRID\.md$
+^DGGRID_API_GAPS\.md$
 ^vignettes/dggridR\.Rmd$

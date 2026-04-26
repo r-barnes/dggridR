@@ -1,3 +1,19 @@
+dggridR v4.1.0
+===============
+* New dgconstruct() parameter aperture=7 for ISEA7H / FULLER7H hexagonal grids
+* New dgconstruct() parameter aperture_type='MIXED43' with num_aperture_4_res
+  for ISEA43H / FULLER43H mixed-aperture grids
+* New dgconstruct() parameter orient='RANDOM' for uniform random grid orientation
+* New dgneighbors(dggs, cells) returns adjacent cell IDs for each input cell
+* New dgchildren(dggs, cells) returns immediate child cell IDs (at res+1)
+* New dgparent(dggs, cells) returns parent cell ID (at res-1)
+* New dgbin_points(dggs, lon, lat, values) bins point data into grid cells,
+  returning per-cell count, mean, and/or total
+* New dgpoints_to_cells(dggs, lon, lat) returns the grid cells containing
+  each point, with optional per-cell point counts
+* dgearthgrid() and dgcellstogrid() gain a densify parameter to add extra
+  vertices along cell edges for smoother boundaries at coarse resolutions
+
 dggridR v4.0.0
 ===============
 * Updated bundled DGGRID C++ engine to v9.0b (upstream SebKrantz/DGGRID)
