@@ -56,7 +56,7 @@ template <class TINT, class TSTR> class DgHierNdxSystemRF :
 
    //protected:
 
-      DgHierNdxSystemRF<TINT, TSTR> (
+      DgHierNdxSystemRF (
             const DgHierNdxSystemRFS<TINT, TSTR>& hierNdxRFSIn,
             int resIn = 0, const std::string& nameIn = "DgHierNdxSystemRF")
          : DgHierNdxSystemRFBase(hierNdxRFSIn, resIn, nameIn)

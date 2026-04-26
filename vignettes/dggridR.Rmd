@@ -5,10 +5,6 @@ author:
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bib
-vignette: >
-  %\VignetteIndexEntry{dggridR: Discrete Global Grids for R}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 

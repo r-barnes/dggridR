@@ -52,6 +52,15 @@ find ./src/ -type f -exec perl -pi -e 's/constexpr long double M_2PI.*\n?//g' {}
 # Remove non-R build artifacts
 rm -f src/Makefile.noCMake
 
+# C++20: template-id not allowed for constructors — strip template args from ctor names
+find ./src/ -type f -name "DgBoundedRF.h" -exec perl -pi -e \
+  's/\bDgBoundedRF<A, B, DB> \(/DgBoundedRF (/g' {} \;
+find ./src/ -type f -name "DgHierNdxRF.h" -exec perl -pi -e \
+  's/\bDgHierNdxCoord<T> \(/DgHierNdxCoord (/g;
+   s/\bDgHierNdxRF<C> \(/DgHierNdxRF (/g' {} \;
+find ./src/ -type f -name "DgHierNdxSystemRF.h" -exec perl -pi -e \
+  's/\bDgHierNdxSystemRF<TINT, TSTR> \(/DgHierNdxSystemRF (/g' {} \;
+
 # Windows: fix DgHierNdxRF.h — sys_.dggs() returns const DgIDGGSBase& (a reference, not a
 # pointer); remove the erroneous * dereference and widen the return type to DgIDGGSBase&
 find ./src/ -type f -name "DgHierNdxRF.h" -exec perl -pi -e \

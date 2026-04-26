@@ -29,3 +29,4 @@ CMakeLists.txt
 ^\.Rproj\.user$
 ^CLAUDE\.md$
 ^UPDATE_DGGRID\.md$
+^vignettes/dggridR\.Rmd$

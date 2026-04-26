@@ -43,11 +43,11 @@ template <class T> class DgHierNdxCoord  {
 
       //static const DgHierNdxCoord<T> undefDgHierNdxCoord<T>;
 
-      DgHierNdxCoord<T> (void) : value_ (0) { }
+      DgHierNdxCoord (void) : value_ (0) { }
 
-      DgHierNdxCoord<T> (T valIn) : value_ (valIn) { }
+      DgHierNdxCoord (T valIn) : value_ (valIn) { }
 
-      DgHierNdxCoord<T> (const DgHierNdxCoord<T>& coord)
+      DgHierNdxCoord (const DgHierNdxCoord<T>& coord)
               { value_ = coord.value(); }
 
       void setValue (T value) { value_ = value; }

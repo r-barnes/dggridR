@@ -1,9 +1,9 @@
 Package: dggridR
 Type: Package
 Title: Discrete Global Grids
-Version: 4.0.0
+Version: 4.0.1
 Date: 2026-04-24
-Author: Richard Barnes [aut], Kevin Sahr [aut, cph], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph], Even Rouault [cph], Lian Song [ctb], Sebastian Krantz [ctb, cre]
+Author: Richard Barnes [aut], Kevin Sahr [aut, cph], Gerald Evenden [cph], Angus Johnson [cph], Frank Warmerdam [cph], Even Rouault [cph], Lian Song [ctb], Edzer Pebesma [ctb], Sebastian Krantz [ctb, cre]
 Maintainer: Sebastian Krantz <sebastian.krantz@graduateinstitute.ch>
 NeedsCompilation: yes
 Depends: R (>= 4.1.0)
