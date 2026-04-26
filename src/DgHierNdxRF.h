@@ -134,7 +134,7 @@ template <class C> class DgHierNdxRF :
 
    protected:
 
-      DgHierNdxRF<C> (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
+      DgHierNdxRF (const DgHierNdxSystemRFBase& sysIn, int resIn, const std::string& nameIn)
          : DgDiscRF<C, DgQ2DICoord, long long int>(sysIn.dggs().network(),
                        sysIn.dggs().idggBase(resIn), nameIn),
            sys_ (sysIn) { }

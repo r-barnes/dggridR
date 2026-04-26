@@ -60,6 +60,10 @@ find ./src/ -type f -name "DgHierNdxRF.h" -exec perl -pi -e \
    s/\bDgHierNdxRF<C> \(/DgHierNdxRF (/g' {} \;
 find ./src/ -type f -name "DgHierNdxSystemRF.h" -exec perl -pi -e \
   's/\bDgHierNdxSystemRF<TINT, TSTR> \(/DgHierNdxSystemRF (/g' {} \;
+find ./src/ -type f -name "DgPhysicalRF.h" -exec perl -pi -e \
+  's/\bDgPhysicalRF<A, C> \(/DgPhysicalRF (/g' {} \;
+find ./src/ -type f -name "DgSpatialDB.h" -exec perl -pi -e \
+  's/\bDgSpatialDB<C> \(/DgSpatialDB (/g' {} \;
 
 # Windows: fix DgHierNdxRF.h — sys_.dggs() returns const DgIDGGSBase& (a reference, not a
 # pointer); remove the erroneous * dereference and widen the return type to DgIDGGSBase&

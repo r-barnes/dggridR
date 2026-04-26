@@ -83,7 +83,7 @@ template<class C> class DgSpatialDB {
             const DgSpatialDB<C>* db_;
       };
 
-      DgSpatialDB<C> (DgPhysicalRFBase<C>& rfIn)
+      DgSpatialDB (DgPhysicalRFBase<C>& rfIn)
          : physicalRF_ (rfIn), begin_ (*this), end_ (*this)
          {  begin_ = boundedRF().first(); end_ = boundedRF().end();
             rfIn.initAllCells(); }
