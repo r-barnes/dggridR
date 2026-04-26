@@ -18,7 +18,7 @@ Description: Spatial analyses involving binning require that every bin have the
     hexagons, triangles, and diamonds to overcome this issue, overlaying the
     Earth with equally-sized bins. This package provides utilities for working
     with discrete global grids, along with utilities to aid in plotting such data.
-URL: https://github.com/r-barnes/dggridR/
+URL: https://github.com/r-barnes/dggridR/, https://sebkrantz.github.io/dggridR/
 BugReports: https://github.com/r-barnes/dggridR/issues
 License: AGPL (>= 3)
 Encoding: UTF-8
@@ -28,6 +28,6 @@ Depends: R (>= 4.1.0)
 Imports: Rcpp (>= 0.12.12), collapse (>= 1.8.0), sf (>= 1.0), s2 (>= 1.1)
 LinkingTo: Rcpp
 RcppModules: dgfuncs, gridgens, gridstats
-Suggests: R.rsp, testthat
+Suggests: R.rsp, testthat, ggplot2
 VignetteBuilder: R.rsp
 RoxygenNote: 7.3.2
