@@ -33,3 +33,11 @@ CMakeLists.txt
 ^DGGRID_API_GAPS\.md$
 ^vignettes/dggridR\.Rmd$
 ^\.github$
+^\.gitignore$
+^\.gitmodules$
+^\.DS_Store$
+^\.RData$
+^\.Rhistory$
+^cgen_head\.h$
+^cgen_body\.h$
+^cgen_funcs\.h$
