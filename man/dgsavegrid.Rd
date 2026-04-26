@@ -17,3 +17,4 @@ The filename the grid was saved to
 \description{
 Saves a generated grid to a shapefile
 }
+\keyword{internal}

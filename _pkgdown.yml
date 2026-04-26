@@ -30,8 +30,8 @@ navbar:
       text: Reference
       href: reference/index.html
     articles:
-      text: Vignette
-      href: articles/dggridR.html
+      text: Vignettes
+      href: articles/index.html
     news:
       text: News
       href: news/index.html
@@ -109,6 +109,20 @@ reference:
   - dg_shpfname_south_africa
 
 
+external-articles:
+  - name: dggridR
+    title: "dggridR: Discrete Global Grids for R"
+    description: >
+      Walk-through of all main features: spatial binning, point aggregation,
+      neighbour and hierarchy queries, densification, random orientation, and more.
+    href: https://sebkrantz.github.io/dggridR/articles/dggridR.html
+  - name: dggrid_manual
+    title: "DGGRID v9.0b User Manual"
+    description: >
+      Complete reference manual for the DGGRID engine that powers dggridR,
+      covering all grid types, parameters, and mathematical foundations.
+    href: https://raw.githubusercontent.com/SebKrantz/dggridR/development/vignettes/dggrid_v90b_manual.pdf
+
 articles:
 - title: Introduction to dggridR
   desc: >
@@ -116,3 +130,9 @@ articles:
     neighbour and hierarchy queries, densification, random orientation, and more.
   contents:
   - dggridR
+- title: DGGRID Engine Reference
+  desc: >
+    Official DGGRID v9.0b user manual covering all grid types, parameters, and
+    mathematical foundations of the underlying C++ engine.
+  contents:
+  - dggrid_manual

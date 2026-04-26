@@ -50,6 +50,8 @@ makegrid <- function(bb, n = 10000, nsig = 2, cellsize, offset = rep(0.5, nrow(b
 #'        package. At the moment the only option is 'dg_debug' which, when set
 #'        to TRUE provides extensive outputs useful for tracking down bugs.
 #'
+#' @keywords internal
+#'
 dg_env <- new.env()
 assign("dg_debug", FALSE, envir=dg_env)
 
@@ -594,6 +596,8 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #'
 #' @return Returns an sf object.
 #'
+#' @keywords internal
+#'
 dg_process_polydata <- function(polydata) {
 
   x <- y <- seqnum <- geometry <- NULL # For R CMD Check: no visible binding for global variables
@@ -786,6 +790,8 @@ dgcellstogrid <- function(dggs, cells, savegrid=NA, return_sf = TRUE, densify = 
 #' @param shpfname  File to save the grid to
 #'
 #' @return          The filename the grid was saved to
+#'
+#' @keywords internal
 dgsavegrid <- function(grid,shpfname) {
   write_sf(grid, shpfname, driver='ESRI Shapefile', layer='dggrid')
   shpfname

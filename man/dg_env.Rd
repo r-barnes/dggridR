@@ -15,4 +15,4 @@ This environment is used to control global features of the dggridR
        package. At the moment the only option is 'dg_debug' which, when set
        to TRUE provides extensive outputs useful for tracking down bugs.
 }
-\keyword{datasets}
+\keyword{internal}
