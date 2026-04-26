@@ -1,3 +1,5 @@
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/SebKrantz/dggridR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SebKrantz/dggridR/actions/workflows/R-CMD-check.yaml)
 [![dggridR status badge](https://fastverse.r-universe.dev/badges/dggridR)](https://fastverse.r-universe.dev/dggridR)
 [![CRAN status](https://www.r-pkg.org/badges/version/dggridR)](https://cran.r-project.org/package=dggridR) 
 [![cran checks](https://badges.cranchecks.info/worst/dggridR.svg)](https://cran.r-project.org/web/checks/check_results_dggridR.html)
@@ -6,6 +8,7 @@
 [![dependencies](https://tinyverse.netlify.app/badge/dggridR)](https://CRAN.R-project.org/package=dggridR)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1322866.svg)](https://doi.org/10.5281/zenodo.1322866)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/r-barnes/dggridR)
+<!-- badges: end -->
 
 dggridR: Discrete Global Grids for R
 ====================================
