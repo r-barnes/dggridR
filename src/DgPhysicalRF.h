@@ -40,7 +40,7 @@ template<class A, class C, class B, class DB> class DgPhysicalRF
 
    public:
 
-      DgPhysicalRF<A, C> (const DgBoundedRF<A, B, DB>& rfIn)
+      DgPhysicalRF (const DgBoundedRF<A, B, DB>& rfIn)
           : DgPhysicalRFBase<C> (rfIn), boundedRF_ (rfIn) { }
 
       const DgBoundedRF<A, B, DB>& boundedRF (void) const { return boundedRF_; }

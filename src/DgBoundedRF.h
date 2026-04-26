@@ -41,7 +41,7 @@ template<class A, class B, class DB> class DgBoundedRF
 
    public:
 
-      DgBoundedRF<A, B, DB> (const DgDiscTopoRF<A, B, DB>& rfIn,
+      DgBoundedRF (const DgDiscTopoRF<A, B, DB>& rfIn,
                              const A& firstAddIn,
                              const A& lastAddIn, const A& endAddIn,
                              bool zBasedIn = true);

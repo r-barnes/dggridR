@@ -52,6 +52,31 @@ find ./src/ -type f -exec perl -pi -e 's/constexpr long double M_2PI.*\n?//g' {}
 # Remove non-R build artifacts
 rm -f src/Makefile.noCMake
 
+# C++20: template-id not allowed for constructors — strip template args from ctor names
+find ./src/ -type f -name "DgBoundedRF.h" -exec perl -pi -e \
+  's/\bDgBoundedRF<A, B, DB> \(/DgBoundedRF (/g' {} \;
+find ./src/ -type f -name "DgHierNdxRF.h" -exec perl -pi -e \
+  's/\bDgHierNdxCoord<T> \(/DgHierNdxCoord (/g;
+   s/\bDgHierNdxRF<C> \(/DgHierNdxRF (/g' {} \;
+find ./src/ -type f -name "DgHierNdxSystemRF.h" -exec perl -pi -e \
+  's/\bDgHierNdxSystemRF<TINT, TSTR> \(/DgHierNdxSystemRF (/g' {} \;
+find ./src/ -type f -name "DgPhysicalRF.h" -exec perl -pi -e \
+  's/\bDgPhysicalRF<A, C> \(/DgPhysicalRF (/g' {} \;
+find ./src/ -type f -name "DgSpatialDB.h" -exec perl -pi -e \
+  's/\bDgSpatialDB<C> \(/DgSpatialDB (/g' {} \;
+
+# Windows: fix DgHierNdxRF.h — sys_.dggs() returns const DgIDGGSBase& (a reference, not a
+# pointer); remove the erroneous * dereference and widen the return type to DgIDGGSBase&
+find ./src/ -type f -name "DgHierNdxRF.h" -exec perl -pi -e \
+  's{const DgIDGGS\s*&\s*dggs\s*\(void\)\s*const\s*\{[^}]*\}}{const DgIDGGSBase\& dggs (void) const { return sys_.dggs(); }}' {} \;
+
+# Windows/modern-GCC: replace obsolete <tr1/> block with standard C++11 headers in DgUtil.h
+# (-0 slurps the whole file so the multiline /s match works)
+find ./src/ -type f -name "DgUtil.h" -exec perl -0pi -e \
+  's{// make sure we have the necessary C99 support.*?^#endif\n}{// C++11 provides all the math/integer headers we need in the standard locations\n#include <cfloat>\n#include <climits>\n#include <cmath>\n#include <cstdint>\n}ms' {} \;
+find ./src/ -type f -name "DgUtil.h" -exec perl -0pi -e \
+  's{#if DGGS_GCC_VERSION >= 40401.*?#endif\n}{ return std::lrintl(x);\n}s' {} \;
+
 # CRAN compliance: replace std::cerr debug prints with nothing (developer leftovers)
 find ./src/ -type f \( -name "*.cpp" -o -name "*.h" \) -exec \
   perl -pi -e 's/.*std::cerr.*\n//' {} \;

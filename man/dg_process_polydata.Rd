@@ -16,3 +16,4 @@ Returns an sf object.
 Convert data from internal dggrid functions into something
                  useful: an sp object or a data frame
 }
+\keyword{internal}
