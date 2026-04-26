@@ -222,3 +222,126 @@ Roughly ordered by likely user demand:
 5. **Densification parameter** in `dgcellstogrid()` / `dgearthgrid()` — improves boundary
    accuracy for coarse-resolution cells.
 6. **REGION_CENTER / RANDOM orientation** in `dgconstruct()`.
+
+---
+
+## Implementation Status (v4.1.0)
+
+All six priorities above were implemented in v4.1.0. The table below records what changed,
+how it was done, and what limitations remain.
+
+---
+
+### Priority 1 — Aperture 7 and MIXED43 (§2.1–2.2)
+
+**Status: Implemented.**
+
+| Item | Change |
+|---|---|
+| Aperture 7 (ISEA7H, FULLER7H) | `dgconstruct(aperture=7)` accepted; `dgverify()` allows `aperture ∈ {3,4,7}` |
+| MIXED43 (ISEA43H, FULLER43H) | `dgconstruct(aperture_type='MIXED43', num_aperture_4_res=N)` |
+| C++ bridge | `DgParams` extended with `isMixed43` / `numAp4`; threaded through `GridThing`, both generators, `Transformer`, and all 30 generated coordinate-conversion functions |
+| `func_gen.py` | `proj_arg` extended with `("bool","isMixed43","FALSE")` and `("int","numAp4","0L")`; `dgproj_args` generation uses null-safe accessors for backward compatibility; output path bug fixed (`../../R/cwrapper.R` → `../R/cwrapper.R`) |
+
+**Remaining gaps:**
+- Sequence aperture (`aperture_type = SEQUENCE`, preset PLANETRISK) — not implemented; requires `DgApSeq` string construction and a new R parameter.
+- SUPERFUND preset (MIXED43 + special cell-label numbering) — not implemented.
+- `dggetres()` / `GridStat_*` functions still use the 7-arg constructor with fixed `isMixed43=false`; MIXED43 grid statistics cannot be queried via `dggetres()`.
+
+---
+
+### Priority 2 — Point Aggregation (§1: GENERATE_GRID_FROM_POINTS, BIN_POINT_VALS)
+
+**Status: Implemented in pure R using existing bridge calls.**
+
+| Function | Wraps | Notes |
+|---|---|---|
+| `dgpoints_to_cells(dggs, lon, lat, return_count)` | GENERATE_GRID_FROM_POINTS | Calls `dgGEO_to_SEQNUM()` + `dgcellstogrid()`; returns sf grid with optional `count` column |
+| `dgbin_points(dggs, lon, lat, values, output_count, output_mean, output_total)` | BIN_POINT_VALS | Pure collapse aggregation; returns a plain data frame (no geometry) |
+
+**Remaining gaps:**
+- GDAL vector file input for points — not supported (R-only path).
+- `BIN_POINT_PRESENCE` (multi-class presence/absence binning) — not implemented.
+- `cell_output_control = OUTPUT_ALL` (emit empty cells) — the R implementation only returns occupied cells.
+
+---
+
+### Priority 3 — Cell Neighbors (§5)
+
+**Status: Implemented.**
+
+New function `dgneighbors(dggs, cells)` → data frame with columns `seqnum` (input cell) and
+`neighbor` (adjacent cell ID).
+
+**C++ path:** `GridThing::getNeighbors(seqnum)` → `DgIDGGBase::setAddNeighbors(q2di, vec)` →
+`GetNeighbors()` in `Rwrapper.cpp` → `RCPP_MODULE(gridgens)`.
+
+**Remaining gaps:**
+- Triangle grids: DGGRID itself does not support neighbor queries for TRIANGLE topology;
+  `dgneighbors()` errors with a clear message.
+- Diamond grids: `setAddNeighbors` is defined for `DgIDGGBase` and should work for DIAMOND,
+  but this has not been tested.
+
+---
+
+### Priority 4 — Hierarchical Children / Parent (§4, §5)
+
+**Status: Implemented via `DgDiscTopoRFS` public API (no HIERNDX address type).**
+
+| Function | Returns |
+|---|---|
+| `dgchildren(dggs, cells)` | Data frame: `seqnum` (parent at `res`) + `child` (at `res+1`) |
+| `dgparent(dggs, cells)` | Data frame: `seqnum` (child at `res`) + `parent` (at `res-1`) |
+
+**C++ path:**
+- `dgchildren` → `GetChildren()` constructs a `GridThing` with `res+1` (so `idggs` covers
+  `res+2` levels) → `GridThing::getChildrenAt(seqnum, parentRes)` →
+  `DgDiscTopoRFS::setAllChildren(parentRes, loc, vec)` →
+  `DgHexIDGGS::setAddAllChildren()` (interior + boundary children).
+- `dgparent` → `GetParent()` → `GridThing::getParentAt(seqnum, childRes)` →
+  `DgDiscTopoRFS::setParents(childRes, loc, vec)` → `DgHexIDGGS::setAddParents()`.
+
+**Design note — boundary children:** `setAddAllChildren` returns interior children (1 per
+aperture-3 parent, 3 for aperture-4) plus boundary children shared with neighboring cells.
+A boundary child's primary parent (as returned by `setParents`) may be a neighbor, not the
+original parent. The R-level test reflects this: `any(prnt$parent == parent_cell)` rather
+than `all(...)`.
+
+**Remaining gaps:**
+- Only immediate children (one resolution step) are supported; multi-step children require
+  iterative calls.
+- Only HEXAGON topology is supported (`dgverify`-level check); DIAMOND and TRIANGLE are not.
+- The HIERNDX address system (Z7/ZOrder/Z3) is still not exposed in coordinate conversions;
+  `dgchildren`/`dgparent` use the SEQNUM-based `DgDiscTopoRFS` public API instead.
+
+---
+
+### Priority 5 — Densification (§7.1)
+
+**Status: Implemented.**
+
+`dgearthgrid(dggs, densify=N)` and `dgcellstogrid(dggs, cells, densify=N)` add `N` extra
+vertices along each cell edge (default 0). Threaded through `DgParams::densify` →
+`GlobalGridGenerator` / `SeqNumGridGenerator` → `dgg.setVertices(*loc, verts, densify)`.
+
+**Remaining gaps:** None for the core feature. DGGRID supports values 0–500; R passes the
+integer through without clamping (out-of-range values will produce a C++ error).
+
+---
+
+### Priority 6 — Random Orientation (§3)
+
+**Status: Implemented in pure R.**
+
+`dgconstruct(orient='RANDOM')` draws a uniformly distributed random orientation:
+```r
+pole_lat_deg <- asin(runif(1, -1, 1)) * 180 / pi   # uniform on sphere
+pole_lon_deg <- runif(1, -180, 180)
+azimuth_deg  <- runif(1, 0, 360)
+```
+Use `set.seed()` before calling for reproducibility.
+
+**Remaining gaps:**
+- `REGION_CENTER` orientation (align icosahedron vertex 0 to a study-region centre) is not
+  implemented — requires spherical trigonometry currently only inside the DGGRID CLI.
+- `dggs_num_placements > 1` (multiple random placements in one call) is not implemented.
