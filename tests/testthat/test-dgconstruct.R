@@ -5,10 +5,9 @@ library(dggridR)
 test_that("dgconstruct returns a named list with expected slots", {
   dggs <- dgconstruct(res = 5, show_info = FALSE)
   expect_type(dggs, "list")
-  expect_named(dggs,
-    c("pole_lon_deg", "pole_lat_deg", "azimuth_deg", "aperture",
-      "res", "topology", "projection", "precision"),
-    ignore.order = TRUE)
+  expect_true(all(c("pole_lon_deg", "pole_lat_deg", "azimuth_deg", "aperture",
+                    "aperture_type", "num_aperture_4_res", "isMixed43", "numAp4",
+                    "res", "topology", "projection", "precision") %in% names(dggs)))
 })
 
 test_that("dgconstruct errors when no sizing param is given", {
