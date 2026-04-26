@@ -6,7 +6,7 @@ home:
 template:
   bootstrap: 5
   bootswatch: sandstone
-  theme: ayu-dark
+  theme: arrow-light
   bslib:
     primary: "#1a3a4a"
     code-color: "#005f87"
