@@ -1,4 +1,4 @@
-# DGGRID v9.0b — Features Not Exposed in the R Package
+# DGGRID v9.0b — Features Not Exposed in the R Package Version 4.0.0
 
 This document identifies DGGRID engine capabilities (from the v9.0b manual and source) that are not
 currently accessible through the dggridR R API. The R package wraps DGGRID via an Rcpp bridge
