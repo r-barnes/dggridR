@@ -41,3 +41,6 @@ CMakeLists.txt
 ^cgen_head\.h$
 ^cgen_body\.h$
 ^cgen_funcs\.h$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
