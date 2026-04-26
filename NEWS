@@ -13,6 +13,7 @@ dggridR v4.1.0
   each point, with optional per-cell point counts
 * dgearthgrid() and dgcellstogrid() gain a densify parameter to add extra
   vertices along cell edges for smoother boundaries at coarse resolutions
+* These changes were made by Sebastian Krantz
 
 dggridR v4.0.0
 ===============
