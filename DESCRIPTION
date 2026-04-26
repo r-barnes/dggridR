@@ -28,6 +28,6 @@ Depends: R (>= 4.1.0)
 Imports: Rcpp (>= 0.12.12), collapse (>= 1.8.0), sf (>= 1.0), s2 (>= 1.1)
 LinkingTo: Rcpp
 RcppModules: dgfuncs, gridgens, gridstats
-Suggests: R.rsp, testthat, ggplot2
+Suggests: R.rsp, testthat, ggplot2, maps
 VignetteBuilder: R.rsp
 RoxygenNote: 7.3.2
