@@ -32,3 +32,4 @@ CMakeLists.txt
 ^UPDATE_DGGRID\.md$
 ^DGGRID_API_GAPS\.md$
 ^vignettes/dggridR\.Rmd$
+^\.github$
