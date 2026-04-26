@@ -52,6 +52,11 @@ find ./src/ -type f -exec perl -pi -e 's/constexpr long double M_2PI.*\n?//g' {}
 # Remove non-R build artifacts
 rm -f src/Makefile.noCMake
 
+# Windows: fix DgHierNdxRF.h — sys_.dggs() returns const DgIDGGSBase& (a reference, not a
+# pointer); remove the erroneous * dereference and widen the return type to DgIDGGSBase&
+find ./src/ -type f -name "DgHierNdxRF.h" -exec perl -pi -e \
+  's{const DgIDGGS\s*&\s*dggs\s*\(void\)\s*const\s*\{[^}]*\}}{const DgIDGGSBase\& dggs (void) const { return sys_.dggs(); }}' {} \;
+
 # Windows/modern-GCC: replace obsolete <tr1/> block with standard C++11 headers in DgUtil.h
 # (-0 slurps the whole file so the multiline /s match works)
 find ./src/ -type f -name "DgUtil.h" -exec perl -0pi -e \
