@@ -13,7 +13,6 @@ dg_process_polydata(polydata)
 Returns an sf object.
 }
 \description{
-Convert data from internal dggrid functions into something
-                 useful: an sp object or a data frame
+Convert data from internal dggrid functions into an sf object.
 }
 \keyword{internal}
