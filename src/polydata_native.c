@@ -1,6 +1,5 @@
 #include <R.h>
 #include <Rinternals.h>
-#include <stdint.h>
 #include <string.h>
 
 static SEXP get_list_element(SEXP x, const char *name) {
@@ -16,20 +15,67 @@ static SEXP get_list_element(SEXP x, const char *name) {
   return R_NilValue;
 }
 
-static int is_little_endian(void) {
-  const uint16_t value = 1;
-  return *((const unsigned char *)&value) == 1;
+static SEXP make_character_vector2(const char *x, const char *y) {
+  SEXP out = PROTECT(Rf_allocVector(STRSXP, 2));
+  SET_STRING_ELT(out, 0, Rf_mkChar(x));
+  SET_STRING_ELT(out, 1, Rf_mkChar(y));
+  UNPROTECT(1);
+  return out;
 }
 
-static void write_uint32_native(unsigned char *dest, uint32_t value) {
-  memcpy(dest, &value, sizeof(uint32_t));
+static SEXP make_character_vector3(const char *x, const char *y, const char *z) {
+  SEXP out = PROTECT(Rf_allocVector(STRSXP, 3));
+  SET_STRING_ELT(out, 0, Rf_mkChar(x));
+  SET_STRING_ELT(out, 1, Rf_mkChar(y));
+  SET_STRING_ELT(out, 2, Rf_mkChar(z));
+  UNPROTECT(1);
+  return out;
 }
 
-static void write_double_native(unsigned char *dest, double value) {
-  memcpy(dest, &value, sizeof(double));
+static void set_bbox(SEXP geometry, double xmin, double ymin, double xmax, double ymax) {
+  SEXP bbox = PROTECT(Rf_allocVector(REALSXP, 4));
+  SEXP bbox_names = PROTECT(Rf_allocVector(STRSXP, 4));
+  SEXP bbox_class = PROTECT(Rf_mkString("bbox"));
+
+  REAL(bbox)[0] = xmin;
+  REAL(bbox)[1] = ymin;
+  REAL(bbox)[2] = xmax;
+  REAL(bbox)[3] = ymax;
+
+  SET_STRING_ELT(bbox_names, 0, Rf_mkChar("xmin"));
+  SET_STRING_ELT(bbox_names, 1, Rf_mkChar("ymin"));
+  SET_STRING_ELT(bbox_names, 2, Rf_mkChar("xmax"));
+  SET_STRING_ELT(bbox_names, 3, Rf_mkChar("ymax"));
+
+  Rf_setAttrib(bbox, R_NamesSymbol, bbox_names);
+  Rf_setAttrib(bbox, R_ClassSymbol, bbox_class);
+  Rf_setAttrib(geometry, Rf_install("bbox"), bbox);
+
+  UNPROTECT(3);
 }
 
-SEXP dg_process_polydata_native(SEXP polydata, SEXP n_cells_sexp) {
+static void set_sfc_attributes(
+    SEXP geometry,
+    SEXP sfc_class,
+    SEXP crs,
+    double xmin,
+    double ymin,
+    double xmax,
+    double ymax
+) {
+  SEXP precision = PROTECT(Rf_ScalarReal(0.0));
+  SEXP n_empty = PROTECT(Rf_ScalarInteger(0));
+
+  Rf_setAttrib(geometry, R_ClassSymbol, sfc_class);
+  Rf_setAttrib(geometry, Rf_install("precision"), precision);
+  Rf_setAttrib(geometry, Rf_install("crs"), crs);
+  Rf_setAttrib(geometry, Rf_install("n_empty"), n_empty);
+  set_bbox(geometry, xmin, ymin, xmax, ymax);
+
+  UNPROTECT(2);
+}
+
+SEXP dg_process_polydata_native(SEXP polydata, SEXP n_cells_sexp, SEXP crs) {
   int nprotect = 0;
 
   if (TYPEOF(polydata) != VECSXP) {
@@ -58,15 +104,18 @@ SEXP dg_process_polydata_native(SEXP polydata, SEXP n_cells_sexp) {
     ++nprotect;
     SEXP out_seq = PROTECT(Rf_allocVector(REALSXP, 0));
     ++nprotect;
-    SEXP out_wkb = PROTECT(Rf_allocVector(VECSXP, 0));
+    SEXP geometry = PROTECT(Rf_allocVector(VECSXP, 0));
     ++nprotect;
     SEXP names = PROTECT(Rf_allocVector(STRSXP, 2));
     ++nprotect;
+    SEXP sfc_class = PROTECT(make_character_vector2("sfc_POLYGON", "sfc"));
+    ++nprotect;
 
     SET_STRING_ELT(names, 0, Rf_mkChar("seqnum"));
-    SET_STRING_ELT(names, 1, Rf_mkChar("wkb"));
+    SET_STRING_ELT(names, 1, Rf_mkChar("geometry"));
+    set_sfc_attributes(geometry, sfc_class, crs, NA_REAL, NA_REAL, NA_REAL, NA_REAL);
     SET_VECTOR_ELT(out, 0, out_seq);
-    SET_VECTOR_ELT(out, 1, out_wkb);
+    SET_VECTOR_ELT(out, 1, geometry);
     Rf_setAttrib(out, R_NamesSymbol, names);
 
     UNPROTECT(nprotect);
@@ -111,9 +160,17 @@ SEXP dg_process_polydata_native(SEXP polydata, SEXP n_cells_sexp) {
 
   SEXP out_seq = PROTECT(Rf_allocVector(REALSXP, n_cells));
   ++nprotect;
-  SEXP out_wkb = PROTECT(Rf_allocVector(VECSXP, n_cells));
+  SEXP geometry = PROTECT(Rf_allocVector(VECSXP, n_cells));
   ++nprotect;
-  const unsigned char byte_order = is_little_endian() ? 1 : 0;
+  SEXP sfg_class = PROTECT(make_character_vector3("XY", "POLYGON", "sfg"));
+  ++nprotect;
+  SEXP sfc_class = PROTECT(make_character_vector2("sfc_POLYGON", "sfc"));
+  ++nprotect;
+
+  double xmin = x_ptr[0];
+  double ymin = y_ptr[0];
+  double xmax = x_ptr[0];
+  double ymax = y_ptr[0];
 
   for (R_xlen_t g = 0; g < n_cells; ++g) {
     const R_xlen_t start = starts[g];
@@ -126,38 +183,37 @@ SEXP dg_process_polydata_native(SEXP polydata, SEXP n_cells_sexp) {
     const int closed = (first_x == last_x) && (first_y == last_y);
     const R_xlen_t n_points = closed ? count : (count + 1);
 
-    const R_xlen_t wkb_bytes = 13 + (16 * n_points);
-    SEXP raw = PROTECT(Rf_allocVector(RAWSXP, wkb_bytes));
-    unsigned char *buf = RAW(raw);
-    R_xlen_t pos = 0;
-
-    buf[pos++] = byte_order;
-    write_uint32_native(buf + pos, (uint32_t)3); /* WKB Polygon */
-    pos += 4;
-    write_uint32_native(buf + pos, (uint32_t)1); /* one ring */
-    pos += 4;
-    write_uint32_native(buf + pos, (uint32_t)n_points);
-    pos += 4;
+    SEXP ring = PROTECT(Rf_allocMatrix(REALSXP, n_points, 2));
+    SEXP polygon = PROTECT(Rf_allocVector(VECSXP, 1));
+    double *ring_ptr = REAL(ring);
 
     for (R_xlen_t j = 0; j < count; ++j) {
       const R_xlen_t idx = start + j;
-      write_double_native(buf + pos, x_ptr[idx]);
-      pos += 8;
-      write_double_native(buf + pos, y_ptr[idx]);
-      pos += 8;
+      const double x_val = x_ptr[idx];
+      const double y_val = y_ptr[idx];
+
+      ring_ptr[j] = x_val;
+      ring_ptr[j + n_points] = y_val;
+
+      if (x_val < xmin) xmin = x_val;
+      if (y_val < ymin) ymin = y_val;
+      if (x_val > xmax) xmax = x_val;
+      if (y_val > ymax) ymax = y_val;
     }
 
     if (!closed) {
-      write_double_native(buf + pos, first_x);
-      pos += 8;
-      write_double_native(buf + pos, first_y);
-      pos += 8;
+      ring_ptr[n_points - 1] = first_x;
+      ring_ptr[(2 * n_points) - 1] = first_y;
     }
 
-    SET_VECTOR_ELT(out_wkb, g, raw);
+    SET_VECTOR_ELT(polygon, 0, ring);
+    Rf_setAttrib(polygon, R_ClassSymbol, sfg_class);
+    SET_VECTOR_ELT(geometry, g, polygon);
     REAL(out_seq)[g] = seq_values[g];
-    UNPROTECT(1); /* raw */
+    UNPROTECT(2); /* ring, polygon */
   }
+
+  set_sfc_attributes(geometry, sfc_class, crs, xmin, ymin, xmax, ymax);
 
   SEXP out = PROTECT(Rf_allocVector(VECSXP, 2));
   ++nprotect;
@@ -165,9 +221,9 @@ SEXP dg_process_polydata_native(SEXP polydata, SEXP n_cells_sexp) {
   ++nprotect;
 
   SET_STRING_ELT(names, 0, Rf_mkChar("seqnum"));
-  SET_STRING_ELT(names, 1, Rf_mkChar("wkb"));
+  SET_STRING_ELT(names, 1, Rf_mkChar("geometry"));
   SET_VECTOR_ELT(out, 0, out_seq);
-  SET_VECTOR_ELT(out, 1, out_wkb);
+  SET_VECTOR_ELT(out, 1, geometry);
   Rf_setAttrib(out, R_NamesSymbol, names);
 
   R_Free(seq_values);

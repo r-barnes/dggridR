@@ -2,7 +2,6 @@
 // Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #include <Rcpp.h>
-#include <R_ext/Rdynload.h>
 
 using namespace Rcpp;
 
@@ -12,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 
-RcppExport SEXP dg_process_polydata_native(SEXP, SEXP);
+RcppExport SEXP dg_process_polydata_native(SEXP, SEXP, SEXP);
 RcppExport SEXP _rcpp_module_boot_gridgens();
 RcppExport SEXP _rcpp_module_boot_gridstats();
 RcppExport SEXP _rcpp_module_boot_dgfuncs();
@@ -21,7 +20,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_gridgens", (DL_FUNC) &_rcpp_module_boot_gridgens, 0},
     {"_rcpp_module_boot_gridstats", (DL_FUNC) &_rcpp_module_boot_gridstats, 0},
     {"_rcpp_module_boot_dgfuncs", (DL_FUNC) &_rcpp_module_boot_dgfuncs, 0},
-    {"dg_process_polydata_native", (DL_FUNC) &dg_process_polydata_native, 2},
+    {"dg_process_polydata_native", (DL_FUNC) &dg_process_polydata_native, 3},
     {NULL, NULL, 0}
 };
 

@@ -598,9 +598,8 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #' @keywords internal
 #'
 dg_process_polydata <- function(polydata) {
-  native <- .Call(C_dg_process_polydata_native, polydata, collapse::fndistinct(polydata$seqnum))
-  geometry <- sf::st_as_sfc(native$wkb, crs = 4326)
-  sf::st_sf(seqnum = native$seqnum, geometry = geometry)
+  native <- .Call(C_dg_process_polydata_native, polydata, collapse::fndistinct(polydata$seqnum), sf::st_crs(4326))
+  sf::st_sf(seqnum = native$seqnum, geometry = native$geometry)
 
   # Previous implementation:
   # x <- y <- seqnum <- geometry <- NULL # For R CMD Check: no visible binding for global variables
