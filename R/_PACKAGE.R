@@ -94,6 +94,7 @@
 #'
 #' @author Richard Barnes \email{rijard.barnes@gmail.com}, Kevin Sahr \email{sahrk@sou.edu},
 #'   and Sebastian Krantz \email{sebastian.krantz@graduateinstitute.ch}
+#' @keywords internal
 #' @name dggridR-package
 #' @aliases dggridR
 NULL

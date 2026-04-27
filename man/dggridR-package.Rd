@@ -99,3 +99,4 @@ metrics on discrete global grid systems. \emph{Computers, Environment and Urban 
 Richard Barnes \email{rijard.barnes@gmail.com}, Kevin Sahr \email{sahrk@sou.edu},
   and Sebastian Krantz \email{sebastian.krantz@graduateinstitute.ch}
 }
+\keyword{internal}
