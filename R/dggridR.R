@@ -1,5 +1,4 @@
-#' @importFrom sf st_bbox st_as_sf write_sf st_read
-#' @importFrom s2 s2_geog_point s2_convex_hull_agg
+#' @importFrom sf st_bbox st_sf write_sf st_read
 #' @importFrom collapse qDF fgroup_by fsummarise fmutate funique fmean fsum fnobs
 #' @importFrom tools file_path_sans_ext
 #' @useDynLib dggridR, .registration = TRUE, .fixes = "C_"
@@ -599,7 +598,7 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #'
 dg_process_polydata <- function(polydata) {
   native <- .Call(C_dg_process_polydata_native, polydata, collapse::fndistinct(polydata$seqnum), sf::st_crs(4326))
-  sf::st_sf(seqnum = native$seqnum, geometry = native$geometry)
+  st_sf(seqnum = native$seqnum, geometry = native$geometry)
 
   # Previous implementation:
   # x <- y <- seqnum <- geometry <- NULL # For R CMD Check: no visible binding for global variables
