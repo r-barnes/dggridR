@@ -9,6 +9,7 @@
 * New `dgpoints_to_cells(dggs, lon, lat)` maps lon/lat points to grid cells and returns an sf grid with optional per-cell counts.
 * New `dgbin_points(dggs, lon, lat, values)` aggregates point data into grid cells, returning per-cell count, mean, and/or total as a data frame.
 * `dgearthgrid()` and `dgcellstogrid()` gain a `densify` parameter to insert extra vertices along cell edges for smoother boundaries.
+* `dgearthgrid()` and `dgcellstogrid()` now materialize sf polygon grids through a native C implementation using R's C API, preserving DGGRID ring order and avoiding the previous s2/collapse polygon construction path. Illustrative conversion timings for full-earth grids improved from 0.022s to 0.001s at res 5 (~22x), 0.072s to 0.002s at res 6 (~36x), 0.284s to 0.005s at res 7 (~57x), 0.924s to 0.016s at res 8 (~58x), and 3.854s to 0.050s at res 9 (~77x).
 * pkgdown site added at <https://sebkrantz.github.io/dggridR/>.
 
 # dggridR 4.0.0
