@@ -21,7 +21,6 @@ For each cell ID in \code{cells}, returns the IDs of all
 }
 \examples{
 library(dggridR)
-dggs <- dgconstruct(res=3)
-nbrs <- dgneighbors(dggs, c(1, 2, 3))
+dgneighbors(dgconstruct(res=3), c(1, 2, 3))
 
 }

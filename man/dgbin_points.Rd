@@ -53,9 +53,9 @@ data(dgquakes)
 dggs <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
 
 # Count earthquakes per cell
-dgbin_points(dggs, dgquakes$lon, dgquakes$lat)
+dgbin_points(dggs, dgquakes$lon, dgquakes$lat) |> head(20)
 
 # Aggregate magnitude per cell
 dgbin_points(dggs, dgquakes$lon, dgquakes$lat, values=dgquakes$mag,
-             output_count=TRUE, output_total=TRUE)
+             output_count=TRUE, output_total=TRUE) |> head(20)
 }

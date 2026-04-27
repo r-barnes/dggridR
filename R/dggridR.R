@@ -142,6 +142,7 @@ dg_shpfname_south_africa <- function(){
 #' @examples
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
+#' str(dggs)
 #'
 #' dggs <- dgconstruct(area=5,metric=FALSE)
 #'
@@ -241,8 +242,8 @@ dgconstruct <- function(
 #'
 #' @examples
 #' library(dggridR)
-#' dggs <- dgconstruct(res=20)
-#' dggs <- dgsetres(dggs,10)
+#' dgsetres(dgconstruct(res=20), 10)
+#' 
 #' @export
 dgsetres <- function(dggs,res){
   dggs[['res']] = res
@@ -265,8 +266,8 @@ dgsetres <- function(dggs,res){
 #'             object is misspecified
 #' @examples
 #' library(dggridR)
-#' dggs <- dgconstruct(res=20)
-#' dgverify(dggs)
+#' dgverify(dgconstruct(res=20))
+#' 
 #' @export
 dgverify <- function(dggs){
   if(!(dggs[['projection']] %in% c('ISEA','FULLER')))
@@ -324,8 +325,8 @@ dgverify <- function(dggs){
 #'
 #' @examples
 #' library(dggridR)
-#' dggs <- dgconstruct(res=20)
-#' dginfo(dggs)
+#' dginfo(dgconstruct(res=20))
+#' 
 #' @export
 dginfo <- function(dggs){
   dgverify(dggs)
@@ -359,8 +360,8 @@ dginfo <- function(dggs){
 #'
 #' @examples
 #' library(dggridR)
-#' dggs <- dgconstruct(res=20)
-#' dggetres(dggs)
+#' dggetres(dgconstruct(res=20))
+#' 
 #' @export
 dggetres <- function(dggs){
   dgverify(dggs)
@@ -401,6 +402,8 @@ dggetres <- function(dggs){
 #' maxcell <- dgmaxcell(dggs)                     #Get maximum cell id
 #' cells   <- sample(1:maxcell, N, replace=FALSE) #Choose random cells
 #' grid    <- dgcellstogrid(dggs,cells) #Get grid
+#' head(grid)
+#' 
 #' @export
 dgmaxcell <- function(dggs,res=NA){
   dgverify(dggs)
@@ -447,7 +450,8 @@ dgmaxcell <- function(dggs,res=NA){
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' res  <- dg_closest_res(dggs,'area_km',1)
-#' dggs <- dgsetres(dggs,res)
+#' dgsetres(dggs,res)
+#' 
 #' @export
 dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TRUE){
   KM_TO_M <- 0.621371
@@ -510,7 +514,8 @@ dg_closest_res <- function(dggs,col,val,round='nearest',show_info=TRUE,metric=TR
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' res  <- dg_closest_res_to_area(dggs,1)
-#' dggs <- dgsetres(dggs,res)
+#' dgsetres(dggs,res)
+#' 
 #' @export
 dg_closest_res_to_area <- function(dggs,area,round='nearest',show_info=TRUE,metric=TRUE){
   dg_closest_res(dggs,'area_km',area,round,show_info,metric)
@@ -542,7 +547,8 @@ dg_closest_res_to_area <- function(dggs,area,round='nearest',show_info=TRUE,metr
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' res  <- dg_closest_res_to_spacing(dggs,1)
-#' dggs <- dgsetres(dggs,res)
+#' dgsetres(dggs,res)
+#' 
 #' @export
 dg_closest_res_to_spacing <- function(dggs,spacing,round='nearest',show_info=TRUE,metric=TRUE){
   dg_closest_res(dggs,'spacing_km',spacing,round,show_info,metric)
@@ -576,7 +582,8 @@ dg_closest_res_to_spacing <- function(dggs,spacing,round='nearest',show_info=TRU
 #' library(dggridR)
 #' dggs <- dgconstruct(res=20)
 #' res  <- dg_closest_res_to_cls(dggs,1)
-#' dggs <- dgsetres(dggs,res)
+#' dgsetres(dggs,res)
+#' 
 #' @export
 dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric=TRUE){
   dg_closest_res(dggs,'cls_km',cls,round,show_info,metric)
@@ -645,6 +652,8 @@ dg_process_polydata <- function(polydata) {
 #' grid <- dgrectgrid(dggs,
 #'                minlat=24.7433195, minlon=-124.7844079,
 #'                maxlat=49.3457868, maxlon=-66.9513812)
+#' head(grid)
+#' 
 #' @export
 dgrectgrid <- function(dggs,minlat=-1,minlon=-1,maxlat=-1,maxlon=-1,cellsize=0.1, ...){ #TODO: Densify?
   dgverify(dggs)
@@ -743,6 +752,8 @@ dgearthgrid <- function(dggs, savegrid = NA, return_sf = TRUE, densify = 0L) {
 #'
 #' #Get grid cells for the earthquakes identified
 #' grid          <- dgcellstogrid(dggs, dgquakes$cell)
+#' head(grid)
+#' 
 #' @export
 dgcellstogrid <- function(dggs, cells, savegrid=NA, return_sf = TRUE, densify = 0L) {
   dgverify(dggs)
@@ -829,6 +840,8 @@ dgsavegrid <- function(grid,shpfname) {
 #'
 #' dggs <- dgconstruct(spacing=25, metric=FALSE, resround='nearest')
 #' south_africa_grid <- dgshptogrid(dggs,dg_shpfname_south_africa())
+#' head(south_africa_grid)
+#' 
 #' @export
 dgshptogrid <- function(dggs, shpfname, cellsize = 0.1, ...) { #TODO: Densify?
   dgverify(dggs)
@@ -886,6 +899,8 @@ dgshptogrid <- function(dggs, shpfname, cellsize = 0.1, ...) { #TODO: Densify?
 #' data(dgquakes)
 #' dggs <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
 #' grid <- dgpoints_to_cells(dggs, dgquakes$lon, dgquakes$lat, return_count=TRUE)
+#' head(grid)
+#' 
 #' @export
 dgpoints_to_cells <- function(dggs, lon, lat, return_count = FALSE, ...) {
   dgverify(dggs)
@@ -934,11 +949,11 @@ dgpoints_to_cells <- function(dggs, lon, lat, return_count = FALSE, ...) {
 #' dggs <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
 #'
 #' # Count earthquakes per cell
-#' dgbin_points(dggs, dgquakes$lon, dgquakes$lat)
+#' dgbin_points(dggs, dgquakes$lon, dgquakes$lat) |> head(20)
 #'
 #' # Aggregate magnitude per cell
 #' dgbin_points(dggs, dgquakes$lon, dgquakes$lat, values=dgquakes$mag,
-#'              output_count=TRUE, output_total=TRUE)
+#'              output_count=TRUE, output_total=TRUE) |> head(20)
 #' @export
 dgbin_points <- function(dggs, lon, lat, values = NULL,
                          output_count = is.null(values),
@@ -982,8 +997,7 @@ dgbin_points <- function(dggs, lon, lat, values = NULL,
 #'
 #' @examples
 #' library(dggridR)
-#' dggs <- dgconstruct(res=3)
-#' nbrs <- dgneighbors(dggs, c(1, 2, 3))
+#' dgneighbors(dgconstruct(res=3), c(1, 2, 3))
 #'
 #' @export
 dgneighbors <- function(dggs, cells) {
@@ -1019,8 +1033,7 @@ dgneighbors <- function(dggs, cells) {
 #'
 #' @examples
 #' library(dggridR)
-#' dggs <- dgconstruct(res=3)
-#' chld <- dgchildren(dggs, c(1, 2))
+#' dgchildren(dgconstruct(res=3), c(1, 2))
 #'
 #' @export
 dgchildren <- function(dggs, cells) {
@@ -1058,8 +1071,7 @@ dgchildren <- function(dggs, cells) {
 #'
 #' @examples
 #' library(dggridR)
-#' dggs <- dgconstruct(res=4)
-#' prnt <- dgparent(dggs, c(1, 2))
+#' dgparent(dgconstruct(res=4), c(1, 2))
 #'
 #' @export
 dgparent <- function(dggs, cells) {
