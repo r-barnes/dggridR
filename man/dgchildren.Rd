@@ -23,7 +23,6 @@ For each cell ID in \code{cells} at the current grid
 }
 \examples{
 library(dggridR)
-dggs <- dgconstruct(res=3)
-chld <- dgchildren(dggs, c(1, 2))
+dgchildren(dgconstruct(res=3), c(1, 2))
 
 }

@@ -49,4 +49,6 @@ dggs <- dgconstruct(spacing=1000,metric=FALSE,resround='down')
 grid <- dgrectgrid(dggs,
                minlat=24.7433195, minlon=-124.7844079,
                maxlat=49.3457868, maxlon=-66.9513812)
+head(grid)
+
 }

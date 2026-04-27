@@ -41,5 +41,6 @@ This is a generic function that is used to determine an appropriate
 library(dggridR)
 dggs <- dgconstruct(res=20)
 res  <- dg_closest_res(dggs,'area_km',1)
-dggs <- dgsetres(dggs,res)
+dgsetres(dggs,res)
+
 }

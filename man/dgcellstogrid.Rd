@@ -41,4 +41,6 @@ dgquakes$cell <- dgGEO_to_SEQNUM(dggs,dgquakes$lat,dgquakes$lon)$seqnum
 
 #Get grid cells for the earthquakes identified
 grid          <- dgcellstogrid(dggs, dgquakes$cell)
+head(grid)
+
 }
