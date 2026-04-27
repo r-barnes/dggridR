@@ -33,4 +33,6 @@ library(dggridR)
 data(dgquakes)
 dggs <- dgconstruct(spacing=1000, metric=FALSE, resround='down')
 grid <- dgpoints_to_cells(dggs, dgquakes$lon, dgquakes$lat, return_count=TRUE)
+head(grid)
+
 }

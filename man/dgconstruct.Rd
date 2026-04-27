@@ -93,6 +93,7 @@ Construct a discrete global grid system (dggs) object
 \examples{
 library(dggridR)
 dggs <- dgconstruct(res=20)
+str(dggs)
 
 dggs <- dgconstruct(area=5,metric=FALSE)
 

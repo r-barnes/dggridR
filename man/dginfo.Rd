@@ -18,6 +18,6 @@ dggs objects have many settings. This returns all of them, along
 }
 \examples{
 library(dggridR)
-dggs <- dgconstruct(res=20)
-dginfo(dggs)
+dginfo(dgconstruct(res=20))
+
 }

@@ -25,6 +25,6 @@ Set the resolution of a dggs object
 }
 \examples{
 library(dggridR)
-dggs <- dgconstruct(res=20)
-dggs <- dgsetres(dggs,10)
+dgsetres(dgconstruct(res=20), 10)
+
 }

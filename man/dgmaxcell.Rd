@@ -27,4 +27,6 @@ N       <- 100                                 #Number of cells
 maxcell <- dgmaxcell(dggs)                     #Get maximum cell id
 cells   <- sample(1:maxcell, N, replace=FALSE) #Choose random cells
 grid    <- dgcellstogrid(dggs,cells) #Get grid
+head(grid)
+
 }
