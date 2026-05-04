@@ -1,10 +1,10 @@
-#' @importFrom sf st_bbox st_sf write_sf st_read
+#' @importFrom sf st_bbox st_as_sf st_as_sfc st_sf write_sf st_read
 #' @importFrom collapse qDF fgroup_by fsummarise fmutate funique fmean fsum fnobs
 #' @importFrom tools file_path_sans_ext
 #' @useDynLib dggridR, .registration = TRUE, .fixes = "C_"
 #'
 
-utils::globalVariables(c("seqnum", "C_dg_process_polydata_native"))
+utils::globalVariables(c("seqnum", "C_dg_process_polydata_native", "value"))
 
 # Convert sf::st_bbox to sp::bbox
 st_bbox_to_sp <- function(x) {
@@ -602,10 +602,13 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #' @return Returns an sf object.
 #'
 #' @keywords internal
-#'
+#' @importFrom sf st_as_sfc st_sf
+#' @importFrom wk parse_wkb
+#' @importFrom collapse fndistinct
 dg_process_polydata <- function(polydata) {
-  native <- .Call(C_dg_process_polydata_native, polydata, collapse::fndistinct(polydata$seqnum), sf::st_crs(4326))
-  st_sf(seqnum = native$seqnum, geometry = native$geometry)
+  native <- .Call(C_dg_process_polydata_native, polydata, fndistinct(polydata$seqnum))
+  geometry <- st_as_sfc(parse_wkb(native$wkb, crs = 4326, geodesic = TRUE))
+  st_sf(seqnum = native$seqnum, geometry = geometry)
 
   # Previous implementation:
   # x <- y <- seqnum <- geometry <- NULL # For R CMD Check: no visible binding for global variables
