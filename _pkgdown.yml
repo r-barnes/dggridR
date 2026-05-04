@@ -112,15 +112,11 @@ reference:
 external-articles:
   - name: dggridR
     title: "dggridR: Discrete Global Grids for R"
-    description: >
-      Walk-through of all main features: spatial binning, point aggregation,
-      neighbour and hierarchy queries, densification, random orientation, and more.
+    description: " "
     href: https://sebkrantz.github.io/dggridR/articles/dggridR.html
   - name: dggrid_manual
     title: "DGGRID v9.0b User Manual"
-    description: >
-      Complete reference manual for the DGGRID engine that powers dggridR,
-      covering all grid types, parameters, and mathematical foundations.
+    description: " "
     href: https://raw.githubusercontent.com/SebKrantz/dggridR/development/vignettes/dggrid_v90b_manual.pdf
 
 articles:
