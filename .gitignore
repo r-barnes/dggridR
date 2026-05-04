@@ -38,3 +38,4 @@ cgen_head.h
 cgen_body.h
 cgen_funcs.h
 docs
+.positai
