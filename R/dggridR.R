@@ -1,10 +1,10 @@
-#' @importFrom sf st_bbox st_as_sf st_combine st_cast write_sf st_read
+#' @importFrom sf st_bbox st_as_sf st_as_sfc st_sf write_sf st_read
 #' @importFrom collapse qDF fgroup_by fsummarise fmutate funique fmean fsum fnobs
 #' @importFrom tools file_path_sans_ext
-#' @useDynLib  dggridR
+#' @useDynLib dggridR, .registration = TRUE, .fixes = "C_"
 #'
 
-utils::globalVariables("seqnum")
+utils::globalVariables(c("seqnum", "C_dg_process_polydata_native"))
 
 # Convert sf::st_bbox to sp::bbox
 st_bbox_to_sp <- function(x) {
@@ -604,14 +604,17 @@ dg_closest_res_to_cls <- function(dggs,cls,round='nearest',show_info=TRUE,metric
 #' @keywords internal
 #'
 dg_process_polydata <- function(polydata) {
-  x <- y <- seqnum <- geometry <- NULL # For R CMD Check: no visible binding for global variables
+  native <- .Call(C_dg_process_polydata_native, polydata, collapse::fndistinct(polydata$seqnum))
+  geometry <- sf::st_as_sfc(native$wkb, crs = 4326)
+  sf::st_sf(seqnum = native$seqnum, geometry = geometry)
 
-  qDF(polydata) |>
-    st_as_sf(coords = c("x", "y"), crs = 4326) |>
-    fgroup_by(seqnum, sort = TRUE) |>
-    fsummarise(geometry = st_combine(geometry)) |>
-    fmutate(geometry = `oldClass<-`(geometry, c("sfc_MULTIPOINT", "sfc"))) |>
-    st_cast("POLYGON")
+  # Previous implementation:
+  # x <- y <- seqnum <- geometry <- NULL # For R CMD Check: no visible binding for global variables
+  # qDF(polydata) |>
+  #   fmutate(geometry = s2_geog_point(x, y)) |>
+  #   fgroup_by(seqnum, sort = TRUE) |>
+  #   fsummarise(geometry = s2_convex_hull_agg(geometry)) |>
+  #   st_as_sf(crs = 4326)
 }
 
 
