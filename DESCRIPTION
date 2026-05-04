@@ -25,9 +25,9 @@ Encoding: UTF-8
 Language: en-US
 NeedsCompilation: yes
 Depends: R (>= 4.1.0)
-Imports: Rcpp (>= 0.12.12), collapse (>= 1.8.0), sf (>= 1.0)
+Imports: Rcpp (>= 0.12.12), collapse (>= 1.8.0), sf (>= 1.0), wk (>= 0.9.4)
 LinkingTo: Rcpp
 RcppModules: dgfuncs, gridgens, gridstats
 Suggests: R.rsp, testthat, ggplot2, maps, dplyr
 VignetteBuilder: R.rsp
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
