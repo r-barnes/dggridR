@@ -509,7 +509,7 @@ library(dggridR)
 
 dggs <- dgconstruct(res = 2, show_info = FALSE)
 
-center_cell <- 50
+center_cell <- 30
 nbrs <- dgneighbors(dggs, center_cell)
 
 # Visualise the cell and its ring of neighbours
