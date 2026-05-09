@@ -55,6 +55,23 @@ test_that("dgcellstogrid sf output has valid geometry", {
   expect_true(all(sf::st_is_valid(grid)))
 })
 
+test_that("dgcellstogrid polygons are closed rings", {
+  dggs <- dgconstruct(res = 3, show_info = FALSE)
+  grid <- dgcellstogrid(dggs, 1:3)
+  coords <- sf::st_coordinates(grid$geometry[[1]])
+  expect_gte(nrow(coords), 4)
+  expect_equal(unname(coords[1, 1:2]), unname(coords[nrow(coords), 1:2]))
+})
+
+test_that("dgcellstogrid densify increases polygon vertices in sf output", {
+  dggs <- dgconstruct(res = 2, show_info = FALSE)
+  g0 <- dgcellstogrid(dggs, 1, densify = 0)
+  g4 <- dgcellstogrid(dggs, 1, densify = 4)
+  n0 <- nrow(sf::st_coordinates(g0$geometry[[1]]))
+  n4 <- nrow(sf::st_coordinates(g4$geometry[[1]]))
+  expect_gt(n4, n0)
+})
+
 test_that("dgcellstogrid savegrid writes a shapefile and returns its path", {
   dggs    <- dgconstruct(res = 2, show_info = FALSE)
   tmpfile <- tempfile(fileext = ".shp")
