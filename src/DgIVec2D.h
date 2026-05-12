@@ -78,8 +78,8 @@ class DgIVec2D {
                           { return DgIVec2D(*this - pt0); }
 
       DgIVec2D absDiffVec (const DgIVec2D& pt0) const
-                          { return DgIVec2D(abs(i_ - pt0.i()),
-                                            abs(j_ - pt0.j())); }
+                          { return DgIVec2D(std::abs(i_ - pt0.i()),
+                                            std::abs(j_ - pt0.j())); }
 
       const char* fromString (const char* str, char delimiter);
 

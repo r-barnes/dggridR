@@ -44,8 +44,8 @@ class DgDmdD8Grid2D : public DgDmdD4Grid2D {
 
       virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
       {
-	unsigned long long int diffi = abs(add2.i() - add1.i());
-	unsigned long long int diffj = abs(add2.j() - add1.j());
+	unsigned long long int diffi = std::abs(add2.i() - add1.i());
+	unsigned long long int diffj = std::abs(add2.j() - add1.j());
         return (diffi >= diffj) ? diffi : diffj;
       }
 
