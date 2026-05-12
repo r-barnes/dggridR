@@ -108,9 +108,9 @@ typedef enum {
                           { return DgIVec3D(*this - pt0); }
 
       DgIVec3D absDiffVec (const DgIVec3D& pt0) const
-                          { return DgIVec3D(abs(i_ - pt0.i()),
-                                            abs(j_ - pt0.j()),
-                                            abs(k_ - pt0.k())); }
+                          { return DgIVec3D(std::abs(i_ - pt0.i()),
+                                            std::abs(j_ - pt0.j()),
+                                            std::abs(k_ - pt0.k())); }
 
       const char* fromString (const char* str, char delimiter);
 

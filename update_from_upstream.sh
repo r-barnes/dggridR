@@ -89,5 +89,10 @@ find ./src/ -type f -name "*.c" -exec \
 find ./src/ -type f -name "*.c" -exec \
   perl -pi -e 's/\bsprintf\s*\(\s*stmp\s*,/snprintf(stmp, sizeof(stmp),/g' {} \;
 
+# Fix abs() truncation warnings: replace abs() with std::abs() for long long arguments
+# This prevents segfaults from integer truncation when abs() is called with long long values
+find ./src/ -type f \( -name "*.cpp" -o -name "*.h" \) -exec \
+  perl -pi -e 's/\babs\(/std::abs(/g' {} \;
+
 # Copy the Rcpp bridge layer (dggridR-specific, not from DGGRID upstream)
 cp copy_to_src/* ./src/

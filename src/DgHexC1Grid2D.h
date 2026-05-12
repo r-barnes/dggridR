@@ -59,12 +59,12 @@ class DgHexC1Grid2D : public DgDiscRF2D {
              if ((diff.i() >= 0 && diff.j() <= 0) ||
                  (diff.i() <= 0 && diff.j() >= 0))   /* different signs */
              {
-                return abs(diff.i()) + abs(diff.j());
+                return std::abs(diff.i()) + std::abs(diff.j());
              }
              else /* same signs */
              {
-                diff.setI(abs(diff.i()));
-                diff.setJ(abs(diff.j()));
+                diff.setI(std::abs(diff.i()));
+                diff.setJ(std::abs(diff.j()));
                 return (diff.i() > diff.j()) ? diff.i() : diff.j();
              }}
 

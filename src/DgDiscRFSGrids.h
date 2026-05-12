@@ -140,7 +140,7 @@ template<class A, class B, class BG, class DB> class DgDiscRFSGridsBase {
       // hokey temporary notion of distance
       virtual long long int distRFS (const DgResAdd<A>& add1,
                       const DgResAdd<A>& add2) const
-            { return abs(add2.res() - add1.res()); }
+            { return std::abs(add2.res() - add1.res()); }
     /*
       virtual DgResAdd<A> quantifyRFS (const B& point) const
             {

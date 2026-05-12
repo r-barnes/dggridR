@@ -165,7 +165,7 @@ class DgRadixString {
          // padWidth of -1 indicates no padding
          //
          {
-            int pval = abs(val);
+            int pval = std::abs(val);
 
             int nd = pval % base();
             setDigits(dgg::util::to_string(nd));

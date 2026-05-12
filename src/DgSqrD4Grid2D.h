@@ -52,7 +52,7 @@ class DgSqrD4Grid2D : public DgDiscRF2D {
            { DgDiscRF2D::operator=(grd); return *this; }
 
       virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
-           { return abs(add2.i() - add1.i()) + abs(add2.j() - add1.j()); }
+           { return std::abs(add2.i() - add1.i()) + std::abs(add2.j() - add1.j()); }
 
    protected:
 

@@ -43,8 +43,8 @@ class DgSqrD8Grid2D : public DgSqrD4Grid2D {
          { return new DgSqrD8Grid2D (networkIn, contCartFrameIn, nameIn); }
 
       virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
-           { long long int diffi = abs(add2.i() - add1.i());
-             long long int diffj = abs(add2.j() - add1.j());
+           { long long int diffi = std::abs(add2.i() - add1.i());
+             long long int diffj = std::abs(add2.j() - add1.j());
              return (diffi >= diffj) ? diffi : diffj; }
 
    protected:
