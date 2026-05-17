@@ -55,7 +55,7 @@ jobs:
     container:
       image: debian:testing
 
-    name: Debian testing (R-devel, clang)
+    name: Debian testing (dggridR with clang)
 
     steps:
       - name: Install system dependencies
@@ -99,31 +99,28 @@ jobs:
 
       - name: Configure build environment
         run: |
-          # Set compilers
-          echo "CC=clang" >> $GITHUB_ENV
-          echo "CXX=clang++" >> $GITHUB_ENV
-
-          # Display versions
-          echo "=== Compiler Versions ==="
+          # Display available compilers
+          echo "=== Available Compilers ==="
+          gcc --version
+          g++ --version
           clang --version
           clang++ --version
 
-          # Configure gdal and geos for sf package
+          # Configure spatial libraries
           echo "=== Spatial Library Configuration ==="
           gdal-config --version
           geos-config --version
 
-      - name: Install R package dependencies
-        env:
-          CC: clang
-          CXX: clang++
+      - name: Install R package dependencies with GCC
         run: |
+          # Use GCC for dependencies (s2/sf have issues with Clang 21)
           options(repos = c(CRAN = 'https://cloud.r-project.org'))
 
           cat("Installing remotes and rcmdcheck...\n")
           install.packages(c('remotes', 'rcmdcheck'), Ncpus = 2)
 
-          cat("\nInstalling required dependencies only (not Suggests)...\n")
+          cat("\nInstalling required dependencies with GCC...\n")
+          cat("(Dependencies compiled with GCC, dggridR will use Clang)\n")
           # Install only required dependencies, skip suggested packages
           remotes::install_deps(dependencies = NA, upgrade = "never", Ncpus = 2)
 
@@ -139,16 +136,34 @@ jobs:
             }
           }
           if (!all_ok) stop("Required packages failed to install")
-          cat("\n✓ All required dependencies installed successfully\n")
+          cat("\n✓ All required dependencies installed successfully with GCC\n")
         shell: Rscript {0}
 
-      - name: Show R and compiler configuration
+      - name: Configure Clang for dggridR compilation
+        run: |
+          # Now set Clang as default for dggridR package compilation
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+          cat ~/.R/Makevars 2>/dev/null || echo "No ~/.R/Makevars found"
+          mkdir -p ~/.R
+          echo "CC=clang" > ~/.R/Makevars
+          echo "CXX=clang++" >> ~/.R/Makevars
+          echo "=== Clang configured for package compilation ==="
+
+      - name: Show R and compiler configuration for dggridR
         run: |
           cat("R version:\n")
           print(R.version)
-          cat("\nCompiler configuration:\n")
-          system("$CC --version")
-          system("$CXX --version")
+          cat("\nCompiler configuration for dggridR:\n")
+          cat("CC:", Sys.getenv("CC"), "\n")
+          cat("CXX:", Sys.getenv("CXX"), "\n")
+          system("clang --version")
+          cat("\nMakevars configuration:\n")
+          if (file.exists("~/.R/Makevars")) {
+            cat(readLines("~/.R/Makevars"), sep = "\n")
+          } else {
+            cat("No ~/.R/Makevars file\n")
+          }
         shell: Rscript {0}
 
       - name: Check package
