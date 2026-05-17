@@ -68,6 +68,9 @@ jobs:
             libc++abi-dev \
             git \
             r-base-dev \
+            r-cran-rcpp \
+            r-cran-sf \
+            r-cran-wk \
             libgdal-dev \
             libgeos-dev \
             libproj-dev \
@@ -95,18 +98,31 @@ jobs:
           clang --version
           clang++ --version
 
+      - name: Verify system-installed R packages
+        run: |
+          cat("System-installed R packages:\n")
+          for (pkg in c("Rcpp", "sf", "wk")) {
+            if (requireNamespace(pkg, quietly = TRUE)) {
+              cat(sprintf("✓ %s: %s\n", pkg, packageVersion(pkg)))
+            } else {
+              cat(sprintf("✗ %s: NOT INSTALLED\n", pkg))
+              stop(sprintf("Required package %s is not available", pkg))
+            }
+          }
+        shell: Rscript {0}
+
       - name: Install R package dependencies
         run: |
           options(repos = c(CRAN = 'https://cloud.r-project.org'))
+          cat("Installing remotes...\n")
           install.packages('remotes')
-          cat("Installing package dependencies...\n")
-          deps <- remotes::dev_package_deps(dependencies = TRUE)
-          print(deps)
-          remotes::install_deps(dependencies = TRUE, upgrade = "never", force = TRUE)
+          cat("Installing missing package dependencies...\n")
+          # Install only packages not available from system
+          remotes::install_deps(dependencies = TRUE, upgrade = "never")
           cat("Installing rcmdcheck...\n")
           install.packages("rcmdcheck")
-          cat("\nVerifying key packages are installed:\n")
-          for (pkg in c("Rcpp", "collapse", "sf", "wk")) {
+          cat("\nAll required packages:\n")
+          for (pkg in c("Rcpp", "collapse", "sf", "wk", "rcmdcheck")) {
             if (requireNamespace(pkg, quietly = TRUE)) {
               cat(sprintf("✓ %s: %s\n", pkg, packageVersion(pkg)))
             } else {

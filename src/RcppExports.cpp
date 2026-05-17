@@ -5,12 +5,10 @@
 
 using namespace Rcpp;
 
-// RCPP_USE_GLOBAL_ROSTREAM disabled to prevent segfaults during dyn.load() on Linux
-// See: https://github.com/RcppCore/Rcpp/issues/1158
-// #ifdef RCPP_USE_GLOBAL_ROSTREAM
-// Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
-// Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
-// #endif
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
 
 
 RcppExport SEXP dg_process_polydata_native(SEXP, SEXP);
