@@ -68,11 +68,9 @@ jobs:
             libc++abi-dev \
             git \
             r-base-dev \
-            r-cran-rcpp \
-            r-cran-sf \
-            r-cran-wk \
             libgdal-dev \
             libgeos-dev \
+            libgeos++-dev \
             libproj-dev \
             libudunits2-dev \
             libssl-dev \
@@ -85,50 +83,58 @@ jobs:
             libpng-dev \
             libtiff5-dev \
             libjpeg-dev \
+            libsqlite3-dev \
+            libbz2-dev \
+            zlib1g-dev \
             pandoc \
             qpdf \
-            ghostscript
+            ghostscript \
+            wget
 
       - uses: actions/checkout@v4
 
-      - name: Set Clang as default compiler
+      - name: Configure build environment
         run: |
+          # Set compilers
           echo "CC=clang" >> $GITHUB_ENV
           echo "CXX=clang++" >> $GITHUB_ENV
+
+          # Display versions
+          echo "=== Compiler Versions ==="
           clang --version
           clang++ --version
 
-      - name: Verify system-installed R packages
-        run: |
-          cat("System-installed R packages:\n")
-          for (pkg in c("Rcpp", "sf", "wk")) {
-            if (requireNamespace(pkg, quietly = TRUE)) {
-              cat(sprintf("✓ %s: %s\n", pkg, packageVersion(pkg)))
-            } else {
-              cat(sprintf("✗ %s: NOT INSTALLED\n", pkg))
-              stop(sprintf("Required package %s is not available", pkg))
-            }
-          }
-        shell: Rscript {0}
+          # Configure gdal and geos for sf package
+          echo "=== Spatial Library Configuration ==="
+          gdal-config --version
+          geos-config --version
 
       - name: Install R package dependencies
+        env:
+          CC: clang
+          CXX: clang++
         run: |
           options(repos = c(CRAN = 'https://cloud.r-project.org'))
-          cat("Installing remotes...\n")
-          install.packages('remotes')
-          cat("Installing missing package dependencies...\n")
-          # Install only packages not available from system
-          remotes::install_deps(dependencies = TRUE, upgrade = "never")
-          cat("Installing rcmdcheck...\n")
-          install.packages("rcmdcheck")
-          cat("\nAll required packages:\n")
-          for (pkg in c("Rcpp", "collapse", "sf", "wk", "rcmdcheck")) {
+          cat("Installing remotes and rcmdcheck...\n")
+          install.packages(c('remotes', 'rcmdcheck'), Ncpus = 2)
+
+          cat("\nInstalling package dependencies...\n")
+          # Install dependencies with proper compiler settings
+          remotes::install_deps(dependencies = TRUE, upgrade = "never", Ncpus = 2)
+
+          cat("\nVerifying all required packages:\n")
+          required_pkgs <- c("Rcpp", "collapse", "sf", "wk", "rcmdcheck")
+          all_ok <- TRUE
+          for (pkg in required_pkgs) {
             if (requireNamespace(pkg, quietly = TRUE)) {
               cat(sprintf("✓ %s: %s\n", pkg, packageVersion(pkg)))
             } else {
               cat(sprintf("✗ %s: NOT INSTALLED\n", pkg))
+              all_ok <- FALSE
             }
           }
+          if (!all_ok) stop("Some required packages failed to install")
+          cat("\n✓ All dependencies installed successfully\n")
         shell: Rscript {0}
 
       - name: Show R and compiler configuration
