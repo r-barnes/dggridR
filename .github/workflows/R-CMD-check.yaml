@@ -49,3 +49,77 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  debian-clang-check:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:testing
+
+    name: Debian testing (R-devel, clang)
+
+    steps:
+      - name: Install system dependencies
+        run: |
+          apt-get update -y
+          apt-get install -y --no-install-recommends \
+            clang \
+            libc++-dev \
+            libc++abi-dev \
+            git \
+            r-base-dev \
+            libgdal-dev \
+            libgeos-dev \
+            libproj-dev \
+            libudunits2-dev \
+            libssl-dev \
+            libcurl4-openssl-dev \
+            pandoc \
+            qpdf \
+            ghostscript
+
+      - uses: actions/checkout@v4
+
+      - name: Set Clang as default compiler
+        run: |
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+          clang --version
+          clang++ --version
+
+      - name: Query R dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+        shell: Rscript {0}
+
+      - name: Install R dependencies
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
+        shell: Rscript {0}
+
+      - name: Show R and compiler configuration
+        run: |
+          cat("R version:\n")
+          print(R.version)
+          cat("\nCompiler configuration:\n")
+          system("$CC --version")
+          system("$CXX --version")
+        shell: Rscript {0}
+
+      - name: Check package
+        run: |
+          rcmdcheck::rcmdcheck(
+            args = c("--no-manual", "--as-cran", "--no-vignettes"),
+            build_args = c("--no-manual", "--no-build-vignettes"),
+            error_on = "warning",
+            check_dir = "check"
+          )
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debian-clang-results
+          path: check
