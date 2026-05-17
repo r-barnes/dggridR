@@ -86,10 +86,14 @@ jobs:
             libsqlite3-dev \
             libbz2-dev \
             zlib1g-dev \
+            libuv1-dev \
+            libgit2-dev \
             pandoc \
             qpdf \
             ghostscript \
-            wget
+            wget \
+            cmake \
+            pkg-config
 
       - uses: actions/checkout@v4
 
@@ -115,14 +119,15 @@ jobs:
           CXX: clang++
         run: |
           options(repos = c(CRAN = 'https://cloud.r-project.org'))
+
           cat("Installing remotes and rcmdcheck...\n")
           install.packages(c('remotes', 'rcmdcheck'), Ncpus = 2)
 
-          cat("\nInstalling package dependencies...\n")
-          # Install dependencies with proper compiler settings
-          remotes::install_deps(dependencies = TRUE, upgrade = "never", Ncpus = 2)
+          cat("\nInstalling required dependencies only (not Suggests)...\n")
+          # Install only required dependencies, skip suggested packages
+          remotes::install_deps(dependencies = NA, upgrade = "never", Ncpus = 2)
 
-          cat("\nVerifying all required packages:\n")
+          cat("\nVerifying required packages:\n")
           required_pkgs <- c("Rcpp", "collapse", "sf", "wk", "rcmdcheck")
           all_ok <- TRUE
           for (pkg in required_pkgs) {
@@ -133,8 +138,8 @@ jobs:
               all_ok <- FALSE
             }
           }
-          if (!all_ok) stop("Some required packages failed to install")
-          cat("\n✓ All dependencies installed successfully\n")
+          if (!all_ok) stop("Required packages failed to install")
+          cat("\n✓ All required dependencies installed successfully\n")
         shell: Rscript {0}
 
       - name: Show R and compiler configuration
