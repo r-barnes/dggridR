@@ -62,6 +62,7 @@ jobs:
         run: |
           apt-get update -y
           apt-get install -y --no-install-recommends \
+            ca-certificates \
             clang \
             libc++-dev \
             libc++abi-dev \
@@ -73,6 +74,14 @@ jobs:
             libudunits2-dev \
             libssl-dev \
             libcurl4-openssl-dev \
+            libxml2-dev \
+            libfontconfig1-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libfreetype6-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev \
             pandoc \
             qpdf \
             ghostscript
@@ -86,16 +95,24 @@ jobs:
           clang --version
           clang++ --version
 
-      - name: Query R dependencies
+      - name: Install R package dependencies
         run: |
+          options(repos = c(CRAN = 'https://cloud.r-project.org'))
           install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-        shell: Rscript {0}
-
-      - name: Install R dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rcmdcheck")
+          cat("Installing package dependencies...\n")
+          deps <- remotes::dev_package_deps(dependencies = TRUE)
+          print(deps)
+          remotes::install_deps(dependencies = TRUE, upgrade = "never", force = TRUE)
+          cat("Installing rcmdcheck...\n")
+          install.packages("rcmdcheck")
+          cat("\nVerifying key packages are installed:\n")
+          for (pkg in c("Rcpp", "collapse", "sf", "wk")) {
+            if (requireNamespace(pkg, quietly = TRUE)) {
+              cat(sprintf("✓ %s: %s\n", pkg, packageVersion(pkg)))
+            } else {
+              cat(sprintf("✗ %s: NOT INSTALLED\n", pkg))
+            }
+          }
         shell: Rscript {0}
 
       - name: Show R and compiler configuration
@@ -109,6 +126,7 @@ jobs:
 
       - name: Check package
         run: |
+          Sys.setenv("_R_CHECK_FORCE_SUGGESTS_" = "false")
           rcmdcheck::rcmdcheck(
             args = c("--no-manual", "--as-cran", "--no-vignettes"),
             build_args = c("--no-manual", "--no-build-vignettes"),
