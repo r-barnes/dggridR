@@ -53,14 +53,15 @@ jobs:
   debian-clang-check:
     runs-on: ubuntu-latest
     container:
-      image: debian:testing
+      image: debian:stable
 
-    name: Debian testing (dggridR with clang)
+    name: Debian stable (dggridR with clang)
 
     steps:
-      - name: Install system dependencies
+      - name: Install system dependencies and R packages
         run: |
           apt-get update -y
+          # First try to install R packages from Debian repos
           apt-get install -y --no-install-recommends \
             ca-certificates \
             clang \
@@ -68,6 +69,9 @@ jobs:
             libc++abi-dev \
             git \
             r-base-dev \
+            r-cran-rcpp \
+            r-cran-sf \
+            r-cran-wk \
             libgdal-dev \
             libgeos-dev \
             libgeos++-dev \
@@ -93,11 +97,12 @@ jobs:
             ghostscript \
             wget \
             cmake \
-            pkg-config
+            pkg-config \
+          || echo "Some r-cran packages not available, will install from CRAN"
 
       - uses: actions/checkout@v4
 
-      - name: Configure GCC for dependency installation
+      - name: Check system-installed R packages
         run: |
           # Display available compilers
           echo "=== Available Compilers ==="
@@ -106,47 +111,36 @@ jobs:
           clang --version
           clang++ --version
 
-          # Explicitly set GCC as compiler for R package installation
-          mkdir -p ~/.R
-          cat > ~/.R/Makevars <<EOF
-          CC=gcc
-          CXX=g++
-          CXX11=g++
-          CXX14=g++
-          CXX17=g++
-          CXX20=g++
-          EOF
-          echo "=== GCC configured in ~/.R/Makevars ==="
-          cat ~/.R/Makevars
-
           # Configure spatial libraries
           echo "=== Spatial Library Configuration ==="
           gdal-config --version
           geos-config --version
 
-      - name: Install R package dependencies with GCC
+      - name: Install missing R package dependencies
         env:
           CC: gcc
           CXX: g++
         run: |
-          # Use GCC for dependencies (s2/sf have issues with Clang 21)
           options(repos = c(CRAN = 'https://cloud.r-project.org'))
 
-          cat("Current compiler settings:\n")
-          cat("CC:", Sys.getenv("CC"), "\n")
-          cat("CXX:", Sys.getenv("CXX"), "\n")
-          cat("Makevars:\n")
-          cat(readLines("~/.R/Makevars"), sep = "\n")
+          cat("Checking system-installed R packages:\n")
+          system_pkgs <- c("Rcpp", "sf", "wk")
+          for (pkg in system_pkgs) {
+            if (requireNamespace(pkg, quietly = TRUE)) {
+              cat(sprintf("✓ %s (system): %s\n", pkg, packageVersion(pkg)))
+            } else {
+              cat(sprintf("✗ %s: not found in system\n", pkg))
+            }
+          }
 
           cat("\nInstalling remotes and rcmdcheck...\n")
           install.packages(c('remotes', 'rcmdcheck'), Ncpus = 2)
 
-          cat("\nInstalling required dependencies with GCC...\n")
-          cat("(Dependencies compiled with GCC, dggridR will use Clang)\n")
-          # Install only required dependencies, skip suggested packages
+          cat("\nInstalling missing dependencies from CRAN (if any)...\n")
+          # Install only required dependencies that aren't already available
           remotes::install_deps(dependencies = NA, upgrade = "never", Ncpus = 2)
 
-          cat("\nVerifying required packages:\n")
+          cat("\nVerifying all required packages:\n")
           required_pkgs <- c("Rcpp", "collapse", "sf", "wk", "rcmdcheck")
           all_ok <- TRUE
           for (pkg in required_pkgs) {
@@ -158,12 +152,13 @@ jobs:
             }
           }
           if (!all_ok) stop("Required packages failed to install")
-          cat("\n✓ All required dependencies installed successfully with GCC\n")
+          cat("\n✓ All required dependencies available\n")
         shell: Rscript {0}
 
       - name: Configure Clang for dggridR compilation
         run: |
-          # Now reconfigure to use Clang for dggridR package compilation
+          # Configure Clang for dggridR package compilation
+          mkdir -p ~/.R
           cat > ~/.R/Makevars <<EOF
           CC=clang
           CXX=clang++
