@@ -42,7 +42,9 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: |
+            any::rcmdcheck
+            any::testthat
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
@@ -133,15 +135,15 @@ jobs:
             }
           }
 
-          cat("\nInstalling remotes and rcmdcheck...\n")
-          install.packages(c('remotes', 'rcmdcheck'), Ncpus = 2)
+          cat("\nInstalling remotes, rcmdcheck, and testthat...\n")
+          install.packages(c('remotes', 'rcmdcheck', 'testthat'), Ncpus = 2)
 
           cat("\nInstalling missing dependencies from CRAN (if any)...\n")
           # Install only required dependencies that aren't already available
           remotes::install_deps(dependencies = NA, upgrade = "never", Ncpus = 2)
 
           cat("\nVerifying all required packages:\n")
-          required_pkgs <- c("Rcpp", "collapse", "sf", "wk", "rcmdcheck")
+          required_pkgs <- c("Rcpp", "collapse", "sf", "wk", "rcmdcheck", "testthat")
           all_ok <- TRUE
           for (pkg in required_pkgs) {
             if (requireNamespace(pkg, quietly = TRUE)) {
