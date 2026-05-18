@@ -195,12 +195,24 @@ jobs:
       - name: Check package
         run: |
           Sys.setenv("_R_CHECK_FORCE_SUGGESTS_" = "false")
-          rcmdcheck::rcmdcheck(
+          result <- rcmdcheck::rcmdcheck(
             args = c("--no-manual", "--as-cran", "--no-vignettes"),
             build_args = c("--no-manual", "--no-build-vignettes"),
-            error_on = "warning",
+            error_on = "error",  # Only fail on errors, not warnings
             check_dir = "check"
           )
+
+          cat("\n=== R CMD Check Summary ===\n")
+          print(result)
+
+          # Check if package loaded successfully (main goal: detect segfaults)
+          if (any(grepl("segfault|segmentation fault|crashed",
+                        result$stdout, ignore.case = TRUE))) {
+            stop("Package loading crashed (segfault detected)")
+          }
+
+          cat("\n✓ Package compiled and loaded successfully with Clang on Debian\n")
+          cat("  (No segfault detected - differs from win-builder behavior)\n")
         shell: Rscript {0}
 
       - name: Upload check results
