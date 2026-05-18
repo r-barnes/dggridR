@@ -97,7 +97,7 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Configure build environment
+      - name: Configure GCC for dependency installation
         run: |
           # Display available compilers
           echo "=== Available Compilers ==="
@@ -106,17 +106,39 @@ jobs:
           clang --version
           clang++ --version
 
+          # Explicitly set GCC as compiler for R package installation
+          mkdir -p ~/.R
+          cat > ~/.R/Makevars <<EOF
+          CC=gcc
+          CXX=g++
+          CXX11=g++
+          CXX14=g++
+          CXX17=g++
+          CXX20=g++
+          EOF
+          echo "=== GCC configured in ~/.R/Makevars ==="
+          cat ~/.R/Makevars
+
           # Configure spatial libraries
           echo "=== Spatial Library Configuration ==="
           gdal-config --version
           geos-config --version
 
       - name: Install R package dependencies with GCC
+        env:
+          CC: gcc
+          CXX: g++
         run: |
           # Use GCC for dependencies (s2/sf have issues with Clang 21)
           options(repos = c(CRAN = 'https://cloud.r-project.org'))
 
-          cat("Installing remotes and rcmdcheck...\n")
+          cat("Current compiler settings:\n")
+          cat("CC:", Sys.getenv("CC"), "\n")
+          cat("CXX:", Sys.getenv("CXX"), "\n")
+          cat("Makevars:\n")
+          cat(readLines("~/.R/Makevars"), sep = "\n")
+
+          cat("\nInstalling remotes and rcmdcheck...\n")
           install.packages(c('remotes', 'rcmdcheck'), Ncpus = 2)
 
           cat("\nInstalling required dependencies with GCC...\n")
@@ -141,14 +163,21 @@ jobs:
 
       - name: Configure Clang for dggridR compilation
         run: |
-          # Now set Clang as default for dggridR package compilation
+          # Now reconfigure to use Clang for dggridR package compilation
+          cat > ~/.R/Makevars <<EOF
+          CC=clang
+          CXX=clang++
+          CXX11=clang++
+          CXX14=clang++
+          CXX17=clang++
+          CXX20=clang++
+          EOF
+
           echo "CC=clang" >> $GITHUB_ENV
           echo "CXX=clang++" >> $GITHUB_ENV
-          cat ~/.R/Makevars 2>/dev/null || echo "No ~/.R/Makevars found"
-          mkdir -p ~/.R
-          echo "CC=clang" > ~/.R/Makevars
-          echo "CXX=clang++" >> ~/.R/Makevars
-          echo "=== Clang configured for package compilation ==="
+
+          echo "=== Clang configured for dggridR compilation ==="
+          cat ~/.R/Makevars
 
       - name: Show R and compiler configuration for dggridR
         run: |
