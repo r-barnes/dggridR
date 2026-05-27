@@ -35,7 +35,9 @@ bool DgConverterBase::isTraceOn_ = true;
 bool DgConverterBase::isTraceOn_ = false;
 #endif
 
-std::ostream* DgConverterBase::traceStream_ = &dgcout;
+// Do not initialize with &dgcout: taking the address of Rcpp::Rcout at
+// static-init time segfaults during dyn.load() before R is ready.
+std::ostream* DgConverterBase::traceStream_ = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////
 DgConverterBase::~DgConverterBase (void)
@@ -157,7 +159,7 @@ DgConverterBase::convert (DgLocation* loc) const
       return loc;
    }
 
-   if (isTraceOn()) traceStream() << *loc;
+   if (isTraceOn() && traceStream_) (*traceStream_) << *loc;
 
    loc->rf_ = &toFrame();
 
@@ -165,7 +167,7 @@ DgConverterBase::convert (DgLocation* loc) const
    delete loc->address_;
    loc->address_ = tmpAdd;
 
-   if (isTraceOn()) traceStream() << "->" << *loc << std::endl;
+   if (isTraceOn() && traceStream_) (*traceStream_) << "->" << *loc << std::endl;
 
    return loc;
 

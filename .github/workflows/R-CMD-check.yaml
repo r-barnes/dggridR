@@ -42,10 +42,182 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: |
+            any::rcmdcheck
+            any::testthat
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+  debian-clang-check:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:stable
+
+    name: Debian stable (dggridR with clang)
+
+    steps:
+      - name: Install system dependencies and R packages
+        run: |
+          apt-get update -y
+          # First try to install R packages from Debian repos
+          apt-get install -y --no-install-recommends \
+            ca-certificates \
+            clang \
+            libc++-dev \
+            libc++abi-dev \
+            git \
+            r-base-dev \
+            r-cran-rcpp \
+            r-cran-sf \
+            r-cran-wk \
+            libgdal-dev \
+            libgeos-dev \
+            libgeos++-dev \
+            libproj-dev \
+            libudunits2-dev \
+            libssl-dev \
+            libcurl4-openssl-dev \
+            libxml2-dev \
+            libfontconfig1-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libfreetype6-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev \
+            libsqlite3-dev \
+            libbz2-dev \
+            zlib1g-dev \
+            libuv1-dev \
+            libgit2-dev \
+            pandoc \
+            qpdf \
+            ghostscript \
+            wget \
+            cmake \
+            pkg-config \
+          || echo "Some r-cran packages not available, will install from CRAN"
+
+      - uses: actions/checkout@v4
+
+      - name: Check system-installed R packages
+        run: |
+          # Display available compilers
+          echo "=== Available Compilers ==="
+          gcc --version
+          g++ --version
+          clang --version
+          clang++ --version
+
+          # Configure spatial libraries
+          echo "=== Spatial Library Configuration ==="
+          gdal-config --version
+          geos-config --version
+
+      - name: Install missing R package dependencies
+        env:
+          CC: gcc
+          CXX: g++
+        run: |
+          options(repos = c(CRAN = 'https://cloud.r-project.org'))
+
+          cat("Checking system-installed R packages:\n")
+          system_pkgs <- c("Rcpp", "sf", "wk")
+          for (pkg in system_pkgs) {
+            if (requireNamespace(pkg, quietly = TRUE)) {
+              cat(sprintf("✓ %s (system): %s\n", pkg, packageVersion(pkg)))
+            } else {
+              cat(sprintf("✗ %s: not found in system\n", pkg))
+            }
+          }
+
+          cat("\nInstalling remotes, rcmdcheck, and testthat...\n")
+          install.packages(c('remotes', 'rcmdcheck', 'testthat'), Ncpus = 2)
+
+          cat("\nInstalling missing dependencies from CRAN (if any)...\n")
+          # Install only required dependencies that aren't already available
+          remotes::install_deps(dependencies = NA, upgrade = "never", Ncpus = 2)
+
+          cat("\nVerifying all required packages:\n")
+          required_pkgs <- c("Rcpp", "collapse", "sf", "wk", "rcmdcheck", "testthat")
+          all_ok <- TRUE
+          for (pkg in required_pkgs) {
+            if (requireNamespace(pkg, quietly = TRUE)) {
+              cat(sprintf("✓ %s: %s\n", pkg, packageVersion(pkg)))
+            } else {
+              cat(sprintf("✗ %s: NOT INSTALLED\n", pkg))
+              all_ok <- FALSE
+            }
+          }
+          if (!all_ok) stop("Required packages failed to install")
+          cat("\n✓ All required dependencies available\n")
+        shell: Rscript {0}
+
+      - name: Configure Clang for dggridR compilation
+        run: |
+          # Configure Clang for dggridR package compilation
+          mkdir -p ~/.R
+          cat > ~/.R/Makevars <<EOF
+          CC=clang
+          CXX=clang++
+          CXX11=clang++
+          CXX14=clang++
+          CXX17=clang++
+          CXX20=clang++
+          EOF
+
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+
+          echo "=== Clang configured for dggridR compilation ==="
+          cat ~/.R/Makevars
+
+      - name: Show R and compiler configuration for dggridR
+        run: |
+          cat("R version:\n")
+          print(R.version)
+          cat("\nCompiler configuration for dggridR:\n")
+          cat("CC:", Sys.getenv("CC"), "\n")
+          cat("CXX:", Sys.getenv("CXX"), "\n")
+          system("clang --version")
+          cat("\nMakevars configuration:\n")
+          if (file.exists("~/.R/Makevars")) {
+            cat(readLines("~/.R/Makevars"), sep = "\n")
+          } else {
+            cat("No ~/.R/Makevars file\n")
+          }
+        shell: Rscript {0}
+
+      - name: Check package
+        run: |
+          Sys.setenv("_R_CHECK_FORCE_SUGGESTS_" = "false")
+          result <- rcmdcheck::rcmdcheck(
+            args = c("--no-manual", "--as-cran", "--no-vignettes"),
+            build_args = c("--no-manual", "--no-build-vignettes"),
+            error_on = "error",  # Only fail on errors, not warnings
+            check_dir = "check"
+          )
+
+          cat("\n=== R CMD Check Summary ===\n")
+          print(result)
+
+          # Check if package loaded successfully (main goal: detect segfaults)
+          if (any(grepl("segfault|segmentation fault|crashed",
+                        result$stdout, ignore.case = TRUE))) {
+            stop("Package loading crashed (segfault detected)")
+          }
+
+          cat("\n✓ Package compiled and loaded successfully with Clang on Debian\n")
+          cat("  (No segfault detected - differs from win-builder behavior)\n")
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debian-clang-results
+          path: check
