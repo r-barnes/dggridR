@@ -1,3 +1,9 @@
+# dggridR 4.1.4
+
+* Fixed segmentation fault on Debian/Linux during package loading caused by static initialization of `DgConverterBase::traceStream_` with `&dgcout` (`Rcpp::Rcout`) before R is ready during `dyn.load()`.
+* Restored disabled `RCPP_USE_GLOBAL_ROSTREAM` in `RcppExports.cpp` and added `src/Makevars` with `-URCPP_USE_GLOBAL_ROSTREAM` to prevent regressions from `Rcpp::compileAttributes()`.
+* Removed the `DgConverterBase` fallback reference to `dgcout` so tracing no longer pulls C++ iostream output by default.
+
 # dggridR 4.1.1
 
 * Fixed segmentation fault on Debian/Linux during package loading caused by `RCPP_USE_GLOBAL_ROSTREAM` global initialization in `RcppExports.cpp`.

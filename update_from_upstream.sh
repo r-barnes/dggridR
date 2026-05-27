@@ -94,5 +94,11 @@ find ./src/ -type f -name "*.c" -exec \
 find ./src/ -type f \( -name "*.cpp" -o -name "*.h" \) -exec \
   perl -pi -e 's/\babs\(/std::abs(/g' {} \;
 
+# CRAN/dyn.load: avoid static-init of &dgcout (Rcpp::Rcout) in DgConverterBase
+find ./src/ -type f -name "DgConverterBase.cpp" -exec perl -pi -e \
+  's/std::ostream\* DgConverterBase::traceStream_ = &dgcout;/\/\/ Do not initialize with \&dgcout: taking the address of Rcpp::Rcout at\n\/\/ static-init time segfaults during dyn.load() before R is ready.\nstd::ostream* DgConverterBase::traceStream_ = nullptr;/' {} \;
+find ./src/ -type f -name "DgConverterBase.h" -exec perl -0pi -e \
+  's/static void setTraceStream \(std::ostream& stream = dgcout\)\s*\{ traceStream_ = &stream; \}\s*static std::ostream& traceStream \(void\) \{ return \*traceStream_; \}/static void setTraceStream (std::ostream\& stream)\n                           { traceStream_ = \&stream; }\n      static std::ostream\& traceStream (void) { return *traceStream_; }/s' {} \;
+
 # Copy the Rcpp bridge layer (dggridR-specific, not from DGGRID upstream)
 cp copy_to_src/* ./src/
