@@ -655,7 +655,7 @@ time, Sahr's dggrid is the best option I've found. -->
 
 # Credits
 
-This R package was originally developed by Richard Barnes (https://rbarnes.org/) and is currently maintained by Sebastian Krantz.
+This R package was originally developed by Richard Barnes (https://richard.science/) and is currently maintained by Sebastian Krantz.
 
 The dggrid conversion software was developed predominantly by Kevin Sahr
 (https://github.com/sahrk/DGGRID), with contributions from a few others.
