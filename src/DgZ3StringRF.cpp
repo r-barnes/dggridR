@@ -119,7 +119,7 @@ DgZ3StringRF::invQuantify (const DgHierNdxStringCoord& addIn) const
     // z3 codes
     std::string radStr1 = "";
     std::string radStr2 = "";
-    for (int i = 0; i < z3str.length(); i += 2) {
+    for (size_t i = 0; i < z3str.length(); i += 2) {
        std::string z3code = z3str.substr(i, 2);
        if (z3code == "00") {
           radStr1 += "0";

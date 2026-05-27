@@ -1,3 +1,10 @@
+# dggridR 4.1.5
+
+* Removed `test.cpp` from the package shared-library build to reduce load-time risk surface on Debian pretest.
+* Fixed install warnings from signed/unsigned comparisons in `DgDiscRFSGrids.h` and `DgZ3StringRF.cpp`.
+* Guarded MSVC-only `#pragma comment(lib, ...)` in `safileio.c` to avoid GCC unknown pragma warnings.
+* Added durable patch steps in `update_from_upstream.sh` so these fixes survive source regeneration.
+
 # dggridR 4.1.4
 
 * Fixed segmentation fault on Debian/Linux during package loading caused by static initialization of `DgConverterBase::traceStream_` with `&dgcout` (`Rcpp::Rcout`) before R is ready during `dyn.load()`.

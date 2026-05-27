@@ -46,3 +46,5 @@ CMakeLists.txt
 ^pkgdown$
 ^\.positai$
 ^\.claude$
+^\.tmp_winbuilder_install.out$
+^\.tmp_.*$
