@@ -39,3 +39,5 @@ cgen_body.h
 cgen_funcs.h
 docs
 .positai
+.tmp_winbuilder_install.out
+.tmp_*

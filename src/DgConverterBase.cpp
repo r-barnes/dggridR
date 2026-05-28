@@ -35,8 +35,10 @@ bool DgConverterBase::isTraceOn_ = true;
 bool DgConverterBase::isTraceOn_ = false;
 #endif
 
-// Do not initialize with &dgcout: taking the address of Rcpp::Rcout at
-// static-init time segfaults during dyn.load() before R is ready.
+// Do not initialize with &dgcout: Rcpp::Rcout is not available at
+// static-init time (before R is ready). See also DgBase.h / DgBase.cpp
+// where dgcout/dgcerr are now lazily initialised to avoid this class
+// of bug entirely.
 std::ostream* DgConverterBase::traceStream_ = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////

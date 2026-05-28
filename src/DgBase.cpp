@@ -31,6 +31,23 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifdef DGGRIDR
+// Lazily initialised Rcpp output streams.  Using function-local statics
+// guarantees they are constructed on first use (never during dyn.load())
+// and that construction is thread-safe (C++11 "magic statics").
+#include <Rcpp.h>
+std::ostream& dggridR_cout() {
+    static Rcpp::Rostream<true> s;
+    return s;
+}
+std::ostream& dggridR_cerr() {
+    static Rcpp::Rostream<false> s;
+    return s;
+}
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+
 const std::string DgBase::defaultName = "UNDEFNAME";
 DgBase::DgReportLevel DgBase::minReportLevel_ = DgBase::Info;
 

@@ -94,6 +94,18 @@ find ./src/ -type f -name "*.c" -exec \
 find ./src/ -type f \( -name "*.cpp" -o -name "*.h" \) -exec \
   perl -pi -e 's/\babs\(/std::abs(/g' {} \;
 
+# Silence -Wsign-compare in DGGRID resolution checks.
+find ./src/ -type f -name "DgDiscRFSGrids.h" -exec perl -pi -e \
+  's/static_cast<unsigned long>\(res\(\)\) >= discRFS\(\)\.nRes\(\) \+ 1/res() >= discRFS().nRes() + 1/g' {} \;
+
+# Silence -Wsign-compare in Z3 parsing loop.
+find ./src/ -type f -name "DgZ3StringRF.cpp" -exec perl -pi -e \
+  's/for \(int i = 0; i < z3str\.length\(\); i \+= 2\)/for (size_t i = 0; i < z3str.length(); i += 2)/' {} \;
+
+# Silence GCC warning for MSVC-only pragma in shapelib.
+find ./src/ -type f -name "safileio.c" -exec perl -0pi -e \
+  's/#       include <windows\.h>\n#       pragma comment\(lib, "kernel32\.lib"\)/#       include <windows.h>\n#       if defined(_MSC_VER)\n#       pragma comment(lib, "kernel32.lib")\n#       endif/s' {} \;
+
 # CRAN/dyn.load: avoid static-init of &dgcout (Rcpp::Rcout) in DgConverterBase
 find ./src/ -type f -name "DgConverterBase.cpp" -exec perl -pi -e \
   's/std::ostream\* DgConverterBase::traceStream_ = &dgcout;/\/\/ Do not initialize with \&dgcout: taking the address of Rcpp::Rcout at\n\/\/ static-init time segfaults during dyn.load() before R is ready.\nstd::ostream* DgConverterBase::traceStream_ = nullptr;/' {} \;
@@ -102,3 +114,6 @@ find ./src/ -type f -name "DgConverterBase.h" -exec perl -0pi -e \
 
 # Copy the Rcpp bridge layer (dggridR-specific, not from DGGRID upstream)
 cp copy_to_src/* ./src/
+
+# Exclude standalone test executable source from R shared library build.
+rm -f ./src/test.cpp

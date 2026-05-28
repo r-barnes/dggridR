@@ -80,7 +80,9 @@ SHP_CVSID("$Id: safileio.c,v 1.5 2016-12-05 12:44:05 erouault Exp $")
 #       define WIN32_LEAN_AND_MEAN
 #       define NOMINMAX
 #       include <windows.h>
+#       if defined(_MSC_VER)
 #       pragma comment(lib, "kernel32.lib")
+#       endif
 #   endif
 #endif
 

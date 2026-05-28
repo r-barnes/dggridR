@@ -13,8 +13,6 @@
 #include "DgProjGnomonicRF.h"
 #include "DgTriGrid2D.h"
 
-#include <Rcpp.h>
-
 #include <cassert>
 #include <fstream>
 #include <stdexcept>
@@ -431,7 +429,7 @@ namespace dglib {
 
     std::unique_ptr<DgLocation> loc(static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(sn));
     if (!dgg.bndRF().validLocation(*loc)){
-      Rcpp::Rcout<<"doTransform(): SEQNUM " << i << " not a valid location"<<std::endl;
+      dgcout<<"doTransform(): SEQNUM " << i << " not a valid location"<<std::endl;
       ::report("SeqNumGridGenerator: Invalid SEQNUM found.", DgBase::Warning);
     }
 
