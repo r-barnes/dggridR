@@ -26,7 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <sstream>
-#include <iostream>
+#include <ostream>
 
 #include "DgOutKMLfile.h"
 #include "DgLocList.h"

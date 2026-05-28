@@ -33,7 +33,7 @@
 #include "DgRFBase.h"
 #include "DgDataList.h"
 
-#include <iostream>
+#include <ostream>
 #include <string>
 
 class DgDistanceBase;

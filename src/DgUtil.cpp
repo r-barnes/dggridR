@@ -26,7 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#include <iostream>
+#include <ostream>
 #include <string.h>
 
 #include "DgUtil.h"

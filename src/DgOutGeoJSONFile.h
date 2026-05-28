@@ -35,7 +35,7 @@
 #include "DgOutLocTextFile.h"
 #include "DgUtil.h"
 
-#include <iostream>
+#include <ostream>
 #include <string>
 
 class DgDVec2D;

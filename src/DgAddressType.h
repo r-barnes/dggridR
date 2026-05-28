@@ -28,7 +28,7 @@
 #ifndef DGADDRESSTYPE_H
 #define DGADDRESSTYPE_H
 
-#include <iostream>
+#include <ostream>
 #include "DgUtil.h"
 
 namespace dgg { namespace addtype {

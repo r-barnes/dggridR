@@ -29,7 +29,7 @@
 #define DGHIERNDXSYSTEMRFBASE_H
 
 #include <climits>
-#include <iostream>
+#include <ostream>
 
 #include "DgConverter.h"
 #include "Dg2WayConverter.h"

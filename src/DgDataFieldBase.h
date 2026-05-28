@@ -28,7 +28,7 @@
 #ifndef DGDATAFIELDBASE_H
 #define DGDATAFIELDBASE_H
 
-#include <iostream>
+#include <ostream>
 
 class DgDistanceBase;
 

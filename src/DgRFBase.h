@@ -34,7 +34,7 @@
 #include "DgRFNetwork.h"
 #include "DgUtil.h"
 
-#include <iostream>
+#include <ostream>
 #include <string>
 #include <vector>
 

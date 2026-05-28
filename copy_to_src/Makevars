@@ -1,1 +1,16 @@
+# `dggridR_overrides` shadows Rcpp's <Rcpp/iostream/Rstreambuf.h> with a
+# variant that omits the file-scope `static Rostream<true> Rcout; static
+# Rostream<false> Rcerr;` declarations.  That eliminates the static-init
+# constructors that have been observed to segfault inside `dyn.load()`
+# on the CRAN pretest Debian box (R-devel + gcc-16 + libstdc++-16 +
+# _FORTIFY_SOURCE=3) before R_init_dggridR is reached.  See the header
+# comment in dggridR_overrides/Rcpp/iostream/Rstreambuf.h for the full
+# rationale.  CPPFLAGS is evaluated BEFORE the Rcpp include path so the
+# override is found first.
+PKG_CPPFLAGS = -IdggridR_overrides
+
+# Make sure we land in the `extern Rostream&` branch of the (now stubbed-out)
+# Rcpp Rcout/Rcerr declarations -- redundant with the override above but
+# kept for belt-and-braces protection if anything ever re-introduces the
+# upstream header into the include path.
 PKG_CXXFLAGS = -URCPP_USE_GLOBAL_ROSTREAM

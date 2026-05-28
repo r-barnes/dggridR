@@ -31,7 +31,7 @@
 #ifdef USE_GDAL
 
 #include <sstream>
-#include <iostream>
+#include <ostream>
 #include <string>
 
 #include "DgOutGdalFile.h"

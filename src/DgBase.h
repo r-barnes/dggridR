@@ -28,7 +28,13 @@
 #ifndef DGBASE_H
 #define DGBASE_H
 
-#include <iostream>
+// Use <ostream> rather than <iostream>: <iostream> drags in libstdc++'s
+// __ioinit static initialiser into every including TU, which on the CRAN
+// pretest Debian box (R-devel + gcc-16 + libstdc++-16 + _FORTIFY_SOURCE=3)
+// has been observed to segfault inside dyn.load() before R_init_dggridR
+// is reached.  <ostream> gives us std::ostream / std::endl, which is all
+// that dgcout / dgcerr need.
+#include <ostream>
 #include <string>
 
 #define DGDEBUG             0

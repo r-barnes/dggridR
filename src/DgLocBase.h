@@ -28,7 +28,7 @@
 #ifndef DGLOCBASE_H
 #define DGLOCBASE_H
 
-#include <iostream>
+#include <ostream>
 #include <string>
 
 class DgRFBase;

@@ -29,7 +29,7 @@
 #define DGELLIPSOIDRF_H
 
 #include <climits>
-#include <iostream>
+#include <ostream>
 
 #include "DgConstants.h"
 #include "DgDVec2D.h"

@@ -36,7 +36,7 @@
 #include "DgUtil.h"
 
 #include <climits>
-#include <iostream>
+#include <ostream>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgSphIcosa {

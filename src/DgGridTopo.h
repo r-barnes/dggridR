@@ -30,7 +30,7 @@
 #ifndef DGGRIDTOPO_H
 #define DGGRIDTOPO_H
 
-#include <iostream>
+#include <ostream>
 
 #include "DgUtil.h"
 

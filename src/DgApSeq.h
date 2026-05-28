@@ -34,7 +34,7 @@
 #include "DgUtil.h"
 
 #include <algorithm>
-#include <iostream>
+#include <ostream>
 #include <vector>
 
 class DgAperture {

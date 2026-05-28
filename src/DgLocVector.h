@@ -30,7 +30,7 @@
 
 #include "DgLocation.h"
 
-#include <iostream>
+#include <ostream>
 #include <string>
 #include <vector>
 

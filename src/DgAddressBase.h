@@ -28,7 +28,7 @@
 #ifndef DGADDRESSBASE_H
 #define DGADDRESSBASE_H
 
-#include <iostream>
+#include <ostream>
 
 class DgDistanceBase;
 

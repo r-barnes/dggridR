@@ -13,7 +13,10 @@
 #include "DgProjGnomonicRF.h"
 #include "DgTriGrid2D.h"
 
-#include <Rcpp.h>
+// Note: do NOT include <Rcpp.h> here.  All R-aware output is routed through
+// dgcout/dgcerr (defined via Rprintf-backed std::ostreams in DgBase.cpp) to
+// keep static-init time free of Rcpp::Rostream constructors that have been
+// observed to crash dyn.load() on the CRAN Debian gcc-16 pretest box.
 
 #include <cassert>
 #include <fstream>
@@ -431,7 +434,7 @@ namespace dglib {
 
     std::unique_ptr<DgLocation> loc(static_cast<const DgIDGG&>(dgg).bndRF().locFromSeqNum(sn));
     if (!dgg.bndRF().validLocation(*loc)){
-      Rcpp::Rcout<<"doTransform(): SEQNUM " << i << " not a valid location"<<std::endl;
+      dgcout<<"doTransform(): SEQNUM " << i << " not a valid location"<<std::endl;
       ::report("SeqNumGridGenerator: Invalid SEQNUM found.", DgBase::Warning);
     }
 

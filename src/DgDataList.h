@@ -28,7 +28,7 @@
 #ifndef DGDATALIST_H
 #define DGDATALIST_H
 
-#include <iostream>
+#include <ostream>
 #include <vector>
 #include <unordered_map>
 

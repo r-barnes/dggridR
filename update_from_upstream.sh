@@ -112,8 +112,42 @@ find ./src/ -type f -name "DgConverterBase.cpp" -exec perl -pi -e \
 find ./src/ -type f -name "DgConverterBase.h" -exec perl -0pi -e \
   's/static void setTraceStream \(std::ostream& stream = dgcout\)\s*\{ traceStream_ = &stream; \}\s*static std::ostream& traceStream \(void\) \{ return \*traceStream_; \}/static void setTraceStream (std::ostream\& stream)\n                           { traceStream_ = \&stream; }\n      static std::ostream\& traceStream (void) { return *traceStream_; }/s' {} \;
 
-# Copy the Rcpp bridge layer (dggridR-specific, not from DGGRID upstream)
-cp copy_to_src/* ./src/
+# CRAN/dyn.load (Debian gcc-16 + libstdc++-16 + _FORTIFY_SOURCE=3):
+# Replace the upstream DgBase.h dgcout/dgcerr definitions (which alias
+# Rcpp::Rcout/Rcerr and pull <Rcpp.h> into every translation unit) with
+# forward declarations of dggridR_cout()/dggridR_cerr(), implemented as
+# Rprintf-backed std::ostream& accessors in DgBase.cpp.  This removes the
+# file-scope static Rcpp::Rostream instances that <Rcpp.h> would otherwise
+# instantiate in ~100 TUs and that crash this specific dyn.load path.
+find ./src/ -type f -name "DgBase.h" -exec perl -0pi -e \
+  's{#ifdef DGGRIDR\s*\n#include <Rcpp\.h>\s*\n#define dgcout Rcpp::Rcout\s*\n#define dgcerr Rcpp::Rcerr\s*\n#else}{#ifdef DGGRIDR\n// Do NOT include <Rcpp.h> here: it places file-scope static Rcpp::Rostream\n// objects into every TU that includes DgBase.h, whose constructors run\n// during dyn.load() before R is ready and segfault on the CRAN Debian\n// gcc-16 + libstdc++-16 + _FORTIFY_SOURCE=3 pretest box.  Forward-declare\n// the R-aware ostream accessors here; they are defined lazily in DgBase.cpp.\nstd::ostream\& dggridR_cout();\nstd::ostream\& dggridR_cerr();\n#define dgcout dggridR_cout()\n#define dgcerr dggridR_cerr()\n#else}s' {} \;
+
+# Replace the upstream DgBase.cpp body to define dggridR_cout/dggridR_cerr
+# via a minimal Rprintf-backed streambuf, with NO <Rcpp.h> include in this
+# TU.  The std::ostream itself is wrapped in a function-local static so it
+# constructs lazily on first use, not during dyn.load().
+find ./src/ -type f -name "DgBase.cpp" -exec perl -0pi -e \
+  's{(\n////////////////////////////////////////////////////////////////////////////////\n\nconst std::string DgBase::defaultName)}{\n////////////////////////////////////////////////////////////////////////////////\n\n#ifdef DGGRIDR\n// Lazily-initialised, R-aware ostreams that do NOT depend on <Rcpp.h>.\n// Routing through Rprintf/REprintf via a custom std::streambuf avoids the\n// file-scope static Rcpp::Rostream instances that <Rcpp.h> would otherwise\n// inject into this TU \(and that segfault during dyn.load\(\) on the CRAN\n// Debian gcc-16 + libstdc++-16 + _FORTIFY_SOURCE=3 box\).  It also avoids\n// pulling in std::cout/std::cerr, silencing the _ZSt4cout CRAN NOTE.\n#include <ostream>\n#include <streambuf>\n#include <R_ext/Print.h>\nnamespace {\nclass DgRPrintfBuf : public std::streambuf {\npublic:\n   explicit DgRPrintfBuf \(bool is_err\) : is_err_\(is_err\) {}\nprotected:\n   int overflow \(int c\) override {\n      if \(c != EOF\) {\n         char ch = static_cast<char>\(c\);\n         if \(is_err_\) REprintf\(\"%.1s\", \&ch\); else Rprintf\(\"%.1s\", \&ch\);\n      }\n      return c;\n   }\n   std::streamsize xsputn \(const char\* s, std::streamsize n\) override {\n      if \(is_err_\) REprintf\(\"%.\*s\", static_cast<int>\(n\), s\);\n      else         Rprintf \(\"%.\*s\", static_cast<int>\(n\), s\);\n      return n;\n   }\nprivate:\n   bool is_err_;\n};\n} // anonymous namespace\nstd::ostream\& dggridR_cout \(void\) {\n   static DgRPrintfBuf buf\(false\);\n   static std::ostream stream\(\&buf\);\n   return stream;\n}\nstd::ostream\& dggridR_cerr \(void\) {\n   static DgRPrintfBuf buf\(true\);\n   static std::ostream stream\(\&buf\);\n   return stream;\n}\n#endif\n$1}s' {} \;
+
+# CRAN/dyn.load: Replace `#include <iostream>` with `#include <ostream>` in
+# every DGGRID header/source.  The `<iostream>` header drags libstdc++'s
+# `std::__ioinit` static initialiser into every including TU, which on the
+# CRAN pretest Debian box can interact badly with the dynamic loader.
+# Nothing in DGGRID's R-mode build actually uses std::cout/std::cerr
+# (all such uses are inside /* */ blocks or `#if DGDEBUG` guards), so the
+# narrower <ostream> include is sufficient and strictly reduces load-time
+# iostream construction in the .so.
+find ./src/ -type f \( -name "*.cpp" -o -name "*.h" \) -exec \
+  perl -pi -e 's{^#include\s+<iostream>}{#include <ostream>}' {} \;
+
+# Copy the Rcpp bridge layer (dggridR-specific, not from DGGRID upstream).
+# This also drops in dggridR_overrides/ which shadows
+# <Rcpp/iostream/Rstreambuf.h> with a stub that omits the file-scope
+# static Rcpp::Rostream Rcout/Rcerr declarations -- the only remaining
+# place where <Rcpp.h> would otherwise inject iostream-derived static
+# constructors into the package's .so.  See src/Makevars and the override
+# file's header comment for the rationale.
+cp -r copy_to_src/* ./src/
 
 # Exclude standalone test executable source from R shared library build.
 rm -f ./src/test.cpp
