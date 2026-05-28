@@ -30,7 +30,7 @@
 
 #include "DgConverterBase.h"
 
-#include <iostream>
+#include <ostream>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgSeriesConverter : public DgConverterBase {

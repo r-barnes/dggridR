@@ -32,7 +32,7 @@
 #include "DgString.h"
 
 #include <cmath>
-#include <iostream>
+#include <ostream>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgDVec3D {

@@ -29,7 +29,7 @@
 #define DGHIERNDXSYSTEMRF_H
 
 #include <climits>
-#include <iostream>
+#include <ostream>
 
 #include "DgDiscRF.h"
 #include "DgIDGGS.h"

@@ -50,7 +50,7 @@
 #include "DgUtil.h"
 
 #include <climits>
-#include <iostream>
+#include <ostream>
 
 class DgPolygon;
 class DgBoundedIDGG;

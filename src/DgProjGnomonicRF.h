@@ -32,7 +32,7 @@
 #include "DgDVec2D.h"
 #include "DgGeoProjRF.h"
 
-#include <iostream>
+#include <ostream>
 
 class DgEllipsoidRF;
 

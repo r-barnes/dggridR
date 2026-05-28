@@ -33,7 +33,7 @@
 #include "DgEllipsoidRF.h"
 #include "DgGeoDatumRF.h"
 
-#include <iostream>
+#include <ostream>
 
 class DgGeoCoord;
 class DgEllipsoidRF;

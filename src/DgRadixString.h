@@ -31,7 +31,7 @@
 #include "DgBase.h"
 #include "DgString.h"
 
-#include <iostream>
+#include <ostream>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgRadixString {

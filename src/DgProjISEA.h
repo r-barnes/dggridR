@@ -43,7 +43,7 @@
 #include "DgUtil.h"
 
 #include <climits>
-#include <iostream>
+#include <ostream>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgProjISEAFwd : public DgConverter<DgGeoCoord, long double,

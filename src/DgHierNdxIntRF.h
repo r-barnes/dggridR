@@ -29,7 +29,7 @@
 #define DGHIERNDXINTRF_H
 
 //#include <climits>
-#include <iostream>
+#include <ostream>
 
 #include "DgHierNdxRF.h"
 

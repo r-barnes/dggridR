@@ -29,7 +29,7 @@
 #define DGZ3STRINGRF_H
 
 #include <climits>
-#include <iostream>
+#include <ostream>
 
 #include "DgHierNdxStringRF.h"
 

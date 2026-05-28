@@ -34,7 +34,7 @@
 
 #include <cfloat>
 #include <cmath>
-#include <iostream>
+#include <ostream>
 
 class DgDVec3D;
 
