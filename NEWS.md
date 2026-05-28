@@ -1,3 +1,7 @@
+# dggridR 4.1.6
+
+* DgBase.h included <Rcpp.h>, and since DgBase.h is transitively included by nearly every .cpp file in the project (~100+ translation units), each TU got a pair of static Rcpp::Rostream objects (Rcout and Rcerr). These inherit from std::ostream and are constructed during dyn.load() — before R is fully ready. With GCC 16's libstdc++ on Debian, constructing ~200+ std::ostream-derived objects during shared library loading triggered a NULL pointer dereference (segfault at address (nil)).
+
 # dggridR 4.1.5
 
 * Removed `test.cpp` from the package shared-library build to reduce load-time risk surface on Debian pretest.

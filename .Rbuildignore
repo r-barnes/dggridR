@@ -48,3 +48,5 @@ CMakeLists.txt
 ^\.claude$
 ^\.tmp_winbuilder_install.out$
 ^\.tmp_.*$
+(^|/)\.DS_Store$
+

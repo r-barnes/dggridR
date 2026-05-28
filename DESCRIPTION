@@ -1,7 +1,7 @@
 Package: dggridR
 Title: Discrete Global Grids
-Version: 4.1.5
-Date: 2026-05-27
+Version: 4.1.6
+Date: 2026-05-28
 Authors@R: c(person("Richard", "Barnes",    role = "aut", email = "rijard.barnes@gmail.com"),
              person("Kevin",   "Sahr",      role = c("aut", "cph"), email = "sahrk@sou.edu"),
              person("Sebastian", "Krantz",  role = c("ctb", "cre"), email = "sebastian.krantz@graduateinstitute.ch"),

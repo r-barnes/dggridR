@@ -50,9 +50,14 @@
 
 // allow for R output from dggridR
 #ifdef DGGRIDR
-#include <Rcpp.h>
-#define dgcout Rcpp::Rcout
-#define dgcerr Rcpp::Rcerr
+// Do NOT include <Rcpp.h> here: it creates static Rcpp::Rostream objects in
+// every translation unit that includes DgBase.h.  With GCC 16 / libstdc++
+// those constructors can segfault during dyn.load() before R is ready.
+// Instead, use lazily-initialised function-local statics (defined in DgBase.cpp).
+std::ostream& dggridR_cout();
+std::ostream& dggridR_cerr();
+#define dgcout dggridR_cout()
+#define dgcerr dggridR_cerr()
 #else
 #define dgcout std::cout
 #define dgcerr std::cerr
