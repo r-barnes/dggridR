@@ -1,24 +1,10 @@
-# dggridR 4.1.6
+# dggridR 4.1.1-4.1.6
 
-* DgBase.h included <Rcpp.h>, and since DgBase.h is transitively included by nearly every .cpp file in the project (~100+ translation units), each TU got a pair of static Rcpp::Rostream objects (Rcout and Rcerr). These inherit from std::ostream and are constructed during dyn.load() — before R is fully ready. With GCC 16's libstdc++ on Debian, constructing ~200+ std::ostream-derived objects during shared library loading triggered a NULL pointer dereference (segfault at address (nil)).
-
-# dggridR 4.1.5
-
-* Removed `test.cpp` from the package shared-library build to reduce load-time risk surface on Debian pretest.
+* Fixed segmentation fault on Debian/Linux during `dyn.load()`: static initialization of `Rcpp::Rostream` (`Rcout`/`Rcerr`) and other C++ iostream objects before R is ready. With GCC 16's libstdc++ on Debian, constructing hundreds of `std::ostream`-derived objects at load time triggered a NULL pointer dereference. The definitive fix was removing `#include <Rcpp.h>` from `DgBase.h`, which is transitively included by nearly every translation unit (~100+). Retained mitigations from earlier attempts: disable `RCPP_USE_GLOBAL_ROSTREAM` in `RcppExports.cpp` and enforce via `src/Makevars` (`-URCPP_USE_GLOBAL_ROSTREAM`); remove `DgConverterBase::traceStream_` and its `dgcout` fallback; exclude `test.cpp` from the package shared-library build.
 * Fixed install warnings from signed/unsigned comparisons in `DgDiscRFSGrids.h` and `DgZ3StringRF.cpp`.
 * Guarded MSVC-only `#pragma comment(lib, ...)` in `safileio.c` to avoid GCC unknown pragma warnings.
-* Added durable patch steps in `update_from_upstream.sh` so these fixes survive source regeneration.
-
-# dggridR 4.1.4
-
-* Fixed segmentation fault on Debian/Linux during package loading caused by static initialization of `DgConverterBase::traceStream_` with `&dgcout` (`Rcpp::Rcout`) before R is ready during `dyn.load()`.
-* Restored disabled `RCPP_USE_GLOBAL_ROSTREAM` in `RcppExports.cpp` and added `src/Makevars` with `-URCPP_USE_GLOBAL_ROSTREAM` to prevent regressions from `Rcpp::compileAttributes()`.
-* Removed the `DgConverterBase` fallback reference to `dgcout` so tracing no longer pulls C++ iostream output by default.
-
-# dggridR 4.1.1
-
-* Fixed segmentation fault on Debian/Linux during package loading caused by `RCPP_USE_GLOBAL_ROSTREAM` global initialization in `RcppExports.cpp`.
 * Fixed integer truncation warnings by replacing C `abs()` with `std::abs()` for `long long` arguments in DGGRID headers.
+* Added durable patch steps in `update_from_upstream.sh` so these fixes survive source regeneration.
 
 # dggridR 4.1.0
 
