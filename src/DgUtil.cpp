@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -26,6 +26,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
+#include <ostream>
+#include <string.h>
 
 #include "DgUtil.h"
 
@@ -35,5 +37,36 @@ long rint(const float& x)
 {
  return static_cast<long>(std::ceil(x));
 }
+
+void ssplit(const std::string& src, std::vector<std::string>& dest, const char *delim)
+{
+ for(char *name = strtok(const_cast<char *>(src.c_str()), delim); 0 != name; name = strtok(0, delim))
+  dest.push_back(name);
+}
+
+void ssplit(const char *src, std::vector<std::string>& dest, const char *delim)
+{
+ std::string s(src);
+ return ssplit(s, dest, delim);
+}
+
+std::string stripQuotes (const std::string& str, char quote) {
+   if (str[0] == quote && str.back() == quote && str.length() > 2)
+      return str.substr(1, str.length() - 2);
+   else
+      return str;
+}
+
+std::string baseName (const std::string& path) {
+  return path.substr(path.find_last_of("/\\") + 1);
+}
+
+std::string toUpper (const std::string& str) {
+    std::string result = str;
+    for (auto & c: result) c = toupper(c);
+    return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 }} // namespace dgg::util

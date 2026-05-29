@@ -18,6 +18,6 @@ Verify that a dggs object has appropriate values
 }
 \examples{
 library(dggridR)
-dggs <- dgconstruct(res=20)
-dgverify(dggs)
+dgverify(dgconstruct(res=20))
+
 }

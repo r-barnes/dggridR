@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -35,7 +35,7 @@
 #include "DgOutLocTextFile.h"
 #include "DgUtil.h"
 
-#include <iostream>
+#include <ostream>
 #include <string>
 
 class DgDVec2D;
@@ -54,13 +54,18 @@ class DgOutGeoJSONFile : public DgOutLocTextFile
 
       ~DgOutGeoJSONFile();
 
-      virtual void close(void) { ofstream::close(); }
+      virtual void close(void) { std::ofstream::close(); }
 
-      virtual DgOutLocFile& insert (DgLocation& loc, const string* label = NULL);
-      virtual DgOutLocFile& insert (DgLocVector& vec, const string* label = NULL,
-                                const DgLocation* cent = NULL);
-      virtual DgOutLocFile& insert (DgPolygon& poly, const string* label = NULL,
-                                const DgLocation* cent = NULL);
+      virtual DgOutLocFile& insert (DgLocation& loc, const std::string* label = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      virtual DgOutLocFile& insert (DgLocVector& vec, const std::string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
+
+      virtual DgOutLocFile& insert (DgPolygon& poly, const std::string* label = nullptr,
+                                const DgLocation* cent = nullptr,
+                                const DgDataList* dataList = nullptr);
 
    protected:
 
@@ -68,9 +73,10 @@ class DgOutGeoJSONFile : public DgOutLocTextFile
 
       virtual void setFormatStr(void)
       {
-          ostringstream os;
+          std::ostringstream os;
           os << "[%#." << getPrecision() << "LF,"
-             << "%#." << getPrecision() << "LF,0.0]";
+             << "%#." << getPrecision() << "LF]";
+             //<< "%#." << getPrecision() << "LF,0.0]";  // with altitude
 
           formatStr_ = os.str();
       }

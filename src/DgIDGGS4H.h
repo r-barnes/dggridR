@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -41,7 +41,7 @@ class DgIDGGS4H : public DgHexIDGGS {
 
       static const DgIDGGS4H* makeRF (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
-               const string& nameIn = "ISEA4H", const string& projType = "ISEA")
+               const std::string& nameIn = "ISEA4H", const std::string& projType = "ISEA")
          { return new DgIDGGS4H(networkIn, backFrameIn, vert0, azDegs, nResIn,
                                     nameIn, projType); }
 
@@ -55,7 +55,7 @@ class DgIDGGS4H : public DgHexIDGGS {
 
       DgIDGGS4H (DgRFNetwork& networkIn, const DgGeoSphRF& backFrameIn,
                const DgGeoCoord& vert0, long double azDegs, int nResIn = 1,
-               const string& nameIn = "ISEA4H", const string& projType = "ISEA")
+               const std::string& nameIn = "ISEA4H", const std::string& projType = "ISEA")
          : DgHexIDGGS (networkIn, backFrameIn, vert0, azDegs, 4, nResIn,
                 nameIn, projType)
            { frequency_ = sqrtl(aperture()); }

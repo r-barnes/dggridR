@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -31,45 +31,59 @@
 
 #include "DgHexIDGGS.h"
 #include "DgContCartRF.h"
-#include "DgDiscRF.h"
+#include "DgDiscTopoRF.h"
 #include "DgHexC1Grid2D.h"
 #include "DgHexC2Grid2D.h"
+#include "DgHierNdxSystemRFSBase.h"
 
 ////////////////////////////////////////////////////////////////////////////////
+const DgHexIDGGS*
+DgHexIDGGS::makeRF (DgRFNetwork& network, const DgGeoSphRF& backFrame,
+         const DgGeoCoord& vert0, long double azDegs, unsigned int aperture,
+         int nRes, const std::string& name, const std::string& projType,
+         bool isApSeq, const DgApSeq& apSeq,
+         bool isMixed43, int numAp4, bool isSuperfund,
+         DgHierNdxSysType hierNdxSysType)
+{
+    DgHexIDGGS* idggs = new DgHexIDGGS(network, backFrame, vert0, azDegs, aperture, nRes, name,
+               projType, isApSeq, apSeq, isMixed43, numAp4, isSuperfund, hierNdxSysType);
+
+    return idggs;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
-                  const DgGeoCoord& vert0, long double azDegs, 
-                  unsigned int aperture, int nRes, 
-                  const string& name, const string& projType, 
-                  const DgApSeq& apSeq, bool isApSeq,
-                  bool isMixed43, int numAp4, bool isSuperfund)
-        : DgIDGGS (network, backFrame, vert0, azDegs, aperture, nRes, 
-                       Hexagon, D6, name, projType, isMixed43, numAp4,
-                       isSuperfund, isApSeq, apSeq),
+                  const DgGeoCoord& vert0, long double azDegs,
+                  unsigned int aperture, int nRes,
+                  const std::string& name, const std::string& projType,
+                  bool isApSeq, const DgApSeq& apSeq,
+                  bool isMixed43, int numAp4, bool isSuperfund,
+                  const DgHierNdxSysType hierNdxSysType)
+        : DgIDGGS (network, backFrame, vert0, azDegs, aperture, nRes,
+                       Hexagon, D6, name, projType, isApSeq, apSeq, isMixed43, numAp4,
+                       isSuperfund, hierNdxSysType),
           apSeq_ (apSeq)
 {
-   if (!isApSeq) // need to build the apSeq
-   {  
+   if (!isApSeq) { // need to build the apSeq
+
       int r;
-         
-      if (isMixed43)
-      {  
+
+      if (isMixed43) {
          for (r = 0; r < numAp4; r++)
             apSeq_.addAperture(DgAperture(4));
-            
+
          for (; r < nRes - 1; r++)
             apSeq_.addAperture(DgAperture(3));
-      }
-      else
+      } else
          for (r = 0; r < nRes - 1; r++)
-            apSeq_.addAperture(DgAperture((aperture == 3) ? 3 : 4));
+            apSeq_.addAperture(DgAperture((int) aperture));
    }
-         
+
    if (nRes > apSeq_.nRes() + 1) // remember +1 resolution for res 0
       report("DgHexIDGGS::DgHexIDGGS res " + dgg::util::to_string(nRes) +
              " exceeds aperture sequence string length", DgBase::Fatal);
-   
-   setUndefLoc(makeLocation(undefAddress())); 
+
+   setUndefLoc(makeLocation(undefAddress()));
    isAligned_ = true;
    isCongruent_ = false;
 
@@ -83,20 +97,26 @@ DgHexIDGGS::DgHexIDGGS (DgRFNetwork& network, const DgGeoSphRF& backFrame,
    {
       int ap = apSeq_.getAperture(r).aperture();
 
-      (*grids_)[r] = new DgHexIDGG(*this, ap, r, 
+      (*grids_)[r] = new DgHexIDGG(*this, ap, r,
                                    name + dgg::util::to_string(r, 2));
    //cout << "========================\nRES " << r << ": " << hexIdgg(r);
    }
 
    for (int r = 0; r < nRes; r++)
-      Dg2WayResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[r]), r);
+       Dg2WayTopoResAddConverter<DgQ2DICoord, DgGeoCoord, long double>(*this, *(grids()[r]), r);
+
+
+    // create the hierarchical indexing system
+     if (hierNdxSysType != InvalidHierNdxSysType) {
+        hierNdxSystem_ = DgHierNdxSystemRFSBase::makeSystem(*this, hierNdxSysType, Int64);
+     }
 
 } // DgHexIDGGS::DgHexIDGGS
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddParents (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddParents (const DgResAdd<DgQ2DICoord>& add,
                              DgLocVector& vec) const
 {
    DgPolygon verts;
@@ -128,8 +148,8 @@ DgHexIDGGS::setAddParents (const DgResAdd<DgQ2DICoord>& add,
 } // void DgHexIDGGS::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    // single center hex at next res
@@ -143,8 +163,8 @@ DgHexIDGGS::setAddInteriorChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgHexIDGGS::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    const DgHexIDGG& dgg = hexIdgg(add.res());
@@ -153,7 +173,7 @@ DgHexIDGGS::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
    // the neighbors of the center hex at next res
    DgLocation* centerLoc = dgg.makeLocation(add.address());
    dggr.convert(centerLoc);
-   const DgQ2DICoord& centerAdd = 
+   const DgQ2DICoord& centerAdd =
        *dggr.getAddress(*centerLoc);
 
    dggr.setAddNeighbors(centerAdd, vec);
@@ -163,8 +183,8 @@ DgHexIDGGS::setAddBoundaryChildren (const DgResAdd<DgQ2DICoord>& add,
 } // void DgHexIDGGS::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddBoundary2Children (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddBoundary2Children (const DgResAdd<DgQ2DICoord>& add,
                                         DgLocVector& vec) const
 {
    const DgHexIDGG& dgg = hexIdgg(add.res());
@@ -175,7 +195,7 @@ DgHexIDGGS::setAddBoundary2Children (const DgResAdd<DgQ2DICoord>& add,
    // the neighbors of the center hex at next res
    DgLocation* centerLoc = dgg.makeLocation(add.address());
    dggr.convert(centerLoc);
-   const DgQ2DICoord& centerAdd = 
+   const DgQ2DICoord& centerAdd =
        *dggr.getAddress(*centerLoc);
 
    dggr.setAddNeighborsBdry2(centerAdd, vec);
@@ -185,8 +205,8 @@ DgHexIDGGS::setAddBoundary2Children (const DgResAdd<DgQ2DICoord>& add,
 } // void DgHexIDGGS::setAddBoundary2Children
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgHexIDGGS::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add, 
+void
+DgHexIDGGS::setAddAllChildren (const DgResAdd<DgQ2DICoord>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

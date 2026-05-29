@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -31,39 +31,40 @@
 #ifndef DGOUTPUTSTREAM_H
 #define DGOUTPUTSTREAM_H
 
-#include "DgBase.h"
-
+#ifdef std
+#  error "Bug: `std` is a macro before including <fstream>"
+#endif
 #include <fstream>
 #include <string>
 
-using namespace std;
+#include "DgBase.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-class DgOutputStream : public ofstream, public DgBase {
+class DgOutputStream : public std::ofstream, public DgBase {
 
    public:
 
       DgOutputStream (void) : DgBase ("DgOutputStream") {}
 
-      DgOutputStream (const string& fileName,
-                      const string& suffix    = string(""),
+      DgOutputStream (const std::string& fileName,
+                      const std::string& suffix    = std::string(""),
                       DgReportLevel failLevel = DgBase::Fatal);
 
      ~DgOutputStream (void) { close(); }
 
-      bool open (string fileName, DgReportLevel failLevel = DgBase::Fatal);
+    bool open (std::string fileName, DgReportLevel failLevel = DgBase::Fatal);
 
-      virtual void close (void) { ofstream::close(); }
+    virtual void close (void) { std::ofstream::close(); }
 
-      void setSuffix (const string& suffix) { suffix_ = suffix; }
+      void setSuffix (const std::string& suffix) { suffix_ = suffix; }
 
-      const string& fileName (void) { return fileName_; }
-      const string& suffix   (void) { return suffix_; }
+      const std::string& fileName (void) { return fileName_; }
+      const std::string& suffix   (void) { return suffix_; }
 
    protected:
 
-      string fileName_;
-      string suffix_;
+      std::string fileName_;
+      std::string suffix_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

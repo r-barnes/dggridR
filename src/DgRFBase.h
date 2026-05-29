@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -34,11 +34,9 @@
 #include "DgRFNetwork.h"
 #include "DgUtil.h"
 
-#include <iostream>
+#include <ostream>
 #include <string>
 #include <vector>
-
-using namespace std;
 
 class DgConverterBase;
 class DgLocation;
@@ -59,13 +57,13 @@ class DgRFBase {
 
       int id (void) const { return id_; }
 
-      string name (void) const { return name_; }
+      std::string name (void) const { return name_; }
 
       bool isConnected (void) const { return connectTo_ && connectFrom_; }
 
       DgRFNetwork& network (void) const { return *network_; }
 
-      ostream& traceToGround (ostream& stream = dgcout) const;
+      std::ostream& traceToGround (std::ostream& stream = dgcout) const;
 
       const DgRFBase* connectTo   (void) const { return connectTo_; }
       const DgRFBase* connectFrom (void) const { return connectFrom_; }
@@ -94,7 +92,7 @@ class DgRFBase {
                                           bool convert = false) const = 0;
 #endif
 
-      void setName (const string& nameIn) { name_ = nameIn; }
+      void setName (const std::string& nameIn) { name_ = nameIn; }
 
       virtual bool operator== (const DgRFBase& frame) const
                { return (id() == frame.id() && network() == frame.network()); }
@@ -131,7 +129,7 @@ class DgRFBase {
 
    protected:
 
-      DgRFBase (DgRFNetwork& networkIn, const string& nameIn)
+      DgRFBase (DgRFNetwork& networkIn, const std::string& nameIn)
          : network_ (&networkIn), name_ (nameIn), precision_ (6),
            connectTo_ (0), connectFrom_ (0), undefLoc_ (0)
            { id_ = networkIn.generateId(this); setFormatStr(); }
@@ -164,27 +162,27 @@ class DgRFBase {
       void setFormatStr (void)
             { snprintf(formatStr_, DgRFBase::maxFmtStr, "%%#.%dLF", precision()); }
 
-      string toString        (const DgLocBase& lb) const;
-      string toString        (const DgLocBase& lb, char delimiter) const;
-      string toAddressString (const DgLocBase& lb) const;
-      string toAddressString (const DgLocBase& lb, char delimiter) const;
+      std::string toString        (const DgLocBase& lb) const;
+      std::string toString        (const DgLocBase& lb, char delimiter) const;
+      std::string toAddressString (const DgLocBase& lb) const;
+      std::string toAddressString (const DgLocBase& lb, char delimiter) const;
 
-      virtual string toString (const DgLocation&     loc)  const = 0;
-      virtual string toString (const DgLocVector&    loc)  const = 0;
-      virtual string toString (const DgDistanceBase& dist) const = 0;
+      virtual std::string toString (const DgLocation&     loc)  const = 0;
+      virtual std::string toString (const DgLocVector&    loc)  const = 0;
+      virtual std::string toString (const DgDistanceBase& dist) const = 0;
       virtual long double toDouble (const DgDistanceBase& dist) const = 0;
 
       virtual unsigned long long int toInt (const DgDistanceBase& dist) const = 0;
 
-      virtual string toAddressString (const DgLocation& loc)     const = 0;
-      virtual string toAddressString (const DgLocVector& locVec) const = 0;
+      virtual std::string toAddressString (const DgLocation& loc)     const = 0;
+      virtual std::string toAddressString (const DgLocVector& locVec) const = 0;
 
-      virtual string toString (const DgLocation& loc, char delimiter) const = 0;
-      virtual string toString (const DgLocVector& loc, char delimiter)
+      virtual std::string toString (const DgLocation& loc, char delimiter) const = 0;
+      virtual std::string toString (const DgLocVector& loc, char delimiter)
                                                                       const = 0;
-      virtual string toAddressString (const DgLocation& loc, char delimiter)
+      virtual std::string toAddressString (const DgLocation& loc, char delimiter)
                                                                       const = 0;
-      virtual string toAddressString (const DgLocVector& locVec, char delimiter)
+      virtual std::string toAddressString (const DgLocVector& locVec, char delimiter)
                                                                       const = 0;
       virtual const char* fromString (DgLocation& loc, const char* str,
                                       char delimiter) const = 0;
@@ -195,7 +193,7 @@ class DgRFBase {
 
       DgRFNetwork* network_;
 
-      string name_;
+      std::string name_;
 
       int precision_;
 
@@ -229,7 +227,7 @@ DgRFBase::operator= (const DgRFBase& frame)
 } // inline DgRFBase& DgRFBase::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgRFBase& frame)
+inline std::ostream& operator<< (std::ostream& stream, const DgRFBase& frame)
             { return stream << frame.name(); }
 
 ////////////////////////////////////////////////////////////////////////////////

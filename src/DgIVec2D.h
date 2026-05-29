@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -78,17 +78,17 @@ class DgIVec2D {
                           { return DgIVec2D(*this - pt0); }
 
       DgIVec2D absDiffVec (const DgIVec2D& pt0) const
-                          { return DgIVec2D(abs(i_ - pt0.i()),
-                                            abs(j_ - pt0.j())); }
+                          { return DgIVec2D(std::abs(i_ - pt0.i()),
+                                            std::abs(j_ - pt0.j())); }
 
       const char* fromString (const char* str, char delimiter);
 
       inline DgIVec2D& scale (long double xScaleFactor, long double yScaleFactor);
       inline DgIVec2D& rotate (long double degrees);
 
-      //inline operator XPoint   (void) const;
-      inline operator string (void) const;
-      inline operator DgDVec2D  (void) const;
+      //inline operator XPoint    (void) const;
+      inline operator std::string (void) const;
+      inline operator DgDVec2D    (void) const;
 
       inline DgIVec2D& operator=  (const DgIVec2D& pt);
       inline DgIVec2D& operator+= (const DgIVec2D& pt);
@@ -109,7 +109,7 @@ class DgIVec2D {
       friend bool operator>  (const DgIVec2D& pt1, const DgIVec2D& pt2);
       friend bool operator>= (const DgIVec2D& pt1, const DgIVec2D& pt2);
 
-      friend ostream& operator<< (ostream& stream, const DgIVec2D& pt);
+      friend std::ostream& operator<< (std::ostream& stream, const DgIVec2D& pt);
 
    private:
 
@@ -190,11 +190,11 @@ inline DgIVec2D::operator DgDVec2D (void) const
 } // DgIVec2D::operator DgDVec2D
 
 ////////////////////////////////////////////////////////////////////////////////
-inline DgIVec2D::operator string (void) const
+inline DgIVec2D::operator std::string (void) const
 {
    return "(" + dgg::util::to_string(i_) + ", " + dgg::util::to_string(j_) + ")";
 
-} // DgIVec2D::operator string
+} // DgIVec2D::operator std::string
 
 ////////////////////////////////////////////////////////////////////////////////
 inline DgIVec2D&
@@ -348,12 +348,12 @@ operator- (const DgIVec2D& pt1, const DgIVec2D& pt2)
 } // bool operator-
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream&
-operator<< (ostream& stream, const DgIVec2D& pt)
+inline std::ostream&
+operator<< (std::ostream& stream, const DgIVec2D& pt)
 {
-   return stream << string(pt);
+   return stream << std::string(pt);
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

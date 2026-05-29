@@ -2,8 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
-
+    Copyright (C) 2023 Kevin Sahr
     This file is part of DGGRID.
 
     DGGRID is free software: you can redistribute it and/or modify
@@ -21,27 +20,35 @@
 *******************************************************************************/
 ////////////////////////////////////////////////////////////////////////////////
 //
-// util.cpp: util class implementation
+// DgHierNdx.cpp: DgHierNdx class implementation
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util.h"
+#include "DgHierNdx.h"
+#include "DgHierNdxIntRF.h"
+#include "DgHierNdxStringRF.h"
+#include "DgHierNdxStringRF.h"
 
-#include <iostream>
+////////////////////////////////////////////////////////////////////////////////
+const DgHierNdx
+DgHierNdx::undefCoord(DgHierNdxIntRF::undefCoord, DgHierNdxStringRF::undefCoord, true);
 
-namespace dgg { namespace util {
-
-void ssplit(const std::string& src, std::vector<std::string>& dest, const char *delim)
+////////////////////////////////////////////////////////////////////////////////
+DgHierNdx::DgHierNdx (bool extModeIntIn)
+   : intNdx_ (undefCoord.intNdx()), strNdx_(undefCoord.strNdx()),
+                   extModeInt_ (extModeIntIn)
 {
- for(char *name = strtok(const_cast<char *>(src.c_str()), delim); 0 != name; name = strtok(0, delim))
-  dest.push_back(name);
 }
 
-void ssplit(const char *src, std::vector<std::string>& dest, const char *delim)
+////////////////////////////////////////////////////////////////////////////////
+std::string
+DgHierNdx::valString (void) const
 {
- std::string s(src);
- return ssplit(s, dest, delim);
+  if (extModeInt())
+     return intNdx_.valString();
+  else
+     return strNdx_.valString();
 }
 
-
-}} // namespace dgg::util
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////

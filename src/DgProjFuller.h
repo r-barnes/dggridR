@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -43,9 +43,7 @@
 #include "DgUtil.h"
 
 #include <climits>
-#include <iostream>
-
-using namespace std;
+#include <ostream>
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgProjFullerFwd : public DgConverter<DgGeoCoord, long double,

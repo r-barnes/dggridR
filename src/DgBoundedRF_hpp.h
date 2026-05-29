@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -26,7 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 template<class A, class B, class DB>
-DgBoundedRF<A, B, DB>::DgBoundedRF (const DgDiscRF<A, B, DB>& rfIn,
+DgBoundedRF<A, B, DB>::DgBoundedRF (const DgDiscTopoRF<A, B, DB>& rfIn,
       const A& firstAddIn, const A& lastAddIn, const A& endAddIn, bool zBasedIn)
    : DgBoundedRFBase<B, DB> (rfIn, rfIn.makeLocation(firstAddIn),
      rfIn.makeLocation(lastAddIn), rfIn.makeLocation(endAddIn), zBasedIn),

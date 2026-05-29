@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -29,7 +29,7 @@
 #define DGBOUNDEDRF_H
 
 #include "DgBoundedRFBase.h"
-#include "DgDiscRF.h"
+#include "DgDiscTopoRF.h"
 #include "DgPolygon.h"
 
 class DgLocation;
@@ -41,12 +41,12 @@ template<class A, class B, class DB> class DgBoundedRF
 
    public:
 
-      DgBoundedRF(const DgDiscRF<A, B, DB>& rfIn,
-                  const A& firstAddIn,
-                  const A& lastAddIn, const A& endAddIn,
-                  bool zBasedIn = true);
+      DgBoundedRF (const DgDiscTopoRF<A, B, DB>& rfIn,
+                             const A& firstAddIn,
+                             const A& lastAddIn, const A& endAddIn,
+                             bool zBasedIn = true);
 
-      const DgDiscRF<A, B, DB>& discRF (void) const { return discRF_; }
+      const DgDiscTopoRF<A, B, DB>& discRF (void) const { return discRF_; }
 
       virtual bool validLocation (const DgLocation& loc,
                                   bool convert = true) const;
@@ -71,7 +71,7 @@ template<class A, class B, class DB> class DgBoundedRF
       virtual const DgRF<B, DB>& backFrame (void) const
                      { return discRF().backFrame(); }
 
-      virtual string dist2str (const long long int& dist) const
+      virtual std::string dist2str (const long long int& dist) const
                      { return discRF().dist2str(dist); }
 
       virtual long double dist2dbl (const long long int& dist) const
@@ -143,7 +143,7 @@ template<class A, class B, class DB> class DgBoundedRF
 
    protected:
 
-      void setFirstAdd (const A& firstAddIn) 
+      void setFirstAdd (const A& firstAddIn)
          { firstAdd_ = firstAddIn;
            discRF().forceAddress(DgBoundedRFBase0::first_, firstAddIn); }
 
@@ -152,7 +152,7 @@ template<class A, class B, class DB> class DgBoundedRF
 
    private:
 
-      const DgDiscRF<A, B, DB>& discRF_;
+      const DgDiscTopoRF<A, B, DB>& discRF_;
 
       A firstAdd_;
       A lastAdd_;

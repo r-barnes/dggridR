@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -37,67 +37,65 @@
 #include <sstream>
 #include <string>
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 // string comparison operators
 
-inline bool operator== (const string& s1, const string& s2)
+inline bool operator== (const std::string& s1, const std::string& s2)
 { return (s1.compare(s2) == 0); }
 
-inline bool operator!= (const string& s1, const string& s2)
+inline bool operator!= (const std::string& s1, const std::string& s2)
 { return (s1.compare(s2) != 0); }
 
-inline bool operator< (const string& s1, const string& s2)
+inline bool operator< (const std::string& s1, const std::string& s2)
 { return (s1.compare(s2) < 0); }
 
-inline bool operator<= (const string& s1, const string& s2)
+inline bool operator<= (const std::string& s1, const std::string& s2)
 { return (s1.compare(s2) <= 0); }
 
-inline bool operator> (const string& s1, const string& s2)
+inline bool operator> (const std::string& s1, const std::string& s2)
 { return (s1.compare(s2) > 0); }
 
-inline bool operator>= (const string& s1, const string& s2)
+inline bool operator>= (const std::string& s1, const std::string& s2)
 { return (s1.compare(s2) >= 0); }
 
-inline bool operator== (const string& s1, const char* s2)
-{ return (s1 == string(s2)); }
+inline bool operator== (const std::string& s1, const char* s2)
+{ return (s1 == std::string(s2)); }
 
-inline bool operator!= (const string& s1, const char* s2)
-{ return (s1 != string(s2)); }
+inline bool operator!= (const std::string& s1, const char* s2)
+{ return (s1 != std::string(s2)); }
 
-inline bool operator< (const string& s1, const char* s2)
-{ return (s1 < string(s2)); }
+inline bool operator< (const std::string& s1, const char* s2)
+{ return (s1 < std::string(s2)); }
 
-inline bool operator<= (const string& s1, const char* s2)
-{ return (s1 <= string(s2)); }
+inline bool operator<= (const std::string& s1, const char* s2)
+{ return (s1 <= std::string(s2)); }
 
-inline bool operator> (const string& s1, const char* s2)
-{ return (s1 > string(s2)); }
+inline bool operator> (const std::string& s1, const char* s2)
+{ return (s1 > std::string(s2)); }
 
-inline bool operator>= (const string& s1, const char* s2)
-{ return (s1 >= string(s2)); }
+inline bool operator>= (const std::string& s1, const char* s2)
+{ return (s1 >= std::string(s2)); }
 
-inline bool operator== (const char* s1, const string& s2)
-{ return (string(s1) == s2); }
+inline bool operator== (const char* s1, const std::string& s2)
+{ return (std::string(s1) == s2); }
 
-inline bool operator!= (const char* s1, const string& s2)
-{ return (string(s1) != s2); }
+inline bool operator!= (const char* s1, const std::string& s2)
+{ return (std::string(s1) != s2); }
 
-inline bool operator< (const char* s1, const string& s2)
-{ return (string(s1) < s2); }
+inline bool operator< (const char* s1, const std::string& s2)
+{ return (std::string(s1) < s2); }
 
-inline bool operator<= (const char* s1, const string& s2)
-{ return (string(s1) <= s2); }
+inline bool operator<= (const char* s1, const std::string& s2)
+{ return (std::string(s1) <= s2); }
 
-inline bool operator> (const char* s1, const string& s2)
-{ return (string(s1) > s2); }
+inline bool operator> (const char* s1, const std::string& s2)
+{ return (std::string(s1) > s2); }
 
-inline bool operator>= (const char* s1, const string& s2)
-{ return (string(s1) >= s2); }
+inline bool operator>= (const char* s1, const std::string& s2)
+{ return (std::string(s1) >= s2); }
 
 ////////////////////////////////////////////////////////////////////////////////
-inline string toLower (const string& strIn)
+inline std::string toLower (const std::string& strIn)
 {
    std::string ret(strIn);
    std::transform(ret.begin(), ret.end(), ret.begin(), ::tolower);
@@ -108,13 +106,13 @@ inline string toLower (const string& strIn)
 namespace dgg { namespace util {
 
 ////////////////////////////////////////////////////////////////////////////////
-inline string addCommas (unsigned long long int num)
+inline std::string addCommas (unsigned long long int num)
 {
     std::stringstream ss;
     ss << num;
-    string s = ss.str();
+    std::string s = ss.str();
 
-    string newS = "";
+    std::string newS = "";
     if (s.length() <= 3)
        newS = s;
     else
@@ -133,18 +131,18 @@ inline string addCommas (unsigned long long int num)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-inline string addCommas (long double num, unsigned int precision)
+inline std::string addCommas (long double num, unsigned int precision)
 {
    unsigned long long int intPart = num;
 
-   string newS = addCommas(intPart);
+   std::string newS = addCommas(intPart);
 
    std::stringstream ss;
-   ss << std::fixed << setprecision(precision) << num;
-   string s = ss.str();
+   ss << std::fixed << std::setprecision(precision) << num;
+   std::string s = ss.str();
    size_t ptNdx = s.find_first_of('.');
 
-   if (ptNdx != string::npos)
+   if (ptNdx != std::string::npos)
       newS += s.substr(ptNdx, s.length() - ptNdx);
 
    return newS;
@@ -254,7 +252,7 @@ inline std::string to_string(long double val, const char *formatStr)
 
    snprintf(buffer, maxBuffer, formatStr, val);
 
-   return string(buffer);
+   return std::string(buffer);
 }
 
 inline std::string to_string(int val, int padWidth)

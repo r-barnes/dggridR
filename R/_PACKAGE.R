@@ -1,0 +1,100 @@
+#' Discrete Global Grids for R
+#'
+#' @description
+#'
+#' \emph{dggridR} provides discrete global grids (DGGs) — spatial binning on the surface of the Earth
+#' using equal-area hexagonal, triangular, or diamond cells. Unlike rectangular grids, DGG cells have the
+#' same area regardless of their location, making them ideal for spatial statistics, point aggregation,
+#' and multi-scale analysis. The package wraps the DGGRID v9.0b C++ engine via Rcpp.
+#'
+#'
+#' \strong{Grid Construction}
+#'
+#'  \code{\link[=dgconstruct]{dgconstruct()}} --- Build a DGG specification (projection, topology, aperture, resolution)\cr
+#'  \code{\link[=dgsetres]{dgsetres()}} --- Change the resolution of an existing DGG specification\cr
+#'  \code{\link[=dgverify]{dgverify()}} --- Validate a DGG specification\cr
+#'
+#'
+#' \strong{Grid Information}
+#'
+#'  \code{\link[=dginfo]{dginfo()}} --- Print a human-readable summary of a DGG specification\cr
+#'  \code{\link[=dggetres]{dggetres()}} --- Return a table of cell counts, areas, and spacings for all resolutions\cr
+#'  \code{\link[=dgmaxcell]{dgmaxcell()}} --- Return the maximum cell ID at a given resolution\cr
+#'  \code{\link[=dg_closest_res_to_area]{dg_closest_res_to_area()}} --- Select resolution by target cell area\cr
+#'  \code{\link[=dg_closest_res_to_spacing]{dg_closest_res_to_spacing()}} --- Select resolution by target inter-cell spacing\cr
+#'  \code{\link[=dg_closest_res_to_cls]{dg_closest_res_to_cls()}} --- Select resolution by target characteristic length scale\cr
+#'
+#'
+#' \strong{Grid Materialization}
+#'
+#'  \code{\link[=dgearthgrid]{dgearthgrid()}} --- Generate the full global grid as an sf object\cr
+#'  \code{\link[=dgcellstogrid]{dgcellstogrid()}} --- Generate grid cell boundaries for specified cell IDs\cr
+#'  \code{\link[=dgrectgrid]{dgrectgrid()}} --- Generate a grid covering a lat/lon bounding box\cr
+#'  \code{\link[=dgshptogrid]{dgshptogrid()}} --- Generate a grid covering a shapefile or sf polygon\cr
+#'
+#'
+#' \strong{Point Aggregation}
+#'
+#'  \code{\link[=dgpoints_to_cells]{dgpoints_to_cells()}} --- Map lon/lat points to grid cells; returns an sf grid with optional per-cell counts\cr
+#'  \code{\link[=dgbin_points]{dgbin_points()}} --- Aggregate numeric values by cell; returns per-cell count, mean, and/or total\cr
+#'
+#'
+#' \strong{Cell Relationships}
+#'
+#'  \code{\link[=dgneighbors]{dgneighbors()}} --- Return adjacent cell IDs for each input cell (hexagonal grids)\cr
+#'  \code{\link[=dgchildren]{dgchildren()}} --- Return child cell IDs at the next finer resolution\cr
+#'  \code{\link[=dgparent]{dgparent()}} --- Return the parent cell ID at the next coarser resolution\cr
+#'
+#'
+#' \strong{Coordinate Conversion}
+#'
+#' Thirty functions convert between the five cell address systems supported by DGGRID,
+#' named \code{dgINPUT_to_OUTPUT}: \strong{GEO} (geographic lon/lat), \strong{SEQNUM} (globally unique integer
+#' cell ID), \strong{Q2DI} (quad-based integer), \strong{Q2DD} (quad-based double), and \strong{PROJTRI}
+#' (projected triangle). The most commonly used are:\cr
+#'
+#'  \code{\link[=dgGEO_to_SEQNUM]{dgGEO_to_SEQNUM()}} --- Geographic coordinates to cell sequence number\cr
+#'  \code{\link[=dgSEQNUM_to_GEO]{dgSEQNUM_to_GEO()}} --- Cell sequence number to geographic coordinates\cr
+#'
+#'
+#' \strong{Data}
+#'
+#'  \code{\link{dgquakes}} --- Lat/lon locations of 1,000 earthquakes off Fiji (from the \code{datasets} package)\cr
+#'  \code{\link[=dg_shpfname_south_africa]{dg_shpfname_south_africa()}} --- Path to a bundled South Africa border shapefile\cr
+#'
+#' @details
+#' The recommended default grid is \strong{ISEA3H} (Icosahedral Snyder Equal Area, aperture 3, hexagonal),
+#' constructed with \code{dgconstruct(projection = "ISEA", topology = "HEXAGON", aperture = 3)}.
+#' Every resolution contains exactly 12 pentagonal cells (area 5/6 of a hexagon); in the default
+#' orientation these are placed at out-of-the-way locations. Use \code{orient = "RANDOM"} in
+#' \code{dgconstruct()} for a uniformly random icosahedral orientation.
+#'
+#' Additional grid families supported: ISEA4H, ISEA7H, ISEA43H, FULLER3H, FULLER4H,
+#' FULLER7H, FULLER43H, ISEA4T / FULLER4T (triangular), and ISEA4D / FULLER4D (diamond).
+#'
+#' The package uses the DGGRID v9.0b C++ engine developed by Kevin Sahr, accessed via a
+#' hand-written Rcpp bridge. The underlying DGGRID library is available at
+#' \url{https://github.com/sahrk/DGGRID}.
+#'
+#' @references
+#' Sahr, K., White, D., & Kimerling, A. J. (2003). Geodesic discrete global grid systems.
+#' \emph{Cartography and Geographic Information Science}, \emph{30}(2), 121--134.
+#' \doi{10.1559/152304003100011090}
+#'
+#' Kimerling, A. J., Sahr, K., White, D., & Song, L. (1999). Comparing geometrical properties
+#' of global grids. \emph{Cartography and Geographic Information Science}, \emph{26}(4), 271--288.
+#' \doi{10.1559/152304099782294186}
+#'
+#' Snyder, J. P. (1992). An equal-area map projection for polyhedral globes.
+#' \emph{Cartographica}, \emph{29}(1), 10--21. \doi{10.3138/27H7-8K88-4882-1752}
+#'
+#' Gregory, M. J., Kimerling, A. J., White, D., & Sahr, K. (2008). A comparison of intercell
+#' metrics on discrete global grid systems. \emph{Computers, Environment and Urban Systems},
+#' \emph{32}(3), 188--203. \doi{10.1016/j.compenvurbsys.2008.02.002}
+#'
+#' @author Richard Barnes \email{rijard.barnes@gmail.com}, Kevin Sahr \email{sahrk@sou.edu},
+#'   and Sebastian Krantz \email{sebastian.krantz@graduateinstitute.ch}
+#' @keywords internal
+#' @name dggridR-package
+#' @aliases dggridR
+NULL

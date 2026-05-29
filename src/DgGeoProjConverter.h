@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -71,7 +71,7 @@ class DgGeoProjConverter :
            const DgEllipsoidRF& e = ellipsoidRF();
            const DgGeoProjRF& p = geoProjRF();
 
-//cout << "cta: proj0: " << p.proj0() << " addIn: " << addIn << endl;
+//cout << "cta: proj0: " << p.proj0() << " addIn: " << addIn << std::endl;
            DgGeoCoord lp(addIn);
            DgDVec2D xy;
            long double t;
@@ -87,9 +87,9 @@ class DgGeoProjConverter :
                  lp.setLat(lp.lat() < 0.0L ? -M_PI_2 : M_PI_2);
               else if (p.geoc())
                  lp.setLat(atanl(e.rone_es() * tanl(lp.lat())));
-//cout << "cta: lp: " << lp << endl;
+//cout << "cta: lp: " << lp << std::endl;
               lp.setLon(lp.lon() - p.lam0());  /* compute del lp.lam */
-//cout << "cta: lp: " << lp << endl;
+//cout << "cta: lp: " << lp << std::endl;
               if (!p.over()) {
                  if (lp.lon() < 0.0)
                     lp.setLon(lp.lon() + M_2PI);
@@ -97,7 +97,7 @@ class DgGeoProjConverter :
                     lp.setLon(lp.lon() - M_2PI);
               }
 
-//cout << "cta: lp: " << lp << endl;
+//cout << "cta: lp: " << lp << std::endl;
 
               xy = p.projForward(lp, e);
 

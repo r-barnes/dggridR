@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -28,21 +28,23 @@
 #include <cmath>
 
 #include "DgContCartRF.h"
+#include "DgDVec2D.h"
 #include "DgIVec2D.h"
-#include "DgDiscRF.h"
+#include "DgDiscTopoRF.h"
 #include "DgTriGrid2D.h"
 #include "DgTriGrid2DS.h"
+#include "DgDiscRFSGrids.h"
 
 using namespace dgg::topo;
 
 ////////////////////////////////////////////////////////////////////////////////
-DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn, 
-               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn, 
+DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
+               const DgRF<DgDVec2D, long double>& backFrameIn, int nResIn,
                unsigned int apertureIn, bool isCongruentIn, bool isAlignedIn,
-               const string& nameIn)
-        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, apertureIn, Triangle, D3,
-                       isCongruentIn, isAlignedIn, nameIn) 
-{ 
+               const std::string& nameIn)
+        : DgDiscRFS2D (networkIn, backFrameIn, nResIn, Triangle, D3, apertureIn,
+                       isCongruentIn, isAlignedIn, nameIn)
+{
    if (!isCongruent())
    {
       report("DgTriGrid2DS::DgTriGrid2DS() only congruent triangle grid "
@@ -67,16 +69,16 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
 
    for (int i = 0; i < nRes(); i++)
    {
-      string newName = name() + "_" + dgg::util::to_string(i);
+      std::string newName = name() + "_" + dgg::util::to_string(i);
 
-      //cout << newName << " " << fac << ' ' << trans << endl;
+      //cout << newName << " " << fac << ' ' << trans << std::endl;
 
-      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + string("bf"));
+      const DgContCartRF* ccRF = DgContCartRF::makeRF(network(), newName + std::string("bf"));
 
-      Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, trans); 
+      Dg2WayContAffineConverter(backFrame(), *ccRF, (long double) fac, 0.0, trans);
 
       (*grids_)[i] = DgTriGrid2D::makeRF(network(), *ccRF, newName);
-      Dg2WayResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
+      Dg2WayTopoResAddConverter<DgIVec2D, DgDVec2D, long double>(*this, *(grids()[i]), i);
 
       fac *= radix();
    }
@@ -84,7 +86,7 @@ DgTriGrid2DS::DgTriGrid2DS (DgRFNetwork& networkIn,
 } // DgTriGrid2DS::DgTriGrid2DS
 
 ////////////////////////////////////////////////////////////////////////////////
-DgTriGrid2DS::DgTriGrid2DS (const DgTriGrid2DS& rf) 
+DgTriGrid2DS::DgTriGrid2DS (const DgTriGrid2DS& rf)
   : DgDiscRFS2D (rf)
 {
    report("DgTriGrid2DS::operator=() not implemented yet", DgBase::Fatal);
@@ -106,11 +108,11 @@ DgTriGrid2DS::operator= (const DgTriGrid2DS&)
 } // DgTriGrid2DS& DgTriGrid2DS::operator=
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgTriGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add, 
+void
+DgTriGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
                                DgLocVector& vec) const
 {
-//cout << "   setAddParents: " << add << endl;
+//cout << "   setAddParents: " << add << std::endl;
    if (isCongruent())
    {
       DgLocation* tmpLoc = makeLocation(add);
@@ -130,15 +132,15 @@ DgTriGrid2DS::setAddParents (const DgResAdd<DgIVec2D>& add,
 } // void DgTriGrid2DS::setAddParents
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
                                         DgLocVector& vec) const
 {
    if (isCongruent())
    {
-//cout << "Children: " << add << " " << lowerLeft << endl;
+//cout << "Children: " << add << " " << lowerLeft << std::endl;
 
-      vector<DgAddressBase*>& v = vec.addressVec();
+      std::vector<DgAddressBase*>& v = vec.addressVec();
 
       if (DgTriGrid2D::isUp(add.address()))
       {
@@ -151,7 +153,7 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
             for (long long int j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgIVec2D> >(
-                           DgResAdd<DgIVec2D>(DgIVec2D(lowerLeft.i() + i, 
+                           DgResAdd<DgIVec2D>(DgIVec2D(lowerLeft.i() + i,
                                 lowerLeft.j() + j), add.res() + 1)));
             }
             maxJ += 2;
@@ -168,7 +170,7 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
             for (long long int j = 0; j <= maxJ; j++)
             {
                v.push_back(new DgAddress< DgResAdd<DgIVec2D> >(
-                           DgResAdd<DgIVec2D>(DgIVec2D(upperRight.i() - i, 
+                           DgResAdd<DgIVec2D>(DgIVec2D(upperRight.i() - i,
                                 upperRight.j() - j), add.res() + 1)));
             }
             maxJ += 2;
@@ -180,12 +182,12 @@ DgTriGrid2DS::setAddInteriorChildren (const DgResAdd<DgIVec2D>& add,
       report("DgTriGrid2DS::DgTriGrid2DS() only congruent triangle grid "
              "systems implemented", DgBase::Fatal);
    }
-//cout << vec << endl;
-   
+//cout << vec << std::endl;
+
 } // void DgTriGrid2DS::setAddInteriorChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgTriGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>&, DgLocVector&) const
 {
    if (isCongruent()) {
@@ -198,8 +200,8 @@ DgTriGrid2DS::setAddBoundaryChildren (const DgResAdd<DgIVec2D>&, DgLocVector&) c
 } // void DgTriGrid2DS::setAddBoundaryChildren
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
-DgTriGrid2DS::setAddAllChildren (const DgResAdd<DgIVec2D>& add, 
+void
+DgTriGrid2DS::setAddAllChildren (const DgResAdd<DgIVec2D>& add,
                                    DgLocVector& vec) const
 {
    setAddInteriorChildren(add, vec);

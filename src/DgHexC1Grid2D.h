@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -48,7 +48,7 @@ class DgHexC1Grid2D : public DgDiscRF2D {
 
       static const DgHexC1Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
-                     const string& nameIn = "HexC12D")
+                     const std::string& nameIn = "HexC12D")
          { return new DgHexC1Grid2D (networkIn, ccFrameIn, nameIn); }
 
       DgHexC1Grid2D& operator= (const DgHexC1Grid2D& grd)
@@ -59,18 +59,18 @@ class DgHexC1Grid2D : public DgDiscRF2D {
              if ((diff.i() >= 0 && diff.j() <= 0) ||
                  (diff.i() <= 0 && diff.j() >= 0))   /* different signs */
              {
-                return abs(diff.i()) + abs(diff.j());
+                return std::abs(diff.i()) + std::abs(diff.j());
              }
              else /* same signs */
              {
-                diff.setI(abs(diff.i()));
-                diff.setJ(abs(diff.j()));
+                diff.setI(std::abs(diff.i()));
+                diff.setJ(std::abs(diff.j()));
                 return (diff.i() > diff.j()) ? diff.i() : diff.j();
              }}
 
-      virtual operator string (void) const
+      virtual operator std::string (void) const
       {
-         string s = DgDiscRF::operator string() + ": DgHexC1Grid2D";
+         std::string s = DgDiscTopoRF::operator std::string() + ": DgHexC1Grid2D";
 
          return s;
       }
@@ -79,7 +79,7 @@ class DgHexC1Grid2D : public DgDiscRF2D {
 
       DgHexC1Grid2D (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& ccFrameIn,
-                     const string& nameIn = "HexC12D")
+                     const std::string& nameIn = "HexC12D")
          : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D6,
                M_1_SQRT3, M_1_SQRT3, M_SQRT3_2, 1.0L)
            { area_ = c(); }

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -62,11 +62,11 @@ min3 (float a, float b, float c)
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgColor::linearSpreadRGB (const DgColor& col1, const DgColor& col2,
                           std::vector<DgColor*>& spread, int steps)
 //
-// Add to spread a steps-step linear interpolation in RGB space of colors 
+// Add to spread a steps-step linear interpolation in RGB space of colors
 // from col1 to col2 inclusive.
 //
 {
@@ -80,9 +80,9 @@ DgColor::linearSpreadRGB (const DgColor& col1, const DgColor& col2,
     spread.push_back(lastColor);
     for (int i = 1; i < steps; i++)
     {
-       DgColor* nextColor = new DgColor(lastColor->red() + dRed, 
+       DgColor* nextColor = new DgColor(lastColor->red() + dRed,
                  lastColor->green() + dGreen, lastColor->blue() + dBlue);
-      
+
        spread.push_back(nextColor);
 
        lastColor = nextColor;
@@ -92,11 +92,11 @@ DgColor::linearSpreadRGB (const DgColor& col1, const DgColor& col2,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgColor::linearSpreadHLS (const DgColor& col1, const DgColor& col2,
                           std::vector<DgColor*>& spread, int steps)
 //
-// Add to spread a steps-step linear interpolation in HLS space of colors 
+// Add to spread a steps-step linear interpolation in HLS space of colors
 // from col1 to col2 inclusive.
 //
 {
@@ -111,10 +111,10 @@ DgColor::linearSpreadHLS (const DgColor& col1, const DgColor& col2,
     for (int i = 1; i < steps; i++)
     {
        DgColor* nextColor = new DgColor();
-       nextColor->setHLS(lastColor->hue() + dHue, 
-                         lastColor->lightness() + dLight, 
+       nextColor->setHLS(lastColor->hue() + dHue,
+                         lastColor->lightness() + dLight,
                          lastColor->saturation() + dSat);
-      
+
        spread.push_back(nextColor);
 
        lastColor = nextColor;
@@ -166,7 +166,7 @@ DgColor::set (float r, float g, float b)
    if (g > 1.0) g = 1.0; else if (g < 0.0) g = 0.0;
    if (b > 1.0) b = 1.0; else if (b < 0.0) b = 0.0;
 
-   // set my rgb values 
+   // set my rgb values
 
    red_   = r;
    green_ = g;
@@ -176,7 +176,7 @@ DgColor::set (float r, float g, float b)
 
    const unsigned int maxColStr = 8;
    char colStr[maxColStr];
-   snprintf(colStr, maxColStr, "#%02x%02x%02x", (int) dgg::util::lrint(r * 255.0), 
+   snprintf(colStr, maxColStr, "#%02x%02x%02x", (int) dgg::util::lrint(r * 255.0),
            (int) dgg::util::lrint(g * 255.0), (int) dgg::util::lrint(b * 255.0));
 
    name_ = colStr;
@@ -197,7 +197,7 @@ DgColor::set (float cyan, float magenta, float yellow, float black)
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-static float 
+static float
 hlsHelper (float n1, float n2, float hue)
 //
 // See Foley & VanDam 2nd edition p. 596
@@ -321,7 +321,7 @@ DgColor::hls (float* hue, float* lightness, float* saturation) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-float 
+float
 DgColor::hue (void) const
 {
    float hue, lightness, saturation;
@@ -334,7 +334,7 @@ DgColor::hue (void) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-float 
+float
 DgColor::lightness (void) const
 {
    float hue, lightness, saturation;
@@ -347,7 +347,7 @@ DgColor::lightness (void) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-float 
+float
 DgColor::saturation (void) const
 {
    float hue, lightness, saturation;
@@ -360,7 +360,7 @@ DgColor::saturation (void) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgColor::cmyk (float* cyan, float* magenta, float* yellow, float* black) const
 {
    *cyan    = 1.0 - red();
@@ -377,7 +377,7 @@ DgColor::cmyk (float* cyan, float* magenta, float* yellow, float* black) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-float 
+float
 DgColor::cyan (void) const
 {
    float c, m, y, k;
@@ -390,7 +390,7 @@ DgColor::cyan (void) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-float 
+float
 DgColor::magenta (void) const
 {
    float c, m, y, k;
@@ -403,7 +403,7 @@ DgColor::magenta (void) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-float 
+float
 DgColor::yellow (void) const
 {
    float c, m, y, k;
@@ -416,7 +416,7 @@ DgColor::yellow (void) const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-float 
+float
 DgColor::black (void) const
 {
    float c, m, y, k;

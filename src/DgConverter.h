@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -29,8 +29,6 @@
 #define DGCONVERTER_H
 
 #include <vector>
-
-using namespace std;
 
 #include "DgAddress.h"
 #include "DgConverterBase.h"
@@ -65,7 +63,7 @@ public DgConverterBase {
                 //new DgAddress<ATo>(convertTypedAddress(addFrom));
                 new DgAddress<ATo>(convertTypedAddress(
                 static_cast<const DgAddress<AFrom>&>(addIn).address()));
-            dgcout << " " << addFrom.address() << "->" << addTo->address() << endl;
+            dgcout << " " << addFrom.address() << "->" << addTo->address() << std::endl;
             return addTo;
           }
 #else

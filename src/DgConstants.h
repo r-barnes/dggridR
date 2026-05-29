@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -38,7 +38,6 @@ constexpr long double M_EPSILON =   0.00000000000050000000000000000000000000000L
 constexpr long double M_ZERO =      0.00000000000000000000000000000000000000000L;
 constexpr long double M_ONE =       1.00000000000000000000000000000000000000000L;
 constexpr long double M_HALF =      0.50000000000000000000000000000000000000000L;
-
 constexpr long double M_SQRT3 =     1.7320508075688772935274463415058723669428L;
 constexpr long double M_1_SQRT3 =   0.5773502691896257645091487805019574556476L;
 constexpr long double M_SQRT3_2 =   0.8660254037844386467637231707529361834714L;
@@ -60,6 +59,10 @@ constexpr long double M_ATAN2_2 =   0.553574358897045251508532730089268520035023
 constexpr long double M_ATAN_HALF = 0.46364760900080611621425623146121440202853705L;
 constexpr long double M_PI_180 =    0.0174532925199432957692369076848861271111L;
 constexpr long double M_180_PI =    57.29577951308232087679815481410517033240547L;
+
+#ifndef M_2PI
+constexpr long double M_2PI =       6.283185307179586476925286766558999L; /* 2*pi */
+#endif
 
 // asin(sqrt(3.0 / 28.0))
 constexpr long double M_AP7_ROT_RADS = 0.333473172251832115336090755351601070065900389L;

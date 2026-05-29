@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -38,7 +38,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
-             const DgRF<DgDVec2D, long double>& ccFrameIn, const string& nameIn)
+             const DgRF<DgDVec2D, long double>& ccFrameIn, const std::string& nameIn)
          : DgDiscRF2D (networkIn, ccFrameIn, nameIn, Hexagon, D3,
                  M_1_SQRT3, M_1_SQRT3, M_SQRT3_2, 1.0L)
 {
@@ -46,22 +46,19 @@ DgHexC2Grid2D::DgHexC2Grid2D (DgRFNetwork& networkIn,
 
    // create the surrogate hex grid: a class I hex grid rotated 30 degrees
 
-   const DgContCartRF* surCCRF = DgContCartRF::makeRF(network(), nameIn + string("SurBF"));
-
-   // version 6.4 and previous rotated by 30.0L
+   const DgContCartRF* surCCRF = DgContCartRF::makeRF(network(), nameIn + std::string("SurBF"));
    Dg2WayContAffineConverter(backFrame(), *surCCRF, 1.0L, -30.0L);
-   surrogate_ = DgHexC1Grid2D::makeRF(network(), *surCCRF, nameIn + string("Sur"));
+   surrogate_ = DgHexC1Grid2D::makeRF(network(), *surCCRF, nameIn + std::string("Sur"));
 
    // create the substrate hex grid: a class I hex one aperture 3 resolution
    // finer
 
-   const DgContCartRF* subCCRF = DgContCartRF::makeRF(network(), nameIn + string("SubBF"));
-
+   const DgContCartRF* subCCRF = DgContCartRF::makeRF(network(), nameIn + std::string("SubBF"));
    Dg2WayContAffineConverter(backFrame(), *subCCRF, M_SQRT3);
-   substrate_ = DgHexC1Grid2D::makeRF(network(), *subCCRF, nameIn + string("Sub"));
+   substrate_ = DgHexC1Grid2D::makeRF(network(), *subCCRF, nameIn + std::string("Sub"));
 
    // connect the surrogate to the substrate
-   vector<const DgConverterBase*> sc;
+   std::vector<const DgConverterBase*> sc;
    sc.push_back(network().getConverter(*surrogate_, *surCCRF));
    sc.push_back(network().getConverter(*surCCRF, backFrame()));
    new DgSeriesConverter(sc, true);
@@ -134,7 +131,7 @@ DgHexC2Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 
    delete tmpLoc;
 
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
    for (int i = 0; i < (int) tmpVec.size(); i++)
    {
       v.push_back(new DgAddress<DgIVec2D>(
@@ -155,7 +152,7 @@ DgHexC2Grid2D::setAddNeighborsBdry2 (const DgIVec2D& add, DgLocVector& vec) cons
 
    delete tmpLoc;
 
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
    for (int i = 0; i < (int) tmpVec.size(); i++)
    {
       v.push_back(new DgAddress<DgIVec2D>(

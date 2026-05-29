@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -60,7 +60,7 @@ class DgBoundedRFS2D
 
       const DgDiscRFS2D& discRFS (void) const { return discRFS_; }
 
-      const vector<const DgBoundedRF2D*>& grids (void) const { return *grids_; }
+      const std::vector<const DgBoundedRF2D*>& grids (void) const { return *grids_; }
 
       virtual unsigned long long int seqNumAddress (const DgResAdd<DgIVec2D>& add)
                                                                         const;
@@ -71,7 +71,7 @@ class DgBoundedRFS2D
 
       const DgDiscRFS2D& discRFS_;
 
-      vector<const DgBoundedRF2D*>* grids_;
+      std::vector<const DgBoundedRF2D*>* grids_;
 
 };
 

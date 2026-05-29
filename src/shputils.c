@@ -258,7 +258,7 @@ void openfiles(void) {
 
         if (nShapeType != nShapeTypeAppend)
         {
-            dgprintf( "ERROR: Input and Append shape files are of different types.");
+            dgprintf("%s\n", "ERROR: Input and Append shape files are of different types.");
 #ifndef DGGRIDR
         exit( 1 );
 #endif
@@ -328,7 +328,7 @@ void mergefields(void)
 	        }
 	    }
 	}
-
+	
 	if (pt[i] == -1  && (! found) )  /* Try to force into an existing field */
 	{                                /* Ignore the field name, width, and decimal places */
 	    jType = DBFGetFieldInfo( hDBFappend, j, jszTitle, &jWidth, &jDecimals );
@@ -441,10 +441,10 @@ void showitems(void)
                 dsum = dsum + dtmp;
             }
             mean=dsum/maxrec;
-            dgprintf(stmp, "%%.%df to %%.%df \t(%%.%df)",iDecimals,iDecimals,iDecimals);
+            snprintf(stmp, sizeof(stmp),"%%.%df to %%.%df \t(%%.%df)",iDecimals,iDecimals,iDecimals);
             if (dlow < dhigh)       dgprintf(stmp,dlow,dhigh,mean);
             else if (dlow == dhigh) {
-                dgprintf(stmp, "= %%.%df",iDecimals);
+                snprintf(stmp, sizeof(stmp),"= %%.%df",iDecimals);
                 dgprintf(stmp,dlow);
             }
             else dgprintf("No Values");
@@ -467,7 +467,7 @@ int selectrec(void)
     switch(ty)
     {
       case FTString:
-        dgprintf("Invalid Item");
+        dgprintf("%s\n", "Invalid Item");
         iselect=FALSE;
 	break;
       case FTInteger:
@@ -482,7 +482,7 @@ int selectrec(void)
         }
 	break;
       case FTDouble:
-        dgprintf("Invalid Item");
+        dgprintf("%s\n", "Invalid Item");
         iselect=FALSE;
         break;
     }
@@ -510,7 +510,7 @@ void check_theme_bnd(void)
     }
 
     if (nEntities == 0)
-        dgprintf("WARNING: Theme is outside the clip area."); /** SKIP THEME  **/
+        dgprintf("%s\n", "WARNING: Theme is outside the clip area."); /** SKIP THEME  **/
 }
 
 int clip_boundary(void)
@@ -693,46 +693,46 @@ double findunit(char *unit)
 /*      Display a usage message.                                        */
 /* -------------------------------------------------------------------- */
 void error(void)
-{
-    dgprintf( "The program will append to an existing shape file or it will" );
-    dgprintf( "create a new file if needed." );
-    dgprintf( "Only the items in the first output file will be preserved." );
-    dgprintf( "When an item does not match with the append theme then the item");
-    dgprintf( "might be placed to an existing item at the same position and type." );
-    dgprintf( "  OTHER FUNCTIONS:" );
-    dgprintf( "  - Describe all items in the dbase file (Use ALL for more than 5000 recs.)");
-    dgprintf( "  - Select a group of shapes from a comma separated selection list.");
-    dgprintf( "  - UnSelect a group of shapes from a comma separated selection list.");
-    dgprintf( "  - Clip boundary extent or by theme boundary." );
-    dgprintf( "      Touch writes all the shapes that touch the boundary.");
-    dgprintf( "      Inside writes all the shapes that are completely within the boundary.");
-    dgprintf( "      Boundary clips are only the min and max of a theme boundary." );
-    dgprintf( "  - Erase boundary extent or by theme boundary." );
-    dgprintf( "      Erase is the direct opposite of the Clip function." );
-    dgprintf( "  - Change coordinate value units between meters and feet.");
-    dgprintf( "      There is no way to determine the input unit of a shape file.");
-    dgprintf( "      Skip this function if the shape file is already in the correct unit.");
-    dgprintf( "      Clip and Erase will be done before the unit is changed.");
-    dgprintf( "      A shift will be done after the unit is changed.");
-    dgprintf( "  - Shift X and Y coordinates.\n" );
-    dgprintf( "Finally, There can only be one select or unselect in the command line.");
-    dgprintf( "         There can only be one clip or erase in the command line.");
-    dgprintf( "         There can only be one unit and only one shift in the command line.\n");
-    dgprintf( "Ex: shputils in.shp out.shp   SELECT countycode 3,5,9,13,17,27");
-    dgprintf( "    shputils in.shp out.shp   CLIP   10 10 90 90 Touch   FACTOR Meter Feet");
-    dgprintf( "    shputils in.shp out.shp   FACTOR Meter 3.0");
-    dgprintf( "    shputils in.shp out.shp   CLIP   clip.shp Boundary Touch   SHIFT 40 40");
-    dgprintf( "    shputils in.shp out.shp   SELECT co 112   CLIP clip.shp Boundary Touch\n");
-    dgprintf( "USAGE: shputils  <DescribeShape>   {ALL}");
-    dgprintf( "USAGE: shputils  <InputShape>  <OutShape|AppendShape>" );
-    dgprintf( "   { <FACTOR>       <FEET|MILES|METERS|KM> <FEET|MILES|METERS|KM|factor> }" );
-    dgprintf( "   { <SHIFT>        <xshift> <yshift> }" );
-    dgprintf( "   { <SELECT|UNSEL> <Item> <valuelist> }" );
-    dgprintf( "   { <CLIP|ERASE>   <xmin> <ymin> <xmax> <ymax> <TOUCH|INSIDE|CUT> }" );
-    dgprintf( "   { <CLIP|ERASE>   <theme>      <BOUNDARY>     <TOUCH|INSIDE|CUT> }" );
-    dgprintf( "     Note: CUT is not complete and does not create intersections.");
-    dgprintf( "           For more information read programmer comment.");
-
+{	
+    dgprintf("%s\n", "The program will append to an existing shape file or it will");
+    dgprintf("%s\n", "create a new file if needed.");
+    dgprintf("%s\n", "Only the items in the first output file will be preserved.");
+    dgprintf("%s\n", "When an item does not match with the append theme then the item");
+    dgprintf("%s\n", "might be placed to an existing item at the same position and type.");
+    dgprintf("%s\n", "  OTHER FUNCTIONS:");
+    dgprintf("%s\n", "  - Describe all items in the dbase file (Use ALL for more than 5000 recs.)");
+    dgprintf("%s\n", "  - Select a group of shapes from a comma separated selection list.");
+    dgprintf("%s\n", "  - UnSelect a group of shapes from a comma separated selection list.");
+    dgprintf("%s\n", "  - Clip boundary extent or by theme boundary.");
+    dgprintf("%s\n", "      Touch writes all the shapes that touch the boundary.");
+    dgprintf("%s\n", "      Inside writes all the shapes that are completely within the boundary.");
+    dgprintf("%s\n", "      Boundary clips are only the min and max of a theme boundary.");
+    dgprintf("%s\n", "  - Erase boundary extent or by theme boundary.");
+    dgprintf("%s\n", "      Erase is the direct opposite of the Clip function.");
+    dgprintf("%s\n", "  - Change coordinate value units between meters and feet.");
+    dgprintf("%s\n", "      There is no way to determine the input unit of a shape file.");
+    dgprintf("%s\n", "      Skip this function if the shape file is already in the correct unit.");
+    dgprintf("%s\n", "      Clip and Erase will be done before the unit is changed.");
+    dgprintf("%s\n", "      A shift will be done after the unit is changed.");
+    dgprintf("%s\n", "  - Shift X and Y coordinates.\n");
+    dgprintf("%s\n", "Finally, There can only be one select or unselect in the command line.");
+    dgprintf("%s\n", "         There can only be one clip or erase in the command line.");
+    dgprintf("%s\n", "         There can only be one unit and only one shift in the command line.\n");
+    dgprintf("%s\n", "Ex: shputils in.shp out.shp   SELECT countycode 3,5,9,13,17,27");
+    dgprintf("%s\n", "    shputils in.shp out.shp   CLIP   10 10 90 90 Touch   FACTOR Meter Feet");
+    dgprintf("%s\n", "    shputils in.shp out.shp   FACTOR Meter 3.0");
+    dgprintf("%s\n", "    shputils in.shp out.shp   CLIP   clip.shp Boundary Touch   SHIFT 40 40");
+    dgprintf("%s\n", "    shputils in.shp out.shp   SELECT co 112   CLIP clip.shp Boundary Touch\n");
+    dgprintf("%s\n", "USAGE: shputils  <DescribeShape>   {ALL}");
+    dgprintf("%s\n", "USAGE: shputils  <InputShape>  <OutShape|AppendShape>");
+    dgprintf("%s\n", "   { <FACTOR>       <FEET|MILES|METERS|KM> <FEET|MILES|METERS|KM|factor> }");
+    dgprintf("%s\n", "   { <SHIFT>        <xshift> <yshift> }");
+    dgprintf("%s\n", "   { <SELECT|UNSEL> <Item> <valuelist> }");
+    dgprintf("%s\n", "   { <CLIP|ERASE>   <xmin> <ymin> <xmax> <ymax> <TOUCH|INSIDE|CUT> }");
+    dgprintf("%s\n", "   { <CLIP|ERASE>   <theme>      <BOUNDARY>     <TOUCH|INSIDE|CUT> }");
+    dgprintf("%s\n", "     Note: CUT is not complete and does not create intersections.");
+    dgprintf("%s\n", "           For more information read programmer comment.");
+	
     /****   Clip functions for Polygon and Cut is not supported
             There are several web pages that describe methods of doing this function.
             It seem easy to impliment until you start writting code.  I don't have the
@@ -740,14 +740,14 @@ void error(void)
             program that can be called by using CUT instead of TOUCH in the
             CLIP or ERASE functions.  It does not add the intersection of the line and
             the clip box, so polygons could look incomplete and lines will come up short.
-
+	
             Information about clipping lines with a box:
             http://www.csclub.uwaterloo.ca/u/mpslager/articles/sutherland/wr.html
             Information about finding the intersection of two lines:
             http://www.whisqu.se/per/docs/math28.htm
-
+	
             THE CODE LOOKS LIKE THIS:
-            ********************************************************
+            ********************************************************	
             void Intersect_Lines(float x0,float y0,float x1,float y1,
             float x2,float y2,float x3,float y3,
             float *xi,float *yi)

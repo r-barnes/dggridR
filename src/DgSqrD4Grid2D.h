@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -45,20 +45,20 @@ class DgSqrD4Grid2D : public DgDiscRF2D {
 
       static const DgSqrD4Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
-                     const string& nameIn = "Sqr2D")
+                     const std::string& nameIn = "Sqr2D")
          { return new DgSqrD4Grid2D (networkIn, contCartFrameIn, nameIn); }
 
       DgSqrD4Grid2D& operator= (const DgSqrD4Grid2D& grd)
            { DgDiscRF2D::operator=(grd); return *this; }
 
       virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
-           { return abs(add2.i() - add1.i()) + abs(add2.j() - add1.j()); }
+           { return std::abs(add2.i() - add1.i()) + std::abs(add2.j() - add1.j()); }
 
    protected:
 
       DgSqrD4Grid2D (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
-                     const string& nameIn = "Sqr2D")
+                     const std::string& nameIn = "Sqr2D")
          : DgDiscRF2D (networkIn, contCartFrameIn, nameIn, Square, D4,
                1.0L, 1.0L, M_SQRT2, 1.0L)
            { r_ = 1.0L / c(); }

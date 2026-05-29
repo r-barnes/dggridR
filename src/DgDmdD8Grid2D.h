@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -25,7 +25,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DGDMDGRIDD82D_H 
+#ifndef DGDMDGRIDD82D_H
 #define DGDMDGRIDD82D_H
 
 #include "DgDmdD4Grid2D.h"
@@ -37,30 +37,30 @@ class DgDmdD8Grid2D : public DgDmdD4Grid2D {
 
    public:
 
-      static const DgDmdD8Grid2D* makeRF (DgRFNetwork& networkIn, 
+      static const DgDmdD8Grid2D* makeRF (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
-                     const string& nameIn = "Dmd2D")
+                     const std::string& nameIn = "Dmd2D")
          { return new DgDmdD8Grid2D (networkIn, contCartFrameIn, nameIn); }
 
       virtual long long int dist (const DgIVec2D& add1, const DgIVec2D& add2) const
-      { 
-	unsigned long long int diffi = abs(add2.i() - add1.i());
-	unsigned long long int diffj = abs(add2.j() - add1.j());
-        return (diffi >= diffj) ? diffi : diffj; 
+      {
+	unsigned long long int diffi = std::abs(add2.i() - add1.i());
+	unsigned long long int diffj = std::abs(add2.j() - add1.j());
+        return (diffi >= diffj) ? diffi : diffj;
       }
 
    protected:
 
-      DgDmdD8Grid2D (DgRFNetwork& networkIn, 
+      DgDmdD8Grid2D (DgRFNetwork& networkIn,
                      const DgRF<DgDVec2D, long double>& contCartFrameIn,
-                     const string& nameIn = "Dmd2D")
-         : DgDmdD4Grid2D (networkIn, contCartFrameIn, nameIn) 
+                     const std::string& nameIn = "Dmd2D")
+         : DgDmdD4Grid2D (networkIn, contCartFrameIn, nameIn)
               { setGridMetric(D8); }
 
-      DgDmdD8Grid2D (const DgDmdD8Grid2D& grd) 
+      DgDmdD8Grid2D (const DgDmdD8Grid2D& grd)
          : DgDmdD4Grid2D (grd) { setGridMetric(D8); }
 
-      virtual void setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) 
+      virtual void setAddNeighbors (const DgIVec2D& add, DgLocVector& vec)
                                                                         const;
 
 };

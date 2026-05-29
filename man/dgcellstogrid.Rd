@@ -4,7 +4,7 @@
 \alias{dgcellstogrid}
 \title{Return boundary coordinates for specified cells}
 \usage{
-dgcellstogrid(dggs, cells, savegrid = NA, return_sf = TRUE)
+dgcellstogrid(dggs, cells, savegrid = NA, return_sf = TRUE, densify = 0L)
 }
 \arguments{
 \item{dggs}{A dggs object from dgconstruct()}
@@ -17,6 +17,10 @@ is returned. No other manipulations are done.
 Default: NA (do not save grid, return it)}
 
 \item{return_sf}{logical. If \code{FALSE}, a long-format data frame giving the coordinates of the vertices of each cell is returned. This is is considerably faster and more memory efficient than creating an sf data frame.}
+
+\item{densify}{Integer. Number of extra vertices to add along each cell
+edge (0 = none). Larger values produce smoother boundaries
+for coarse-resolution cells. Default: 0.}
 }
 \value{
 Returns an sf object.
@@ -37,4 +41,6 @@ dgquakes$cell <- dgGEO_to_SEQNUM(dggs,dgquakes$lat,dgquakes$lon)$seqnum
 
 #Get grid cells for the earthquakes identified
 grid          <- dgcellstogrid(dggs, dgquakes$cell)
+head(grid)
+
 }

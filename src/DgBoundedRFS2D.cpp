@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -34,14 +34,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf, 
-                                const DgIVec2D& lowerLeft0, 
+DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
+                                const DgIVec2D& lowerLeft0,
                                 const DgIVec2D& upperRight0)
-   : DgBoundedRF< DgResAdd<DgIVec2D>, DgDVec2D, long double > (rf, 
+   : DgBoundedRF< DgResAdd<DgIVec2D>, DgDVec2D, long double > (rf,
                   DgResAdd<DgIVec2D> (DgIVec2D(0, 0), 0),
-                  DgResAdd<DgIVec2D> (DgIVec2D(0, 0), 0), rf.undefAddress()), 
+                  DgResAdd<DgIVec2D> (DgIVec2D(0, 0), 0), rf.undefAddress()),
      discRFS_ (rf)
-{ 
+{
    // check to see if current limitations are met
 
    if (lowerLeft0 != DgIVec2D(0, 0))
@@ -52,53 +52,44 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
 
    // allocate the grids
 
-   grids_ = new vector<const DgBoundedRF2D*>(discRFS().nRes());
+   grids_ = new std::vector<const DgBoundedRF2D*>(discRFS().nRes());
 
    int totTicks = 1;
    long long int numI = upperRight0.i() + 1;
    long long int numJ = upperRight0.j() + 1;
-   if (rf.aperture() == 3) // better be hex!
-   {
-      for (int i = 0; i < discRFS().nRes(); i++)
-      {
+   if (rf.aperture() == 3) { // better be hex!
+      for (int i = 0; i < discRFS().nRes(); i++) {
          bool isClassI = !(i % 2);
-         if (isClassI)
-         {
+         if (isClassI) {
             (*grids_)[i] = new DgBoundedRF2D(*rf.grids()[i], DgIVec2D(0, 0),
                       DgIVec2D(totTicks * numI - 1, totTicks * numJ - 1));
 
             totTicks *= 3;
-         }
-         else
-         {
-            (*grids_)[i] = new DgBoundedHexC2RF2D(*rf.grids()[i], 
-                                DgIVec2D(0, 0), DgIVec2D(totTicks * numI - 1, 
+         } else {
+            (*grids_)[i] = new DgBoundedHexC2RF2D(*rf.grids()[i],
+                                DgIVec2D(0, 0), DgIVec2D(totTicks * numI - 1,
                                                          totTicks * numJ - 1));
          }
       }
-   }
-   else
-   {
+   } else {
       // check that the aperture is a perfect square
 
       int sqrtApp = static_cast<int>(sqrt(static_cast<float>(rf.aperture())));
-      if (static_cast<unsigned int>(sqrtApp * sqrtApp) != rf.aperture())
-      {
-         report("DgBoundedRFS2DS::DgBoundedRFS2DS() aperture " + 
+      if (static_cast<unsigned int>(sqrtApp * sqrtApp) != rf.aperture()) {
+         report("DgBoundedRFS2DS::DgBoundedRFS2DS() aperture " +
                 dgg::util::to_string(rf.aperture()) + " is not a perfect square",
                 DgBase::Fatal);
       }
 
-      for (int i = 0; i < discRFS().nRes(); i++)
-      {
+      for (int i = 0; i < discRFS().nRes(); i++) {
          (*grids_)[i] = new DgBoundedRF2D(*rf.grids()[i], DgIVec2D(0, 0),
                 DgIVec2D(totTicks * numI - 1, totTicks * numJ - 1));
 
 /*
-         cout << "grid " << i << endl;
-         for (DgIVec2D c = (*grids_)[i]->lowerLeft(); 
-              c != (*grids_)[i]->invalidAdd();         
-              c = (*grids_)[i]->incrementAddress(c)) cout << c << endl;
+         std::cout << "grid " << i << std::endl;
+         for (DgIVec2D c = (*grids_)[i]->lowerLeft();
+              c != (*grids_)[i]->invalidAdd();
+              c = (*grids_)[i]->incrementAddress(c)) std::cout << c << std::endl;
 */
 
          totTicks *= sqrtApp;
@@ -115,16 +106,14 @@ DgBoundedRFS2D::DgBoundedRFS2D (const DgDiscRFS2D& rf,
    // set the size
 
    size_ = 0;
-   for (int i = 0; i < discRFS().nRes(); i++)
-   {
+   for (int i = 0; i < discRFS().nRes(); i++) {
       unsigned long long int lastSize = size_;
 
       const DgBoundedRF2D* g = (*grids_)[i];
 
       if (g->validSize()) size_ += g->size();
 
-      if (!g->validSize() || size() < lastSize)
-      {
+      if (!g->validSize() || size() < lastSize) {
 /*
          report("DgBoundedRFS2D::DgBoundedRFS2D() invalid size setting due to "
                 "possible overflow", DgBase::Warning);
@@ -153,7 +142,7 @@ DgBoundedRFS2D::incrementAddress (DgResAdd<DgIVec2D>& add) const
    if (add.address() == grid.endAdd())
    {
       if (add.res() == (discRFS().nRes() - 1)) return add = endAdd();
-      else 
+      else
       {
          int newRes = add.res() + 1;
          add = DgResAdd<DgIVec2D>(grids()[newRes]->firstAdd(), newRes);
@@ -167,7 +156,7 @@ DgBoundedRFS2D::incrementAddress (DgResAdd<DgIVec2D>& add) const
        add.address() == grid.endAdd())
    {
       if (add.res() == (discRFS().nRes() - 1)) return add = endAdd();
-      else 
+      else
       {
          int newRes = add.res() + 1;
          return add = DgResAdd<DgIVec2D>(grids()[newRes]->firstAdd(), newRes);
@@ -204,7 +193,7 @@ DgBoundedRFS2D::decrementAddress (DgResAdd<DgIVec2D>& add) const
 } // DgResAdd<DgIVec2D>& DgBoundedRFS2D::decrementAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-unsigned long long int 
+unsigned long long int
 DgBoundedRFS2D::seqNumAddress (const DgResAdd<DgIVec2D>& add) const
 {
    if (!validSize())
@@ -226,7 +215,7 @@ DgBoundedRFS2D::seqNumAddress (const DgResAdd<DgIVec2D>& add) const
 } // unsigned long long int DgBoundedRFS2D::seqNumAddress
 
 ////////////////////////////////////////////////////////////////////////////////
-DgResAdd<DgIVec2D> 
+DgResAdd<DgIVec2D>
 DgBoundedRFS2D::addFromSeqNum (unsigned long long int sNum) const
 {
    if (!validSize())

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -28,9 +28,7 @@
 #ifndef DGADDRESSBASE_H
 #define DGADDRESSBASE_H
 
-#include <iostream>
-
-using namespace std;
+#include <ostream>
 
 class DgDistanceBase;
 
@@ -45,13 +43,13 @@ class DgAddressBase {
 
       DgAddressBase (void) {}
 
-      virtual ostream& writeTo (ostream& stream) const = 0;
+      virtual std::ostream& writeTo (std::ostream& stream) const = 0;
 
-   friend ostream& operator<< (ostream& stream, const DgAddressBase& add);
+   friend std::ostream& operator<< (std::ostream& stream, const DgAddressBase& add);
 
 };
 
-inline ostream& operator<< (ostream& stream, const DgAddressBase& add)
+inline std::ostream& operator<< (std::ostream& stream, const DgAddressBase& add)
 { return add.writeTo(stream); }
 
 ////////////////////////////////////////////////////////////////////////////////

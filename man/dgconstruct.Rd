@@ -8,6 +8,8 @@ dgconstruct(
   projection = "ISEA",
   aperture = 3,
   topology = "HEXAGON",
+  aperture_type = "PURE",
+  num_aperture_4_res = 0L,
   res = NA,
   precision = 7,
   area = NA,
@@ -16,6 +18,7 @@ dgconstruct(
   resround = "nearest",
   metric = TRUE,
   show_info = TRUE,
+  orient = "SPECIFIED",
   azimuth_deg = 0,
   pole_lat_deg = 58.28252559,
   pole_lon_deg = 11.25
@@ -26,12 +29,19 @@ dgconstruct(
 Default: ISEA3H}
 
 \item{aperture}{How finely subsequent resolution levels divide the grid.
-Options are: 3, 4. Not all options work with all
-projections and topologies.
-Default: 3}
+Options are: 3, 4, 7 (HEXAGON only). Not all options work
+with all projections and topologies. Default: 3}
 
 \item{topology}{Shape of cell. Options are: HEXAGON, DIAMOND, TRIANGLE.
 Default: HEXAGON}
+
+\item{aperture_type}{Aperture sequence type. Options are: \code{"PURE"} (single
+aperture value), \code{"MIXED43"} (alternating aperture-4
+and aperture-3, HEXAGON only). Default: \code{"PURE"}.}
+
+\item{num_aperture_4_res}{For \code{aperture_type = "MIXED43"}: number of
+aperture-4 resolutions before switching to aperture-3.
+Must be in [0, res]. Default: 0.}
 
 \item{res}{Resolution. Must be in the range [0,30]. Larger values represent
 finer resolutions. Appropriate resolutions can be found with
@@ -59,6 +69,11 @@ imperial (FALSE)}
 
 \item{show_info}{Print the area, spacing, and CLS of the chosen resolution.}
 
+\item{orient}{Grid orientation. Options are: \code{"SPECIFIED"} (use explicit
+pole and azimuth values) or \code{"RANDOM"} (random uniform
+orientation; use \code{set.seed()} before for reproducibility).
+Default: \code{"SPECIFIED"}.}
+
 \item{azimuth_deg}{Rotation in degrees of grid about its pole, value in [0,360].
 Default=0.}
 
@@ -78,6 +93,17 @@ Construct a discrete global grid system (dggs) object
 \examples{
 library(dggridR)
 dggs <- dgconstruct(res=20)
+str(dggs)
 
 dggs <- dgconstruct(area=5,metric=FALSE)
+
+# Aperture-7 hexagonal grid (ISEA7H)
+dggs7 <- dgconstruct(aperture=7, res=3)
+
+# Mixed aperture grid (ISEA43H)
+dggsM <- dgconstruct(aperture_type='MIXED43', num_aperture_4_res=2, res=5)
+
+# Random orientation (reproducible with set.seed)
+set.seed(42)
+dggs_r <- dgconstruct(res=4, orient='RANDOM')
 }

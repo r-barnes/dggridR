@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -32,7 +32,7 @@
 void
 DgSqrD4Grid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    // find the center
 
@@ -51,7 +51,7 @@ DgSqrD4Grid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 void
 DgSqrD4Grid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i(), add.j() + 1)));
    v.push_back(new DgAddress<DgIVec2D>(DgIVec2D(add.i() - 1, add.j())));

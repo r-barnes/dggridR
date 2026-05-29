@@ -19,6 +19,6 @@ Gets a grid's resolution and cell property info as a data frame.
 }
 \examples{
 library(dggridR)
-dggs <- dgconstruct(res=20)
-dggetres(dggs)
+dggetres(dgconstruct(res=20))
+
 }

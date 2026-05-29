@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -40,7 +40,7 @@ template<class A, class C, class B, class DB> class DgPhysicalRF
 
    public:
 
-      DgPhysicalRF<A, C> (const DgBoundedRF<A, B, DB>& rfIn)
+      DgPhysicalRF (const DgBoundedRF<A, B, DB>& rfIn)
           : DgPhysicalRFBase<C> (rfIn), boundedRF_ (rfIn) { }
 
       const DgBoundedRF<A, B, DB>& boundedRF (void) const { return boundedRF_; }

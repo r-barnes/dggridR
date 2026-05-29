@@ -1,7 +1,7 @@
 ---
 title:  "dggridR: Discrete Global Grids for R"
 author:
-- Richard Barnes
+- Richard Barnes and Sebastian Krantz
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bib
@@ -85,14 +85,19 @@ The following grids are available:
 
  * ISEA3H:    Icosahedral Snyder Equal Area Aperture 3 Hexagonal Grid
  * ISEA4H:    Icosahedral Snyder Equal Area Aperture 4 Hexagonal Grid
+ * ISEA7H:    Icosahedral Snyder Equal Area Aperture 7 Hexagonal Grid
  * ISEA43H:   Icosahedral Snyder Equal Area Mixed Aperture 4,3 Hexagonal Grid
  * ISEA4T:    Icosahedral Snyder Equal Area Aperture 4 Triangular Grid
  * ISEA4D:    Icosahedral Snyder Equal Area Aperture 4 Diamond Grid
  * FULLER3H:  Fuller Aperture 3 Hexagonal Grid
  * FULLER4H:  Fuller Aperture 4 Hexagonal Grid
+ * FULLER7H:  Fuller Aperture 7 Hexagonal Grid
  * FULLER43H: Fuller Mixed Aperture 4,3 Hexagonal Grid
- * FULLER4T:  Fuller Aperture 4 Triganular Grid
+ * FULLER4T:  Fuller Aperture 4 Triangular Grid
  * FULLER4D:  Fuller Aperture 4 Diamond Grid
+
+Use the `aperture` argument of `dgconstruct()` to select aperture 3, 4, or 7 for hexagonal grids.
+MIXED43 grids alternate aperture-4 and aperture-3 refinements; construct them with `aperture_type = "MIXED43"` and `num_aperture_4_res` specifying how many resolution levels use aperture-4 refinement.
 
 Unless you are using cells with very large areas (significant fractions of
 Earth's hemispheres), I recommend the ISEA3H be your default grid.
@@ -116,9 +121,10 @@ other levels.
 
 ![Nested hexagonal grid](hex_grid_nested.png)
 
-At present, there is no convenient way to convert grid cell ids at one
-resolution level to another. In the future, I hope to add this capability to the
-package. (TODO)
+Use `dgchildren()` and `dgparent()` to navigate between resolution levels:
+`dgchildren(dggs, cells)` returns the finer-resolution cells contained within
+each input cell, and `dgparent(dggs, cells)` returns the coarser-resolution
+cell that contains each input cell.
 
 
 
@@ -177,7 +183,18 @@ Table: ISEA3H grid cell characteristics.
     * `dgrectgrid()`
     * `dgshptogrid()`
 
-6. Check that your dggs object is valid (if you've mucked with it) using:
+6. Aggregate points directly into grid cells with:
+
+    * `dgpoints_to_cells()` — returns an sf grid with optional per-cell counts
+    * `dgbin_points()` — returns a data frame with per-cell counts, means, or totals
+
+7. Query spatial relationships between cells with:
+
+    * `dgneighbors()` — adjacent cells (hexagonal grids only)
+    * `dgchildren()` — cells at the next finer resolution contained within each cell
+    * `dgparent()` — cell at the next coarser resolution that contains each cell
+
+8. Check that your dggs object is valid (if you've mucked with it) using:
 
     * `dgverify()`
 
@@ -444,6 +461,155 @@ p
 ```
 
 
+## Point Aggregation
+
+`dgpoints_to_cells()` maps a set of lon/lat points to their grid cells and
+returns the grid geometry as an sf object, optionally with a `count` column
+showing how many points fell in each cell. `dgbin_points()` skips the geometry
+and returns a plain data frame of per-cell statistics (count, mean, total).
+
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
+library(dggridR)
+
+data(dgquakes)
+dggs <- dgconstruct(spacing = 1000, metric = FALSE, resround = 'down')
+
+# One step: points → sf grid with per-cell counts
+grid <- dgpoints_to_cells(dggs, dgquakes$lon, dgquakes$lat, return_count = TRUE)
+grid$count <- log(grid$count)
+
+countries <- map_data("world")
+wrapped   <- st_wrap_dateline(grid, options = c("WRAPDATELINE=YES","DATELINEOFFSET=180"), quiet = TRUE)
+```
+
+```{r, fig.width=6, fig.height=4}
+ggplot() +
+    geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black") +
+    geom_sf(data=wrapped, aes(fill=count), color=alpha("white", 0.4)) +
+    scale_fill_gradient(low="blue", high="red") +
+    ggtitle("Earthquakes per cell (log scale)")
+```
+
+`dgbin_points()` is useful when you only need the aggregated numbers rather than
+the geometry:
+
+```{r}
+bins <- dgbin_points(dggs, dgquakes$lon, dgquakes$lat, output_count = TRUE)
+head(bins)
+```
+
+
+## Grid Neighbours
+
+`dgneighbors()` returns the 6 adjacent cells for each hexagonal cell (not
+supported for triangular grids).
+
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
+library(dggridR)
+
+dggs <- dgconstruct(res = 2, show_info = FALSE)
+
+center_cell <- 30
+nbrs <- dgneighbors(dggs, center_cell)
+
+# Visualise the cell and its ring of neighbours
+all_cells <- c(center_cell, nbrs$neighbor)
+grid      <- dgcellstogrid(dggs, all_cells)
+grid$role <- ifelse(grid$seqnum == center_cell, "centre", "neighbour")
+```
+
+```{r, fig.width=5, fig.height=4}
+ggplot() +
+    geom_sf(data=grid, aes(fill=role), color="white") +
+    scale_fill_manual(values = c(centre = "#E41A1C", neighbour = "#377EB8")) +
+    ggtitle(paste("Cell", center_cell, "and its 6 neighbours"))
+```
+
+
+## Parent and Child Cells
+
+`dgchildren()` returns the cells at the next finer resolution that are contained
+within each input cell. `dgparent()` returns the coarser-resolution cell that
+contains each input cell. Both require a hexagonal grid.
+
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
+library(dggridR)
+
+dggs_parent <- dgconstruct(res = 3, show_info = FALSE)
+dggs_child  <- dgconstruct(res = 4, show_info = FALSE)
+
+parent_cell <- 100
+chld <- dgchildren(dggs_parent, parent_cell)
+
+# Visualise the parent boundary and its child cells
+grid_parent <- dgcellstogrid(dggs_parent, parent_cell)
+grid_child  <- dgcellstogrid(dggs_child, chld$child)
+```
+
+```{r, fig.width=5, fig.height=4}
+ggplot() +
+    geom_sf(data=grid_child,  fill=alpha("#377EB8", 0.5), color="white") +
+    geom_sf(data=grid_parent, fill=NA, color="#E41A1C", linewidth=1.2) +
+    ggtitle(paste("Children of cell", parent_cell, "at res 4 (red = parent boundary)"))
+```
+
+Round-tripping via `dgparent()` confirms that interior children map back to
+their parent (boundary children may be shared with a neighbouring cell):
+
+```{r}
+prnt <- dgparent(dggs_child, chld$child)
+head(prnt)
+```
+
+
+## Densification
+
+The `densify` parameter in `dgearthgrid()` and `dgcellstogrid()` inserts
+additional interpolated vertices along each cell edge. The default (`densify=0`)
+uses only the corner vertices; higher values add intermediate points and produce
+smoother curves when the cells are displayed in a curved projection.
+
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
+library(dggridR)
+
+dggs <- dgconstruct(res = 2, show_info = FALSE)
+g0   <- dgearthgrid(dggs, densify = 0)  # corners only
+g5   <- dgearthgrid(dggs, densify = 5)  # 5 extra vertices per edge
+```
+
+```{r}
+# Vertex counts increase substantially with densification
+c(
+  sparse = sum(lengths(lapply(sf::st_geometry(g0), sf::st_coordinates))),
+  dense  = sum(lengths(lapply(sf::st_geometry(g5), sf::st_coordinates)))
+)
+```
+
+
+## Random Grid Orientation
+
+By default the 12 pentagonal cells are placed at fixed, out-of-the-way
+locations. Pass `orient = "RANDOM"` to `dgconstruct()` for a uniformly random
+icosahedral orientation, which is useful for sensitivity analyses or Monte Carlo
+studies. Use `set.seed()` before the call for reproducibility.
+
+```{r, results='hide', warning=FALSE, error=FALSE, message=FALSE}
+library(dggridR)
+
+set.seed(42)
+dggs_r <- dgconstruct(res = 3, orient = "RANDOM", show_info = FALSE)
+gr     <- dgearthgrid(dggs_r)
+```
+
+```{r, fig.width=6, fig.height=4}
+countries <- map_data("world")
+ggplot() +
+    geom_polygon(data=countries, aes(x=long, y=lat, group=group), fill=NA, color="black") +
+    geom_sf(data=gr, fill=NA, color=alpha("#1B9E77", 0.5)) +
+    ggtitle("ISEA3H res-3 grid with random orientation (set.seed(42))")
+```
+
+
 # Caveats
 
 At every resolution, the Icosahedral grids contain 12 pentagonal cells which
@@ -475,11 +641,9 @@ p
 
 # Roadmap
 
-* Method to convert between grid cell ids at different resolutions
-
 * In the future, I plan to switch the package from using Kevin Sahr's dggrid
 software to the [discrete global grid system standards currently being developed
-by OpenGeospatial](https://docs.ogc.org/is/21-038r1/21-038r1.html). 
+by OpenGeospatial](https://docs.ogc.org/is/21-038r1/21-038r1.html).
 
 <!-- Those standards are being developed by a [software working
 group](https://www.ogc.org/projects/groups/dggsswg/) right now, but
@@ -491,14 +655,13 @@ time, Sahr's dggrid is the best option I've found. -->
 
 # Credits
 
-This R package was developed by Richard Barnes (https://rbarnes.org/).
+This R package was originally developed by Richard Barnes (https://richard.science/) and is currently maintained by Sebastian Krantz.
 
 The dggrid conversion software was developed predominantly by Kevin Sahr
-(https://discreteglobal.wpengine.com/), with contributions from a few others.
+(https://github.com/sahrk/DGGRID), with contributions from a few others.
 
-Large portions of the above documentation are drawn from the DGGRID version 6.2b
-User Documentation, which is available in its entirety
-[here](dggrid_v62_manual.pdf).
+Large portions of the above documentation are drawn from the DGGRID version 9.0b
+User Documentation, which is available at the DGGRID repository.
 
 
 
@@ -516,7 +679,7 @@ enhancements, we want to hear about them.
 
 Please cite this package as:
 
- > Richard Barnes and Kevin Sahr (2017). dggridR: Discrete Global Grids for R. R package version 2.0.4. "https://github.com/r-barnes/dggridR/" \doi{10.5281/zenodo.1322866}
+ > Richard Barnes, Kevin Sahr, and Sebastian Krantz (2026). dggridR: Discrete Global Grids for R. R package version 4.1.0. "https://github.com/r-barnes/dggridR/" \doi{10.5281/zenodo.1322866}
 
 
 

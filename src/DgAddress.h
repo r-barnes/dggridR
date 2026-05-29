@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -48,12 +48,12 @@ template <class A> class DgAddress : public DgAddressBase {
 
       const A& address (void) const { return address_; }
 
-      DgAddress<A>& operator= (const DgAddress<A>& add) 
+      DgAddress<A>& operator= (const DgAddress<A>& add)
                                     { address_ = add.address(); return *this; }
 
    protected:
 
-      virtual ostream& writeTo (ostream& stream) const
+      virtual std::ostream& writeTo (std::ostream& stream) const
                                     { return stream << address_; }
 
    private:

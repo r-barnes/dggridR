@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -30,7 +30,6 @@
 
 #include "DgBoundedRF2D.h"
 #include "DgDiscRFS2D.h"
-#include "dgF2D.h"
 #include "DgIVec2D.h"
 #include "DgPhysicalRF.h"
 

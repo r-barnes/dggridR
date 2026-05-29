@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -33,7 +33,7 @@ DgLocVector::DgLocVector (const DgRFBase& rfIn, int sizeIn)
 {
    vec_.resize(sizeIn);
 
-   for (long long int i = 0; i < size(); i++) 
+   for (long long int i = 0; i < size(); i++)
      vec_[i] = rf().createAddress();
 
 } // DgLocVector::DgLocVector
@@ -56,13 +56,13 @@ DgLocVector::clearAddress (void)
 ////////////////////////////////////////////////////////////////////////////////
 bool
 DgLocVector::operator== (const DgLocVector& vec) const
-{ 
-   if (rf() != vec.rf() || vec.size() != size()) 
+{
+   if (rf() != vec.rf() || vec.size() != size())
     return false;
 
    for (int i = 0; i < size(); i++)
    {
-      if (!rf().equalAddress(*vec_[i], *vec[i].address())) 
+      if (!rf().equalAddress(*vec_[i], *vec[i].address()))
        return false;
    }
 
@@ -71,10 +71,10 @@ DgLocVector::operator== (const DgLocVector& vec) const
 } // bool DgLocVector::operator==
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgLocVector::setLoc (int ndx, const DgLocation& loc, bool /* conv */)
 {
-   if (rf() == loc.rf()) 
+   if (rf() == loc.rf())
    {
       rf().copyAddress(*loc.address(), vec_[ndx]);
       return;
@@ -89,10 +89,10 @@ DgLocVector::setLoc (int ndx, const DgLocation& loc, bool /* conv */)
 } // void DgLocVector::setLoc
 
 ////////////////////////////////////////////////////////////////////////////////
-void 
+void
 DgLocVector::push_back (const DgLocation& loc, bool /* conv */)
 {
-   if (rf() == loc.rf()) 
+   if (rf() == loc.rf())
    {
       DgAddressBase* add = rf().createAddress(*loc.address());
       vec_.push_back(add);
@@ -119,8 +119,8 @@ DgLocVector::fromString (const char* str, char delimiter)
    while (*tmp)
    {
       tmp = tloc.fromString(tmp, delimiter);
-      push_back(tloc);  
-      if (*tmp == delimiter) 
+      push_back(tloc);
+      if (*tmp == delimiter)
        tmp++;
    }
 

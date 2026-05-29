@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -34,7 +34,7 @@
 void
 DgTriGrid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    // find the center
 
@@ -56,8 +56,8 @@ DgTriGrid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
    }
 
 /*
-   cout << "triangle: " << add << " " << tmpLoc << endl;
-   cout << vec << endl;
+   std::cout << "triangle: " << add << " " << tmpLoc << std::endl;
+   std::cout << vec << std::endl;
 */
 
 } // void DgTriGrid2D::setAddVertices
@@ -66,7 +66,7 @@ DgTriGrid2D::setAddVertices (const DgIVec2D& add, DgPolygon& vec) const
 void
 DgTriGrid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 {
-   vector<DgAddressBase*>& v = vec.addressVec();
+   std::vector<DgAddressBase*>& v = vec.addressVec();
 
    if (isUp(add))
    {
@@ -84,7 +84,7 @@ DgTriGrid2D::setAddNeighbors (const DgIVec2D& add, DgLocVector& vec) const
 } // void DgTriGrid2D::setAddNeighbors
 
 ////////////////////////////////////////////////////////////////////////////////
-DgIVec2D 
+DgIVec2D
 DgTriGrid2D::quantify (const DgDVec2D& point) const
 {
    DgDVec2D p(point);  // p prime
@@ -113,10 +113,10 @@ DgTriGrid2D::quantify (const DgDVec2D& point) const
 } // DgIVec2D DgTriGrid2D::quantify
 
 ////////////////////////////////////////////////////////////////////////////////
-DgDVec2D 
+DgDVec2D
 DgTriGrid2D::invQuantify (const DgIVec2D& add) const
 {
-   long double x = ((long double) add.i() * e()) - 
+   long double x = ((long double) add.i() * e()) -
                  ((long double) ((add.j() + 1) / 2) * e() / 2.0);
    long double y = 1.5 * (long double) (add.j() / 2) + 0.5 * (long double) (add.j() % 2);
 

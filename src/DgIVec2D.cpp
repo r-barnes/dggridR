@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -26,6 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <climits>
+#include <string.h>
 
 #include "DgBase.h"
 #include "DgIVec2D.h"
@@ -58,10 +59,10 @@ DgIVec2D::fromString (const char* str, char delimiter)
 	
    	tok = strtok(NULL, delimStr);
    	jIn = dgg::util::from_string<long long int>(tok);
-    }  
+    }
    catch(...)
     {
-      ::report("DgIVec2D::fromString() invalid value in string " + string(tok), 
+      ::report("DgIVec2D::fromString() invalid value in string " + std::string(tok),
                DgBase::Fatal);
     }
 
@@ -69,7 +70,7 @@ DgIVec2D::fromString (const char* str, char delimiter)
    setJ(jIn);
 
    unsigned long long int offset = (tok - tmpStr) + strlen(tok) + 1;
-   if (offset >= strlen(str)) 
+   if (offset >= strlen(str))
     return 0;
 
    return &str[offset];

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -49,9 +49,9 @@ static void fixSciNotation (char* string)
 } // void fixSciNotation
 
 ////////////////////////////////////////////////////////////////////////////////
-DgInAIGenFile::DgInAIGenFile (const DgRFBase& rfIn, const string* fileNameIn,
+DgInAIGenFile::DgInAIGenFile (const DgRFBase& rfIn, const std::string* fileNameIn,
                         DgReportLevel failLevel)
-   : DgInLocTextFile (rfIn, fileNameIn, false, failLevel),
+   : DgInLocStreamFile (rfIn, fileNameIn, false, failLevel),
      forcePolyLine_ (false), forceCells_ (false)
 {
    // test for override of vecAddress
@@ -80,7 +80,7 @@ DgInAIGenFile::extract (DgLocVector& vec)
    getline(nextLine, maxLine);
 
    // check to see if we're at EOF
-   if (string(nextLine) == string("END")) {
+   if (std::string(nextLine) == std::string("END")) {
       // force feof()
       while (!eof()) getline(nextLine, maxLine);
       return *this;
@@ -92,18 +92,18 @@ DgInAIGenFile::extract (DgLocVector& vec)
       getline(nextLine, maxLine);
 
       // check for end-of-polyline
-      if (string(nextLine) == string("END")) break;
+      if (std::string(nextLine) == std::string("END")) break;
 
       fixSciNotation(nextLine);
 
-      istringstream iss(nextLine);
+      std::istringstream iss(nextLine);
       iss >> x >> y;
 
       DgAddressBase* add = rf().vecAddress(DgGeoCoord(x, y));
       vec.addressVec().push_back(add); // polyline should delete when done
    }
 
-   //cout << "HERE: " << poly << endl;
+   //cout << "HERE: " << poly << std::endl;
 
    return *this;
 
@@ -126,20 +126,20 @@ DgInAIGenFile::extract (DgPolygon& poly)
    getline(nextLine, maxLine);
 
    // check to see if we're at EOF
-   if (string(nextLine) == string("END")) {
+   if (std::string(nextLine) == std::string("END")) {
       // force feof()
       while (!eof()) getline(nextLine, maxLine);
       return *this;
    }
 
    long double x, y;
-   vector<DgAddressBase*>& v = poly.addressVec();
+   std::vector<DgAddressBase*>& v = poly.addressVec();
    while (!eof()) {
       getline(nextLine, maxLine);
 
       // check for end-of-polygon
       // delete the duplicate first/last vertex
-      if (string(nextLine) == string("END")) {
+      if (std::string(nextLine) == std::string("END")) {
          delete v.back();
          v.back() = NULL;
          v.pop_back();
@@ -152,14 +152,14 @@ DgInAIGenFile::extract (DgPolygon& poly)
       }
       fixSciNotation(nextLine);
 
-      istringstream iss(nextLine);
+      std::istringstream iss(nextLine);
       iss >> x >> y;
 
       DgAddressBase* add = rf().vecAddress(DgGeoCoord(x, y));
       poly.addressVec().push_back(add); // polygon should delete when done
    }
 
-   //cout << "HERE: " << poly << endl;
+   //cout << "HERE: " << poly << std::endl;
 
    return *this;
 
@@ -187,7 +187,7 @@ DgInAIGenFile::extract (DgCell& cell)
    getline(nextLine, maxLine);
    fixSciNotation(nextLine);
 
-   istringstream iss(nextLine);
+   std::istringstream iss(nextLine);
 
    iss >> id;
    cell.setLabel(dgg::util::to_string(id));
@@ -204,7 +204,7 @@ DgInAIGenFile::extract (DgCell& cell)
       while (!eof())
       {
          getline(nextLine, maxLine);
-         if (string(nextLine) == string("END"))
+         if (std::string(nextLine) == std::string("END"))
          {
             poly->addressVec().erase(poly->addressVec().end() - 1);
 
@@ -212,7 +212,7 @@ DgInAIGenFile::extract (DgCell& cell)
          }
          fixSciNotation(nextLine);
 
-         istringstream iss(nextLine);
+         std::istringstream iss(nextLine);
          iss >> x >> y;
 
          DgAddressBase* add = rf().vecAddress(DgDVec2D(x, y));
@@ -254,16 +254,13 @@ DgInAIGenFile::extract (DgLocList& list)
 
    fixSciNotation(nextLine);
 
-   istringstream iss(nextLine);
+   std::istringstream iss(nextLine);
 
    iss >> tmp;
 
-   if (tmp[0] == 'E')
-   {
+   if (tmp[0] == 'E') {
       setIsPointFile(true);
-   }
-   else
-   {
+   } else {
       // try to get values
 
       long double x, y;
@@ -277,36 +274,28 @@ DgInAIGenFile::extract (DgLocList& list)
 
    rewind();
 
-   if (!isPointFile())
-   {
+   if (!isPointFile()) {
       // read-in the sets
 
-      while (true)
-      {
-         if (forceCells())
-         {
+      while (true) {
+         if (forceCells()) {
             DgCell* cell = new DgCell();
             this->extract(*cell);
-            if (this->eof())
-            {
+            if (this->eof()) {
                delete cell;
                break;
             }
 
             list.push_back(cell);
-         }
-         else
-         {
+         } else {
             DgLocVector* vec = new DgLocVector();
             this->extract(*vec);
-            if (this->eof())
-            {
+            if (this->eof()) {
                // determine whether it's a polygon
 
                if (!forcePolyLine() && vec->size() > 2 &&
                    rf().getVecAddress(*(vec->addressVec().front())) ==
-                   rf().getVecAddress(*(vec->addressVec().back())))
-               {
+                   rf().getVecAddress(*(vec->addressVec().back()))) {
                   vec->addressVec().erase(vec->addressVec().end() - 1);
 
                   DgPolygon* poly = new DgPolygon(*vec);
@@ -315,49 +304,35 @@ DgInAIGenFile::extract (DgLocList& list)
 
                   //vec->destroy();
                   delete vec;
-               }
-               else
-               {
+               } else {
                   list.push_back(vec);
                }
-            }
-            else
-            {
+            } else {
                delete vec;
                break;
             }
          }
       }
-   }
-   else // point file
-   {
-      // read-in the points
+   } else { // point file
 
-      while (true)
-      {
-         if (forceCells())
-         {
+      // read-in the points
+      while (true) {
+         if (forceCells()) {
             DgCell* cell = new DgCell();
             this->extract(*cell);
-            if (this->eof())
-            {
+            if (this->eof()) {
                delete cell;
                break;
             }
 
             list.push_back(cell);
-         }
-         else
-         {
+         } else {
             DgLocation* pt = new DgLocation();
             this->extract(*pt);
             if (!(this->eof()) &&
-                rf().getVecLocation(*pt) != DgDVec2D::undefDgDVec2D)
-            {
+                rf().getVecLocation(*pt) != DgDVec2D::undefDgDVec2D) {
                list.push_back(pt);
-            }
-            else
-            {
+            } else {
                delete pt;
                break;
             }
@@ -388,15 +363,14 @@ DgInAIGenFile::extract (DgLocation& loc)
 
    getline(nextLine, maxLine);
    fixSciNotation(nextLine);
-   istringstream iss(nextLine);
+   std::istringstream iss(nextLine);
    iss >> id >> x >> y;
 
    // set the values
 
    rf().convert(&loc);
    DgDVec2D v(x, y);
-   if (iss.fail()) // hopefully "END"
-   {
+   if (iss.fail()) { // hopefully "END"
       v = DgDVec2D::undefDgDVec2D;
    }
 

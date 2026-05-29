@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -30,30 +30,28 @@
 
 #include "DgRFBase.h"
 
-#include <iostream>
+#include <ostream>
 #include <string>
-
-using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 class DgLabelLoc {
 
    public:
 
-      DgLabel (DgLocBase& locIn, string labelIn = "")
+      DgLabel (DgLocBase& locIn, std::string labelIn = "")
          : location_ (locIn), label_ (labelIn) { }
 
-      const string& label (void) const { return label_; }
+      const std::string& label (void) const { return label_; }
       const DgLocBase& location (void) const { return location_; }
 
-      void setLabel (const string& labelIn) { label_ = labelIn; }
+      void setLabel (const std::string& labelIn) { label_ = labelIn; }
       void setLocation (DgLocBase& locIn) { label_ = &locIn; }
 
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgLabel& label)
+inline std::ostream& operator<< (std::ostream& stream, const DgLabel& label)
             { return stream << label.label(); }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 #define _dglib_hpp_
 
 #include "DgConstants.h"
-#include "dggrid.h"
 //#include "DgProjGnomonicRF.h"
 //#include "DgGeoProjConverter.h"
 
@@ -19,6 +18,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace dglib {
 
@@ -32,15 +32,17 @@ namespace dglib {
     long double  pole_lon_deg;
     long double  pole_lat_deg;
     long double  azimuth_deg;
-    unsigned int aperture;
+    unsigned int aperture    = 3;
     int          res;
-    std::string  topology = "BAD_TOPOLOGY"; //"HEXAGON", "DIAMOND", "TRIANGLE"
-    std::string  projection;  //ISEA/FULLER
+    std::string  topology    = "BAD_TOPOLOGY"; //"HEXAGON", "DIAMOND", "TRIANGLE"
+    std::string  projection  = "ISEA";         //ISEA/FULLER
+    bool         isMixed43   = false;
+    int          numAp4      = 0;
+    int          densify     = 0;
   };
 
   class GridThing {
    private:
-    // std::unique_ptr<const DgIDGGS> idggs;
     int myres;
    protected:
     DgRFNetwork net0;
@@ -57,18 +59,14 @@ namespace dglib {
       long double  azimuth_deg,
       unsigned int aperture,
       int          res,
-      std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
-      std::string  projection  //ISEA/FULLER
+      std::string  topology,        //"HEXAGON", "DIAMOND", "TRIANGLE"
+      std::string  projection,      //ISEA/FULLER
+      bool         isMixed43 = false,
+      int          numAp4    = 0
     );
-    // void init (
-    //   long double  pole_lon_deg,
-    //   long double  pole_lat_deg,
-    //   long double  azimuth_deg,
-    //   unsigned int aperture,
-    //   int          res,
-    //   std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
-    //   std::string  projection  //ISEA/FULLER
-    // );
+
+    int res() const { return myres; }
+
     double nCells() const;
     double cellAreaKM() const;
     double cellDistKM() const;
@@ -77,6 +75,10 @@ namespace dglib {
     double cellAreaKM(int res) const;
     double cellDistKM(int res) const;
     double cls(int res) const;
+
+    std::vector<uint64_t> getNeighbors(uint64_t seqnum) const;
+    std::vector<uint64_t> getChildrenAt(uint64_t seqnum, int parentRes) const;
+    uint64_t              getParentAt(uint64_t seqnum, int childRes) const;
   };
 
   class Transformer : public GridThing {
@@ -88,8 +90,10 @@ namespace dglib {
       long double  azimuth_deg,
       unsigned int aperture,
       int          res,
-      std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
-      std::string  projection  //ISEA/FULLER
+      std::string  topology,        //"HEXAGON", "DIAMOND", "TRIANGLE"
+      std::string  projection,      //ISEA/FULLER
+      bool         isMixed43 = false,
+      int          numAp4    = 0
     );
 
     std::shared_ptr<DgLocation> inGEO    (long double lon_deg, long double lat_deg);
@@ -112,6 +116,7 @@ namespace dglib {
   class GlobalGridGenerator : public GridThing {
    private:
     std::unique_ptr<DgLocation> add_loc;
+    int densify = 0;
     void init();
    public:
     GlobalGridGenerator (const DgParams &dp);
@@ -121,8 +126,10 @@ namespace dglib {
       long double  azimuth_deg,
       unsigned int aperture,
       int          res,
-      std::string  topology,   //"HEXAGON", "DIAMOND", "TRIANGLE"
-      std::string  projection  //ISEA/FULLER
+      std::string  topology,        //"HEXAGON", "DIAMOND", "TRIANGLE"
+      std::string  projection,      //ISEA/FULLER
+      bool         isMixed43 = false,
+      int          numAp4    = 0
     );
 
     bool good() const;
@@ -133,6 +140,7 @@ namespace dglib {
    private:
     std::vector<uint64_t> seqnums;
     size_t i = 0;
+    int densify = 0;
     void init(const std::vector<uint64_t> &seqnums0);
    public:
     SeqNumGridGenerator (
@@ -145,9 +153,11 @@ namespace dglib {
       long double  azimuth_deg,
       unsigned int aperture,
       int          res,
-      std::string  topology,    //"HEXAGON", "DIAMOND", "TRIANGLE"
-      std::string  projection,  //ISEA/FULLER
-      const std::vector<uint64_t> &seqnums0
+      std::string  topology,        //"HEXAGON", "DIAMOND", "TRIANGLE"
+      std::string  projection,      //ISEA/FULLER
+      const std::vector<uint64_t> &seqnums0,
+      bool         isMixed43 = false,
+      int          numAp4    = 0
     );
 
     bool good() const;

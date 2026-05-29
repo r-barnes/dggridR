@@ -1,0 +1,134 @@
+url: https://sebkrantz.github.io/dggridR/
+
+home:
+  title: Discrete Global Grids for R
+
+template:
+  bootstrap: 5
+  bootswatch: sandstone
+  theme: arrow-light
+  bslib:
+    primary: "#1a3a4a"
+    code-color: "#005f87"
+    gray-dark: "#3f464d"
+
+development:
+  mode: auto
+
+navbar:
+  title: dggridR
+  structure:
+    left:
+    - reference
+    - articles
+    - news
+    right:
+    - search
+    - github
+  components:
+    reference:
+      text: Reference
+      href: reference/index.html
+    articles:
+      text: Vignettes
+      href: articles/index.html
+    news:
+      text: News
+      href: news/index.html
+    github:
+      icon: fa-github
+      href: https://github.com/r-barnes/dggridR
+      aria-label: GitHub
+
+
+reference:
+- title: "Grid Construction"
+  desc: "Construct and configure a Discrete Global Grid System (dggs) specification."
+- contents:
+  - dgconstruct
+  - dgsetres
+  - dgverify
+
+- title: "Grid Information"
+  desc: >
+    Inspect a dggs object: print a summary, retrieve per-resolution statistics,
+    count cells, and automatically select a resolution from a target area, spacing,
+    or characteristic length scale.
+- contents:
+  - dginfo
+  - dggetres
+  - dgmaxcell
+  - starts_with("dg_closest_res")
+
+- title: "Grid Materialization"
+  desc: "Generate grid cell boundaries as sf geometries for plotting and spatial analysis."
+- contents:
+  - dgearthgrid
+  - dgcellstogrid
+  - dgrectgrid
+  - dgshptogrid
+
+- title: "Point Aggregation"
+  desc: >
+    Aggregate lon/lat point data into grid cells.
+    `dgpoints_to_cells()` returns an sf grid (optionally with per-cell counts);
+    `dgbin_points()` returns a lightweight data frame of per-cell statistics.
+- contents:
+  - dgpoints_to_cells
+  - dgbin_points
+
+- title: "Cell Relationships"
+  desc: >
+    Query spatial relationships between cells.
+    `dgneighbors()` finds adjacent hexagonal cells;
+    `dgchildren()` and `dgparent()` navigate the grid hierarchy across resolution levels.
+- contents:
+  - dgneighbors
+  - dgchildren
+  - dgparent
+
+- title: "Coordinate Conversion"
+  desc: >
+    Convert between the five cell address systems supported by DGGRID:
+    **GEO** (geographic lon/lat), **SEQNUM** (globally unique integer cell ID),
+    **Q2DI** (quad-based integer coordinates), **Q2DD** (quad-based double coordinates),
+    and **PROJTRI** (projected triangle coordinates).
+    Functions follow the naming convention `dgINPUT_to_OUTPUT`.
+    `dgGEO_to_SEQNUM()` and `dgSEQNUM_to_GEO()` are the most commonly used.
+- contents:
+  - starts_with("dgGEO_to_")
+  - starts_with("dgSEQNUM_to_")
+  - starts_with("dgQ2DI_to_")
+  - starts_with("dgQ2DD_to_")
+  - starts_with("dgPROJTRI_to_")
+
+- title: "Data"
+  desc: "Example dataset and helper utilities bundled with the package."
+- contents:
+  - dgquakes
+  - dg_shpfname_south_africa
+
+
+external-articles:
+  - name: dggridR
+    title: "dggridR: Discrete Global Grids for R"
+    description: " "
+    href: https://sebkrantz.github.io/dggridR/articles/dggridR.html
+  - name: dggrid_manual
+    title: "DGGRID v9.0b User Manual"
+    description: " "
+    href: https://raw.githubusercontent.com/SebKrantz/dggridR/development/vignettes/dggrid_v90b_manual.pdf
+
+articles:
+- title: Introduction to dggridR
+  desc: >
+    Walk-through of all main features: spatial binning, point aggregation,
+    neighbour and hierarchy queries, densification, random orientation, and more.
+  contents:
+  - dggridR
+- title: DGGRID Engine Reference
+  desc: >
+    Official DGGRID v9.0b user manual covering all grid types, parameters, and
+    mathematical foundations of the underlying C++ engine.
+  contents:
+  - dggrid_manual

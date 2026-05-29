@@ -1,3 +1,5 @@
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/SebKrantz/dggridR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SebKrantz/dggridR/actions/workflows/R-CMD-check.yaml)
 [![dggridR status badge](https://fastverse.r-universe.dev/badges/dggridR)](https://fastverse.r-universe.dev/dggridR)
 [![CRAN status](https://www.r-pkg.org/badges/version/dggridR)](https://cran.r-project.org/package=dggridR) 
 [![cran checks](https://badges.cranchecks.info/worst/dggridR.svg)](https://cran.r-project.org/web/checks/check_results_dggridR.html)
@@ -5,6 +7,8 @@
 ![downloads](https://cranlogs.r-pkg.org/badges/grand-total/dggridR) <!-- ?color=blue -->
 [![dependencies](https://tinyverse.netlify.app/badge/dggridR)](https://CRAN.R-project.org/package=dggridR)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1322866.svg)](https://doi.org/10.5281/zenodo.1322866)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/r-barnes/dggridR)
+<!-- badges: end -->
 
 dggridR: Discrete Global Grids for R
 ====================================
@@ -120,48 +124,45 @@ the spacing of their center nodes for the ISEA3H grid type.
 Credits
 -------
 
-The code in the 'src' directory is based off of
-[DGGRIDv6.2b](https://discreteglobal.wpengine.com/) by Kevin Sahr.
+The `src/` directory contains a vendored copy of
+[DGGRID v9.0b](https://github.com/SebKrantz/DGGRID) by Kevin Sahr, maintained
+as a fork at [SebKrantz/DGGRID](https://github.com/SebKrantz/DGGRID).
 
-However, Richard Barnes has made some significant alterations. These include:
+**Richard Barnes** built the original R package and hand-written Rcpp bridge, including:
 
-* Replacement of gpclib with clipper, thus making DGGRID into FLOSS software
-  available for both commercial and non-commercial use without restriction
-* Restructuring and simplifying all of the makefiles to enable compilation in R
+* Replacement of gpclib with clipper, making DGGRID fully FLOSS
+* Restructuring of makefiles and include paths to enable compilation in R
 * Direct inclusion of the shapelib library
 * Addition of the SEQTOPOLY option under the GENERATE_GRID faculty
-* Alterations that enable the code to be compiled under GCC6
-* Alterations that make the code ISO C conformant
-* Alterations to resolve -pedantic and -Wall warnings
+* Fixes for GCC 6, ISO C conformance, and -Wall/-pedantic warnings
 
-The package relies on several libraries, as noted in the **Licensing** section
-below.
+**Sebastian Krantz** has made the following additions (v3.1.0 onward):
+
+* Updated the bundled DGGRID engine from v7 to v9.0b and re-architected the Rcpp bridge
+* Fixed numeric precision issues on Apple Silicon
+* Replaced dplyr/rlang/sp with collapse and sf; cell polygons are assembled in C and converted with `sf::st_as_sfc()`, yielding significant performance gains
+* Added aperture-7 grids (ISEA7H, FULLER7H) and mixed-aperture grids (ISEA43H, FULLER43H)
+* Added `dgneighbors()`, `dgchildren()`, `dgparent()` for cell-relationship queries
+* Added `dgpoints_to_cells()` and `dgbin_points()` for point aggregation
+* Added `densify` parameter to grid-materialization functions
+* Added `orient = "RANDOM"` to `dgconstruct()` for random icosahedral orientation
+
+The package relies on several bundled libraries, as noted in the **Licensing** section below.
 
 
 
 Licensing
 ---------
 
-This package uses the following libraries:
+This package is released under the **GNU Affero General Public License v3 or
+later** (AGPL ≥ 3), as stated in `LICENSE.md`.
 
- * clipper:  The clipper library has been released under the Boostv1 license by
-             Angus Johnson
+The following bundled libraries in `src/` have their own licenses:
 
- * dggrid:   Kevin Sahr has released dggrid as a
-             "public domain software program"
-
- * proj4lib: Gerald Evenden has released this code into the public domain. More
-             recent versions of the library, not used here, are under an
-             MIT-style license.
-
- * shapelib: Frank Warmerdam has released shapelib under an MIT-style license.
-             There is also an LGPL licensing option which I have chosen not to
-             use.
-
-This package, and all code and documentation not otherwise mentioned above
-(essentially anything outside the `src/` directory of this package) are released
-under the MIT (Expat) license, as stated in the `LICENSE` file. The `LICENCE`
-file exists for use with CRAN.
+ * **clipper**: Boost Software License v1.0 (Angus Johnson)
+ * **dggrid**: Released as public domain software by Kevin Sahr
+ * **proj4lib**: Released into the public domain by Gerald Evenden
+ * **shapelib**: MIT-style license (Frank Warmerdam)
 
 
 
@@ -181,4 +182,4 @@ Citing this Package
 
 Please cite this package as:
 
- > Richard Barnes and Kevin Sahr (2017). dggridR: Discrete Global Grids for R. R package version 2.0.4. "https://github.com/r-barnes/dggridR/" doi:10.5281/zenodo.1322866
+ > Richard Barnes, Kevin Sahr, and Sebastian Krantz (2026). dggridR: Discrete Global Grids for R. R package version 4.1.0. https://sebkrantz.github.io/dggridR/ doi:10.5281/zenodo.1322866

@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -33,26 +33,33 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgOutNeighborsFile::DgOutNeighborsFile (const string& fileName, 
-         const string& suffix, DgReportLevel failLevel)
-   : DgOutputStream (fileName, suffix, failLevel)
+DgOutNeighborsFile::DgOutNeighborsFile (const std::string& fileName,
+         const DgIDGGBase& dgg, const DgRFBase* outRF, const std::string& suffix,
+         DgReportLevel failLevel)
+   : DgOutputStream (fileName, suffix, failLevel), dgg_ (dgg), outRF_ (outRF)
 {
 
 } // DgOutNeighborsFile::DgOutNeighborsFile
 
 ////////////////////////////////////////////////////////////////////////////////
-DgOutNeighborsFile& 
-DgOutNeighborsFile::insert (const DgIDGGBase& dgg, const DgLocation& center,
-           DgLocVector& vec)
+DgOutNeighborsFile&
+DgOutNeighborsFile::insert (const DgLocation& center, DgLocVector& vec)
 {
-   unsigned long long int sn = dgg.bndRF().seqNum(center);
-   *this << sn;
-   for (int i = 0; i < vec.size(); i++)
-   {
-      *this << " " << dgg.bndRF().seqNum(vec[i]);
+   if (!outRF_) { // indicates seqnum output
+      unsigned long long int sn = dgg_.bndRF().seqNum(center);
+      *this << sn;
+      for (int i = 0; i < vec.size(); i++)
+         *this << " " << dgg_.bndRF().seqNum(vec[i]);
+   } else {
+      DgLocation tmpLoc(center);
+      outRF_->convert(&tmpLoc);
+      *this << tmpLoc.asString(' ');
+      outRF_->convert(&vec);
+      for (int i = 0; i < vec.size(); i++)
+         *this << " " << vec[i].asString(' ');
    }
 
-   *this << endl;
+   *this << std::endl;
 
    return *this;
 

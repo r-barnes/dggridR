@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -31,7 +31,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 int sfRes2actualRes (int sfRes)
 {
-   int actRes[] = { 1, 2, 4, 6, 8, 10, 12, 14, 16, 17 }; 
+   int actRes[] = { 1, 2, 4, 6, 8, 10, 12, 14, 16, 17 };
 
    int res = 0;
    if (sfRes < 0 || sfRes > 9)
@@ -45,8 +45,8 @@ int sfRes2actualRes (int sfRes)
 ////////////////////////////////////////////////////////////////////////////////
 int actualRes2sfRes (int actualRes)
 {
-   // res #         0  1  2   3  4   5  6   7  8   9 10  11 12  13 14  15 16 17 }; 
-   int sfRes[] = { -1, 0, 1, -1, 2, -1, 3, -1, 4, -1, 5, -1, 6, -1, 7, -1, 8, 9 }; 
+   // res #         0  1  2   3  4   5  6   7  8   9 10  11 12  13 14  15 16 17 };
+   int sfRes[] = { -1, 0, 1, -1, 2, -1, 3, -1, 4, -1, 5, -1, 6, -1, 7, -1, 8, 9 };
 
    int res = 0;
    if (actualRes < 0 || actualRes > 17)

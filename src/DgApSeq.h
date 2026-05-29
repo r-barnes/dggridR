@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -34,10 +34,8 @@
 #include "DgUtil.h"
 
 #include <algorithm>
-#include <iostream>
+#include <ostream>
 #include <vector>
-
-using namespace std;
 
 class DgAperture {
 
@@ -61,8 +59,8 @@ class DgAperture {
                {
                   a_ = -1;
                   report("DgAperture::setAperture() invalid aperture " +
-                          //dgg::util::to_string(a), DgBase::Fatal);
-                          to_string(a), DgBase::Fatal);
+                          //dgg::util::to_std::string(a), DgBase::Fatal);
+                          std::to_string(a), DgBase::Fatal);
                }
             }
 
@@ -84,9 +82,9 @@ class DgAperture {
       bool operator!= (const DgAperture& ap) const
              { return !operator==(ap); }
 
-      operator string (void) const
+      operator std::string (void) const
              //{ return dgg::util::to_string(a_); }
-             { return to_string(a_); }
+             { return std::to_string(a_); }
 
    private:
 
@@ -94,12 +92,12 @@ class DgAperture {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgAperture& ap)
+inline std::ostream& operator<< (std::ostream& stream, const DgAperture& ap)
 {
-   stream << string(ap);
+   stream << std::string(ap);
    return stream;
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -108,17 +106,17 @@ class DgApSeq : public DgBase {
    public:
 
       const static DgApSeq defaultApSeq;
-      const static string defaultEmptyApSeqStr;
+      const static std::string defaultEmptyApSeqStr;
 
       DgApSeq (void) : DgBase ("EMPTY_APSEQ") { }
 
-      DgApSeq (const vector<DgAperture>& ap, const string& name = "")
+      DgApSeq (const std::vector<DgAperture>& ap, const std::string& name = "")
          : DgBase (name) { setApSeq(ap); }
 
-      DgApSeq (const string& apSeqStr, const string& name = "")
+      DgApSeq (const std::string& apSeqStr, const std::string& name = "")
          : DgBase (name) { setApSeq(apSeqStr); }
 
-      DgApSeq (const DgApSeq& apSeq, const string& name = "")
+      DgApSeq (const DgApSeq& apSeq, const std::string& name = "")
          : DgBase (name) { setApSeq(apSeq.seqVec_); }
 
       // note that the resolution 1 aperture is vector index 0
@@ -126,7 +124,7 @@ class DgApSeq : public DgBase {
 
       void setAperture (int res, const DgAperture& ap) { seqVec_[res - 1] = ap; }
 
-      void setApSeq (const vector<DgAperture>& apSeq)
+      void setApSeq (const std::vector<DgAperture>& apSeq)
             {
                seqVec_.clear();
                //copy(apSeq.begin(), apSeq.end(), seqVec_.begin());
@@ -134,7 +132,7 @@ class DgApSeq : public DgBase {
                   addAperture(a);
             }
 
-      void setApSeq (const string& seqStr)
+      void setApSeq (const std::string& seqStr)
             {
                seqVec_.clear();
                for (auto &ss: seqStr)
@@ -158,36 +156,36 @@ class DgApSeq : public DgBase {
             }
 
       bool operator== (const DgApSeq& ap) const
-             { return string(*this) == string(ap); }
+             { return std::string(*this) == std::string(ap); }
 
       bool operator!= (const DgApSeq& ap) const
              { return !operator==(ap); }
 
-      operator string (void) const
+      operator std::string (void) const
              {
-                string seqStr;
+                std::string seqStr;
                 if (isEmpty())
                    seqStr = defaultEmptyApSeqStr;
                 else
-                   for (vector<DgAperture>::const_iterator it = seqVec_.begin();
+                   for (std::vector<DgAperture>::const_iterator it = seqVec_.begin();
                         it != seqVec_.end(); ++it)
-                      seqStr += string(*it);
+                      seqStr += std::string(*it);
 
                 return seqStr;
              }
 
    private:
 
-      vector<DgAperture> seqVec_;
+      std::vector<DgAperture> seqVec_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-inline ostream& operator<< (ostream& stream, const DgApSeq& ap)
+inline std::ostream& operator<< (std::ostream& stream, const DgApSeq& ap)
 {
-   stream << ap.instanceName() << string(ap);
+   stream << ap.instanceName() << std::string(ap);
    return stream;
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

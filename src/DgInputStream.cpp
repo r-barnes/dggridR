@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -24,17 +24,17 @@
 // DgInputStream.C: DgInputStream class implementation
 //
 //   This class provides wrappers around some basic input stream functionality
-//   to increase ease of use. 
+//   to increase ease of use.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DgInputStream.h"
 
-string DgInputStream::defaultDirectory_;
+std::string DgInputStream::defaultDirectory_;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-DgInputStream::DgInputStream (const string& fileNameIn, const string& suffixIn,
+DgInputStream::DgInputStream (const std::string& fileNameIn, const std::string& suffixIn,
                               DgReportLevel failLevel)
    : DgBase ("DgInputStream:" + fileNameIn), suffix_ (suffixIn)
 {
@@ -48,8 +48,8 @@ DgInputStream::DgInputStream (const string& fileNameIn, const string& suffixIn,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-bool 
-DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
+bool
+DgInputStream::open (std::string fileNameIn, DgReportLevel failLevel)
 //
 // Open fileName as an input file. Report with a report level of failLevel
 // if the open is unsuccessful.
@@ -60,10 +60,10 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
    // make sure we are not already open
 
    if ((rdbuf())->is_open()) close();
-   
+
    // get all the possible name variations
 
-   string names[4];
+   std::string names[4];
 
    names[0] = fileNameIn;
    names[1] = fileNameIn + "." + suffix_;
@@ -73,7 +73,7 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
    int i;
    for (i = 0; i < 4; i++)
    {
-      ifstream::open(names[i].c_str(), ios::in);
+      std::ifstream::open(names[i].c_str(), std::ios::in);
       if (good())
       {
          fileName_ = names[i];
@@ -84,11 +84,11 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
          close();
          clear();
       }
-   } 
+   }
 
-   if (i == 4) 
+   if (i == 4)
    {
-      report("DgInputStream::open() unable to open file " + fileNameIn, 
+      report("DgInputStream::open() unable to open file " + fileNameIn,
              failLevel);
       return false;
    }
@@ -97,7 +97,7 @@ DgInputStream::open (string fileNameIn, DgReportLevel failLevel)
       debug("DgInputStream::open() opened file " + fileName_);
       return true;
    }
-   
+
 } // DgInputStream::open
 
 ////////////////////////////////////////////////////////////////////////////////

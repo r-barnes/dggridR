@@ -2,7 +2,7 @@
 #define DGGRIDR
 #endif
 /*******************************************************************************
-    Copyright (C) 2021 Kevin Sahr
+    Copyright (C) 2023 Kevin Sahr
 
     This file is part of DGGRID.
 
@@ -28,16 +28,14 @@
 #include <list>
 #include <vector>
 
-using namespace std;
-
 #include "DgBase.h"
 #include "DgString.h"
 #include "DgSeriesConverter.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-DgSeriesConverter::DgSeriesConverter 
-      (const vector<const DgConverterBase*>& series, bool userGenerated)
-   : DgConverterBase (series[0]->fromFrame(), 
+DgSeriesConverter::DgSeriesConverter
+      (const std::vector<const DgConverterBase*>& series, bool userGenerated)
+   : DgConverterBase (series[0]->fromFrame(),
                       series[series.size() - 1]->toFrame(), userGenerated)
 {
    // verify the series does what it claims
@@ -46,20 +44,20 @@ DgSeriesConverter::DgSeriesConverter
    {
       if (series[i]->toFrame() != series[i+1]->fromFrame())
       {
-         report(string("DgSeriesConverter::DgSeriesConverter() mismatch in "
-           "toFrame/fromFrame: ") + series[i]->toFrame().name() + string("/")
+         report(std::string("DgSeriesConverter::DgSeriesConverter() mismatch in "
+           "toFrame/fromFrame: ") + series[i]->toFrame().name() + std::string("/")
            + series[i+1]->fromFrame().name(), DgBase::Fatal);
       }
    }
 
    series_.resize(series.size());
-   for (unsigned long i = 0; i < series.size(); i++) 
+   for (unsigned long i = 0; i < series.size(); i++)
     series_[i] = series[i];
 
 } // DgSeriesConverter::DgSeriesConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame, 
+DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
                                       const DgRFBase& toFrame,
                                       bool userGenerated)
    : DgConverterBase (fromFrame, toFrame, userGenerated)
@@ -81,7 +79,7 @@ DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
    {
       // can we get directly there from here?
 
-      if (net.existsConverter(*from, toFrame)) 
+      if (net.existsConverter(*from, toFrame))
       {
          series_.resize(series_.size() + 1);
          series_[i] =
@@ -103,14 +101,14 @@ DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
                 "series", DgBase::Fatal);
       }
 
-      if (!net.existsConverter(*from, *(from->connectTo()))) 
+      if (!net.existsConverter(*from, *(from->connectTo())))
       {
          report("DgSeriesConverter::DgSeriesConverter() bad connection",
                 DgBase::Fatal);
       }
 
       series_.resize(series_.size() + 1);
-      series_[i++] = const_cast<DgConverterBase*>(net.getConverter(*from, 
+      series_[i++] = const_cast<DgConverterBase*>(net.getConverter(*from,
                                                   *(from->connectTo())));
       from = from->connectTo();
    }
@@ -118,7 +116,7 @@ DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
    // are we done?
 
    if (from->id() == toFrame.id()) return;
-   
+
    // otherwise we should be at the ground
 
    if (from->id() != 0)
@@ -129,7 +127,7 @@ DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
 
    // now build in reverse the series from the ground to the fromFrame
 
-   list<const DgRFBase*> rev;
+   std::list<const DgRFBase*> rev;
    const DgRFBase* ground = from;
    from = &toFrame;
    while (true)
@@ -176,7 +174,7 @@ DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
 
    // now build the converter series from the ground to the toFrame
 
-   list<const DgRFBase*>::iterator it = rev.begin();
+   std::list<const DgRFBase*>::iterator it = rev.begin();
    it++;
    const DgRFBase* to;
    for (; it != rev.end(); it++)
@@ -186,7 +184,7 @@ DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
 
       // can we get directly there from here?
 
-      if (net.existsConverter(*from, toFrame)) 
+      if (net.existsConverter(*from, toFrame))
       {
          series_[i] =
            const_cast<DgConverterBase*>(net.getConverter(*from, toFrame));
@@ -196,7 +194,7 @@ DgSeriesConverter::DgSeriesConverter (const DgRFBase& fromFrame,
 
       // otherwise add this conversion to the series and continue
 
-      if (!net.existsConverter(*from, *to)) 
+      if (!net.existsConverter(*from, *to))
       {
          report("DgSeriesConverter::DgSeriesConverter() bad connection",
                 DgBase::Fatal);
@@ -218,7 +216,7 @@ DgSeriesConverter::~DgSeriesConverter (void)
 } // DgSeriesConverter::~DgSeriesConverter
 
 ////////////////////////////////////////////////////////////////////////////////
-DgAddressBase* 
+DgAddressBase*
 DgSeriesConverter::createConvertedAddress (const DgAddressBase& addIn) const
 {
    // keep track of nested series depth for formatting output
@@ -226,16 +224,16 @@ DgSeriesConverter::createConvertedAddress (const DgAddressBase& addIn) const
    seriesDepth++;
 
    if (isTraceOn())
-      traceStream() << " -> " << std::string(seriesDepth, '*') << " <SERIES> " 
-                    << fromFrame().name() << ": " << addIn << endl;
+      traceStream() << " -> " << std::string(seriesDepth, '*') << " <SERIES> "
+                    << fromFrame().name() << ": " << addIn << std::endl;
 
    DgAddressBase* pAdd0 = series_[0]->createConvertedAddress(addIn);
-   if (isTraceOn()) 
-      traceStream() << std::string(seriesDepth, '*') << "  --> " 
-                    << fromFrame().name() << ": " << *pAdd0 << endl;
+   if (isTraceOn())
+      traceStream() << std::string(seriesDepth, '*') << "  --> "
+                    << fromFrame().name() << ": " << *pAdd0 << std::endl;
 
 #if DGDEBUG
-dgcout << "BEGIN series conversion" << endl;
+dgcout << "BEGIN series conversion" << std::endl;
 #endif
    for (int i = 1; i < size(); i++)
    {
@@ -243,12 +241,12 @@ dgcout << "BEGIN series conversion" << endl;
 
       delete pAdd0;
       pAdd0 = pAdd1;
-      if (isTraceOn()) 
-         traceStream() << std::string(seriesDepth, '*') << "  --> " 
-                       << fromFrame().name() << ": " << *pAdd0 << endl;
+      if (isTraceOn())
+         traceStream() << std::string(seriesDepth, '*') << "  --> "
+                       << toFrame().name() << ": " << *pAdd0 << std::endl;
    }
 #if DGDEBUG
-dgcout << "END series conversion" << endl;
+dgcout << "END series conversion" << std::endl;
 #endif
 
    seriesDepth--;
@@ -263,7 +261,7 @@ DgSeriesConverter::converter (int ndx) const
 {
    if (ndx < 0 || ndx >= size())
    {
-      report("DgSeriesConverter::converter(" + dgg::util::to_string(ndx) + 
+      report("DgSeriesConverter::converter(" + dgg::util::to_string(ndx) +
              ") index out of range", DgBase::Fatal);
       return *series_[0]; // will never actually get here
    }
@@ -273,16 +271,16 @@ DgSeriesConverter::converter (int ndx) const
 } // const DgConverterBase* DgSeriesConverter::converter
 
 ////////////////////////////////////////////////////////////////////////////////
-ostream& operator<< (ostream& stream, const DgSeriesConverter& con)
-{ 
+std::ostream& operator<< (std::ostream& stream, const DgSeriesConverter& con)
+{
    stream << "{\n";
-   for (int i = 0; i < con.size(); i++) 
+   for (int i = 0; i < con.size(); i++)
    {
       stream << "  " << con.converter(i) << "\n";
    }
-   return stream << "}" << endl;
+   return stream << "}" << std::endl;
 
-} // ostream& operator<<
+} // std::ostream& operator<<
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
